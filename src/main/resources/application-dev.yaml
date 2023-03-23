@@ -1,0 +1,21 @@
+chat:
+  # Secret key
+  auth_secret_key: 123456
+  # OpenAI API Key - https://platform.openai.com/overview
+  openai_api_key: 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
+  # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
+  openai_access_token: 111
+  # OpenAI API Base URL - https://api.openai.com
+  openai_api_base_url:
+  # OpenAI API Model - https://platform.openai.com/docs/models
+  openai_api_model:
+  # Reverse Proxy
+  api_reverse_proxy:
+  # timeout
+  timeout_ms: 100000
+  # Socks Proxy Host
+  socks_proxy_host:
+  # Socks Proxy Port
+  socks_proxy_port:
+  # HTTPS PROXY
+  https_proxy:
