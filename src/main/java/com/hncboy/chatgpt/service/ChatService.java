@@ -2,8 +2,7 @@ package com.hncboy.chatgpt.service;
 
 import com.hncboy.chatgpt.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.domain.vo.ChatConfigVO;
-
-import java.io.InputStream;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 /**
  * @author hncboy
@@ -23,7 +22,7 @@ public interface ChatService {
      * 消息处理
      *
      * @param chatProcessRequest 消息处理请求参数
-     * @return 消息流
+     * @return emitter
      */
-    InputStream chatProcess(ChatProcessRequest chatProcessRequest);
+    ResponseBodyEmitter chatProcess(ChatProcessRequest chatProcessRequest);
 }

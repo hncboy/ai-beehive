@@ -1,21 +1,21 @@
 chat:
-  # Secret key
+  # 访问密码
   auth_secret_key: 123456
   # OpenAI API Key - https://platform.openai.com/overview
-  openai_api_key: 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
+  openai_api_key: xxxx
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
-  openai_access_token: 111
-  # OpenAI API Base URL - https://api.openai.com
-  openai_api_base_url:
+  openai_access_token: xxx
+  # OpenAI API Base URL - https://api.openai.com/，要加/后缀
+  openai_api_base_url: https://api.openai.com/
   # OpenAI API Model - https://platform.openai.com/docs/models
-  openai_api_model:
-  # Reverse Proxy
-  api_reverse_proxy:
+  openai_api_model: gpt-3.5-turbo
+  # 反向代理地址 AccessToken 时使用
+  api_reverse_proxy: https://bypass.duti.tech/api/conversation
   # timeout
   timeout_ms: 100000
   # Socks Proxy Host
-  socks_proxy_host:
+  socks_proxy_host: 127.0.0.1
   # Socks Proxy Port
-  socks_proxy_port:
+  socks_proxy_port: 33210
   # HTTPS PROXY
   https_proxy:

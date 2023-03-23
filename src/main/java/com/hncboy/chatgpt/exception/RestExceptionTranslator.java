@@ -1,6 +1,8 @@
 package com.hncboy.chatgpt.exception;
 
+import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.handler.response.R;
+import com.hncboy.chatgpt.handler.response.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -44,5 +46,19 @@ public class RestExceptionTranslator {
     public R<Void> handleError(AuthException e) {
         log.error("鉴权异常", e);
         return R.fail(e.getResultCode(), e.getMessage());
+    }
+
+    /**
+     * 其他异常处理
+     * HTTP 状态为 200
+     *
+     * @param e 异常信息
+     * @return 返回值
+     */
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.OK)
+    public R<Void> handleError(Throwable e) {
+        log.error("服务器异常", e);
+        return R.fail(ResultCode.INTERNAL_SERVER_ERROR, (StrUtil.emptyToDefault(e.getMessage(), ResultCode.INTERNAL_SERVER_ERROR.getMessage())));
     }
 }

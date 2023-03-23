@@ -8,14 +8,15 @@ import com.hncboy.chatgpt.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author hncboy
@@ -39,9 +40,8 @@ public class ChatController {
 
     @Operation(summary = "消息处理")
     @PostMapping("/chat-process")
-    public ResponseEntity<InputStreamResource> chatProcess(@RequestBody @Validated ChatProcessRequest chatProcessRequest) {
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(new InputStreamResource(chatService.chatProcess(chatProcessRequest)));
+    public ResponseBodyEmitter chatProcess(@RequestBody @Validated ChatProcessRequest chatProcessRequest, HttpServletResponse response) {
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        return chatService.chatProcess(chatProcessRequest);
     }
 }

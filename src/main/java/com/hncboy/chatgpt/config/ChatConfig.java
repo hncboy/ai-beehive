@@ -2,10 +2,13 @@ package com.hncboy.chatgpt.config;
 
 import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.enums.ApiTypeEnum;
+import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 /**
  * @author hncboy
@@ -69,6 +72,15 @@ public class ChatConfig implements InitializingBean {
     private String httpsProxy;
 
     /**
+     * 判断是否有 socks 代理
+     *
+     * @return true/false
+     */
+    public Boolean hasSocksProxy() {
+        return StrUtil.isNotBlank(socksProxyHost) && Objects.nonNull(socksProxyPort);
+    }
+
+    /**
      * 判断是否有鉴权
      *
      * @return true/false
@@ -95,5 +107,23 @@ public class ChatConfig implements InitializingBean {
         if (StrUtil.isBlank(openaiApiKey) && StrUtil.isBlank(openaiAccessToken)) {
             throw new RuntimeException("apiKey 或 accessToken 必须有值");
         }
+
+        if (StrUtil.isBlank(openaiApiBaseUrl)) {
+            throw new RuntimeException("openaiApiBaseUrl 必须有值");
+        }
+
+        // 校验 apiModel
+        if (StrUtil.isBlank(openaiApiModel)) {
+            openaiApiModel = null;
+            return;
+        }
+
+        ChatCompletion.Model[] models = ChatCompletion.Model.values();
+        for (ChatCompletion.Model model : models) {
+            if (model.getName().equals(openaiApiModel)) {
+                return;
+            }
+        }
+        throw new RuntimeException("apiMode 填写错误");
     }
 }

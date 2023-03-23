@@ -27,7 +27,12 @@ public enum ResultCode implements IResultCode {
     /**
      * 请求未授权
      */
-    UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "请求未授权");
+    UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "请求未授权"),
+
+    /**
+     * 服务器异常
+     */
+    INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "服务器异常");
 
     /**
      * 状态码
