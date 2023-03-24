@@ -11,7 +11,8 @@
 - Spring Boot 2.7.10
 - JDK 17
 - SpringDoc 接口文档
-- [ChatGPT java sdk](https://github.com/PlexPt/chatgpt-java)
+- [PlexPt ChatGPT java sdk](https://github.com/PlexPt/chatgpt-java)
+- [Grt1228 ChatGPT java sdk](https://github.com/Grt1228/chatgpt-java)
 
 ## 功能
 

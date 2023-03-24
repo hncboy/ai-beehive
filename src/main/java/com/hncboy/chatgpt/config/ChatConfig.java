@@ -2,7 +2,7 @@ package com.hncboy.chatgpt.config;
 
 import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.enums.ApiTypeEnum;
-import com.plexpt.chatgpt.entity.chat.ChatCompletion;
+import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -47,37 +47,32 @@ public class ChatConfig implements InitializingBean {
     private String openaiApiModel;
 
     /**
-     * Reverse Proxy
+     * 反向代理地址，AccessToken 时用到
      */
     private String apiReverseProxy;
 
     /**
-     * Timeout in milliseconds
+     * 超时毫秒
      */
     private Integer timeoutMs;
 
     /**
-     * Socks Proxy Host
+     * HTTP 代理主机
      */
-    private String socksProxyHost;
+    private String httpProxyHost;
 
     /**
-     * Socks Proxy Port
+     * HTTP 代理端口
      */
-    private Integer socksProxyPort;
+    private Integer httpProxyPort;
 
     /**
-     * HTTPS Proxy
-     */
-    private String httpsProxy;
-
-    /**
-     * 判断是否有 socks 代理
+     * 判断是否有 http 代理
      *
      * @return true/false
      */
-    public Boolean hasSocksProxy() {
-        return StrUtil.isNotBlank(socksProxyHost) && Objects.nonNull(socksProxyPort);
+    public Boolean hasHttpProxy() {
+        return StrUtil.isNotBlank(httpProxyHost) && Objects.nonNull(httpProxyPort);
     }
 
     /**
