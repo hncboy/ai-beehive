@@ -2,6 +2,7 @@ package com.hncboy.chatgpt.api.listener;
 
 import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.api.parser.ResponseParser;
+import com.hncboy.chatgpt.domain.vo.ChatReplyMessageVO;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.sse.EventSource;
@@ -22,9 +23,9 @@ import java.util.Objects;
 public class ParsedEventSourceListener extends EventSourceListener {
 
     /**
-     * 接收到的所有消息
+     * 已经接收到的完整消息
      */
-    private final StringBuilder receivedMessage = new StringBuilder();
+    private String receivedMessage = StrUtil.EMPTY;
 
     /**
      * 当前消息条数
@@ -51,25 +52,31 @@ public class ParsedEventSourceListener extends EventSourceListener {
         // 判断有没有结束
         boolean isEnd = Objects.equals(originalData, "[DONE]");
         String newMessage = null;
+        ChatReplyMessageVO chatReplyMessageVO = null;
         if (!isEnd) {
             // 解析消息
-            newMessage = parser.parseContent(originalData);
+            newMessage = parser.parseNewMessage(originalData);
             // 为空直接跳过
             if (StrUtil.isEmpty(newMessage)) {
                 return;
             }
-            // 添加新的消息
-            receivedMessage.append(newMessage);
+
+            // 消息数量 +1
+            currentMessageCount++;
+
+            // 当前收到的所有消息
+            receivedMessage = parser.parseReceivedMessage(receivedMessage, newMessage);
+            // 解析 ChatReplyMessageVO
+            chatReplyMessageVO = parser.parseChatReplyMessageVO(receivedMessage, originalData);
         }
 
         // 遍历监听器
-        currentMessageCount++;
         for (AbstractStreamListener listener : listeners) {
             if (isEnd) {
-                listener.onComplete(receivedMessage.toString());
-                listener.onComplete.accept(receivedMessage.toString());
+                listener.onComplete(receivedMessage);
+                listener.onComplete.accept(receivedMessage);
             } else {
-                listener.onMessage(newMessage, receivedMessage.toString(), currentMessageCount);
+                listener.onMessage(newMessage, receivedMessage, chatReplyMessageVO, currentMessageCount);
             }
         }
     }
@@ -81,12 +88,12 @@ public class ParsedEventSourceListener extends EventSourceListener {
             if (Objects.nonNull(response) && Objects.nonNull(response.body())) {
                 responseStr = response.body().string();
             }
-            log.warn("消息发送异常，当前已接收消息：{}，响应内容：{}", receivedMessage.toString(), responseStr, t);
+            log.warn("消息发送异常，当前已接收消息：{}，响应内容：{}，异常堆栈：", receivedMessage, responseStr, t);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         for (AbstractStreamListener listener : listeners) {
-            listener.onError(receivedMessage.toString(), t, response);
+            listener.onError(receivedMessage, t, response);
         }
     }
 

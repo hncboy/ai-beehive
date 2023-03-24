@@ -3,7 +3,7 @@ package com.hncboy.chatgpt.service.impl;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.hncboy.chatgpt.api.ChatClientUtil;
+import com.hncboy.chatgpt.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.config.ChatConfig;
 import com.hncboy.chatgpt.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.domain.vo.ChatConfigVO;
@@ -30,7 +30,7 @@ public class ChatServiceImpl implements ChatService {
     public ChatConfigVO getChatConfig() {
         ChatConfigVO chatConfigVO = new ChatConfigVO();
         chatConfigVO.setApiModel(chatConfig.getApiTypeEnum());
-        chatConfigVO.setBalance(String.valueOf(ChatClientUtil.buildOpenAiClient().creditGrants().getTotalAvailable()));
+        chatConfigVO.setBalance(String.valueOf(ApiKeyChatClientBuilder.buildOpenAiClient().creditGrants().getTotalAvailable()));
         chatConfigVO.setHttpsProxy(StrUtil.isAllNotEmpty(chatConfig.getHttpProxyHost(), String.valueOf(chatConfig.getHttpProxyPort()))
                 ? String.format("%s:%s", chatConfig.getHttpProxyHost(), chatConfig.getHttpProxyPort())
                 : StrPool.DASHED);

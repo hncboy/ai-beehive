@@ -18,9 +18,4 @@ public class AuthException extends RuntimeException {
         super(message);
         this.resultCode = ResultCode.UN_AUTHORIZED;
     }
-
-    public AuthException(IResultCode resultCode) {
-        super(resultCode.getMessage());
-        this.resultCode = resultCode;
-    }
 }

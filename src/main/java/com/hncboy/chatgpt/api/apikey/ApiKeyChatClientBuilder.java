@@ -1,4 +1,4 @@
-package com.hncboy.chatgpt.api;
+package com.hncboy.chatgpt.api.apikey;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.hncboy.chatgpt.config.ChatConfig;
@@ -12,10 +12,10 @@ import java.net.Proxy;
 /**
  * @author hncboy
  * @date 2023/3/24 16:09
- * 聊天客户端工具
+ * ApiKey 聊天 Client 构建者
  */
 @UtilityClass
-public class ChatClientUtil {
+public class ApiKeyChatClientBuilder {
 
     /**
      * 构建 API 流式请求客户端

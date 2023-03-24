@@ -17,19 +17,24 @@
 ## 功能
 
 - 待实现：配置 dockerfile
-- 待实现：accessToken 接口调用，ApiKey 上下文接口调用
+- 待实现：ApiKey 上下文方式接入
 - 待实现：ip 限流
+- 已实现：ApiKey 无上下文发送消息，AccessToken 发送消息
 
 ## 接口
 
-| 路径          | 功能         | 完成情况                  |
-| ------------- | ------------ | ------------------------- |
-| /config       | 获取聊天配置 | 已完成                    |
-| /chat-process | 消息处理     | ApiKey 无上写文方式已接入 |
-| /verify       | 校验密码     | 已完成                    |
-| /verify       | 获取模型信息 | 已完成                    |
+| 路径          | 功能         | 完成情况                   |
+| ------------- | ------------ | -------------------------- |
+| /config       | 获取聊天配置 | 已完成                     |
+| /chat-process | 消息处理     | 剩余 ApiKey 上下文方式接入 |
+| /verify       | 校验密码     | 已完成                     |
+| /session      | 获取模型信息 | 已完成                     |
 
 ## 地址
 
 - 接口文档：http://localhost:3002/swagger-ui.html
+
+## 使用方式
+
+- 根据 application.properties 里的配置，优先 ApiKey 方式
 

@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.api.listener;
 
+import com.hncboy.chatgpt.domain.vo.ChatReplyMessageVO;
 import lombok.RequiredArgsConstructor;
 import okhttp3.Response;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +17,7 @@ public class SseEmitterStreamListener extends AbstractStreamListener {
     private final SseEmitter emitter;
 
     @Override
-    public void onMessage(String newMessage, String receivedMessage, int i) {
+    public void onMessage(String newMessage, String receivedMessage, ChatReplyMessageVO chatReplyMessageVO, int i) {
         // TODO
     }
 

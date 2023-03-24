@@ -17,8 +17,6 @@
 
     <properties>
         <java.version>17</java.version>
-<!--        <retrofit2.version>2.9.0</retrofit2.version>-->
-<!--        <okhttp.version>3.14.9</okhttp.version>-->
     </properties>
 
     <dependencies>
@@ -63,36 +61,6 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.15</version>
         </dependency>
-        <!-- okhttp sse 扩展：实现 sse -->
-        <!--<dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp-sse</artifactId>
-            <version>${okhttp.version}</version>
-        </dependency>
-        &lt;!&ndash; OkHttp 日志扩展：记录请求和响应的日志 &ndash;&gt;
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>logging-interceptor</artifactId>
-            <version>${okhttp.version}</version>
-        </dependency>
-        &lt;!&ndash; 基于 OkHttp 的 RESTFul API客户端库，用于简化HTTP请求和响应的处理。 &ndash;&gt;
-        <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>retrofit</artifactId>
-            <version>${retrofit2.version}</version>
-        </dependency>
-        &lt;!&ndash; 请求和响应的 JSON 转换 &ndash;&gt;
-        <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>converter-jackson</artifactId>
-            <version>${retrofit2.version}</version>
-        </dependency>
-        &lt;!&ndash; 将请求和响应转换为 RxJava 的 Observable 对象 &ndash;&gt;
-        <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>adapter-rxjava2</artifactId>
-            <version>${retrofit2.version}</version>
-        </dependency>-->
     </dependencies>
 
 </project>

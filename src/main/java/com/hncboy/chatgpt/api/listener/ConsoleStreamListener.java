@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.api.listener;
 
+import com.hncboy.chatgpt.domain.vo.ChatReplyMessageVO;
 import okhttp3.Response;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class ConsoleStreamListener extends AbstractStreamListener {
 
     @Override
-    public void onMessage(String newMessage, String receivedMessage, int i) {
+    public void onMessage(String newMessage, String receivedMessage, ChatReplyMessageVO chatReplyMessageVO, int i) {
         System.out.println(newMessage);
     }
 

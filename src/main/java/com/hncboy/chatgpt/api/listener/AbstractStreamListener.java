@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.api.listener;
 
+import com.hncboy.chatgpt.domain.vo.ChatReplyMessageVO;
 import lombok.Getter;
 import lombok.Setter;
 import okhttp3.Response;
@@ -17,11 +18,12 @@ public abstract class AbstractStreamListener {
     /**
      * 接收到新消息
      *
-     * @param newMessage      新的单条消息
-     * @param receivedMessage 已经接收到的所有消息，包含当前新消息
-     * @param messageCount    消息条数
+     * @param newMessage         新的单条消息
+     * @param receivedMessage    已经接收到的所有消息，包含当前新消息
+     * @param chatReplyMessageVO ChatReplyMessageVO
+     * @param messageCount       消息条数
      */
-    public abstract void onMessage(String newMessage, String receivedMessage, int messageCount);
+    public abstract void onMessage(String newMessage, String receivedMessage, ChatReplyMessageVO chatReplyMessageVO, int messageCount);
 
     /**
      * 结束响应

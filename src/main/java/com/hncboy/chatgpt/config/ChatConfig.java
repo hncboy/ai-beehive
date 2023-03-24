@@ -1,6 +1,7 @@
 package com.hncboy.chatgpt.config;
 
 import cn.hutool.core.util.StrUtil;
+import com.hncboy.chatgpt.api.accesstoken.ConversationModelEnum;
 import com.hncboy.chatgpt.enums.ApiTypeEnum;
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import lombok.Data;
@@ -103,22 +104,43 @@ public class ChatConfig implements InitializingBean {
             throw new RuntimeException("apiKey 或 accessToken 必须有值");
         }
 
-        if (StrUtil.isBlank(openaiApiBaseUrl)) {
-            throw new RuntimeException("openaiApiBaseUrl 必须有值");
-        }
+        // ApiKey
+        if (getApiTypeEnum() == ApiTypeEnum.API_KEY) {
+            // apiBaseUrl 必须有值
+            if (StrUtil.isBlank(openaiApiBaseUrl)) {
+                throw new RuntimeException("openaiApiBaseUrl 必须有值");
+            }
 
-        // 校验 apiModel
-        if (StrUtil.isBlank(openaiApiModel)) {
-            openaiApiModel = null;
-            return;
-        }
-
-        ChatCompletion.Model[] models = ChatCompletion.Model.values();
-        for (ChatCompletion.Model model : models) {
-            if (model.getName().equals(openaiApiModel)) {
+            // 校验 apiModel
+            if (StrUtil.isBlank(openaiApiModel)) {
+                openaiApiModel = null;
                 return;
             }
+            ChatCompletion.Model[] models = ChatCompletion.Model.values();
+            for (ChatCompletion.Model model : models) {
+                if (model.getName().equals(openaiApiModel)) {
+                    return;
+                }
+            }
+            throw new RuntimeException("ApiKey apiModel 填写错误");
         }
-        throw new RuntimeException("apiMode 填写错误");
+
+        // AccessToken
+        if (getApiTypeEnum() == ApiTypeEnum.ACCESS_TOKEN) {
+            // apiReverseProxy 必须有值
+            if (StrUtil.isBlank(apiReverseProxy)) {
+                throw new RuntimeException("apiReverseProxy 必须有值");
+            }
+
+            // 校验 apiModel
+            if (StrUtil.isBlank(openaiApiModel)) {
+                openaiApiModel = null;
+                return;
+            }
+
+            if (!ConversationModelEnum.NAME_MAP.containsKey(openaiApiKey)) {
+                throw new RuntimeException("AccessToken apiModel 填写错误");
+            }
+        }
     }
 }

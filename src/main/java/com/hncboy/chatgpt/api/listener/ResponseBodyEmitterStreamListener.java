@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author hncboy
@@ -22,9 +23,11 @@ public class ResponseBodyEmitterStreamListener extends AbstractStreamListener {
     private final ResponseBodyEmitter emitter;
 
     @Override
-    public void onMessage(String newMessage, String receivedMessage, int messageCount) {
-        ChatReplyMessageVO chatReplyMessageVO = new ChatReplyMessageVO();
-        chatReplyMessageVO.setText(receivedMessage);
+    public void onMessage(String newMessage, String receivedMessage, ChatReplyMessageVO chatReplyMessageVO, int messageCount) {
+        if (Objects.isNull(chatReplyMessageVO)) {
+            return;
+        }
+
         try {
             emitter.send((messageCount != 1 ? "\n" : "") + ObjectMapperUtil.toJson(chatReplyMessageVO));
         } catch (IOException e) {

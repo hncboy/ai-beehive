@@ -2,13 +2,13 @@ chat:
   # 访问密码
   auth_secret_key: 123456
   # OpenAI API Key - https://platform.openai.com/overview
-  openai_api_key: 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
+  openai_api_key: xxxx
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
   openai_access_token: xxx
   # OpenAI API Base URL - https://api.openai.com/，要加/后缀
   openai_api_base_url: https://api.openai.com/
-  # OpenAI API Model - https://platform.openai.com/docs/models
-  openai_api_model: gpt-3.5-turbo
+  # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
+  openai_api_model:
   # 反向代理地址 AccessToken 时使用
   api_reverse_proxy: https://bypass.duti.tech/api/conversation
   # 超时毫秒

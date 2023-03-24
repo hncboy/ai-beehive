@@ -18,9 +18,4 @@ public class ServiceException extends RuntimeException {
         super(message);
         this.resultCode = ResultCode.FAILURE;
     }
-
-    public ServiceException(IResultCode resultCode) {
-        super(resultCode.getMessage());
-        this.resultCode = resultCode;
-    }
 }
