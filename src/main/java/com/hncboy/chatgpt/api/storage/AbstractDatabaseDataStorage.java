@@ -86,32 +86,45 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
 
     @Override
     public void onError(ChatMessageStorage chatMessageStorage) {
-        // TODO 如果不存在 ChatMessage 应该先插入 没连上就失败会没数据比如 ApiKey 是错误的
-
-        ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionChatMessageDO();
-        ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerChatMessageDO();
-
         // 消息流条数大于 0 表示部分成功
         ChatMessageStatusEnum chatMessageStatusEnum = chatMessageStorage.getCurrentStreamMessageCount() > 0 ? ChatMessageStatusEnum.PART_SUCCESS : ChatMessageStatusEnum.ERROR;
-        questionChatMessageDO.setStatus(chatMessageStatusEnum);
+
+        // 更新问题消息记录
+        updateErrorQuestionChatMessage(chatMessageStorage, chatMessageStatusEnum);
+
+        // 还没收到回复就断了，跳过回答消息记录更新
+        if (chatMessageStatusEnum == ChatMessageStatusEnum.ERROR) {
+            return;
+        }
+
+        // 更新问题消息记录
+        ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerChatMessageDO();
         answerChatMessageDO.setStatus(chatMessageStatusEnum);
+        // 原始响应数据
+        answerChatMessageDO.setOriginalData(chatMessageStorage.getOriginalResponseData());
+        // 错误响应数据
+        answerChatMessageDO.setResponseErrorData(chatMessageStorage.getErrorResponseData());
+        // 更新时间
+        answerChatMessageDO.setUpdateTime(new Date());
+        // 更新消息
+        chatMessageService.updateById(answerChatMessageDO);
+    }
+
+    /**
+     * 更新错误的问题消息记录
+     *
+     * @param chatMessageStorage    消息记录存储
+     * @param chatMessageStatusEnum 消息记录状态枚举
+     */
+    private void updateErrorQuestionChatMessage(ChatMessageStorage chatMessageStorage, ChatMessageStatusEnum chatMessageStatusEnum) {
+        ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionChatMessageDO();
+        questionChatMessageDO.setStatus(chatMessageStatusEnum);
 
         // 原始请求数据
         questionChatMessageDO.setOriginalData(chatMessageStorage.getOriginalRequestData());
-
-        // 原始响应数据
-        answerChatMessageDO.setOriginalData(chatMessageStorage.getOriginalResponseData());
-
         // 错误响应数据
         questionChatMessageDO.setResponseErrorData(chatMessageStorage.getErrorResponseData());
-        answerChatMessageDO.setResponseErrorData(chatMessageStorage.getErrorResponseData());
-
-        // 更新时间
         questionChatMessageDO.setUpdateTime(new Date());
-        answerChatMessageDO.setUpdateTime(new Date());
-
-        // 更新消息
         chatMessageService.updateById(questionChatMessageDO);
-        chatMessageService.updateById(answerChatMessageDO);
     }
 }

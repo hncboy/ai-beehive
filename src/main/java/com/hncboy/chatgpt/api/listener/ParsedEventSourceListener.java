@@ -162,7 +162,7 @@ public class ParsedEventSourceListener extends EventSourceListener {
                 .answerChatMessageDO(answerChatMessageDO)
                 .originalRequestData(originalRequestData)
                 .originalResponseData(lastOriginalResponseData)
-                .originalResponseData(responseStr)
+                .errorResponseData(responseStr)
                 .parser(parser)
                 .build());
 
