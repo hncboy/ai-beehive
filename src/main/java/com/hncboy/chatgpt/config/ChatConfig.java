@@ -113,7 +113,7 @@ public class ChatConfig implements InitializingBean {
 
             // 校验 apiModel
             if (StrUtil.isBlank(openaiApiModel)) {
-                openaiApiModel = null;
+                openaiApiModel = ChatCompletion.Model.GPT_3_5_TURBO.getName();
                 return;
             }
             ChatCompletion.Model[] models = ChatCompletion.Model.values();
@@ -134,7 +134,7 @@ public class ChatConfig implements InitializingBean {
 
             // 校验 apiModel
             if (StrUtil.isBlank(openaiApiModel)) {
-                openaiApiModel = null;
+                openaiApiModel = ConversationModelEnum.DEFAULT_GPT_3_5.getName();
                 return;
             }
 

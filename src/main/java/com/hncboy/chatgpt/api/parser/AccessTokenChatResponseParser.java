@@ -2,7 +2,6 @@ package com.hncboy.chatgpt.api.parser;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.hncboy.chatgpt.api.accesstoken.ConversationResponse;
-import com.hncboy.chatgpt.domain.vo.ChatReplyMessageVO;
 import com.hncboy.chatgpt.util.ObjectMapperUtil;
 import com.unfbx.chatgpt.entity.chat.Message;
 import org.springframework.stereotype.Component;
@@ -43,19 +42,5 @@ public class AccessTokenChatResponseParser implements ResponseParser<Conversatio
 
         // AccessToken 模式返回的消息每句都会包含前面的话，不需要手动拼接
         return parts.get(0);
-    }
-
-    @Override
-    public ChatReplyMessageVO parseChatReplyMessageVO(String receivedMessage, String originalData) {
-        ConversationResponse conversationResponse = parseSuccess(originalData);
-        ConversationResponse.Message message = conversationResponse.getMessage();
-        ChatReplyMessageVO chatReplyMessageVO = new ChatReplyMessageVO();
-        chatReplyMessageVO.setRole(message.getAuthor().getRole());
-        chatReplyMessageVO.setId(message.getId());
-        // 当前消息的父级消息 id 应该没有用
-        chatReplyMessageVO.setParentMessageId(null);
-        chatReplyMessageVO.setConversationId(conversationResponse.getConversationId());
-        chatReplyMessageVO.setText(receivedMessage);
-        return chatReplyMessageVO;
     }
 }

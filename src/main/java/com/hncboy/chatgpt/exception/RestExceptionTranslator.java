@@ -1,6 +1,5 @@
 package com.hncboy.chatgpt.exception;
 
-import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.handler.response.R;
 import com.hncboy.chatgpt.handler.response.ResultCode;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +58,6 @@ public class RestExceptionTranslator {
     @ResponseStatus(HttpStatus.OK)
     public R<Void> handleError(Throwable e) {
         log.error("服务器异常", e);
-        return R.fail(ResultCode.INTERNAL_SERVER_ERROR, (StrUtil.emptyToDefault(e.getMessage(), ResultCode.INTERNAL_SERVER_ERROR.getMessage())));
+        return R.fail(ResultCode.INTERNAL_SERVER_ERROR, ResultCode.INTERNAL_SERVER_ERROR.getMessage());
     }
 }

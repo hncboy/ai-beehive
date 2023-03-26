@@ -14,13 +14,15 @@ import javax.validation.constraints.Size;
 @Schema(name = "消息处理请求")
 public class ChatProcessRequest {
 
-    @Size(min = 1, max = 2000, message = "提示语字数范围[1, 2000]")
-    @Schema(name = "提示语")
+    @Size(min = 1, max = 2000, message = "问题字数范围[1, 2000]")
+    @Schema(name = "问题")
     private String prompt;
 
     @Schema(name = "配置")
     private Options options;
 
+    @Size(max = 100, message = "系统消息字数范围[0, 2000]")
+    private String systemMessage;
     @Data
     @Schema(name = "消息配置")
     public static class Options {
@@ -28,6 +30,10 @@ public class ChatProcessRequest {
         @Schema(name = "对话 id")
         private String conversationId;
 
+        /**
+         * 这里的父级消息指的是回答的父级消息 id
+         * 前端发送问题，需要上下文的话传回答的父级消息 id
+         */
         @Schema(name = "父级消息 id")
         private String parentMessageId;
     }

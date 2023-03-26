@@ -1,7 +1,5 @@
 package com.hncboy.chatgpt.api.parser;
 
-import com.hncboy.chatgpt.domain.vo.ChatReplyMessageVO;
-
 /**
  * @author hncboy
  * @date 2023/3/24 17:43
@@ -35,13 +33,4 @@ public interface ResponseParser<SUCCESS> {
      * @return 消息内容
      */
     String parseNewMessage(String originalData);
-
-    /**
-     * 解析 ChatReplyMessageVO
-     *
-     * @param receivedMessage 已经接收到的所有消息
-     * @param originalData    原始数据
-     * @return ChatReplyMessageVO
-     */
-    ChatReplyMessageVO parseChatReplyMessageVO(String receivedMessage, String originalData);
 }

@@ -12,6 +12,9 @@ import lombok.Data;
 @Schema(name = "聊天回复的消息")
 public class ChatReplyMessageVO {
 
+    /**
+     * 对于前端有什么用？
+     */
     @Schema(name = "角色")
     private String role;
 

@@ -47,6 +47,7 @@ public class ConversationRequest {
 
     /**
      * 父级消息 id
+     * 第一条消息父级消息可以为空
      */
     @JsonProperty("parent_message_id")
     private String parentMessageId;

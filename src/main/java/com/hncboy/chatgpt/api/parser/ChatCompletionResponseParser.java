@@ -1,7 +1,6 @@
 package com.hncboy.chatgpt.api.parser;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.hncboy.chatgpt.domain.vo.ChatReplyMessageVO;
 import com.hncboy.chatgpt.util.ObjectMapperUtil;
 import com.unfbx.chatgpt.entity.chat.ChatChoice;
 import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
@@ -36,19 +35,6 @@ public class ChatCompletionResponseParser implements ResponseParser<ChatCompleti
             return null;
         }
         return message.getContent();
-    }
-
-    @Override
-    public ChatReplyMessageVO parseChatReplyMessageVO(String receivedMessage, String originalData) {
-        Message message = getMessage(originalData);
-        if (Objects.isNull(message)) {
-            return null;
-        }
-        ChatReplyMessageVO chatReplyMessageVO = new ChatReplyMessageVO();
-        chatReplyMessageVO.setRole(message.getRole());
-        chatReplyMessageVO.setText(receivedMessage);
-
-        return null;
     }
 
     /**

@@ -1,12 +1,8 @@
 package com.hncboy.chatgpt.api.listener;
 
 import com.hncboy.chatgpt.domain.vo.ChatReplyMessageVO;
-import lombok.Getter;
-import lombok.Setter;
 import okhttp3.Response;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 /**
  * @author hncboy
@@ -42,13 +38,4 @@ public abstract class AbstractStreamListener {
      * @param response        响应信息
      */
     public abstract void onError(String receivedMessage, Throwable t, @Nullable Response response);
-
-    /**
-     * 所有消息接收完毕的时候
-     */
-    @Setter
-    @Getter
-    protected Consumer<String> onComplete = s -> {
-        // s 是完整的消息
-    };
 }

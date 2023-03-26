@@ -1,20 +1,26 @@
 package com.hncboy.chatgpt.handler.emitter;
 
-import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.api.listener.ConsoleStreamListener;
 import com.hncboy.chatgpt.api.listener.ParsedEventSourceListener;
 import com.hncboy.chatgpt.api.listener.ResponseBodyEmitterStreamListener;
 import com.hncboy.chatgpt.api.parser.ChatCompletionResponseParser;
+import com.hncboy.chatgpt.api.storage.ApiKeyDatabaseDataStorage;
 import com.hncboy.chatgpt.config.ChatConfig;
+import com.hncboy.chatgpt.domain.entity.ChatMessageDO;
 import com.hncboy.chatgpt.domain.request.ChatProcessRequest;
+import com.hncboy.chatgpt.enums.ApiTypeEnum;
+import com.hncboy.chatgpt.service.ChatMessageService;
+import com.hncboy.chatgpt.util.ObjectMapperUtil;
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import com.unfbx.chatgpt.entity.chat.Message;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  * @author hncboy
@@ -27,38 +33,79 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
     @Resource
     private ChatConfig chatConfig;
 
+    @Resource
+    private ChatMessageService chatMessageService;
+
+    @Resource
+    private ChatCompletionResponseParser parser;
+
+    @Resource
+    private ApiKeyDatabaseDataStorage dataStorage;
+
     @Override
     public ResponseBodyEmitter requestToResponseEmitter(ChatProcessRequest chatProcessRequest) {
-        // 系统消息
-        Message systemMessage = Message.builder()
-                .role(Message.Role.SYSTEM)
-                .content("You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.\\nKnowledge cutoff: 2021-09-01\\nCurrent date: ".concat(DateUtil.today()))
-                .build();
-        // 用户消息
-        Message userMessage = Message.builder().role(Message.Role.USER)
-                .content(chatProcessRequest.getPrompt())
-                .build();
+        // 初始化聊天消息
+        ChatMessageDO chatMessageDO = chatMessageService.initChatMessage(chatProcessRequest, ApiTypeEnum.API_KEY);
+
+        // 所有消息
+        LinkedList<Message> messages = new LinkedList<>();
+        // 添加用户上下文消息
+        addContextQuestionChatMessage(chatMessageDO, messages);
+
+        // 系统角色消息
+        if (StrUtil.isNotBlank(chatProcessRequest.getSystemMessage())) {
+            // 系统消息
+            Message systemMessage = Message.builder()
+                    .role(Message.Role.SYSTEM)
+                    .content(chatProcessRequest.getSystemMessage())
+                    .build();
+            messages.addFirst(systemMessage);
+        }
 
         // 构建聊天参数
         ChatCompletion chatCompletion = ChatCompletion.builder()
                 .maxTokens(1000)
                 .model(chatConfig.getOpenaiApiModel())
+                // [0, 2] 越低越精准
                 .temperature(0.8)
                 .topP(1.0)
+                // 每次生成一条
+                .n(1)
                 .presencePenalty(1)
-                .messages(Arrays.asList(systemMessage, userMessage))
+                .messages(messages)
                 .stream(true)
                 .build();
 
         ResponseBodyEmitter emitter = new ResponseBodyEmitter();
+
         // 构建事件监听器
         ParsedEventSourceListener parsedEventSourceListener = new ParsedEventSourceListener.Builder()
                 .addListener(new ConsoleStreamListener())
                 .addListener(new ResponseBodyEmitterStreamListener(emitter))
-                .setParser(new ChatCompletionResponseParser())
+                .setParser(parser)
+                .setDataStorage(dataStorage)
+                .setOriginalRequestData(ObjectMapperUtil.toJson(chatCompletion))
+                .setChatMessageDO(chatMessageDO)
                 .build();
 
         ApiKeyChatClientBuilder.buildOpenAiStreamClient().streamChatCompletion(chatCompletion, parsedEventSourceListener);
         return emitter;
+    }
+
+    /**
+     * 添加上下文问题消息
+     *
+     * @param chatMessageDO 当前消息
+     * @param messages      消息列表
+     */
+    private void addContextQuestionChatMessage(ChatMessageDO chatMessageDO, LinkedList<Message> messages) {
+        if (Objects.isNull(chatMessageDO)) {
+            return;
+        }
+        // 从下往上找并添加，越上面的数据放越前面
+        messages.addFirst(Message.builder().role(Message.Role.USER)
+                .content(chatMessageDO.getContent())
+                .build());
+        addContextQuestionChatMessage(chatMessageService.getById(chatMessageDO.getParentQuestionMessageId()), messages);
     }
 }
