@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ApiModelVO getApiModel() {
         ApiModelVO apiModelVO = new ApiModelVO();
-        apiModelVO.setHasAuth(chatConfig.hasAuth());
+        apiModelVO.setAuth(chatConfig.hasAuth());
         apiModelVO.setModel(chatConfig.getApiTypeEnum());
         return apiModelVO;
     }

@@ -14,7 +14,7 @@ import lombok.Data;
 public class ApiModelVO {
 
     @Schema(name = "是否开启鉴权")
-    private Boolean hasAuth;
+    private Boolean auth;
 
     @Schema(name = "模型名称")
     private ApiTypeEnum model;
