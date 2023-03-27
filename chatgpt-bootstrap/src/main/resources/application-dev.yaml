@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: root
+    password: 123456
+    # server 模式 其他进程连接,
+#    h2-server-enabled: true
+#    url: jdbc:h2:tcp://localhost:9092/./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema-h2.sql'
+    # file 嵌入式，可以持久化数据，运行时自动创建数据库
+    url: jdbc:h2:file:./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema-h2.sql'
+    # 内存模式，重启数据丢失
+#    url: jdbc:h2:mem:chat;INIT=RUNSCRIPT FROM 'classpath:schema-h2.sql'
+
+mybatis-plus:
+  configuration:
+    # 控制台打印 SQL
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+chat:
+  # 访问密码
+  auth_secret_key: 123456
+  # OpenAI API Key - https://platform.openai.com/overview
+  openai_api_key: xxx
+  # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
+  openai_access_token: xxx
+  # OpenAI API Base URL - https://api.openai.com/，要加/后缀
+  openai_api_base_url: https://api.openai.com/
+  # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
+  openai_api_model:
+  # 反向代理地址 AccessToken 时使用
+  api_reverse_proxy: https://bypass.duti.tech/api/conversation
+  # 超时毫秒
+  timeout_ms: 100000
+  # HTTP 代理
+  http_proxy_host: 127.0.0.1
+  http_proxy_port: 33210

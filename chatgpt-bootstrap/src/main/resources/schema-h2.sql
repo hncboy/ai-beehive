@@ -1,6 +1,7 @@
 -- 聊天室表
 CREATE TABLE IF NOT EXISTS chat_room (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    ip VARCHAR(255) NULL,
     conversation_id VARCHAR(255) UNIQUE NULL,
     first_message_id VARCHAR(255) UNIQUE NULL,
     title VARCHAR(255) NOT NULL,
@@ -9,6 +10,7 @@ CREATE TABLE IF NOT EXISTS chat_room (
     update_time TIMESTAMP WITH TIME ZONE NOT NULL
 );
 COMMENT ON COLUMN chat_room.id IS '主键';
+COMMENT ON COLUMN chat_room.ip IS 'ip';
 COMMENT ON COLUMN chat_room.conversation_id IS '对话 id，唯一';
 COMMENT ON COLUMN chat_room.first_message_id IS '第一条消息 id，唯一';
 COMMENT ON COLUMN chat_room.title IS '对话标题，从第一条消息截取';
@@ -35,6 +37,7 @@ CREATE TABLE IF NOT EXISTS chat_message (
     prompt_tokens BIGINT,
     completion_tokens BIGINT,
     total_tokens BIGINT,
+    ip VARCHAR(255) NULL,
     status INTEGER NOT NULL,
     create_time TIMESTAMP WITH TIME ZONE NOT NULL,
     update_time TIMESTAMP WITH TIME ZONE NOT NULL
@@ -57,6 +60,7 @@ COMMENT ON COLUMN chat_message.response_error_data IS '错误的响应数据';
 COMMENT ON COLUMN chat_message.prompt_tokens IS '输入消息的 tokens';
 COMMENT ON COLUMN chat_message.completion_tokens IS '输出消息的 tokens';
 COMMENT ON COLUMN chat_message.total_tokens IS '累计 Tokens';
+COMMENT ON COLUMN chat_message.ip IS 'ip';
 COMMENT ON COLUMN chat_message.status IS '聊天记录状态';
 COMMENT ON COLUMN chat_message.create_time IS '创建时间';
 COMMENT ON COLUMN chat_message.update_time IS '更新时间';

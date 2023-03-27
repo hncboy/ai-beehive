@@ -10,6 +10,7 @@ import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
 import com.hncboy.chatgpt.base.exception.ServiceException;
+import com.hncboy.chatgpt.base.util.WebUtil;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.mapper.ChatMessageMapper;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
@@ -28,7 +29,7 @@ import java.util.UUID;
  * @date 2023/3/25 16:33
  * 聊天记录相关业务实现类
  */
-@Service
+@Service("FrontChatMessageServiceImpl")
 public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatMessageDO> implements ChatMessageService {
 
     @Resource
@@ -53,6 +54,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
         chatMessageDO.setPromptTokens(-1L);
         chatMessageDO.setCompletionTokens(-1L);
         chatMessageDO.setTotalTokens(-1L);
+        chatMessageDO.setIp(WebUtil.getIp());
         chatMessageDO.setStatus(ChatMessageStatusEnum.INIT);
         chatMessageDO.setCreateTime(new Date());
         chatMessageDO.setUpdateTime(new Date());

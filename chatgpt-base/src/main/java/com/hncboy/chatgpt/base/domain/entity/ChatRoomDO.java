@@ -29,6 +29,11 @@ public class ChatRoomDO {
     private String conversationId;
 
     /**
+     * ip
+     */
+    private String ip;
+
+    /**
      * 第一条消息 id
      * 唯一
      */

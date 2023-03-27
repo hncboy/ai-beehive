@@ -79,6 +79,11 @@ public class ChatMessageDO {
     private ApiTypeEnum apiType;
 
     /**
+     * ip
+     */
+    private String ip;
+
+    /**
      * apiKey
      */
     private String apiKey;

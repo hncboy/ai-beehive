@@ -5,19 +5,15 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.exception.AuthException;
-import com.hncboy.chatgpt.base.exception.ServiceException;
+import com.hncboy.chatgpt.base.util.WebUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 /**
  * @author hncboy
@@ -50,8 +46,7 @@ public class PreAuthAspect {
             return point.proceed();
         }
 
-        RequestAttributes requestAttributes = Optional.ofNullable(RequestContextHolder.getRequestAttributes()).orElseThrow(() -> new ServiceException("request is null"));
-        String authorization = ServletUtil.getHeader(((ServletRequestAttributes) requestAttributes).getRequest(), "Authorization", StandardCharsets.UTF_8);
+        String authorization = ServletUtil.getHeader(WebUtil.getRequest(), "Authorization", StandardCharsets.UTF_8);
         if (StrUtil.isBlank(authorization) || !authorization.replace("Bearer ", "").trim().equals(chatConfig.getAuthSecretKey().trim())) {
             throw new AuthException("Error: 无访问权限 | No access rights");
         }
