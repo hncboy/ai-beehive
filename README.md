@@ -1,10 +1,10 @@
 # chatgpt-web-java
-# 分支 official/main
+# 分支 main
 
 ## 介绍 
 
 - [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的 java 后台
-- 该分支跟随官方 main 分支联动，在不影响基本功能的情况可以对后端进行优化
+- 该分支关联项目的 2.8.5 版本
 
 ## 框架
 

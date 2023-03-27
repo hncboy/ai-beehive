@@ -1,0 +1,1 @@
+package com.hncboy.chatgpt.front.domain.query;

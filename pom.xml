@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -9,17 +8,39 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <developers>
+        <developer>
+            <name>hncboy</name>
+            <email>619452863@qq.com</email>
+            <url>https://github.com/hncboy</url>
+        </developer>
+    </developers>
+
+    <modelVersion>4.0.0</modelVersion>
     <groupId>com.hncboy</groupId>
     <artifactId>chatgpt-web-java</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <name>ChatGPT</name>
     <description>ChatGPT</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>chatgpt-base</module>
+        <module>chatgpt-front</module>
+        <module>chatgpt-admin</module>
+        <module>chatgpt-bootstrap</module>
+    </modules>
 
     <properties>
+        <revision>0.0.1-SNAPSHOT</revision>
         <java.version>17</java.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
+        <aspectj.version>1.9.19</aspectj.version>
+        <hutool-all.version>5.8.15</hutool-all.version>
         <maven.plugin.version>3.8.1</maven.plugin.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+        <springdoc.version>1.6.15</springdoc.version>
     </properties>
 
     <dependencies>
@@ -34,7 +55,7 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.9.19</version>
+            <version>${aspectj.version}</version>
         </dependency>
         <!-- Lombok -->
         <!-- https://projectlombok.org/ -->
@@ -49,7 +70,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.15</version>
+            <version>${hutool-all.version}</version>
         </dependency>
         <!-- ChatGPT SDK -->
         <!-- https://github.com/Grt1228/chatgpt-java -->
@@ -63,14 +84,14 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.15</version>
+            <version>${springdoc.version}</version>
         </dependency>
         <!-- MyBatis Plus 数据库操作 -->
         <!-- https://baomidou.com/ -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.3.1</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <!-- mapstruct -->
         <dependency>
@@ -84,6 +105,11 @@
             <artifactId>h2</artifactId>
         </dependency>
     </dependencies>
+
+    <issueManagement>
+        <system>Github Issue</system>
+        <url>https://github.com/hncboy/chatgpt-web-java/issues</url>
+    </issueManagement>
 
     <build>
         <plugins>

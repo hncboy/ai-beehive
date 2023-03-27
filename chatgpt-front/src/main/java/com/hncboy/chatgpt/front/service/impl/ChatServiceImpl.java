@@ -1,0 +1,58 @@
+package com.hncboy.chatgpt.front.service.impl;
+
+import cn.hutool.core.text.StrPool;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
+import com.hncboy.chatgpt.base.config.ChatConfig;
+import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
+import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
+import com.hncboy.chatgpt.front.domain.vo.ChatConfigVO;
+import com.hncboy.chatgpt.front.handler.emitter.AccessTokenResponseEmitter;
+import com.hncboy.chatgpt.front.handler.emitter.ApiKeyResponseEmitter;
+import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitter;
+import com.hncboy.chatgpt.front.service.ChatService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
+
+import javax.annotation.Resource;
+
+/**
+ * @author hncboy
+ * @date 2023/3/22 19:41
+ * 聊天相关业务实现类
+ */
+@Slf4j
+@Service
+public class ChatServiceImpl implements ChatService {
+
+    @Resource
+    private ChatConfig chatConfig;
+
+    @Override
+    public ChatConfigVO getChatConfig() {
+        ChatConfigVO chatConfigVO = new ChatConfigVO();
+        chatConfigVO.setApiModel(chatConfig.getApiTypeEnum());
+        chatConfigVO.setBalance(String.valueOf(ApiKeyChatClientBuilder.buildOpenAiClient().creditGrants().getTotalAvailable()));
+        chatConfigVO.setHttpsProxy(StrUtil.isAllNotEmpty(chatConfig.getHttpProxyHost(), String.valueOf(chatConfig.getHttpProxyPort()))
+                ? String.format("%s:%s", chatConfig.getHttpProxyHost(), chatConfig.getHttpProxyPort())
+                : StrPool.DASHED);
+        chatConfigVO.setReverseProxy(chatConfig.getApiReverseProxy());
+        chatConfigVO.setSocksProxy(StrPool.DASHED);
+        chatConfigVO.setTimeoutMs(chatConfig.getTimeoutMs());
+        return chatConfigVO;
+    }
+
+    @Override
+    public ResponseBodyEmitter chatProcess(ChatProcessRequest chatProcessRequest) {
+        ApiTypeEnum apiTypeEnum = chatConfig.getApiTypeEnum();
+        ResponseEmitter responseEmitter;
+        if (apiTypeEnum == ApiTypeEnum.API_KEY) {
+            responseEmitter = SpringUtil.getBean(ApiKeyResponseEmitter.class);
+        } else {
+            responseEmitter = SpringUtil.getBean(AccessTokenResponseEmitter.class);
+        }
+        return responseEmitter.requestToResponseEmitter(chatProcessRequest);
+    }
+}
