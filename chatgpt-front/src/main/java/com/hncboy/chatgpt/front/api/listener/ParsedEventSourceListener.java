@@ -80,6 +80,13 @@ public class ParsedEventSourceListener extends EventSourceListener {
     }
 
     @Override
+    public void onOpen(@NotNull EventSource eventSource, @NotNull Response response) {
+        for (AbstractStreamListener listener : listeners) {
+            listener.onInit();
+        }
+    }
+
+    @Override
     public void onEvent(@NotNull EventSource eventSource, String id, String type, @NotNull String originalData) {
         // 判断有没有结束
         boolean isEnd = Objects.equals(originalData, "[DONE]");
@@ -162,6 +169,7 @@ public class ParsedEventSourceListener extends EventSourceListener {
                 .answerChatMessageDO(answerChatMessageDO)
                 .originalRequestData(originalRequestData)
                 .originalResponseData(lastOriginalResponseData)
+                .currentStreamMessageCount(currentStreamMessageCount)
                 .errorResponseData(responseStr)
                 .parser(parser)
                 .build());

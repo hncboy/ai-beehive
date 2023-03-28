@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
+import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
+import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.front.api.listener.ConsoleStreamListener;
@@ -43,14 +45,14 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
     private ApiKeyDatabaseDataStorage dataStorage;
 
     @Override
-    public ResponseBodyEmitter requestToResponseEmitter(ChatProcessRequest chatProcessRequest) {
+    public ResponseBodyEmitter requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter) {
         // 初始化聊天消息
         ChatMessageDO chatMessageDO = chatMessageService.initChatMessage(chatProcessRequest, ApiTypeEnum.API_KEY);
 
         // 所有消息
         LinkedList<Message> messages = new LinkedList<>();
         // 添加用户上下文消息
-        addContextQuestionChatMessage(chatMessageDO, messages);
+        addContextChatMessage(chatMessageDO, messages);
 
         // 系统角色消息
         if (StrUtil.isNotBlank(chatProcessRequest.getSystemMessage())) {
@@ -76,8 +78,6 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
                 .stream(true)
                 .build();
 
-        ResponseBodyEmitter emitter = new ResponseBodyEmitter();
-
         // 构建事件监听器
         ParsedEventSourceListener parsedEventSourceListener = new ParsedEventSourceListener.Builder()
                 .addListener(new ConsoleStreamListener())
@@ -98,14 +98,29 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
      * @param chatMessageDO 当前消息
      * @param messages      消息列表
      */
-    private void addContextQuestionChatMessage(ChatMessageDO chatMessageDO, LinkedList<Message> messages) {
+    private void addContextChatMessage(ChatMessageDO chatMessageDO, LinkedList<Message> messages) {
         if (Objects.isNull(chatMessageDO)) {
             return;
         }
+
+        // 根据消息类型去选择角色，需要添加问题和回答到上下文
+        Message.Role role = Message.Role.USER;
+        if (chatMessageDO.getMessageType() == ChatMessageTypeEnum.ANSWER) {
+            role = Message.Role.ASSISTANT;
+        }
+
+        // 回答不成功的情况下，不添加回答消息记录和该回答的问题消息记录
+        if (chatMessageDO.getMessageType() == ChatMessageTypeEnum.ANSWER
+                && chatMessageDO.getStatus() != ChatMessageStatusEnum.PART_SUCCESS
+                && chatMessageDO.getStatus() != ChatMessageStatusEnum.COMPLETE_SUCCESS) {
+            addContextChatMessage(chatMessageService.getById(chatMessageDO.getParentAnswerMessageId()), messages);
+            return;
+        }
+
         // 从下往上找并添加，越上面的数据放越前面
-        messages.addFirst(Message.builder().role(Message.Role.USER)
+        messages.addFirst(Message.builder().role(role)
                 .content(chatMessageDO.getContent())
                 .build());
-        addContextQuestionChatMessage(chatMessageService.getById(chatMessageDO.getParentQuestionMessageId()), messages);
+        addContextChatMessage(chatMessageService.getById(chatMessageDO.getParentMessageId()), messages);
     }
 }

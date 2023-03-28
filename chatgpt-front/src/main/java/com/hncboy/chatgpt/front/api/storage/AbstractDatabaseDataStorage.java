@@ -3,7 +3,6 @@ package com.hncboy.chatgpt.front.api.storage;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
-import com.hncboy.chatgpt.base.util.WebUtil;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.hncboy.chatgpt.front.service.ChatRoomService;
 
@@ -43,7 +42,7 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
         answerChatMessageDO.setApiKey(questionChatMessageDO.getApiKey());
         answerChatMessageDO.setOriginalData(chatMessageStorage.getOriginalResponseData());
         answerChatMessageDO.setStatus(ChatMessageStatusEnum.PART_SUCCESS);
-        answerChatMessageDO.setIp(WebUtil.getIp());
+        answerChatMessageDO.setIp(questionChatMessageDO.getIp());
         answerChatMessageDO.setCreateTime(new Date());
         answerChatMessageDO.setUpdateTime(new Date());
 

@@ -12,6 +12,13 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractStreamListener {
 
     /**
+     * 初始化
+     */
+    public void onInit() {
+
+    }
+
+    /**
      * 接收到新消息
      *
      * @param newMessage         新的单条消息
