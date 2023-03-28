@@ -3,9 +3,10 @@ package com.hncboy.chatgpt.front.service.impl;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
+import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
+import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.domain.vo.ChatConfigVO;
 import com.hncboy.chatgpt.front.handler.emitter.AccessTokenResponseEmitter;
@@ -53,6 +54,11 @@ public class ChatServiceImpl implements ChatService {
         } else {
             responseEmitter = SpringUtil.getBean(AccessTokenResponseEmitter.class);
         }
-        return responseEmitter.requestToResponseEmitter(chatProcessRequest);
+
+        // 超时时间设置 3 分钟
+        ResponseBodyEmitter emitter = new ResponseBodyEmitter(3 * 60 * 1000L);
+        emitter.onCompletion(() -> log.debug("请求参数：{}，Front-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
+        emitter.onTimeout(() -> log.error("请求参数：{}，Back-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
+        return responseEmitter.requestToResponseEmitter(chatProcessRequest, emitter);
     }
 }

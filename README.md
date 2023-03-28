@@ -19,14 +19,19 @@
 
 ### 已实现
 
-- 通过 h2 数据库实现聊天数据存储来实现 apiKey 方式的上下文聊天。
+- 通过 h2 数据库实现聊天数据存储来实现 apiKey 方式的上下文聊天
 - 聊天记录通过 h2 进行内存存储或持久化
+- AccessToken 和 ApiKey 发送消息
 
 ### 待实现
 
 - 配置 dockfile 打包
 - ip 限流
 - 异常信息特定封装返回
+
+### 后续计划
+
+- 后台管理界面
 
 ## 接口
 
@@ -54,6 +59,7 @@
 | 列名             | 数据类型                 | 约束                        | 说明                       |
 | ---------------- | ------------------------ | --------------------------- | -------------------------- |
 | id               | BIGINT                   | PRIMARY KEY, AUTO_INCREMENT | 主键                       |
+| ip               | VARCHAR(255)             | NULL                        | ip                         |
 | conversation_id  | VARCHAR(255)             | UNIQUE, NULL                | 对话 id，唯一              |
 | first_message_id | VARCHAR(255)             | UNIQUE, NULL                | 第一条消息 id，唯一        |
 | title            | VARCHAR(255)             | NOT NULL                    | 对话标题，从第一条消息截取 |
@@ -82,6 +88,7 @@
 | prompt_tokens              | BIGINT                   |             | 输入消息的 tokens        |
 | completion_tokens          | BIGINT                   |             | 输出消息的 tokens        |
 | total_tokens               | BIGINT                   |             | 累计 Tokens              |
+| ip                         | VARCHAR(255)             |             | ip                       |
 | status                     | INTEGER                  | NOT NULL    | 聊天记录状态             |
 | create_time                | TIMESTAMP WITH TIME ZONE | NOT NULL    | 创建时间                 |
 | update_time                | TIMESTAMP WITH TIME ZONE | NOT NULL    | 更新时间                 |

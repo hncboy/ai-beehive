@@ -44,7 +44,7 @@ public class AccessTokenResponseEmitter implements ResponseEmitter {
     private AccessTokenDatabaseDataStorage dataStorage;
 
     @Override
-    public ResponseBodyEmitter requestToResponseEmitter(ChatProcessRequest chatProcessRequest) {
+    public ResponseBodyEmitter requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter) {
         // 构建 accessTokenApiClient
         AccessTokenApiClient accessTokenApiClient = AccessTokenApiClient.builder()
                 .accessToken(chatConfig.getOpenaiAccessToken())
@@ -59,7 +59,6 @@ public class AccessTokenResponseEmitter implements ResponseEmitter {
         ConversationRequest conversationRequest = buildConversationRequest(chatMessageDO);
 
         // 构建事件监听器
-        ResponseBodyEmitter emitter = new ResponseBodyEmitter();
         ParsedEventSourceListener parsedEventSourceListener = new ParsedEventSourceListener.Builder()
                 .addListener(new ConsoleStreamListener())
                 .addListener(new ResponseBodyEmitterStreamListener(emitter))

@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.base.util;
 
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
@@ -42,7 +43,7 @@ public class ObjectMapperUtil {
         try {
             return OBJECT_MAPPER.readValue(json, clazz);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to convert JSON to object", e);
+            throw new RuntimeException(StrUtil.format("{} Failed to convert JSON to object", json, e));
         }
     }
 }

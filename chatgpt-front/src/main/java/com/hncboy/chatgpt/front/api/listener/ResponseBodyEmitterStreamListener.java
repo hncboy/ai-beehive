@@ -1,14 +1,14 @@
 package com.hncboy.chatgpt.front.api.listener;
 
+import com.hncboy.chatgpt.base.exception.ServiceException;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.front.domain.vo.ChatReplyMessageVO;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
-import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -17,7 +17,7 @@ import java.util.Objects;
  * ResponseBodyEmitter 消息流监听
  */
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ResponseBodyEmitterStreamListener extends AbstractStreamListener {
 
     private final ResponseBodyEmitter emitter;
@@ -30,8 +30,9 @@ public class ResponseBodyEmitterStreamListener extends AbstractStreamListener {
 
         try {
             emitter.send((messageCount != 1 ? "\n" : "") + ObjectMapperUtil.toJson(chatReplyMessageVO));
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("消息发送异常，第{}条消息，消息内容：{}", messageCount, receivedMessage, e);
+            throw new ServiceException("消息发送异常");
         }
     }
 
@@ -49,7 +50,11 @@ public class ResponseBodyEmitterStreamListener extends AbstractStreamListener {
         } catch (Exception e) {
             log.warn("消息发送异常，处理异常发送消息时出错", e);
         } finally {
-            emitter.complete();
+            try {
+                emitter.complete();
+            } catch (Exception ignored) {
+
+            }
         }
     }
 }
