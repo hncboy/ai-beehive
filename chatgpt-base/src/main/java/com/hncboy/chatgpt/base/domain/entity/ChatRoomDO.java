@@ -40,7 +40,7 @@ public class ChatRoomDO {
     private String firstMessageId;
 
     /**
-     * 对话标题，从第一条消息截取
+     * 对话标题
      */
     private String title;
 

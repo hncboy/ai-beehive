@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS chat_room (
 COMMENT ON COLUMN chat_room.id IS '主键';
 COMMENT ON COLUMN chat_room.ip IS 'ip';
 COMMENT ON COLUMN chat_room.conversation_id IS '对话 id，唯一';
-COMMENT ON COLUMN chat_room.first_message_id IS '第一条消息 id，唯一';
+COMMENT ON COLUMN chat_room.first_message_id IS '第一条消息';
 COMMENT ON COLUMN chat_room.title IS '对话标题，从第一条消息截取';
 COMMENT ON COLUMN chat_room.api_type IS 'API 类型';
 COMMENT ON COLUMN chat_room.create_time IS '创建时间';
