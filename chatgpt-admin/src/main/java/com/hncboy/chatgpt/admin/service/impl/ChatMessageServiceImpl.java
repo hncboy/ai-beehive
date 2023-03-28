@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * @author hncboy
  * @date 2023/3/27 21:46
- * 聊天记录相关业务实现类
+ * 聊天记录业务实现类
  */
 @Service("AdminChatMessageServiceImpl")
 public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatMessageDO> implements ChatMessageService {

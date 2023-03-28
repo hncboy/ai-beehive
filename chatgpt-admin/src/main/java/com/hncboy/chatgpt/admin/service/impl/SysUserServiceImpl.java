@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 /**
  * @author hncboy
  * @date 2023/3/28 12:44
- * 系统用户相关接口实现类
+ * 系统用户业务实现类
  */
 @Service
 public class SysUserServiceImpl implements SysUserService {

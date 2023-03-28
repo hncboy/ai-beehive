@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author hncboy
  * @date 2023/3/27 21:46
- * 聊天室相关业务实现类
+ * 聊天室业务实现类
  */
 @Service("AdminChatRoomServiceImpl")
 public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomMapper, ChatRoomDO> implements ChatRoomService {

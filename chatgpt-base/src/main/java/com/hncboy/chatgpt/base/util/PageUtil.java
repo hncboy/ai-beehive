@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.base.util;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.experimental.UtilityClass;
@@ -17,8 +18,20 @@ public class PageUtil {
     /**
      * IPage 转 Page
      *
+     * @param page   IPage
+     * @param target 需要 copy 转换的类型
+     * @param <T>    泛型
+     * @return PageResult
+     */
+    public static <T> Page<T> toPage(IPage<?> page, Class<T> target) {
+        return toPage(page, BeanUtil.copyToList(page.getRecords(), target));
+    }
+
+    /**
+     * IPage 转 Page
+     *
      * @param page    IPage
-     * @param records 转换过的list模型
+     * @param records 转换过的 List 模型
      * @param <T>     泛型
      * @return PageResult
      */

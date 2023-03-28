@@ -1,10 +1,13 @@
 package com.hncboy.chatgpt.front.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
+import com.hncboy.chatgpt.base.exception.ServiceException;
+import com.hncboy.chatgpt.base.handler.SensitiveWordHandler;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author hncboy
@@ -47,6 +51,15 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ResponseBodyEmitter chatProcess(ChatProcessRequest chatProcessRequest) {
+        List<String> prompts = SensitiveWordHandler.checkWord(chatProcessRequest.getPrompt());
+        if (CollectionUtil.isNotEmpty(prompts)) {
+            throw new ServiceException(StrUtil.format("发送失败，包含敏感词{}", prompts));
+        }
+        List<String> systemMessages = SensitiveWordHandler.checkWord(chatProcessRequest.getSystemMessage());
+        if (CollectionUtil.isNotEmpty(systemMessages)) {
+            throw new ServiceException(StrUtil.format("发送失败，系统消息包含敏感词{}", prompts));
+        }
+
         ApiTypeEnum apiTypeEnum = chatConfig.getApiTypeEnum();
         ResponseEmitter responseEmitter;
         if (apiTypeEnum == ApiTypeEnum.API_KEY) {

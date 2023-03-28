@@ -1,4 +1,4 @@
-package com.hncboy.chatgpt.config;
+package com.hncboy.chatgpt.base.config;
 
 import org.h2.tools.Server;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

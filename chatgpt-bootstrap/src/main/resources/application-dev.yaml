@@ -38,3 +38,5 @@ chat:
   admin_account: admin
   # 管理端密码
   admin_password: admin
+  # 管理端敏感词是否脱敏，演示用
+  admin_sensitive_word_desensitized_enabled: true
