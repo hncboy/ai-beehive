@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS chat_room (
     id BIGINT PRIMARY KEY COMMENT '主键',
     ip VARCHAR(255) NULL COMMENT 'ip',
     conversation_id VARCHAR(255) UNIQUE NULL COMMENT '对话 id，唯一',
-    first_message_id VARCHAR(255) UNIQUE NULL COMMENT '第一条消息',
+    first_chat_message_id BIGINT UNIQUE NOT NULL  COMMENT '第一条消息主键',
+    first_message_id VARCHAR(255) UNIQUE NOT NULL COMMENT '第一条消息',
     title VARCHAR(255) NOT NULL COMMENT '对话标题，从第一条消息截取',
     api_type VARCHAR(20) NOT NULL COMMENT 'API 类型',
     create_time TIMESTAMP NOT NULL COMMENT '创建时间',
@@ -12,7 +13,8 @@ CREATE TABLE IF NOT EXISTS chat_room (
 
 -- 聊天消息表
 CREATE TABLE IF NOT EXISTS chat_message (
-    message_id VARCHAR(255) PRIMARY KEY COMMENT '消息 id',
+    id BIGINT PRIMARY KEY COMMENT '主键',
+    message_id VARCHAR(255) UNIQUE NOT NULL COMMENT '消息 id',
     parent_message_id VARCHAR(255) COMMENT '父级消息 id',
     parent_answer_message_id VARCHAR(255) COMMENT '父级回答消息 id',
     parent_question_message_id VARCHAR(255) COMMENT '父级问题消息 id',

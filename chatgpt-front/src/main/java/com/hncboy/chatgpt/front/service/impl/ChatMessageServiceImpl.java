@@ -2,6 +2,7 @@ package com.hncboy.chatgpt.front.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
@@ -42,6 +43,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
     @Override
     public ChatMessageDO initChatMessage(ChatProcessRequest chatProcessRequest, ApiTypeEnum apiTypeEnum) {
         ChatMessageDO chatMessageDO = new ChatMessageDO();
+        chatMessageDO.setId(IdWorker.getId());
         // 消息 id 手动生成
         chatMessageDO.setMessageId(UUID.randomUUID().toString());
         chatMessageDO.setMessageType(ChatMessageTypeEnum.QUESTION);

@@ -37,6 +37,12 @@ public class ChatRoomDO {
     private String ip;
 
     /**
+     * 第一条消息主键
+     * 唯一
+     */
+    private Long firstChatMessageId;
+
+    /**
      * 第一条消息 id
      * 唯一
      */
