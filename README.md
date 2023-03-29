@@ -67,6 +67,12 @@
 - 项目启动时会自动运行 h2 的建库建表 SQL，默认 file 持久化
 - 目前是通过 IDEA 运行，后面配置下 Dockfile
 
+## Docker build & Run
+```shell
+ docker build -t chatgpt-web-java .
+ docker run -d -p 3002:3002 chatgpt-web-java
+```
+
 ## 表结构
 
 - 聊天室表
