@@ -27,7 +27,7 @@ public class PreAuthAspect {
     @Resource
     private ChatConfig chatConfig;
 
-    @Pointcut("@annotation(com.hncboy.chatgpt.base.annotation.PreAuth) || @within(com.hncboy.chatgpt.base.annotation.PreAuth)")
+    @Pointcut("@annotation(com.hncboy.chatgpt.base.annotation.FrontPreAuth) || @within(com.hncboy.chatgpt.base.annotation.FrontPreAuth)")
     public void pointcut() {
 
     }

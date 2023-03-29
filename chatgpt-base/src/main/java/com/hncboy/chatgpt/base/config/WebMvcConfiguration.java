@@ -1,4 +1,4 @@
-package com.hncboy.chatgpt.config;
+package com.hncboy.chatgpt.base.config;
 
 import com.hncboy.chatgpt.base.annotation.ApiAdminRestController;
 import com.hncboy.chatgpt.base.constant.ApplicationConstant;

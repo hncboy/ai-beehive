@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2023/3/22 16:50
  * ChatGptApplication
  */
-@MapperScan(value = {"com.hncboy.chatgpt.front.mapper", "com.hncboy.chatgpt.admin.mapper"})
+@MapperScan(value = {"com.hncboy.**.mapper"})
 @SpringBootApplication
 public class ChatGptApplication {
 

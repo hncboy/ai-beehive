@@ -1,6 +1,6 @@
 package com.hncboy.chatgpt.front.controller;
 
-import com.hncboy.chatgpt.base.annotation.PreAuth;
+import com.hncboy.chatgpt.base.annotation.FrontPreAuth;
 import com.hncboy.chatgpt.base.handler.response.R;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.domain.vo.ChatConfigVO;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2023/3/22 19:47
  * 聊天相关接口
  */
-@PreAuth
+@FrontPreAuth
 @AllArgsConstructor
 @Tag(name = "聊天相关接口")
 @RestController

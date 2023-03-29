@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS chat_room (
 COMMENT ON COLUMN chat_room.id IS '主键';
 COMMENT ON COLUMN chat_room.ip IS 'ip';
 COMMENT ON COLUMN chat_room.conversation_id IS '对话 id，唯一';
-COMMENT ON COLUMN chat_room.first_message_id IS '第一条消息 id，唯一';
+COMMENT ON COLUMN chat_room.first_message_id IS '第一条消息';
 COMMENT ON COLUMN chat_room.title IS '对话标题，从第一条消息截取';
 COMMENT ON COLUMN chat_room.api_type IS 'API 类型';
 COMMENT ON COLUMN chat_room.create_time IS '创建时间';
@@ -64,3 +64,19 @@ COMMENT ON COLUMN chat_message.ip IS 'ip';
 COMMENT ON COLUMN chat_message.status IS '聊天记录状态';
 COMMENT ON COLUMN chat_message.create_time IS '创建时间';
 COMMENT ON COLUMN chat_message.update_time IS '更新时间';
+
+-- 敏感词表
+CREATE TABLE IF NOT EXISTS sensitive_word (
+    -- 主键
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    -- 敏感词内容
+    word VARCHAR(255) NOT NULL,
+    -- 创建时间
+    create_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    -- 更新时间
+    update_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- 状态 1 启用 2 停用
+    status INTEGER NOT NULL,
+    -- 是否删除 0 否 NULL 是
+    is_deleted INTEGER DEFAULT 0
+);
