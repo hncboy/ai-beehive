@@ -33,7 +33,7 @@ public class SensitiveWordRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         try {
             // 从本地文件读取敏感词
-            ClassPathResource sensitiveWordResource = new ClassPathResource("sensitive_word_base64.txt");
+            ClassPathResource sensitiveWordResource = new ClassPathResource("data/sensitive_word_base64.txt");
             List<String> sensitiveWords = FileUtil.readLines(sensitiveWordResource.getFile(), Charset.defaultCharset());
             // 拆分敏感词列表
             List<List<String>> splitSensitiveWords = ListUtil.split(sensitiveWords, 100);
