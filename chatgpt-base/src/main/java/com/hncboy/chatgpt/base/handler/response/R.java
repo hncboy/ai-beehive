@@ -12,19 +12,19 @@ import javax.servlet.http.HttpServletResponse;
  * 响应结果
  */
 @Data
-@Schema(name = "响应结果")
+@Schema(title = "响应结果")
 public class R<T> {
 
-    @Schema(name = "状态码")
+    @Schema(title = "状态码")
     private int code;
 
-    @Schema(name = "状态字符串")
+    @Schema(title = "状态字符串")
     private ResultStatusEnum status;
 
-    @Schema(name = "承载数据")
+    @Schema(title = "承载数据")
     private T data;
 
-    @Schema(name = "返回消息")
+    @Schema(title = "返回消息")
     private String message;
 
     private R(IResultCode resultCode) {
@@ -124,8 +124,8 @@ public class R<T> {
      * 返回 R
      *
      * @param resultCode 状态码
-     * @param msg  消息
-     * @param <T>  T 泛型标记
+     * @param msg        消息
+     * @param <T>        T 泛型标记
      * @return R
      */
     public static <T> R<T> fail(IResultCode resultCode, String msg) {

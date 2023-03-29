@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
 /**
  * @author hncboy
  * @date 2023/3/23 00:18
- * 鉴权注解
+ * 前端鉴权注解
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface PreAuth {
+public @interface FrontPreAuth {
 }

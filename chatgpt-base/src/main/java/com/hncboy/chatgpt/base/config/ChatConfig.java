@@ -68,6 +68,16 @@ public class ChatConfig implements InitializingBean {
     private Integer httpProxyPort;
 
     /**
+     * 管理端账号
+     */
+    private String adminAccount;
+
+    /**
+     * 管理端密码
+     */
+    private String adminPassword;
+
+    /**
      * 判断是否有 http 代理
      *
      * @return true/false

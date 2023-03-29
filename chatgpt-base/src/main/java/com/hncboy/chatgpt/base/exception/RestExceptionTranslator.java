@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.base.exception;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import com.hncboy.chatgpt.base.handler.response.R;
 import com.hncboy.chatgpt.base.handler.response.ResultCode;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Configuration
 @RestControllerAdvice
 public class RestExceptionTranslator {
+
+    /**
+     * 管理端登录异常处理
+     * HTTP 状态为 401
+     *
+     * @param e 异常信息
+     * @return 返回值
+     */
+    @ExceptionHandler(NotLoginException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public R<Void> handleError(NotLoginException e) {
+        log.error("管理端登录异常", e);
+        return R.fail(ResultCode.UN_AUTHORIZED, e.getMessage());
+    }
 
     /**
      * 业务异常处理
