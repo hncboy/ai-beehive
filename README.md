@@ -1,10 +1,13 @@
 # chatgpt-web-java
+
+[TOC]
+
 # 分支 main
 
 ## 介绍 
 
-- [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的 java 后台
-- 该分支关联项目的 2.8.5 版本
+- [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的 Java 后台
+- 该分支关联项目的 2.8.5 Release 版本，在不改动前端的情况下更新后台
 
 ## 框架
 
@@ -15,23 +18,35 @@
 - [PlexPt ChatGPT java sdk](https://github.com/PlexPt/chatgpt-java)
 - [Grt1228 ChatGPT java sdk](https://github.com/Grt1228/chatgpt-java)
 
-## 功能
+## 已实现功能
 
-### 已实现
+### 上下文聊天
 
-- 通过 h2 数据库实现聊天数据存储来实现 apiKey 方式的上下文聊天
-- 聊天记录通过 h2 进行内存存储或持久化
-- AccessToken 和 ApiKey 发送消息
+通过 h2 数据库实现聊天数据存储来实现 apiKey 方式的上下文聊天，AccessToken 默认支持上下文聊天。
 
-### 待实现
+数据库存储了每次聊天对话的记录，在选择上下文聊天时，通过 parentMessageId 往上递归遍历获取历史消息，将历史问题以及回答消息都发送给 GPT。
+
+### 聊天记录存储
+
+聊天记录通过 h2 进行内存存储或持久化，选择内存模式项目启动时会丢失聊天记录，选择文件存储可以持久化数据。在数据库表结构变更时需要手动维护历史数据和表结构，这块还没考虑好怎么维护。
+
+项目默认 h2 file 默认模式启动，在启动时执行创建表 SQL 语句。
+
+### 敏感词过滤
+
+在项目启动时会将敏感词文件 sensitive_word_base64.txt 的数据导入到敏感词表，在文件中敏感词以 base64 形式存放。并将敏感词表的数据构建到 HuTool 提供的 WordTree 类中。在发送消息调用方法判断是否属于敏感词，是的话消息发送不成功。为了兼容前端保持上下文关系，在消息内容属于敏感词的情况下会正常返回消息格式，但是带的是请求的的 conversationI 和 parentMessagId。
+
+![](pics/sensitive_word_test.png)
+
+## 待实现功能
 
 - 配置 dockfile 打包
 - ip 限流
-- 异常信息特定封装返回
+- GPT 接口异常信息特定封装返回
 
-### 后续计划
+## 存在问题
 
-- 后台管理界面
+- 在接口返回报错信息时，不会携带 conversationid 和 parentMessageId，导致前端下一次发送消息时会丢失这两个字段，丢失上下文关系。
 
 ## 接口
 
@@ -59,7 +74,6 @@
 | 列名             | 数据类型                 | 约束                        | 说明                       |
 | ---------------- | ------------------------ | --------------------------- | -------------------------- |
 | id               | BIGINT                   | PRIMARY KEY, AUTO_INCREMENT | 主键                       |
-| ip               | VARCHAR(255)             | NULL                        | ip                         |
 | conversation_id  | VARCHAR(255)             | UNIQUE, NULL                | 对话 id，唯一              |
 | first_message_id | VARCHAR(255)             | UNIQUE, NULL                | 第一条消息 id，唯一        |
 | title            | VARCHAR(255)             | NOT NULL                    | 对话标题，从第一条消息截取 |
@@ -88,7 +102,17 @@
 | prompt_tokens              | BIGINT                   |             | 输入消息的 tokens        |
 | completion_tokens          | BIGINT                   |             | 输出消息的 tokens        |
 | total_tokens               | BIGINT                   |             | 累计 Tokens              |
-| ip                         | VARCHAR(255)             |             | ip                       |
 | status                     | INTEGER                  | NOT NULL    | 聊天记录状态             |
 | create_time                | TIMESTAMP WITH TIME ZONE | NOT NULL    | 创建时间                 |
 | update_time                | TIMESTAMP WITH TIME ZONE | NOT NULL    | 更新时间                 |
+
+- 敏感词表
+
+| 字段名      | 数据类型                 | 是否为空 | 默认值                                        | 描述                      |
+| ----------- | ------------------------ | -------- | --------------------------------------------- | ------------------------- |
+| id          | BIGINT                   | NOT NULL | AUTO_INCREMENT                                | 主键                      |
+| word        | VARCHAR(255)             | NOT NULL |                                               | 敏感词内容                |
+| create_time | TIMESTAMP WITH TIME ZONE | NULL     | CURRENT_TIMESTAMP                             | 创建时间                  |
+| update_time | TIMESTAMP WITH TIME ZONE | NULL     | CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新时间                  |
+| status      | INTEGER                  | NOT NULL |                                               | 状态，1为启用，2为停用    |
+| is_deleted  | INTEGER                  | NULL     | 0                                             | 是否删除，0为否，NULL为是 |

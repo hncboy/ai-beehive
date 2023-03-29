@@ -4,8 +4,8 @@ spring:
     username: root
     password: 123456
     # server 模式 其他进程连接,
-#    h2-server-enabled: true
-#    url: jdbc:h2:tcp://localhost:9092/./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema-h2.sql'
+    #    h2-server-enabled: true
+    #    url: jdbc:h2:tcp://localhost:9092/./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema-h2.sql'
     # file 嵌入式，可以持久化数据，运行时自动创建数据库
     url: jdbc:h2:file:./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema-h2.sql'
     # 内存模式，重启数据丢失
@@ -34,3 +34,9 @@ chat:
   # HTTP 代理
   http_proxy_host: 127.0.0.1
   http_proxy_port: 33210
+  # 管理端账号
+  admin_account: admin
+  # 管理端密码
+  admin_password: admin
+  # 管理端敏感词是否脱敏，演示用
+  admin_sensitive_word_desensitized_enabled: true

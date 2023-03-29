@@ -2,16 +2,14 @@ package com.hncboy.chatgpt.front.service.impl;
 
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
 import com.hncboy.chatgpt.base.config.ChatConfig;
-import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.domain.vo.ChatConfigVO;
-import com.hncboy.chatgpt.front.handler.emitter.AccessTokenResponseEmitter;
-import com.hncboy.chatgpt.front.handler.emitter.ApiKeyResponseEmitter;
-import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitter;
+import com.hncboy.chatgpt.front.handler.emitter.ChatMessageEmitterChain;
+import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitterChain;
+import com.hncboy.chatgpt.front.handler.emitter.SensitiveWordEmitterChain;
 import com.hncboy.chatgpt.front.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,18 +45,15 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ResponseBodyEmitter chatProcess(ChatProcessRequest chatProcessRequest) {
-        ApiTypeEnum apiTypeEnum = chatConfig.getApiTypeEnum();
-        ResponseEmitter responseEmitter;
-        if (apiTypeEnum == ApiTypeEnum.API_KEY) {
-            responseEmitter = SpringUtil.getBean(ApiKeyResponseEmitter.class);
-        } else {
-            responseEmitter = SpringUtil.getBean(AccessTokenResponseEmitter.class);
-        }
-
         // 超时时间设置 3 分钟
         ResponseBodyEmitter emitter = new ResponseBodyEmitter(3 * 60 * 1000L);
         emitter.onCompletion(() -> log.debug("请求参数：{}，Front-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
         emitter.onTimeout(() -> log.error("请求参数：{}，Back-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
-        return responseEmitter.requestToResponseEmitter(chatProcessRequest, emitter);
+
+        // 构建 emitter 处理链路
+        ResponseEmitterChain emitterChain = new SensitiveWordEmitterChain();
+        emitterChain.setNext(new ChatMessageEmitterChain());
+        emitterChain.doChain(chatProcessRequest, emitter);
+        return emitter;
     }
 }

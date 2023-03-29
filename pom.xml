@@ -41,6 +41,8 @@
         <maven.plugin.version>3.8.1</maven.plugin.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <springdoc.version>1.6.15</springdoc.version>
+        <satoken.version>1.34.0</satoken.version>
+        <guava.version>31.1-jre</guava.version>
     </properties>
 
     <dependencies>
@@ -104,6 +106,20 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
+        <!-- SaToken 鉴权 -->
+        <!-- https://sa-token.cc -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <version>${satoken.version}</version>
+        </dependency>
+        <!-- guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
     </dependencies>
 
     <issueManagement>
