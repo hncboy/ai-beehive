@@ -3,3 +3,4 @@ server:
 spring:
   profiles:
     active: dev
+#    active: dev-mysql

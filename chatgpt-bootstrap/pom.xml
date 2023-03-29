@@ -9,6 +9,9 @@
     </parent>
     <artifactId>chatgpt-bootstrap</artifactId>
 
+    <properties>
+        <mysql-connector.version>8.0.29</mysql-connector.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.hncboy</groupId>
@@ -24,6 +27,12 @@
             <groupId>com.hncboy</groupId>
             <artifactId>chatgpt-base</artifactId>
             <version>${revision}</version>
+        </dependency>
+        <!--Mysql数据库驱动-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector.version}</version>
         </dependency>
     </dependencies>
 

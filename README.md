@@ -19,8 +19,8 @@
 
 ### 已实现
 
-- 通过 h2 数据库实现聊天数据存储来实现 apiKey 方式的上下文聊天
-- 聊天记录通过 h2 进行内存存储或持久化
+- 通过 h2 / MySQL 数据库实现聊天数据存储来实现 apiKey 方式的上下文聊天
+- 聊天记录通过 h2 / MySQL进行内存存储或持久化
 - AccessToken 和 ApiKey 发送消息
 
 ### 待实现
@@ -49,7 +49,10 @@
 ## 运行
 
 - 根据 application.properties 里的配置，优先 ApiKey 方式
-- 项目启动时会自动运行 h2 的建库建表 SQL，默认 file 持久化
+- 项目启动时默认会自动运行 h2 的建库建表 SQL，默认 file 持久化；
+- 如果需要通过MySQL存储：
+  - 需要先创建schema，schema name为chat，再导入schema-mysql.sql
+  - application.yaml中spring.profiles.active由dev改为dev-mysql 
 - 目前是通过 IDEA 运行，后面配置下 Dockfile
 
 ## 表结构

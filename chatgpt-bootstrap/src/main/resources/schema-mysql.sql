@@ -1,0 +1,60 @@
+-- 聊天室表
+CREATE TABLE IF NOT EXISTS chat_room
+(
+    id               BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
+    ip               VARCHAR(255)        NULL COMMENT 'ip',
+    conversation_id  VARCHAR(255) UNIQUE NULL COMMENT '对话 id，唯一',
+    first_message_id VARCHAR(255) UNIQUE NULL COMMENT '第一条消息 id，唯一',
+    title            VARCHAR(255)        NOT NULL COMMENT '对话标题，从第一条消息截取',
+    api_type         VARCHAR(20)         NOT NULL COMMENT 'API 类型',
+    create_time      TIMESTAMP           NOT NULL COMMENT '创建时间',
+    update_time      TIMESTAMP           NOT NULL COMMENT '更新时间'
+);
+
+
+-- 聊天消息表
+CREATE TABLE IF NOT EXISTS chat_message
+(
+    message_id                 VARCHAR(255) PRIMARY KEY COMMENT '消息 id',
+    parent_message_id          VARCHAR(255) COMMENT '父级消息 id',
+    parent_answer_message_id   VARCHAR(255) COMMENT '父级回答消息 id',
+    parent_question_message_id VARCHAR(255) COMMENT '父级问题消息 id',
+    context_count              BIGINT        NOT NULL COMMENT '上下文数量',
+    question_context_count     BIGINT        NOT NULL COMMENT '问题上下文数量',
+    message_type               INTEGER       NOT NULL COMMENT '消息类型枚举',
+    chat_room_id               BIGINT        NOT NULL COMMENT '聊天室 id',
+    conversation_id            VARCHAR(255)  NULL COMMENT '对话 id',
+    api_type                   VARCHAR(20)   NOT NULL COMMENT 'API 类型',
+    api_key                    VARCHAR(255)  NULL COMMENT 'ApiKey',
+    content                    VARCHAR(5000) NOT NULL COMMENT '消息内容',
+    original_data              TEXT COMMENT '消息的原始请求或响应数据',
+    response_error_data        TEXT COMMENT '错误的响应数据',
+    prompt_tokens              BIGINT COMMENT '输入消息的 tokens',
+    completion_tokens          BIGINT COMMENT '输出消息的 tokens',
+    total_tokens               BIGINT COMMENT '累计 Tokens',
+    ip                         VARCHAR(255)  NULL COMMENT 'ip',
+    status                     INTEGER       NOT NULL COMMENT '聊天记录状态',
+    create_time                TIMESTAMP     NOT NULL COMMENT '创建时间',
+    update_time                TIMESTAMP     NOT NULL COMMENT '更新时间'
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
