@@ -1,7 +1,10 @@
 package com.hncboy.chatgpt.front.domain.vo;
 
+import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.util.Optional;
 
 /**
  * @author hncboy
@@ -29,4 +32,13 @@ public class ChatReplyMessageVO {
 
     @Schema(name = "回复的消息")
     private String text;
+
+    public static ChatReplyMessageVO onEmitterChainException(ChatProcessRequest request) {
+        ChatProcessRequest.Options options = request.getOptions();
+        ChatReplyMessageVO chatReplyMessageVO = new ChatReplyMessageVO();
+        chatReplyMessageVO.setId(Optional.of(options).orElse(new ChatProcessRequest.Options()).getParentMessageId());
+        chatReplyMessageVO.setConversationId(Optional.of(options).orElse(new ChatProcessRequest.Options()).getConversationId());
+        chatReplyMessageVO.setParentMessageId(null);
+        return chatReplyMessageVO;
+    }
 }

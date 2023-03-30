@@ -10,7 +10,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author hncboy
@@ -24,12 +23,8 @@ public class SensitiveWordEmitterChain extends AbstractResponseEmitterChain {
         List<String> prompts = SensitiveWordHandler.checkWord(request.getPrompt());
         List<String> systemMessages = SensitiveWordHandler.checkWord(request.getSystemMessage());
         try {
-            ChatProcessRequest.Options options = request.getOptions();
             // 取上一条消息的 parentMessageId 和 conversationId，使得敏感词检测未通过时不影响上下文
-            ChatReplyMessageVO chatReplyMessageVO = new ChatReplyMessageVO();
-            chatReplyMessageVO.setId(Optional.of(options).orElse(new ChatProcessRequest.Options()).getParentMessageId());
-            chatReplyMessageVO.setConversationId(Optional.of(options).orElse(new ChatProcessRequest.Options()).getConversationId());
-            chatReplyMessageVO.setParentMessageId(null);
+            ChatReplyMessageVO chatReplyMessageVO = ChatReplyMessageVO.onEmitterChainException(request);
             if (CollectionUtil.isNotEmpty(prompts)) {
                 chatReplyMessageVO.setText(StrUtil.format("发送失败，包含敏感词{}", prompts));
                 emitter.send(ObjectMapperUtil.toJson(chatReplyMessageVO));
