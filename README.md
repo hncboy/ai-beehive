@@ -37,9 +37,14 @@
 
 ![](pics/sensitive_word_test.png)
 
+### ip 限流
+
+基于内存和双端队列实现滑动窗口限流，在配置文件中配置 maxRequest 和 maxRequestSecond。
+
+![](pics/ip_limit_test.png)
+
 ## 待实现功能
 
-- ip 限流
 - GPT 接口异常信息特定封装返回
 
 ## 存在问题
@@ -61,8 +66,6 @@
 
 ## 运行
 
-- 根据 application.properties 里的配置，优先 ApiKey 方式
-- 项目启动时会自动运行 h2 的建库建表 SQL，默认 file 持久化
 - IDEA、Dockfile
 
 ## Docker build & Run

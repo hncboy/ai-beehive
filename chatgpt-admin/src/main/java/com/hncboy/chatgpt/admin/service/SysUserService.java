@@ -1,6 +1,9 @@
 package com.hncboy.chatgpt.admin.service;
 
 import com.hncboy.chatgpt.admin.domain.request.SysUserLoginRequest;
+import com.hncboy.chatgpt.admin.domain.vo.RateLimitVO;
+
+import java.util.List;
 
 /**
  * @author hncboy
@@ -15,4 +18,11 @@ public interface SysUserService {
      * @param sysUserLoginRequest 登录参数
      */
     void login(SysUserLoginRequest sysUserLoginRequest);
+
+    /**
+     * 查询限流列表
+     *
+     * @return 限流列表
+     */
+    List<RateLimitVO> listRateLimit();
 }

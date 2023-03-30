@@ -20,6 +20,10 @@ public class ChatMessagePageQuery extends PageQuery {
     @Schema(title = "聊天室 id")
     private Long chatRoomId;
 
+    @Size(max = 20, message = "ip 字数不能超过 20")
+    @Schema(title = "ip")
+    private String ip;
+
     @Size(max = 20, message = "问题或回复搜索字数字数不能超过20")
     @Schema(title = "问题或回复模糊搜索")
     private String content;
