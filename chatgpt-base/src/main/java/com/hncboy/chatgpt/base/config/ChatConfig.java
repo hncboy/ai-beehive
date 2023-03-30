@@ -82,30 +82,12 @@ public class ChatConfig implements InitializingBean {
      * 单位 maxRequestSecond 的最大请求数
      * 默认1s1次
      */
-    private static Integer maxRequest;
+    private Integer maxRequest;
 
     /**
      * 多少s
      */
-    private static Integer maxRequestSecond;
-
-    /**
-     * 设置最大请求数
-     *
-     * @param maxRequest 最大请求数
-     */
-    public void setMaxRequest(Integer maxRequest) {
-        ChatConfig.maxRequest = maxRequest;
-    }
-
-    /**
-     * 设置单位时间
-     *
-     * @param maxRequestSecond 单位时间
-     */
-    public void setMaxRequestSecond(Integer maxRequestSecond) {
-        ChatConfig.maxRequestSecond = maxRequestSecond;
-    }
+    private Integer maxRequestSecond;
 
     /**
      * 判断是否有 http 代理
@@ -138,21 +120,11 @@ public class ChatConfig implements InitializingBean {
         return ApiTypeEnum.ACCESS_TOKEN;
     }
 
-    /**
-     * 获取 ip 限流最大请求数
-     *
-     * @return 最大请求数
-     */
-    public static Integer getMaxRequest() {
+    public Integer getMaxRequest() {
         return Opt.ofNullable(maxRequest).orElse(1);
     }
 
-    /**
-     * 获取 ip 限流单位时间
-     *
-     * @return 单位时间
-     */
-    public static Integer getMaxRequestSecond() {
+    public Integer getMaxRequestSecond() {
         return Opt.ofNullable(maxRequestSecond).orElse(1);
     }
 
