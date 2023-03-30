@@ -26,6 +26,8 @@ public class WebUtil {
      * IP 头部名称数组
      * <p>
      * x-forwarded-for：代理服务器转发的客户端 IP
+     * X-Real-IP：某些代理服务器使用的真实客户端 IP
+     * CF-Connecting-IP：Cloudflare 代理服务器提供的客户端 IP
      * Proxy-Client-IP：HTTP 代理或负载均衡服务器 IP
      * WL-Proxy-Client-IP：WebLogic 代理的客户端 IP
      * HTTP_CLIENT_IP：有些代理服务器会加上此请求头部
@@ -33,6 +35,8 @@ public class WebUtil {
      */
     private static final String[] IP_HEADER_NAMES = new String[]{
             "x-forwarded-for",
+            "X-Real-IP",
+            "CF-Connecting-IP",
             "Proxy-Client-IP",
             "WL-Proxy-Client-IP",
             "HTTP_CLIENT_IP",

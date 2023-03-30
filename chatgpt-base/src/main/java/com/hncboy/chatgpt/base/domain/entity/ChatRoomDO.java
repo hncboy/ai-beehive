@@ -1,6 +1,7 @@
 package com.hncboy.chatgpt.base.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +22,7 @@ public class ChatRoomDO {
     /**
      * 主键
      */
-    @TableId
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -34,6 +35,12 @@ public class ChatRoomDO {
      * ip
      */
     private String ip;
+
+    /**
+     * 第一条消息主键
+     * 唯一
+     */
+    private Long firstChatMessageId;
 
     /**
      * 第一条消息 id

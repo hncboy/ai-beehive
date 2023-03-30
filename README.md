@@ -1,7 +1,5 @@
 # chatgpt-web-java
 
-[TOC]
-
 # 分支 main
 
 ## 介绍 
@@ -32,6 +30,8 @@
 
 项目默认 h2 file 默认模式启动，在启动时执行创建表 SQL 语句。
 
+增加了对 mysql 的支持。
+
 ### 敏感词过滤
 
 在项目启动时会将敏感词文件 sensitive_word_base64.txt 的数据导入到敏感词表，在文件中敏感词以 base64 形式存放。并将敏感词表的数据构建到 HuTool 提供的 WordTree 类中。在发送消息调用方法判断是否属于敏感词，是的话消息发送不成功。为了兼容前端保持上下文关系，在消息内容属于敏感词的情况下会正常返回消息格式，但是带的是请求的的 conversationI 和 parentMessagId。
@@ -40,7 +40,6 @@
 
 ## 待实现功能
 
-- 配置 dockfile 打包
 - ip 限流
 - GPT 接口异常信息特定封装返回
 
@@ -65,7 +64,13 @@
 
 - 根据 application.properties 里的配置，优先 ApiKey 方式
 - 项目启动时会自动运行 h2 的建库建表 SQL，默认 file 持久化
-- 目前是通过 IDEA 运行，后面配置下 Dockfile
+- IDEA、Dockfile
+
+## Docker build & Run
+```shell
+ docker build -t chatgpt-web-java .
+ docker run -d -p 3002:3002 chatgpt-web-java
+```
 
 ## Docker build & Run
 ```shell
@@ -77,21 +82,24 @@
 
 - 聊天室表
 
-| 列名             | 数据类型                 | 约束                        | 说明                       |
-| ---------------- | ------------------------ | --------------------------- | -------------------------- |
-| id               | BIGINT                   | PRIMARY KEY, AUTO_INCREMENT | 主键                       |
-| conversation_id  | VARCHAR(255)             | UNIQUE, NULL                | 对话 id，唯一              |
-| first_message_id | VARCHAR(255)             | UNIQUE, NULL                | 第一条消息 id，唯一        |
-| title            | VARCHAR(255)             | NOT NULL                    | 对话标题，从第一条消息截取 |
-| api_type         | VARCHAR(20)              | NOT NULL                    | API 类型                   |
-| create_time      | TIMESTAMP WITH TIME ZONE | NOT NULL                    | 创建时间                   |
-| update_time      | TIMESTAMP WITH TIME ZONE | NOT NULL                    | 更新时间                   |
+| 列名                  | 数据类型                 | 约束             | 说明                       |
+| --------------------- | ------------------------ | ---------------- | -------------------------- |
+| id                    | BIGINT                   | PRIMARY KEY      | 主键                       |
+| ip                    | VARCHAR(255)             |                  | ip                         |
+| conversation_id       | VARCHAR(255)             | UNIQUE, NULL     | 对话 id，唯一              |
+| first_chat_message_id | BIGINT                   | UNIQUE, NOT NULL | 第一条消息主键，唯一       |
+| first_message_id      | VARCHAR(255)             | UNIQUE, NOT NULL | 第一条消息 id，唯一        |
+| title                 | VARCHAR(255)             | NOT NULL         | 对话标题，从第一条消息截取 |
+| api_type              | VARCHAR(20)              | NOT NULL         | API 类型                   |
+| create_time           | TIMESTAMP WITH TIME ZONE | NOT NULL         | 创建时间                   |
+| update_time           | TIMESTAMP WITH TIME ZONE | NOT NULL         | 更新时间                   |
 
 - 聊天记录表
 
 | 列名                       | 数据类型                 | 约束        | 说明                     |
 | -------------------------- | ------------------------ | ----------- | ------------------------ |
-| message_id                 | VARCHAR(255)             | PRIMARY KEY | 消息 id                  |
+| id                         | BIGINT                   | PRIMARY KEY | 主键                     |
+| message_id                 | VARCHAR(255)             | NOT NULL    | 消息 id                  |
 | parent_message_id          | VARCHAR(255)             |             | 父级消息 id              |
 | parent_answer_message_id   | VARCHAR(255)             |             | 父级回答消息 id          |
 | parent_question_message_id | VARCHAR(255)             |             | 父级问题消息 id          |
@@ -99,9 +107,10 @@
 | question_context_count     | BIGINT                   | NOT NULL    | 问题上下文数量           |
 | message_type               | INTEGER                  | NOT NULL    | 消息类型枚举             |
 | chat_room_id               | BIGINT                   | NOT NULL    | 聊天室 id                |
-| conversation_id            | VARCHAR(255)             | NULL        | 对话 id                  |
+| conversation_id            | VARCHAR(255)             |             | 对话 id                  |
 | api_type                   | VARCHAR(20)              | NOT NULL    | API 类型                 |
-| api_key                    | VARCHAR(255)             | NULL        | ApiKey                   |
+| ip                         | VARCHAR(255)             |             | ip                       |
+| api_key                    | VARCHAR(255)             |             | ApiKey                   |
 | content                    | VARCHAR(5000)            | NOT NULL    | 消息内容                 |
 | original_data              | TEXT                     |             | 消息的原始请求或响应数据 |
 | response_error_data        | TEXT                     |             | 错误的响应数据           |

@@ -25,6 +25,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomMapper, ChatRoomDO>
         chatRoom.setId(IdWorker.getId());
         chatRoom.setApiType(chatMessageDO.getApiType());
         chatRoom.setIp(WebUtil.getIp());
+        chatRoom.setFirstChatMessageId(chatMessageDO.getId());
         chatRoom.setFirstMessageId(chatMessageDO.getMessageId());
         // 取第一条对话内容当标题
         chatRoom.setTitle(chatMessageDO.getContent());

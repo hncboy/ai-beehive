@@ -1,6 +1,7 @@
 package com.hncboy.chatgpt.base.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,9 +22,14 @@ import java.util.Date;
 public class ChatMessageDO {
 
     /**
+     * 主键
+     */
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
+
+    /**
      * 消息 id
      */
-    @TableId
     private String messageId;
 
     /**

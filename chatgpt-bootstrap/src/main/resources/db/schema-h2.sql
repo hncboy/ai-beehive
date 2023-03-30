@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS chat_room (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     ip VARCHAR(255) NULL,
     conversation_id VARCHAR(255) UNIQUE NULL,
-    first_message_id VARCHAR(255) UNIQUE NULL,
+    first_chat_message_id BIGINT UNIQUE NOT NULL,
+    first_message_id VARCHAR(255) UNIQUE NOT NULL,
     title VARCHAR(255) NOT NULL,
     api_type VARCHAR(20) NOT NULL,
     create_time TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -20,7 +21,8 @@ COMMENT ON COLUMN chat_room.update_time IS '更新时间';
 
 -- 聊天消息表
 CREATE TABLE IF NOT EXISTS chat_message (
-    message_id VARCHAR(255) PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
+    message_id VARCHAR(255) UNIQUE NOT NULL,
     parent_message_id VARCHAR(255),
     parent_answer_message_id VARCHAR(255),
     parent_question_message_id VARCHAR(255),
@@ -43,6 +45,7 @@ CREATE TABLE IF NOT EXISTS chat_message (
     update_time TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
+COMMENT ON COLUMN chat_message.id IS '主键';
 COMMENT ON COLUMN chat_message.message_id IS '消息 id';
 COMMENT ON COLUMN chat_message.parent_message_id IS '父级消息 id';
 COMMENT ON COLUMN chat_message.parent_answer_message_id IS '父级回答消息 id';
