@@ -10,14 +10,14 @@ spring:
 #    h2-server-enabled: true
 #    url: jdbc:h2:tcp://localhost:9092/./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:db/schema-h2.sql'
     # file 嵌入式，可以持久化数据，运行时自动创建数据库
-    url: jdbc:h2:file:./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:db/schema-h2.sql'
+#    url: jdbc:h2:file:./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:db/schema-h2.sql'
     # 内存模式，重启数据丢失
-#    url: jdbc:h2:mem:chat;INIT=RUNSCRIPT FROM 'classpath:db/schema-h2.sql'
+    url: jdbc:h2:mem:chat;INIT=RUNSCRIPT FROM 'classpath:db/schema-h2.sql'
 
-mybatis-plus:
-  configuration:
+#mybatis-plus:
+#  configuration:
     # 控制台打印 SQL
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 chat:
   # 访问密码
@@ -43,3 +43,7 @@ chat:
   admin_password: admin
   # 管理端敏感词是否脱敏，演示用
   admin_sensitive_word_desensitized_enabled: true
+  # 时间内最大请求次数
+  maxRequest: 5
+  # 最大请求时间间隔（秒）
+  maxRequestSecond: 3600
