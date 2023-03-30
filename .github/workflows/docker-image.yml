@@ -1,0 +1,35 @@
+# 名称
+name: Build and Push Docker Image
+# 触发条件
+on:
+  push:
+    branches:
+      - main
+
+# 定义环境变量
+env:
+  DOCKER_IMAGE_NAME: chatgpt-web-java
+  DOCKER_IMAGE_TAG: latest
+
+# 定义构建和推送 Docker 镜像的任务
+jobs:
+  build:
+    # 脚本运行在容器中镜像是 ubuntu-latest
+    runs-on: ubuntu-latest
+
+    # 定义任务中的步骤
+    steps:
+      # 步骤 1: 从 Github 仓库中获取代码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 步骤 2: 使用 Docker Buildkit 构建和推送 Docker 镜像
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
+        env:
+          DOCKER_BUILDKIT: 1 # 启用BuildKit构建引擎
