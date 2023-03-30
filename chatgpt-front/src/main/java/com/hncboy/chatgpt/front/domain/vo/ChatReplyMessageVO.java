@@ -33,6 +33,12 @@ public class ChatReplyMessageVO {
     @Schema(name = "回复的消息")
     private String text;
 
+    /**
+     * 当链路出现问题时 取上一条消息的 parentMessageId 和 conversationId，使得异常不影响上下文
+     *
+     * @param request 消息处理请求的实体 从中获取 parentMessageId 和 conversationId
+     * @return 聊天回复的消息
+     */
     public static ChatReplyMessageVO onEmitterChainException(ChatProcessRequest request) {
         ChatProcessRequest.Options options = request.getOptions();
         ChatReplyMessageVO chatReplyMessageVO = new ChatReplyMessageVO();

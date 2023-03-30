@@ -1,9 +1,7 @@
 package com.hncboy.chatgpt.front.handler.emitter;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import com.google.common.util.concurrent.RateLimiter;
-import com.hncboy.chatgpt.base.service.IpLimitService;
+import com.hncboy.chatgpt.base.handler.IpRateLimiterHandler;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.base.util.WebUtil;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
@@ -12,21 +10,20 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * @author lizhongyuan
+ * Ip 限流处理
  */
 @AllArgsConstructor
-public class IpLimitEmitterChain extends AbstractResponseEmitterChain {
+public class IpRateLimiterEmitterChain extends AbstractResponseEmitterChain {
 
     @Override
     public void doChain(ChatProcessRequest request, ResponseBodyEmitter emitter) {
         try {
             String ip = WebUtil.getIp();
-            IpLimitService ipLimitService = SpringUtil.getBean(IpLimitService.class);
-            RateLimiter limiter = ipLimitService.getIpLimiter(ip);
-            if (limiter != null && limiter.tryAcquire()) {
+            // 根据ip判断是够可放行
+            if (IpRateLimiterHandler.allowRequest(ip)) {
                 if (getNext() != null) {
                     getNext().doChain(request, emitter);
                 }

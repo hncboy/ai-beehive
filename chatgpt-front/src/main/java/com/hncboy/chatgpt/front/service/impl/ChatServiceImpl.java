@@ -8,7 +8,7 @@ import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.domain.vo.ChatConfigVO;
 import com.hncboy.chatgpt.front.handler.emitter.ChatMessageEmitterChain;
-import com.hncboy.chatgpt.front.handler.emitter.IpLimitEmitterChain;
+import com.hncboy.chatgpt.front.handler.emitter.IpRateLimiterEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.SensitiveWordEmitterChain;
 import com.hncboy.chatgpt.front.service.ChatService;
@@ -52,11 +52,11 @@ public class ChatServiceImpl implements ChatService {
         emitter.onTimeout(() -> log.error("请求参数：{}，Back-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
 
         // 构建 emitter 处理链路
+        ResponseEmitterChain ipRateLimiterEmitterChain = new IpRateLimiterEmitterChain();
         ResponseEmitterChain sensitiveWordEmitterChain = new SensitiveWordEmitterChain();
         sensitiveWordEmitterChain.setNext(new ChatMessageEmitterChain());
-        ResponseEmitterChain ipLimitEmitterChain = new IpLimitEmitterChain();
-        ipLimitEmitterChain.setNext(sensitiveWordEmitterChain);
-        ipLimitEmitterChain.doChain(chatProcessRequest, emitter);
+        ipRateLimiterEmitterChain.setNext(sensitiveWordEmitterChain);
+        ipRateLimiterEmitterChain.doChain(chatProcessRequest, emitter);
         return emitter;
     }
 }
