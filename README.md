@@ -5,7 +5,7 @@
 ## 介绍 
 
 - [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的 Java 后台
-- 该分支关联项目的 2.8.5 Release 版本，在不改动前端的情况下更新后台
+- 该分支关联项目的 [2.10.8](https://github.com/Chanzhaoyu/chatgpt-web/releases/tag/v2.10.8) 版本，在不改动前端的情况下更新后台
 
 ## 框架
 
@@ -20,20 +20,18 @@
 
 ### 上下文聊天
 
-默认通过 h2 数据库实现聊天数据存储来实现 apiKey 方式的上下文聊天，AccessToken 默认支持上下文聊天。
+通过 MySQL 实现聊天数据存储来实现 apiKey 方式的上下文聊天，AccessToken 默认支持上下文聊天。
 
 数据库存储了每次聊天对话的记录，在选择上下文聊天时，通过 parentMessageId 往上递归遍历获取历史消息，将历史问题以及回答消息都发送给 GPT。
 
 ### 聊天记录存储
 
-- 聊天记录支持通过 h2 进行内存存储或持久化，选择内存模式项目启动时会丢失聊天记录，选择文件存储可以持久化数据。
-- 项目默认 h2 内存存储模式启动
-- 也支持 MySQL 连接
+- 存在 MySQL
 - SQL 存放在 resources 的 db 目录
 
 ### 敏感词过滤
 
-在项目启动时会将敏感词文件 sensitive_word_base64.txt 的数据导入到敏感词表，在文件中敏感词以 base64 形式存放。并将敏感词表的数据构建到 HuTool 提供的 WordTree 类中。在发送消息调用方法判断是否属于敏感词，是的话消息发送不成功。为了兼容前端保持上下文关系，在消息内容属于敏感词的情况下会正常返回消息格式，但是带的是请求的的 conversationI 和 parentMessagId。
+在项目启动时会将敏感词文件 sensitive_word_base64.txt 的数据导入到敏感词表，目前还未提供后台管理敏感词的接口，提供后这种方式可以去掉。在文件中敏感词以 base64 形式存放。并将敏感词表的数据构建到 HuTool 提供的 WordTree 类中。在发送消息调用方法判断是否属于敏感词，是的话消息发送不成功。为了兼容前端保持上下文关系，在消息内容属于敏感词的情况下会正常返回消息格式，但是带的是请求的的 conversationI 和 parentMessagId。
 
 ![](pics/sensitive_word_test.png)
 

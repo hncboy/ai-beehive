@@ -1,18 +1,9 @@
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    # MySQL
-#    url: jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
-    # server 模式 其他进程连接,
-#    h2-server-enabled: true
-#    url: jdbc:h2:tcp://localhost:9092/./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:db/schema-h2.sql'
-    # file 嵌入式，可以持久化数据，运行时自动创建数据库
-#    url: jdbc:h2:file:./data/h2/chat;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:db/schema-h2.sql'
-    # 内存模式，重启数据丢失
-    url: jdbc:h2:mem:chat;INIT=RUNSCRIPT FROM 'classpath:db/schema-h2.sql'
+    url: jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
 
 #mybatis-plus:
 #  configuration:

@@ -2,19 +2,21 @@ package com.hncboy.chatgpt.base.handler.runner;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hncboy.chatgpt.base.domain.entity.SensitiveWordDO;
 import com.hncboy.chatgpt.base.enums.EnableDisableStatusEnum;
 import com.hncboy.chatgpt.base.service.SensitiveWordService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,15 +28,19 @@ import java.util.stream.Collectors;
 @Configuration
 public class SensitiveWordRunner implements ApplicationRunner {
 
-    @Resource
+    @Autowired
     private SensitiveWordService sensitiveWordService;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Override
     public void run(ApplicationArguments args) {
         try {
             // 从本地文件读取敏感词
-            ClassPathResource sensitiveWordResource = new ClassPathResource("data/sensitive_word_base64.txt");
-            List<String> sensitiveWords = FileUtil.readLines(sensitiveWordResource.getFile(), Charset.defaultCharset());
+            Resource resource = resourceLoader.getResource("classpath:data/sensitive_word_base64.txt");
+            List<String> sensitiveWords = new ArrayList<>();
+            IoUtil.readLines(resource.getInputStream(), Charset.defaultCharset(), sensitiveWords);
             // 拆分敏感词列表
             List<List<String>> splitSensitiveWords = ListUtil.split(sensitiveWords, 100);
             for (List<String> subSensitiveWords : splitSensitiveWords) {
