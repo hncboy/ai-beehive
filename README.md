@@ -63,7 +63,7 @@
 
 - 根据 application.properties 里的配置，优先 ApiKey 方式
 - 项目启动时会自动运行 h2 的建库建表 SQL，默认 file 持久化
-- 目前是通过 IDEA 运行，后面配置下 Dockfile
+- IDEA、Dockfile
 
 ## Docker build & Run
 ```shell
@@ -77,7 +77,7 @@
 
 | 列名                  | 数据类型                 | 约束             | 说明                       |
 | --------------------- | ------------------------ | ---------------- | -------------------------- |
-| id                    | BIGINT                   | PRIMARY KEY,     | 主键                       |
+| id                    | BIGINT                   | PRIMARY KEY      | 主键                       |
 | ip                    | VARCHAR(255)             |                  | ip                         |
 | conversation_id       | VARCHAR(255)             | UNIQUE, NULL     | 对话 id，唯一              |
 | first_chat_message_id | BIGINT                   | UNIQUE, NOT NULL | 第一条消息主键，唯一       |
