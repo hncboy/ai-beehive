@@ -102,11 +102,6 @@
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-        <!-- H2 数据库 -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
         <!-- mysql-connector-j -->
         <dependency>
             <groupId>com.mysql</groupId>
