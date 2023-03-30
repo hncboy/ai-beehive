@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.base.config;
 
+import cn.hutool.core.lang.Opt;
 import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.enums.ConversationModelEnum;
@@ -78,6 +79,17 @@ public class ChatConfig implements InitializingBean {
     private String adminPassword;
 
     /**
+     * 单位 maxRequestSecond 的最大请求数
+     * 默认1s1次
+     */
+    private Integer maxRequest;
+
+    /**
+     * 多少s
+     */
+    private Integer maxRequestSecond;
+
+    /**
      * 判断是否有 http 代理
      *
      * @return true/false
@@ -106,6 +118,14 @@ public class ChatConfig implements InitializingBean {
             return ApiTypeEnum.API_KEY;
         }
         return ApiTypeEnum.ACCESS_TOKEN;
+    }
+
+    public Integer getMaxRequest() {
+        return Opt.ofNullable(maxRequest).orElse(1);
+    }
+
+    public Integer getMaxRequestSecond() {
+        return Opt.ofNullable(maxRequestSecond).orElse(1);
     }
 
     @Override
