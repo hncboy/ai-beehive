@@ -66,11 +66,70 @@
 
 - IDEA、Dockfile
 
+- application.yml
+
+  ```yaml
+  spring:
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 123456
+      url: jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+  
+  #mybatis-plus:
+  #  configuration:
+      # 控制台打印 SQL
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  
+  chat:
+    # 访问密码
+    auth_secret_key: 123456
+    # OpenAI API Key - https://platform.openai.com/overview
+    openai_api_key: xxx
+    # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
+    openai_access_token: xxx
+    # OpenAI API Base URL - https://api.openai.com/，要加/后缀
+    openai_api_base_url: https://api.openai.com/
+    # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
+    openai_api_model:
+    # 反向代理地址 AccessToken 时使用
+    api_reverse_proxy: https://bypass.duti.tech/api/conversation
+    # 超时毫秒
+    timeout_ms: 100000
+    # HTTP 代理
+    http_proxy_host: 127.0.0.1
+    http_proxy_port: 33210
+    # 管理端账号
+    admin_account: admin
+    # 管理端密码
+    admin_password: admin
+    # 管理端敏感词是否脱敏，演示用
+    admin_sensitive_word_desensitized_enabled: true
+    # 时间内最大请求次数
+    maxRequest: 5
+    # 最大请求时间间隔（秒）
+    maxRequestSecond: 3600
+  ```
+
+  
+
 ## Docker build & Run
 ```shell
  docker build -t chatgpt-web-java .
  docker run -d -p 3002:3002 chatgpt-web-java
 ```
+
+- 配置参数，在环境变量 PARAMS 中配置 application yml 用到的参数，如下示例
+
+  ```
+  --spring.datasource.url=jdbc:mysql://10.1.82.65:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
+               --spring.datasource.username=root \
+               --spring.datasource.password=123456 \
+               --chat.openai_api_key=xxx \
+               --chat.openai_access_token=xxx
+  ```
+
+  ![](pics/docker_run.png)
 
 ## 表结构
 
