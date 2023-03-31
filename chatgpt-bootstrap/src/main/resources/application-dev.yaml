@@ -22,6 +22,7 @@ chat:
   # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
   openai_api_model:
   # 反向代理地址 AccessToken 时使用
+#  api_reverse_proxy: https://api.pawan.krd/backend-api/conversation
   api_reverse_proxy: https://bypass.duti.tech/api/conversation
   # 超时毫秒
   timeout_ms: 100000
@@ -34,7 +35,11 @@ chat:
   admin_password: admin
   # 管理端敏感词是否脱敏，演示用
   admin_sensitive_word_desensitized_enabled: true
-  # 时间内最大请求次数
+  # 全局时间内最大请求次数
   maxRequest: 5
-  # 最大请求时间间隔（秒）
+  # 全局最大请求时间间隔（秒）
   maxRequestSecond: 3600
+  # ip 时间内最大请求次数
+  ipMaxRequest: 10
+  # ip 最大请求时间间隔（秒）
+  ipMaxRequestSecond: 3600

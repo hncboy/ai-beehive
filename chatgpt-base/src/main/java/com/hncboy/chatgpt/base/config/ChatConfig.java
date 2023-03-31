@@ -79,15 +79,24 @@ public class ChatConfig implements InitializingBean {
     private String adminPassword;
 
     /**
-     * 单位 maxRequestSecond 的最大请求数
-     * 默认1s1次
+     * 全局时间内最大请求次数
      */
     private Integer maxRequest;
 
     /**
-     * 多少s
+     * 全局最大请求时间间隔（秒）
      */
     private Integer maxRequestSecond;
+
+    /**
+     * ip 时间内最大请求次数
+     */
+    private Integer ipMaxRequest;
+
+    /**
+     * ip 最大请求时间间隔（秒）
+     */
+    private Integer ipMaxRequestSecond;
 
     /**
      * 判断是否有 http 代理
@@ -121,11 +130,19 @@ public class ChatConfig implements InitializingBean {
     }
 
     public Integer getMaxRequest() {
-        return Opt.ofNullable(maxRequest).orElse(1);
+        return Opt.ofNullable(maxRequest).orElse(0);
     }
 
     public Integer getMaxRequestSecond() {
-        return Opt.ofNullable(maxRequestSecond).orElse(1);
+        return Opt.ofNullable(maxRequestSecond).orElse(0);
+    }
+
+    public Integer getIpMaxRequest() {
+        return Opt.ofNullable(ipMaxRequest).orElse(0);
+    }
+
+    public Integer getIpMaxRequestSecond() {
+        return Opt.ofNullable(ipMaxRequestSecond).orElse(0);
     }
 
     @Override

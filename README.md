@@ -38,15 +38,18 @@
 
 ![](pics/sensitive_word_test.png)
 
-### ip 限流
+### 限流
 
-基于内存和双端队列实现滑动窗口限流，在配置文件中配置 maxRequest 和 maxRequestSecond。
+分为全局限流和 ip 限流，基于内存和双端队列实现滑动窗口限流。在限流过程会异步的将数据写入的文件中，在项目重启时会读取该文件恢复限流状态。
 
-![](pics/ip_limit_test.png)
+在配置文件中配置 maxRequest、maxRequestSecond、ipMaxRequest、ipMaxRequestSecond
+
+![](pics/rate_limit_test.png)
 
 ## 待实现功能
 
 - GPT 接口异常信息特定封装返回
+- 其他没发现的点
 
 ## 存在问题
 
@@ -96,6 +99,7 @@
     # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
     openai_api_model:
     # 反向代理地址 AccessToken 时使用
+  #  api_reverse_proxy: https://api.pawan.krd/backend-api/conversation
     api_reverse_proxy: https://bypass.duti.tech/api/conversation
     # 超时毫秒
     timeout_ms: 100000
@@ -108,12 +112,16 @@
     admin_password: admin
     # 管理端敏感词是否脱敏，演示用
     admin_sensitive_word_desensitized_enabled: true
-    # 时间内最大请求次数
+    # 全局时间内最大请求次数
     maxRequest: 5
-    # 最大请求时间间隔（秒）
+    # 全局最大请求时间间隔（秒）
     maxRequestSecond: 3600
+    # ip 时间内最大请求次数
+    ipMaxRequest: 10
+    # ip 最大请求时间间隔（秒）
+    ipMaxRequestSecond: 3600
   ```
-
+  
   
 
 ## Docker build & Run

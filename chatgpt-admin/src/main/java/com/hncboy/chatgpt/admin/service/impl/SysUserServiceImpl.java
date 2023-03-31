@@ -41,7 +41,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public List<RateLimitVO> listRateLimit() {
         List<RateLimitVO> rateLimitList = new ArrayList<>();
-        Map<String, Deque<LocalDateTime>> requestTimestampMap = RateLimiterHandler.REQUEST_TIMESTAMP_MAP;
+        Map<String, Deque<LocalDateTime>> requestTimestampMap = RateLimiterHandler.IP_REQUEST_TIMESTAMP_MAP;
         for (Map.Entry<String, Deque<LocalDateTime>> entry : requestTimestampMap.entrySet()) {
             String ip = entry.getKey();
             Deque<LocalDateTime> timestampDeque = entry.getValue();

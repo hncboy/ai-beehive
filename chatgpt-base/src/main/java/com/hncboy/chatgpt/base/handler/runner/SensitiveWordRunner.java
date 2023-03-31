@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hncboy.chatgpt.base.domain.entity.SensitiveWordDO;
 import com.hncboy.chatgpt.base.enums.EnableDisableStatusEnum;
 import com.hncboy.chatgpt.base.service.SensitiveWordService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
@@ -26,13 +26,12 @@ import java.util.stream.Collectors;
  * 敏感词启动器
  */
 @Configuration
+@AllArgsConstructor
 public class SensitiveWordRunner implements ApplicationRunner {
 
-    @Autowired
-    private SensitiveWordService sensitiveWordService;
+    private final SensitiveWordService sensitiveWordService;
 
-    @Autowired
-    private ResourceLoader resourceLoader;
+    private final ResourceLoader resourceLoader;
 
     @Override
     public void run(ApplicationArguments args) {
