@@ -136,7 +136,7 @@ docker stop mysql_gpt && docker rm mysql_gpt
 # 构建image
 docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
 # 运行container
-docker run -d -p 3309:3306 \
+docker run -d -p 3309:3309 \
   --name mysql_gpt \
   -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
   -v  ~/mydata/mysql_dummy/conf:/etc/mysql/conf.d \
