@@ -1,3 +1,8 @@
+-- 创建database
+CREATE DATABASE IF NOT EXISTS chat DEFAULT CHARACTER SET utf8;
+
+USE chat;
+
 -- 聊天室表
 CREATE TABLE IF NOT EXISTS chat_room (
     id BIGINT PRIMARY KEY COMMENT '主键',
@@ -7,8 +12,8 @@ CREATE TABLE IF NOT EXISTS chat_room (
     first_message_id VARCHAR(255) UNIQUE NOT NULL COMMENT '第一条消息',
     title VARCHAR(255) NOT NULL COMMENT '对话标题，从第一条消息截取',
     api_type VARCHAR(20) NOT NULL COMMENT 'API 类型',
-    create_time TIMESTAMP NOT NULL COMMENT '创建时间',
-    update_time TIMESTAMP NOT NULL COMMENT '更新时间'
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT  '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='聊天室表';
 
 -- 聊天消息表
@@ -33,8 +38,8 @@ CREATE TABLE IF NOT EXISTS chat_message (
     total_tokens BIGINT COMMENT '累计 Tokens',
     ip VARCHAR(255) NULL COMMENT 'ip',
     status INTEGER NOT NULL COMMENT '聊天记录状态',
-    create_time TIMESTAMP NOT NULL COMMENT '创建时间',
-    update_time TIMESTAMP NOT NULL COMMENT '更新时间'
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='聊天消息表';
 
 -- 敏感词表
