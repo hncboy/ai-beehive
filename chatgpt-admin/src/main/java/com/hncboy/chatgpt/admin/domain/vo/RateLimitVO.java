@@ -15,14 +15,20 @@ public class RateLimitVO {
     @Schema(title = "ip")
     private String ip;
 
-    @Schema(title = "限流规则")
-    private String limitRule;
+    @Schema(title = "ip 限流规则")
+    private String ipLimitRule;
 
-    @Schema(title = "时间内已经发送次数")
+    @Schema(title = "全局限流规则")
+    private String globalLimitRule;
+
+    @Schema(title = "是否被 ip 限流")
+    private Boolean isIpLimited;
+
+    @Schema(title = "是否被全局限流")
+    private Boolean isGlobalLimited;
+
+    @Schema(title = "ip 限制时间内已发送次数")
     private Integer alreadySendCount;
-
-    @Schema(title = "是否被限流")
-    private Boolean isLimited;
 
     @Schema(title = "下次可以发送消息的时间")
     private String nextSendTime;
