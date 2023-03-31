@@ -140,7 +140,10 @@
                --chat.openai_access_token=xxx
   ```
 
-MySQL容器运行，运行后可以系统可以直接连接docker MySQL容器
+  ![](pics/docker_run.png)
+
+- MySQL容器运行，运行后可以系统可以直接连接docker MySQL容器
+
 ```shell
 # 删除旧版container（如果有的话）
 docker stop mysql_gpt && docker rm mysql_gpt
@@ -154,8 +157,6 @@ docker run -d -p 3309:3309 \
   -v ~/mydata/mysql_dummy/log:/var/log/mysql \
   mysql_gpt_img:latest
 ```
-
-  ![](pics/docker_run.png)
 
 ## 表结构
 
