@@ -13,7 +13,10 @@
 - JDK 17
 - SpringDoc 接口文档
 - MyBatis Plus
-- [PlexPt ChatGPT java sdk](https://github.com/PlexPt/chatgpt-java)
+- MapStruct
+- Lombok
+- [Hutool](https://hutool.cn/) 
+- [SaToken](https://sa-token.cc/) 权限校验
 - [Grt1228 ChatGPT java sdk](https://github.com/Grt1228/chatgpt-java)
 
 ## 已实现功能
