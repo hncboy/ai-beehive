@@ -1,6 +1,8 @@
 package com.hncboy.chatgpt.front.api.storage;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
+import com.hncboy.chatgpt.base.domain.entity.ChatRoomDO;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
@@ -51,6 +53,11 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
 
         // 保存回答消息记录
         chatMessageService.save(answerChatMessageDO);
+
+        // 聊天室更新 conversationId
+        chatRoomService.update(new LambdaUpdateWrapper<ChatRoomDO>()
+                .set(ChatRoomDO::getConversationId, answerChatMessageDO.getConversationId())
+                .eq(ChatRoomDO::getId, answerChatMessageDO.getChatRoomId()));
     }
 
     /**

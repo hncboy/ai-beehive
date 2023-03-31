@@ -1,8 +1,6 @@
 package com.hncboy.chatgpt.front.api.storage;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
-import com.hncboy.chatgpt.base.domain.entity.ChatRoomDO;
 import com.hncboy.chatgpt.front.api.accesstoken.ConversationResponse;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +25,5 @@ public class AccessTokenDatabaseDataStorage extends AbstractDatabaseDataStorage 
 
         // 填充问题消息的对话 id
         chatMessageStorage.getQuestionChatMessageDO().setConversationId(conversationResponse.getConversationId());
-
-        // 聊天室更新 conversationId
-        chatRoomService.update(new LambdaUpdateWrapper<ChatRoomDO>()
-                .set(ChatRoomDO::getConversationId, answerChatMessageDO.getConversationId())
-                .eq(ChatRoomDO::getId, answerChatMessageDO.getChatRoomId()));
     }
 }

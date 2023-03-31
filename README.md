@@ -133,7 +133,7 @@
 - 配置参数，在环境变量 PARAMS 中配置 application yml 用到的参数，如下示例
 
   ```
-  --spring.datasource.url=jdbc:mysql://10.1.82.65:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
+  --spring.datasource.url=jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
                --spring.datasource.username=root \
                --spring.datasource.password=123456 \
                --chat.openai_api_key=xxx \
