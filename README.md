@@ -65,91 +65,82 @@
 
 - 接口文档：http://localhost:3002/swagger-ui.html
 
+## chat-gpt配置
+
+- 有2个配置文件`application-dev.yml`和`application-prod.yml`，对应两个环境dev和prod，不指定profile默认使用dev。
+- 指定profile的方式有两种
+   - 是在`application.yml`的`spring.profiles.active`配置项
+   - 参考下节docker-compose运行
+- 配置项在配置yaml的chat节点下，具体可以参考代码注释。
+
 ## 运行
 
-- IDEA、Dockfile
+### IDEA 运行
 
-- application.yml
+需要本地提前准备好端口为3309的MySQL实例，如果没有可以直接使用Dockerfile_mysql构建一个docker的MySQL容器：
 
-  ```yaml
-  spring:
-    datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: root
-      password: 123456
-      url: jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
-  
-  #mybatis-plus:
-  #  configuration:
-      # 控制台打印 SQL
-  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  
-  chat:
-    # 访问密码
-    auth_secret_key: 123456
-    # OpenAI API Key - https://platform.openai.com/overview
-    openai_api_key: xxx
-    # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
-    openai_access_token: xxx
-    # OpenAI API Base URL - https://api.openai.com/，要加/后缀
-    openai_api_base_url: https://api.openai.com/
-    # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
-    openai_api_model:
-    # 反向代理地址 AccessToken 时使用
-    api_reverse_proxy: https://bypass.duti.tech/api/conversation
-    # 超时毫秒
-    timeout_ms: 100000
-    # HTTP 代理
-    http_proxy_host: 127.0.0.1
-    http_proxy_port: 33210
-    # 管理端账号
-    admin_account: admin
-    # 管理端密码
-    admin_password: admin
-    # 管理端敏感词是否脱敏，演示用
-    admin_sensitive_word_desensitized_enabled: true
-    # 时间内最大请求次数
-    maxRequest: 5
-    # 最大请求时间间隔（秒）
-    maxRequestSecond: 3600
-  ```
-
-  
-
-## Docker build & Run
 ```shell
- docker build -t chatgpt-web-java .
- docker run -d -p 3002:3002 chatgpt-web-java
+  # 删除旧版container（如果有的话）
+  docker stop mysql_gpt && docker rm mysql_gpt
+  # 构建image
+  docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
+  # 运行container
+  docker run -d -p 3309:3306 \
+       --name mysql_gpt \
+       -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
+       -v  ~/mydata/mysql_dummy/conf:/etc/mysql/conf.d \
+       -v ~/mydata/mysql_dummy/log:/var/log/mysql \
+       mysql_gpt_img:latest
 ```
 
-- 配置参数，在环境变量 PARAMS 中配置 application yml 用到的参数，如下示例
+之后使用`chatgpt-bootstrap`下的`ChatGptApplication`类启动即可。
 
-  ```
-  --spring.datasource.url=jdbc:mysql://10.1.82.65:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
-               --spring.datasource.username=root \
-               --spring.datasource.password=123456 \
-               --chat.openai_api_key=xxx \
-               --chat.openai_access_token=xxx
-  ```
+这里也提供下java应用构建镜像的方法。
 
-MySQL容器运行，运行后可以系统可以直接连接docker MySQL容器
 ```shell
-# 删除旧版container（如果有的话）
-docker stop mysql_gpt && docker rm mysql_gpt
-# 构建image
-docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
-# 运行container
-docker run -d -p 3309:3306 \
-  --name mysql_gpt \
-  -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
-  -v  ~/mydata/mysql_dummy/conf:/etc/mysql/conf.d \
-  -v ~/mydata/mysql_dummy/log:/var/log/mysql \
-  mysql_gpt_img:latest
+  # 删除旧版container（如果有的话）
+  docker stop chatgpt-web-java && docker rm chatgpt-web-java
+  docker build -t chatgpt-web-java .
+  docker run -d -p 3002:3002 chatgpt-web-java
 ```
+如果要显式指定DB和chat-gpt参数，可以在docker run后添加-e选项，配置application.yml用到的参数。例如：
 
+```shell
+  # 删除旧版container（如果有的话）
+  docker stop chatgpt-web-java && docker rm chatgpt-web-java
+  docker build -t chatgpt-web-java . 
+  # 如果这里要使用java的容器访问mysql容器，需要使用host.docker.internal而不是localhost，才可以访问到宿主机的3009端口（mysql开放了3009端口）
+  docker run -d -p 3002:3002 \
+      -e '--spring.datasource.url=jdbc:mysql://host.docker.internal:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai' \
+      -e --spring.datasource.username=root \
+      -e --spring.datasource.password=123456 \
+      -e --chat.openai_api_key=xxx \
+      -e --chat.openai_access_token=xxx \
+      -e --chat.openai_api_base_url=http://xxx.com \
+      -e --chat.http_proxy_host=127.0.0.1 \
+      -e --chat.http_proxy_port=7890 \
+      chatgpt-web-java
+```
   ![](pics/docker_run.png)
 
+### docker-compose运行
+
+使用`compile_build_up.sh`可一键启动，具体使用方法：
+
+```shell
+cd chatgpt-web-java
+# 增加执行权限
+chmod a+x compile_build_up.sh
+# 启动
+# dev环境
+./compile_build_up.sh -e dev
+# prod环境 
+./compile_build_up.sh -e prod 
+```
+
 ## 表结构
+
+具体可以参见sql文件，路径是`chatgpt-bootstrap/src/main/resources/db/schema-mysql.sql`。
 
 - 聊天室表
 
