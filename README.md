@@ -139,7 +139,7 @@ docker stop mysql_gpt && docker rm mysql_gpt
 # 构建image
 docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
 # 运行container
-docker run -d -p 3309:3309 \
+docker run -d -p 3309:3306 \
   --name mysql_gpt \
   -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
   -v  ~/mydata/mysql_dummy/conf:/etc/mysql/conf.d \
@@ -153,52 +153,52 @@ docker run -d -p 3309:3309 \
 
 - 聊天室表
 
-| 列名                  | 数据类型                 | 约束             | 说明                       |
-| --------------------- | ------------------------ | ---------------- | -------------------------- |
-| id                    | BIGINT                   | PRIMARY KEY      | 主键                       |
-| ip                    | VARCHAR(255)             |                  | ip                         |
-| conversation_id       | VARCHAR(255)             | UNIQUE, NULL     | 对话 id，唯一              |
-| first_chat_message_id | BIGINT                   | UNIQUE, NOT NULL | 第一条消息主键，唯一       |
-| first_message_id      | VARCHAR(255)             | UNIQUE, NOT NULL | 第一条消息 id，唯一        |
-| title                 | VARCHAR(255)             | NOT NULL         | 对话标题，从第一条消息截取 |
-| api_type              | VARCHAR(20)              | NOT NULL         | API 类型                   |
-| create_time           | TIMESTAMP WITH TIME ZONE | NOT NULL         | 创建时间                   |
-| update_time           | TIMESTAMP WITH TIME ZONE | NOT NULL         | 更新时间                   |
+| 列名                  | 数据类型                | 约束             | 说明                       |
+| --------------------- |---------------------| ---------------- | -------------------------- |
+| id                    | BIGINT              | PRIMARY KEY      | 主键                       |
+| ip                    | VARCHAR(255)        |                  | ip                         |
+| conversation_id       | VARCHAR(255)        | UNIQUE, NULL     | 对话 id，唯一              |
+| first_chat_message_id | BIGINT              | UNIQUE, NOT NULL | 第一条消息主键，唯一       |
+| first_message_id      | VARCHAR(255)        | UNIQUE, NOT NULL | 第一条消息 id，唯一        |
+| title                 | VARCHAR(255)        | NOT NULL         | 对话标题，从第一条消息截取 |
+| api_type              | VARCHAR(20)         | NOT NULL         | API 类型                   |
+| create_time           | DATETIME            | NOT NULL         | 创建时间                   |
+| update_time           | DATETIME            | NOT NULL         | 更新时间                   |
 
 - 聊天记录表
 
-| 列名                       | 数据类型                 | 约束        | 说明                     |
-| -------------------------- | ------------------------ | ----------- | ------------------------ |
-| id                         | BIGINT                   | PRIMARY KEY | 主键                     |
-| message_id                 | VARCHAR(255)             | NOT NULL    | 消息 id                  |
-| parent_message_id          | VARCHAR(255)             |             | 父级消息 id              |
-| parent_answer_message_id   | VARCHAR(255)             |             | 父级回答消息 id          |
-| parent_question_message_id | VARCHAR(255)             |             | 父级问题消息 id          |
-| context_count              | BIGINT                   | NOT NULL    | 上下文数量               |
-| question_context_count     | BIGINT                   | NOT NULL    | 问题上下文数量           |
-| message_type               | INTEGER                  | NOT NULL    | 消息类型枚举             |
-| chat_room_id               | BIGINT                   | NOT NULL    | 聊天室 id                |
-| conversation_id            | VARCHAR(255)             |             | 对话 id                  |
-| api_type                   | VARCHAR(20)              | NOT NULL    | API 类型                 |
-| ip                         | VARCHAR(255)             |             | ip                       |
-| api_key                    | VARCHAR(255)             |             | ApiKey                   |
-| content                    | VARCHAR(5000)            | NOT NULL    | 消息内容                 |
-| original_data              | TEXT                     |             | 消息的原始请求或响应数据 |
-| response_error_data        | TEXT                     |             | 错误的响应数据           |
-| prompt_tokens              | BIGINT                   |             | 输入消息的 tokens        |
-| completion_tokens          | BIGINT                   |             | 输出消息的 tokens        |
-| total_tokens               | BIGINT                   |             | 累计 Tokens              |
-| status                     | INTEGER                  | NOT NULL    | 聊天记录状态             |
-| create_time                | TIMESTAMP WITH TIME ZONE | NOT NULL    | 创建时间                 |
-| update_time                | TIMESTAMP WITH TIME ZONE | NOT NULL    | 更新时间                 |
+| 列名                       | 数据类型                  | 约束        | 说明                     |
+| -------------------------- |-----------------------| ----------- | ------------------------ |
+| id                         | BIGINT                | PRIMARY KEY | 主键                     |
+| message_id                 | VARCHAR(255)          | NOT NULL    | 消息 id                  |
+| parent_message_id          | VARCHAR(255)          |             | 父级消息 id              |
+| parent_answer_message_id   | VARCHAR(255)          |             | 父级回答消息 id          |
+| parent_question_message_id | VARCHAR(255)          |             | 父级问题消息 id          |
+| context_count              | BIGINT                | NOT NULL    | 上下文数量               |
+| question_context_count     | BIGINT                | NOT NULL    | 问题上下文数量           |
+| message_type               | INTEGER               | NOT NULL    | 消息类型枚举             |
+| chat_room_id               | BIGINT                | NOT NULL    | 聊天室 id                |
+| conversation_id            | VARCHAR(255)          |             | 对话 id                  |
+| api_type                   | VARCHAR(20)           | NOT NULL    | API 类型                 |
+| ip                         | VARCHAR(255)          |             | ip                       |
+| api_key                    | VARCHAR(255)          |             | ApiKey                   |
+| content                    | VARCHAR(5000)         | NOT NULL    | 消息内容                 |
+| original_data              | TEXT                  |             | 消息的原始请求或响应数据 |
+| response_error_data        | TEXT                  |             | 错误的响应数据           |
+| prompt_tokens              | BIGINT                |             | 输入消息的 tokens        |
+| completion_tokens          | BIGINT                |             | 输出消息的 tokens        |
+| total_tokens               | BIGINT                |             | 累计 Tokens              |
+| status                     | INTEGER               | NOT NULL    | 聊天记录状态             |
+| create_time                | DATETIME              | NOT NULL    | 创建时间                 |
+| update_time                | DATETIME              | NOT NULL    | 更新时间                 |
 
 - 敏感词表
 
-| 字段名      | 数据类型                 | 是否为空 | 默认值                                        | 描述                      |
-| ----------- | ------------------------ | -------- | --------------------------------------------- | ------------------------- |
-| id          | BIGINT                   | NOT NULL | AUTO_INCREMENT                                | 主键                      |
-| word        | VARCHAR(255)             | NOT NULL |                                               | 敏感词内容                |
-| create_time | TIMESTAMP WITH TIME ZONE | NULL     | CURRENT_TIMESTAMP                             | 创建时间                  |
-| update_time | TIMESTAMP WITH TIME ZONE | NULL     | CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新时间                  |
-| status      | INTEGER                  | NOT NULL |                                               | 状态，1为启用，2为停用    |
-| is_deleted  | INTEGER                  | NULL     | 0                                             | 是否删除，0为否，NULL为是 |
+| 字段名      | 数据类型                                         | 是否为空 | 默认值                                        | 描述                      |
+| ----------- |----------------------------------------------| -------- | --------------------------------------------- | ------------------------- |
+| id          | BIGINT                                       | NOT NULL | AUTO_INCREMENT                                | 主键                      |
+| word        | VARCHAR(255)                                 | NOT NULL |                                               | 敏感词内容                |
+| create_time | DATETIME                                     | NULL     | CURRENT_TIMESTAMP                             | 创建时间                  |
+| update_time | DATETIME                                     | NULL     | CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新时间                  |
+| status      | INTEGER                                      | NOT NULL |                                               | 状态，1为启用，2为停用    |
+| is_deleted  | INTEGER                                      | NULL     | 0                                             | 是否删除，0为否，NULL为是 |
