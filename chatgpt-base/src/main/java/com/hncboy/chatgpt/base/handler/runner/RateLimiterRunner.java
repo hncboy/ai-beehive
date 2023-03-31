@@ -11,10 +11,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.io.FileReader;
-import java.time.LocalDateTime;
-import java.util.AbstractMap;
-import java.util.Deque;
-import java.util.Map;
 
 import static com.hncboy.chatgpt.base.handler.RateLimiterHandler.GLOBAL_REQUEST_TIMESTAMP_QUEUE;
 import static com.hncboy.chatgpt.base.handler.RateLimiterHandler.IP_REQUEST_TIMESTAMP_MAP;
@@ -50,10 +46,10 @@ public class RateLimiterRunner implements ApplicationRunner {
             }
             // 文件长度大于 0 才读取
             try (FileReader fr = new FileReader(file)) {
-                AbstractMap.SimpleEntry<Deque<LocalDateTime>, Map<String, Deque<LocalDateTime>>> deserializedMap = objectMapper.readValue(fr, new TypeReference<>() {
+                RateLimiterHandler.TimestampPair timestampPair = objectMapper.readValue(fr, new TypeReference<>() {
                 });
-                GLOBAL_REQUEST_TIMESTAMP_QUEUE.addAll(deserializedMap.getKey());
-                IP_REQUEST_TIMESTAMP_MAP.putAll(deserializedMap.getValue());
+                GLOBAL_REQUEST_TIMESTAMP_QUEUE.addAll(timestampPair.getGlobalQueue());
+                IP_REQUEST_TIMESTAMP_MAP.putAll(timestampPair.getIpMap());
             }
         } catch (Exception e) {
             log.error("限流器启动器启动失败", e);

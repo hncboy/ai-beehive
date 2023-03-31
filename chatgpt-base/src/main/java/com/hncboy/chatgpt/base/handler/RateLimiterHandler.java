@@ -8,11 +8,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hncboy.chatgpt.base.config.ChatConfig;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileWriter;
 import java.time.LocalDateTime;
-import java.util.AbstractMap;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
@@ -113,9 +116,9 @@ public class RateLimiterHandler {
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.registerModule(new JavaTimeModule());
         try (FileWriter fw = new FileWriter(FILE_PATH)) {
-            AbstractMap.SimpleEntry<Deque<LocalDateTime>, Map<String, Deque<LocalDateTime>>> dataToSerialize =
-                    new AbstractMap.SimpleEntry<>(GLOBAL_REQUEST_TIMESTAMP_QUEUE, IP_REQUEST_TIMESTAMP_MAP);
-            objectMapper.writeValue(fw, dataToSerialize);
+            objectMapper.writeValue(fw, TimestampPair.builder()
+                    .globalQueue(GLOBAL_REQUEST_TIMESTAMP_QUEUE)
+                    .ipMap(IP_REQUEST_TIMESTAMP_MAP).build());
         } catch (Exception e) {
             log.warn("限流数据写入文件失败", e);
         }
@@ -132,5 +135,22 @@ public class RateLimiterHandler {
         while (!timestampDeque.isEmpty() && now.minusSeconds(maxRequestSecond).isAfter(timestampDeque.peekFirst())) {
             timestampDeque.pollFirst();
         }
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TimestampPair {
+
+        /**
+         * 全局队列
+         */
+        private Deque<LocalDateTime> globalQueue;
+
+        /**
+         * ip Map
+         */
+        private Map<String, Deque<LocalDateTime>> ipMap;
     }
 }

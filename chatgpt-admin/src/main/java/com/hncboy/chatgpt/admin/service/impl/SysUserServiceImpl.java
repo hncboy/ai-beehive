@@ -52,11 +52,12 @@ public class SysUserServiceImpl implements SysUserService {
             rateLimitVO.setAlreadySendCount(timestampDeque.size());
             rateLimitVO.setIsLimited(timestampDeque.size() >= chatConfig.getMaxRequest());
             // 计算下次限流放开的时间点
-            if (timestampDeque.isEmpty()) {
-                rateLimitVO.setNextSendTime("N/A");
-            } else {
+            if (rateLimitVO.getIsLimited()) {
+                assert timestampDeque.peekFirst() != null;
                 LocalDateTime nextSendTime = timestampDeque.peekFirst().plusSeconds(chatConfig.getMaxRequestSecond());
                 rateLimitVO.setNextSendTime(LocalDateTimeUtil.format(nextSendTime, DatePattern.NORM_DATETIME_PATTERN));
+            } else {
+                rateLimitVO.setNextSendTime("N/A");
             }
             rateLimitList.add(rateLimitVO);
         }
