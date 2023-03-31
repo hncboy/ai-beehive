@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.front.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
@@ -27,8 +28,8 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomMapper, ChatRoomDO>
         chatRoom.setIp(WebUtil.getIp());
         chatRoom.setFirstChatMessageId(chatMessageDO.getId());
         chatRoom.setFirstMessageId(chatMessageDO.getMessageId());
-        // 取第一条对话内容当标题
-        chatRoom.setTitle(chatMessageDO.getContent());
+        // 取一部分内容当标题
+        chatRoom.setTitle(StrUtil.sub(chatMessageDO.getContent(), 0, 50));
         chatRoom.setCreateTime(new Date());
         chatRoom.setUpdateTime(new Date());
         save(chatRoom);

@@ -21,6 +21,7 @@ public class SensitiveWordPageQuery extends PageQuery {
     @Size(max = 20, message = "敏感词内容不超过 20 个字")
     @Schema(title = "敏感词内容")
     private String word;
+
     @Schema(title = "状态 1 启用 2 停用")
     private EnableDisableStatusEnum status;
 }

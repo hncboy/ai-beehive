@@ -36,7 +36,7 @@ public class SysUserController {
 
     @Operation(summary = "限流列表")
     @GetMapping("/list_rate_limit")
-    public List<RateLimitVO> listRateLimit() {
-        return sysUserService.listRateLimit();
+    public R<List<RateLimitVO>> listRateLimit() {
+        return R.data(sysUserService.listRateLimit());
     }
 }
