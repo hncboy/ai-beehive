@@ -27,8 +27,9 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomMapper, ChatRoomDO>
         chatRoom.setIp(WebUtil.getIp());
         chatRoom.setFirstChatMessageId(chatMessageDO.getId());
         chatRoom.setFirstMessageId(chatMessageDO.getMessageId());
-        // 取第一条对话内容当标题
-        chatRoom.setTitle(chatMessageDO.getContent());
+        // 取第一条对话内容当标题，如果超过255个字符，db会报错，这里最多取前255个字符
+        chatRoom.setTitle(chatMessageDO.getContent().length() > 255
+            ? chatMessageDO.getContent().substring(0, 255) : chatMessageDO.getContent());
         chatRoom.setCreateTime(new Date());
         chatRoom.setUpdateTime(new Date());
         save(chatRoom);
