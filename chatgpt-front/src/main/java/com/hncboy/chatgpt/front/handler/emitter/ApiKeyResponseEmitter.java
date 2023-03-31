@@ -1,6 +1,7 @@
 package com.hncboy.chatgpt.front.handler.emitter;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
@@ -99,8 +100,14 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
      * @param messages      消息列表
      */
     private void addContextChatMessage(ChatMessageDO chatMessageDO, LinkedList<Message> messages) {
-        // 父级消息为空不用往上找了
-        if (Objects.isNull(chatMessageDO) || Objects.isNull(chatMessageDO.getParentMessageId())) {
+        if (Objects.isNull(chatMessageDO)) {
+            return;
+        }
+        // 父级消息id为空，表示是第一条消息，直接添加到message里
+        if (Objects.isNull(chatMessageDO.getParentMessageId())) {
+            messages.addFirst(Message.builder().role(Message.Role.USER)
+              .content(chatMessageDO.getContent())
+              .build());
             return;
         }
 
@@ -116,7 +123,9 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
             if (Objects.isNull(chatMessageDO.getParentAnswerMessageId())) {
                 return;
             }
-            addContextChatMessage(chatMessageService.getById(chatMessageDO.getParentAnswerMessageId()), messages);
+            ChatMessageDO parentMessage = chatMessageService.getOne(new LambdaQueryWrapper<ChatMessageDO>()
+                    .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentAnswerMessageId()));
+            addContextChatMessage(parentMessage, messages);
             return;
         }
 
@@ -124,6 +133,8 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         messages.addFirst(Message.builder().role(role)
                 .content(chatMessageDO.getContent())
                 .build());
-        addContextChatMessage(chatMessageService.getById(chatMessageDO.getParentMessageId()), messages);
+        ChatMessageDO parentMessage = chatMessageService.getOne(new LambdaQueryWrapper<ChatMessageDO>()
+            .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentMessageId()));
+        addContextChatMessage(parentMessage, messages);
     }
 }
