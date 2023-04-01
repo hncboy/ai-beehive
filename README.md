@@ -23,14 +23,9 @@
 
 ### 上下文聊天
 
-通过 MySQL 实现聊天数据存储来实现 apiKey 方式的上下文聊天，AccessToken 默认支持上下文聊天。
+通过 MySQL 实现聊天数据存储来实现 apiKey 方式的上下文聊天，AccessToken 默认支持上下文聊天。可以通过配置参数 limitQuestionContextCount 来限制上下问问题的数量。
 
 数据库存储了每次聊天对话的记录，在选择上下文聊天时，通过 parentMessageId 往上递归遍历获取历史消息，将历史问题以及回答消息都发送给 GPT。
-
-### 聊天记录存储
-
-- 存在 MySQL
-- SQL 存放在 resources 的 db 目录
 
 ### 敏感词过滤
 
@@ -120,6 +115,8 @@
     ipMaxRequest: 10
     # ip 最大请求时间间隔（秒）
     ipMaxRequestSecond: 3600
+    # 限制上下文对话的数量
+    limitQuestionContextCount: 3
   ```
   
   

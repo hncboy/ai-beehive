@@ -100,8 +100,6 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
                 throw new ServiceException("父级消息不存在，本次对话出错，请先关闭上下文或开启新的对话窗口");
             }
 
-            // TODO 限制上下文问题的数量
-
             chatMessageDO.setParentMessageId(parentMessageId);
             chatMessageDO.setParentAnswerMessageId(parentMessageId);
             chatMessageDO.setParentQuestionMessageId(parentChatMessage.getParentQuestionMessageId());
@@ -109,6 +107,12 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
             chatMessageDO.setConversationId(parentChatMessage.getConversationId());
             chatMessageDO.setContextCount(parentChatMessage.getContextCount() + 1);
             chatMessageDO.setQuestionContextCount(parentChatMessage.getQuestionContextCount() + 1);
+
+            // ApiKey 限制上下文问题的数量
+            if (chatMessageDO.getApiType() == ApiTypeEnum.API_KEY
+                    && chatMessageDO.getQuestionContextCount() > chatConfig.getLimitQuestionContextCount()) {
+                throw new ServiceException(StrUtil.format("当前允许连续对话的问题数量为[{}]次，已达到上限，请关闭上下文对话重新发送", chatConfig.getLimitQuestionContextCount()));
+            }
         } else {
             // 创建新聊天室
             ChatRoomDO chatRoomDO = chatRoomService.createChatRoom(chatMessageDO);
