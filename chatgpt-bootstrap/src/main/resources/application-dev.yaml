@@ -22,8 +22,7 @@ chat:
   # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
   openai_api_model:
   # 反向代理地址 AccessToken 时使用
-#  api_reverse_proxy: https://api.pawan.krd/backend-api/conversation
-  api_reverse_proxy: https://bypass.duti.tech/api/conversation
+  api_reverse_proxy: https://bypass.churchless.tech/api/conversation
   # 超时毫秒
   timeout_ms: 100000
   # HTTP 代理
