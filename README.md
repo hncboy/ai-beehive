@@ -130,7 +130,7 @@
 ```shell
 cd chatgpt-web-java
 # 增加执行权限
-chmod a+x compile_build_up.sh
+chmod +x compile_build_up.sh
 # 启动
 # dev环境
 ./compile_build_up.sh -e dev
