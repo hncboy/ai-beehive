@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
  * 验证密码请求参数
  */
 @Data
-@Schema(name = "验证密码请求参数")
+@Schema(title = "验证密码请求参数")
 public class VerifySecretRequest {
 
     @NotNull(message = "授权密码不能为空")
-    @Schema(name = "授权密码")
+    @Schema(title = "授权密码")
     private String token;
 }

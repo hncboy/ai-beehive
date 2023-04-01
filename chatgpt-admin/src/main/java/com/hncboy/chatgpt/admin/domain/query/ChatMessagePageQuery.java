@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Schema(name = "聊天记录分页查询")
+@Schema(title = "聊天记录分页查询")
 public class ChatMessagePageQuery extends PageQuery {
 
     @Schema(title = "聊天室 id")

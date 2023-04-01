@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
  * 消息处理请求
  */
 @Data
-@Schema(name = "消息处理请求")
+@Schema(title = "消息处理请求")
 public class ChatProcessRequest {
 
     @Size(min = 1, max = 2000, message = "问题字数范围[1, 2000]")
