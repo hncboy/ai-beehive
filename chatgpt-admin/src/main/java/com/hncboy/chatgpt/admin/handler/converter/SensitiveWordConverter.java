@@ -24,7 +24,7 @@ public interface SensitiveWordConverter {
     /**
      * 管理端是否脱敏
      */
-    String ADMIN_SENSITIVE_WORD_DESENSITIZED_ENABLED = "admin_sensitive_word_desensitized_enabled";
+    String ADMIN_SENSITIVE_WORD_DESENSITIZED_ENABLED = "chat.admin_sensitive_word_desensitized_enabled";
 
     SensitiveWordConverter INSTANCE = Mappers.getMapper(SensitiveWordConverter.class);
 

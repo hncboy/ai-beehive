@@ -104,6 +104,11 @@ public class ChatConfig implements InitializingBean {
     private Integer limitQuestionContextCount;
 
     /**
+     * 是否展示余额，默认不展示
+     */
+    private Boolean isShowBalance;
+
+    /**
      * 判断是否有 http 代理
      *
      * @return true/false

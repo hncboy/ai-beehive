@@ -44,3 +44,5 @@ chat:
   ipMaxRequestSecond: 3600
   # 限制上下文对话的数量
   limitQuestionContextCount: 3
+  # 是否展示余额
+  isShowBalance: false
