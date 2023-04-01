@@ -6,6 +6,7 @@
 
 - [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的 Java 后台
 - 该分支关联项目的 [2.10.8](https://github.com/Chanzhaoyu/chatgpt-web/releases/tag/v2.10.8) 版本，在不改动前端的情况下更新后台
+- [管理端开源代码](https://github.com/hncboy/chatgpt-web-admin)
 
 ## 框架
 
@@ -18,6 +19,12 @@
 - [Hutool](https://hutool.cn/) 
 - [SaToken](https://sa-token.cc/) 权限校验
 - [Grt1228 ChatGPT java sdk](https://github.com/Grt1228/chatgpt-java)
+
+## 地址
+
+- 接口文档：http://localhost:3002/swagger-ui.html
+- 客户端：https://front.stargpt.top/ 密码：stargpt
+- 管理端：https://admin.stargpt.top/ 账号密码 admin-admin
 
 ## 已实现功能
 
@@ -52,6 +59,32 @@
 
 - 在接口返回报错信息时，不会携带 conversationid 和 parentMessageId，导致前端下一次发送消息时会丢失这两个字段，丢失上下文关系。
 
+## 管理端
+
+### 消息记录
+
+展示消息的列表，问题和回答各是一条消息。通过父消息 id 关联上一条消息。父消息和当前消息一定是同一个聊天室的。
+
+![](pics/chat_message_1.png)
+
+### 限流记录
+
+查看各个 ip 的限流记录，只记录在限流时间范围的限流次数。
+
+![](pics/rate_limit_1.png)
+
+### 聊天室管理
+
+查看聊天室。这里的聊天室和客户端左边的对话不是同一个概念。在同一个窗口中，我们既可以选择关联上下文发送后者不关联上下文发送。如果不关联上下文发送每次发送消息都会产生一个聊天室。
+
+![](pics/chat_room_1.png)
+
+### 敏感词管理
+
+查看敏感词列表，目前只提供了查询的功能，后期可以增加管理。
+
+![](pics/sensitive_word_1.png)
+
 ## 接口
 
 | 路径          | 功能         | 完成情况 |
@@ -60,10 +93,6 @@
 | /chat-process | 消息处理     | 已完成   |
 | /verify       | 校验密码     | 已完成   |
 | /session      | 获取模型信息 | 已完成   |
-
-## 地址
-
-- 接口文档：http://localhost:3002/swagger-ui.html
 
 ## 运行
 
@@ -238,3 +267,31 @@ services:
 | is_deleted  | INTEGER      | NULL        | 是否删除，0为否，NULL为是 |
 | create_time | DATETIME     | NOT NULL    | 创建时间                  |
 | update_time | DATETIME     | NOT NULL    | 更新时间                  |
+
+# 联系
+
+<div style="display: flex; align-items: center; gap: 20px;">
+  <div style="text-align: center">
+    <img style="max-width: 100%" src="pics/wechat_group.png" alt="微信群聊" />
+    <p>微信群聊</p>
+  </div>
+</div>
+
+# 赞助
+
+如果觉得项目对你有帮助的，条件允许的话可以点个 Star 或者在赞助一小点。感谢支持~
+
+<div style="display: flex; align-items: center; gap: 20px;">
+  <div style="text-align: center">
+    <img style="max-width: 100%" src="pics/wechat_pay.png" alt="微信" />
+    <p>微信支付</p>
+  </div>
+  <div style="text-align: center">
+    <img style="max-width: 100%" src="pics/zhifubao_pay.png" alt="支付宝" />
+    <p>支付宝</p>
+  </div>
+</div>
+
+## License
+
+MIT © [hncboy](license)
