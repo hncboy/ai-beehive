@@ -31,7 +31,7 @@ public class IpRateLimiterEmitterChain extends AbstractResponseEmitterChain {
                 }
             } else {
                 ChatReplyMessageVO chatReplyMessageVO = ChatReplyMessageVO.onEmitterChainException(request);
-                chatReplyMessageVO.setText(StrUtil.format("当前 ip:{} 访问过多，请等到 {} 再尝试下", ip, limitPair.getValue()));
+                chatReplyMessageVO.setText(StrUtil.format("当前访问人数过多，请等到 {} 后再尝试下", limitPair.getValue()));
                 emitter.send(ObjectMapperUtil.toJson(chatReplyMessageVO));
                 emitter.complete();
             }

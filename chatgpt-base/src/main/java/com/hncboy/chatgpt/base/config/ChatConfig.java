@@ -79,15 +79,29 @@ public class ChatConfig implements InitializingBean {
     private String adminPassword;
 
     /**
-     * 单位 maxRequestSecond 的最大请求数
-     * 默认1s1次
+     * 全局时间内最大请求次数，默认无限制
      */
     private Integer maxRequest;
 
     /**
-     * 多少s
+     * 全局最大请求时间间隔（秒）
      */
     private Integer maxRequestSecond;
+
+    /**
+     * ip 时间内最大请求次数，默认无限制
+     */
+    private Integer ipMaxRequest;
+
+    /**
+     * ip 最大请求时间间隔（秒）
+     */
+    private Integer ipMaxRequestSecond;
+
+    /**
+     * 限制上下文对话的问题数量，默认 1 次
+     */
+    private Integer limitQuestionContextCount;
 
     /**
      * 判断是否有 http 代理
@@ -120,12 +134,49 @@ public class ChatConfig implements InitializingBean {
         return ApiTypeEnum.ACCESS_TOKEN;
     }
 
+    /**
+     * 获取全局时间内最大请求次数
+     *
+     * @return 最大请求次数
+     */
     public Integer getMaxRequest() {
-        return Opt.ofNullable(maxRequest).orElse(1);
+        return Opt.ofNullable(maxRequest).orElse(0);
     }
 
+    /**
+     * 获取全局最大请求时间间隔（秒）
+     *
+     * @return 时间间隔
+     */
     public Integer getMaxRequestSecond() {
-        return Opt.ofNullable(maxRequestSecond).orElse(1);
+        return Opt.ofNullable(maxRequestSecond).orElse(0);
+    }
+
+    /**
+     * 获取 ip 时间内最大请求次数
+     *
+     * @return 最大请求次数
+     */
+    public Integer getIpMaxRequest() {
+        return Opt.ofNullable(ipMaxRequest).orElse(0);
+    }
+
+    /**
+     * 获取 ip 最大请求时间间隔（秒）
+     *
+     * @return 时间间隔
+     */
+    public Integer getIpMaxRequestSecond() {
+        return Opt.ofNullable(ipMaxRequestSecond).orElse(0);
+    }
+
+    /**
+     * 获取限制的上下文对话数量
+     *
+     * @return 限制数量
+     */
+    public Integer getLimitQuestionContextCount() {
+        return Opt.ofNullable(limitQuestionContextCount).orElse(1);
     }
 
     @Override

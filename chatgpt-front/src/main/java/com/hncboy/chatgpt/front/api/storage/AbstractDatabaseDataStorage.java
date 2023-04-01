@@ -1,6 +1,8 @@
 package com.hncboy.chatgpt.front.api.storage;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
+import com.hncboy.chatgpt.base.domain.entity.ChatRoomDO;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
@@ -47,19 +49,38 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
         answerChatMessageDO.setUpdateTime(new Date());
 
         // 填充第一条消息的字段
-        onFirstMessage(answerChatMessageDO, chatMessageStorage);
+        onFirstMessage(chatMessageStorage);
 
         // 保存回答消息记录
         chatMessageService.save(answerChatMessageDO);
+
+        // 聊天室更新 conversationId
+        chatRoomService.update(new LambdaUpdateWrapper<ChatRoomDO>()
+                .set(ChatRoomDO::getConversationId, answerChatMessageDO.getConversationId())
+                .eq(ChatRoomDO::getId, answerChatMessageDO.getChatRoomId()));
     }
 
     /**
      * 收到第一条消息
      *
-     * @param answerChatMessageDO 回答消息记录
-     * @param chatMessageStorage  聊天记录存储
+     * @param chatMessageStorage 聊天记录存储
      */
-    public abstract void onFirstMessage(ChatMessageDO answerChatMessageDO, ChatMessageStorage chatMessageStorage);
+    abstract void onFirstMessage(ChatMessageStorage chatMessageStorage);
+
+    /**
+     * 收到最后第一条消息
+     *
+     * @param chatMessageStorage 聊天记录存储
+     */
+    abstract void onLastMessage(ChatMessageStorage chatMessageStorage);
+
+    /**
+     * 收到错误消息
+     *
+     * @param chatMessageStorage 聊天记录存储
+     */
+    abstract void onErrorMessage(ChatMessageStorage chatMessageStorage);
+
 
     @Override
     public void onComplete(ChatMessageStorage chatMessageStorage) {
@@ -80,6 +101,9 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
         questionChatMessageDO.setUpdateTime(new Date());
         answerChatMessageDO.setUpdateTime(new Date());
 
+        // 最后一条消息
+        onLastMessage(chatMessageStorage);
+
         // 更新消息
         chatMessageService.updateById(questionChatMessageDO);
         chatMessageService.updateById(answerChatMessageDO);
@@ -92,6 +116,9 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
 
         // 更新问题消息记录
         updateErrorQuestionChatMessage(chatMessageStorage, chatMessageStatusEnum);
+
+        // 错误消息
+        onErrorMessage(chatMessageStorage);
 
         // 还没收到回复就断了，跳过回答消息记录更新
         if (chatMessageStatusEnum == ChatMessageStatusEnum.ERROR) {

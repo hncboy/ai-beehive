@@ -2,8 +2,10 @@ package com.hncboy.chatgpt.front.api.storage;
 
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
 import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
+import com.unfbx.chatgpt.entity.common.Usage;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -15,31 +17,44 @@ import java.util.UUID;
 public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
 
     @Override
-    public void onFirstMessage(ChatMessageDO answerChatMessageDO, ChatMessageStorage chatMessageStorage) {
+    public void onFirstMessage(ChatMessageStorage chatMessageStorage) {
         // 第一条消息手动生成消息 id 和对话 id
+        ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerChatMessageDO();
         answerChatMessageDO.setMessageId(UUID.randomUUID().toString());
         answerChatMessageDO.setConversationId(UUID.randomUUID().toString());
+    }
 
-        // 填充消息使用 Token 数量
-        populateMessageUsageToken(answerChatMessageDO, chatMessageStorage);
+    @Override
+    void onLastMessage(ChatMessageStorage chatMessageStorage) {
+        populateMessageUsageToken(chatMessageStorage);
+    }
 
-        // 这里把问题消息记录的 Token 数量也填了
-        populateMessageUsageToken(chatMessageStorage.getQuestionChatMessageDO(), chatMessageStorage);
+    @Override
+    void onErrorMessage(ChatMessageStorage chatMessageStorage) {
+        populateMessageUsageToken(chatMessageStorage);
     }
 
     /**
      * 填充消息使用 Token 数量
      *
-     * @param chatMessageDO      聊天消息
      * @param chatMessageStorage 聊天消息数据存储
      */
-    private void populateMessageUsageToken(ChatMessageDO chatMessageDO, ChatMessageStorage chatMessageStorage) {
+    private void populateMessageUsageToken(ChatMessageStorage chatMessageStorage) {
         ChatCompletionResponse chatCompletionResponse = (ChatCompletionResponse) chatMessageStorage.getParser()
                 .parseSuccess(chatMessageStorage.getOriginalResponseData());
-        // TODO 填充 usage 是否为空判断
-//        Usage usage = chatCompletionResponse.getUsage();
-//        chatMessageDO.setTotalTokens(usage.getTotalTokens());
-//        chatMessageDO.setPromptTokens(usage.getPromptTokens());
-//        chatMessageDO.setCompletionTokens(usage.getCompletionTokens());
+        Usage usage = chatCompletionResponse.getUsage();
+        if (Objects.nonNull(usage)) {
+            // FIXME 没有 usage
+            // 填充使用情况
+            ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerChatMessageDO();
+            answerChatMessageDO.setTotalTokens(usage.getTotalTokens());
+            answerChatMessageDO.setPromptTokens(usage.getPromptTokens());
+            answerChatMessageDO.setCompletionTokens(usage.getCompletionTokens());
+
+            ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionChatMessageDO();
+            questionChatMessageDO.setTotalTokens(usage.getTotalTokens());
+            questionChatMessageDO.setPromptTokens(usage.getPromptTokens());
+            questionChatMessageDO.setCompletionTokens(usage.getCompletionTokens());
+        }
     }
 }
