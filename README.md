@@ -254,6 +254,7 @@ services:
 | completion_tokens          | BIGINT        |             | 输出消息的 tokens        |
 | total_tokens               | BIGINT        |             | 累计 Tokens              |
 | status                     | INTEGER       | NOT NULL    | 聊天记录状态             |
+| is_hide                    | TINYINT       | NOT NULL    | 是否隐藏 0 否 1 是       |
 | create_time                | DATETIME      | NOT NULL    | 创建时间                 |
 | update_time                | DATETIME      | NOT NULL    | 更新时间                 |
 

@@ -109,6 +109,11 @@ public class ChatConfig implements InitializingBean {
     private Boolean isShowBalance;
 
     /**
+     * 管理端是否展示隐藏的消息，默认不展示
+     */
+    private Boolean isAdminShowHiddenMessage;
+
+    /**
      * 判断是否有 http 代理
      *
      * @return true/false
@@ -182,6 +187,15 @@ public class ChatConfig implements InitializingBean {
      */
     public Integer getLimitQuestionContextCount() {
         return Opt.ofNullable(limitQuestionContextCount).orElse(1);
+    }
+
+    /**
+     * 是否展示管理端隐藏的消息，默认不展示
+     *
+     * @return true/false
+     */
+    public Boolean getIsAdminShowHiddenMessage() {
+        return Opt.ofNullable(isAdminShowHiddenMessage).orElse(false);
     }
 
     @Override
