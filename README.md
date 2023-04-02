@@ -273,10 +273,11 @@ services:
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
-    <img style="max-width: 100%" src="pics/wechat_group.png" alt="微信群聊" />
-    <p>微信群聊</p>
+    <img style="max-width: 100%" src="pics/qq_group.png" alt="QQ" />
+    <p>631171246</p>
   </div>
 </div>
+
 
 # 赞助
 
