@@ -12,6 +12,7 @@
 
 - Spring Boot 2.7.10
 - JDK 17
+- MySQL 8.x
 - SpringDoc 接口文档
 - MyBatis Plus
 - MapStruct
@@ -218,13 +219,13 @@ services:
 
 - 聊天室表
 
-| 列名                  | 数据类型         | 约束             | 说明                       |
-| --------------------- |--------------| ---------------- | -------------------------- |
+| 列名                  | 数据类型     | 约束             | 说明                       |
+| --------------------- | ------------ | ---------------- | -------------------------- |
 | id                    | BIGINT       | PRIMARY KEY      | 主键                       |
 | ip                    | VARCHAR(255) |                  | ip                         |
-| conversation_id       | VARCHAR(255) | UNIQUE, NULL     | 对话 id，唯一              |
+| conversation_id       | VARCHAR(64)  | UNIQUE, NULL     | 对话 id，唯一              |
 | first_chat_message_id | BIGINT       | UNIQUE, NOT NULL | 第一条消息主键，唯一       |
-| first_message_id      | VARCHAR(255) | UNIQUE, NOT NULL | 第一条消息 id，唯一        |
+| first_message_id      | VARCHAR(64)  | UNIQUE, NOT NULL | 第一条消息 id，唯一        |
 | title                 | VARCHAR(255) | NOT NULL         | 对话标题，从第一条消息截取 |
 | api_type              | VARCHAR(20)  | NOT NULL         | API 类型                   |
 | create_time           | DATETIME     | NOT NULL         | 创建时间                   |
@@ -235,15 +236,15 @@ services:
 | 列名                       | 数据类型      | 约束        | 说明                     |
 | -------------------------- | ------------- | ----------- | ------------------------ |
 | id                         | BIGINT        | PRIMARY KEY | 主键                     |
-| message_id                 | VARCHAR(255)  | NOT NULL    | 消息 id                  |
-| parent_message_id          | VARCHAR(255)  |             | 父级消息 id              |
-| parent_answer_message_id   | VARCHAR(255)  |             | 父级回答消息 id          |
-| parent_question_message_id | VARCHAR(255)  |             | 父级问题消息 id          |
+| message_id                 | VARCHAR(64)   | NOT NULL    | 消息 id                  |
+| parent_message_id          | VARCHAR(64)   |             | 父级消息 id              |
+| parent_answer_message_id   | VARCHAR(64)   |             | 父级回答消息 id          |
+| parent_question_message_id | VARCHAR(64)   |             | 父级问题消息 id          |
 | context_count              | BIGINT        | NOT NULL    | 上下文数量               |
 | question_context_count     | BIGINT        | NOT NULL    | 问题上下文数量           |
 | message_type               | INTEGER       | NOT NULL    | 消息类型枚举             |
 | chat_room_id               | BIGINT        | NOT NULL    | 聊天室 id                |
-| conversation_id            | VARCHAR(255)  |             | 对话 id                  |
+| conversation_id            | VARCHAR(64)   |             | 对话 id                  |
 | api_type                   | VARCHAR(20)   | NOT NULL    | API 类型                 |
 | ip                         | VARCHAR(255)  |             | ip                       |
 | api_key                    | VARCHAR(255)  |             | ApiKey                   |
@@ -271,6 +272,12 @@ services:
 
 # 联系
 
+<div style="display: flex; align-items: center; gap: 20px;">
+  <div style="text-align: center">
+    <img style="max-width: 100%" src="pics/wechat_group.png" alt="微信" />
+    <p>微信群</p>
+  </div>
+</div>
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
     <img style="max-width: 100%" src="pics/qq_group.png" alt="QQ" />

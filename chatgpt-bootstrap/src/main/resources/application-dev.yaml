@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    url: jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
 
 #mybatis-plus:
 #  configuration:
@@ -27,7 +27,7 @@ chat:
   timeout_ms: 100000
   # HTTP 代理
   http_proxy_host: 127.0.0.1
-  http_proxy_port: 33210
+  #http_proxy_port:
   # 管理端账号
   admin_account: admin
   # 管理端密码
