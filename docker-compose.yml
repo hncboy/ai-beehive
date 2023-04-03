@@ -5,15 +5,11 @@ services:
     image: yryxspe/chatgpt-web:latest # 总是使用latest,更新时重新pull该tag镜像即可
     ports:
       - 80:80
-    volumes:
-      - ./env/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       gpt_network:
 
   mysql_gpt:
-    build:
-      context: ./
-      dockerfile: Dockerfile_mysql
+    image: yryxspe/chatgpt-web-mysql:latest
     container_name: mysql_gpt
     # 这里debug时暴露给宿主机方便调试
 #    ports:
