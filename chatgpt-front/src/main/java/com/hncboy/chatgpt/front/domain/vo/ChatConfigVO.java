@@ -10,24 +10,24 @@ import lombok.Data;
  * 聊天配置展示参数
  */
 @Data
-@Schema(name = "聊天配置展示参数")
+@Schema(title = "聊天配置展示参数")
 public class ChatConfigVO {
 
-    @Schema(name = "API 类型")
+    @Schema(title = "API 类型")
     private ApiTypeEnum apiModel;
 
-    @Schema(name = "余额")
+    @Schema(title = "余额")
     private String balance;
 
-    @Schema(name = "HTTPS Proxy")
+    @Schema(title = "HTTPS Proxy")
     private String httpsProxy;
 
-    @Schema(name = "反向代理")
+    @Schema(title = "反向代理")
     private String reverseProxy;
 
-    @Schema(name = "SOCKS Proxy")
+    @Schema(title = "SOCKS Proxy")
     private String socksProxy;
 
-    @Schema(name = "超时时间")
+    @Schema(title = "超时时间")
     private Integer timeoutMs;
 }

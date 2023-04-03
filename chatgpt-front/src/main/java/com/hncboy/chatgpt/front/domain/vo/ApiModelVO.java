@@ -10,12 +10,12 @@ import lombok.Data;
  * API 模型信息
  */
 @Data
-@Schema(name = "API 模型信息")
+@Schema(title = "API 模型信息")
 public class ApiModelVO {
 
-    @Schema(name = "是否开启鉴权")
+    @Schema(title = "是否开启鉴权")
     private Boolean auth;
 
-    @Schema(name = "模型名称")
+    @Schema(title = "模型名称")
     private ApiTypeEnum model;
 }

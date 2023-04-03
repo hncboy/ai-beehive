@@ -12,6 +12,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Schema(name = "聊天室分页查询")
+@Schema(title = "聊天室分页查询")
 public class ChatRoomPageQuery extends PageQuery {
 }

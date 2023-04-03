@@ -135,6 +135,11 @@ public class ChatMessageDO {
     private ChatMessageStatusEnum status;
 
     /**
+     * 是否被隐藏
+     */
+    private Boolean isHide;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)

@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Schema(name = "敏感词分页查询")
+@Schema(title = "敏感词分页查询")
 public class SensitiveWordPageQuery extends PageQuery {
 
     @Size(max = 20, message = "敏感词内容不超过 20 个字")

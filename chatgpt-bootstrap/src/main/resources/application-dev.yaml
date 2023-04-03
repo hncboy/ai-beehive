@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USER_NAME:root}
     password: ${MYSQL_PASSWORD:123456}
-    url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false}
+    url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
 
 #mybatis-plus:
 #  configuration:
@@ -27,7 +27,7 @@ chat:
   timeout_ms: 100000
   # HTTP 代理
   http_proxy_host: ${CHAT_HTTP_PROXY_HOST:127.0.0.1}
-  http_proxy_port: ${CHAT_HTTP_PROXY_PORT:33210}
+#  http_proxy_port: ${CHAT_HTTP_PROXY_PORT:33210}
   # 管理端账号
   admin_account: admin
   # 管理端密码
@@ -44,3 +44,7 @@ chat:
   ipMaxRequestSecond: 3600
   # 限制上下文对话的数量
   limitQuestionContextCount: 3
+  # 是否展示余额，默认不展示
+  isShowBalance: false
+  # 是否展示管理端隐藏的消息，默认不展示
+  isAdminShowHiddenMessage: false

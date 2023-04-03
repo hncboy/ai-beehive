@@ -12,25 +12,25 @@ import java.util.Optional;
  * 聊天回复的消息
  */
 @Data
-@Schema(name = "聊天回复的消息")
+@Schema(title = "聊天回复的消息")
 public class ChatReplyMessageVO {
 
     /**
      * 对于前端有什么用？
      */
-    @Schema(name = "角色")
+    @Schema(title = "角色")
     private String role;
 
-    @Schema(name = "当前消息 id")
+    @Schema(title = "当前消息 id")
     private String id;
 
-    @Schema(name = "父级消息 id")
+    @Schema(title = "父级消息 id")
     private String parentMessageId;
 
-    @Schema(name = "对话 id")
+    @Schema(title = "对话 id")
     private String conversationId;
 
-    @Schema(name = "回复的消息")
+    @Schema(title = "回复的消息")
     private String text;
 
     /**
