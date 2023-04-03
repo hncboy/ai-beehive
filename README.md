@@ -95,20 +95,15 @@
 | /verify       | 校验密码     | 已完成   |
 | /session      | 获取模型信息 | 已完成   |
 
-## chat-gpt配置
-
-- 有2个配置文件`application-dev.yml`和`application-prod.yml`，对应两个环境dev和prod，不指定profile默认使用dev。
-- 指定profile的方式有两种
-   - 是在`application.yml`的`spring.profiles.active`配置项
-   - 参考下节docker-compose运行
-- 配置项在配置yaml的chat节点下，具体可以参考代码注释。
-
 ## 运行
 
 ### IDEA 运行
 
-需要本地提前准备好端口为3309的MySQL实例，如果没有可以直接使用Dockerfile_mysql构建一个docker的MySQL容器：
+#### 需要提前准备好的应用
 
+1. 前端代码参考[Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的启动流程。
+
+2. 需要本地提前准备好端口为3309的MySQL实例，如果没有可以直接使用Dockerfile_mysql构建一个docker的MySQL容器：
 ```shell
   # 删除旧版container（如果有的话）
   docker stop mysql_gpt && docker rm mysql_gpt
@@ -141,32 +136,21 @@
   docker build -t chatgpt-web-java . 
   # 如果这里要使用java的容器访问mysql容器，需要使用host.docker.internal而不是localhost，才可以访问到宿主机的3009端口（mysql开放了3009端口）
   docker run -d -p 3002:3002 \
-      -e '--spring.datasource.url=jdbc:mysql://host.docker.internal:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai' \
-      -e --spring.datasource.username=root \
-      -e --spring.datasource.password=123456 \
-      -e --chat.openai_api_key=xxx \
-      -e --chat.openai_access_token=xxx \
-      -e --chat.openai_api_base_url=http://xxx.com \
-      -e --chat.http_proxy_host=127.0.0.1 \
-      -e --chat.http_proxy_port=7890 \
+      -e JDBC_URL=jdbc:mysql://host.docker.internal:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
+      -e MYSQL_USER_NAME=root \
+      -e MYSQL_PASSWORD=123456 \
+      -e CHAT_OPENAI_API_KEY=xxx \
+      -e CHAT_OPENAI_ACCESS_TOKEN=xxx \
+      -e CHAT_OPENAI_API_BASE_URL=http://xxx.com \
+      -e CHAT_HTTP_PROXY_HOST=127.0.0.1 \
+      -e CHAT_HTTP_PROXY_PORT=7890 \
       chatgpt-web-java
 ```
   ![](pics/docker_run.png)
 
 ### docker-compose运行
 
-使用`compile_build_up.sh`可一键启动，具体使用方法：
-
-```shell
-cd chatgpt-web-java
-# 增加执行权限
-chmod +x compile_build_up.sh
-# 启动
-# dev环境
-./compile_build_up.sh -e dev
-# prod环境 
-./compile_build_up.sh -e prod 
-```
+在docker-compose.yml文件中配置好chat-gpt配置后，使用`docker-compose up -d`可一键启动。
 
 ## 表结构
 
