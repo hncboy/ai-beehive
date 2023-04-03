@@ -1,5 +1,15 @@
 version: '3'
 services:
+  web_gpt:
+    container_name: web_gpt
+    image: yryxspe/chatgpt-web:latest # 总是使用latest,更新时重新pull该tag镜像即可
+    ports:
+      - 80:80
+    volumes:
+      - ./env/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      gpt_network:
+
   mysql_gpt:
     build:
       context: ./
@@ -15,26 +25,19 @@ services:
       - ~/mydata/mysql/conf:/etc/mysql/conf.d #配置文件挂载
       - ~/mydata/mysql/log:/var/log/mysql #日志文件挂载
     networks:
-      my-network:
+      gpt_network:
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping" , "-h", "localhost" ]
       interval: 5s
       timeout: 10s
       retries: 5
 
-  java_chatgpt:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    container_name: java_chatgpt
+  java_gpt:
+    # FIXME 这里等mr合并进去之后并且发布了新的hncboy/chatgpt-web-java再改回来
+#    image: hncboy/chatgpt-web-java:latest
+    image: yryxspe/chatgpt-web-java:latest
+    container_name: java_gpt
     environment:
-      - PARAMS=--spring.datasource.url=jdbc:mysql://mysql_gpt:3306/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
-        --spring.datasource.username=root \
-        --spring.datasource.password=123456 \
-        --chat.openai_api_key=xxxxx
-        --chat.http_proxy_host= \
-        --chat.http_proxy_port= \
-      - SPRING_PROFILES_ACTIVE=dev
       # 这里要用mysql_gpt的3306端口
       - JDBC_URL=jdbc:mysql://mysql_gpt:3306/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
       - MYSQL_USER_NAME=root
@@ -44,14 +47,15 @@ services:
       - CHAT_OPENAI_API_BASE_URL=https://api.openai.com/
       - CHAT_HTTP_PROXY_HOST:127.0.0.1
       - CHAT_HTTP_PROXY_PORT:33210
-    ports:
-      - 3002:3002
+    # 3002端口这里不需要暴露
+#    ports:
+#      - 3002:3002
     depends_on:
       - mysql_gpt
     restart: on-failure
     networks:
-      my-network:
+      gpt_network:
 
 networks:
-  my-network:
+  gpt_network:
 
