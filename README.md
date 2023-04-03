@@ -105,11 +105,11 @@
 
 2. 需要本地提前准备好端口为 3309 的 MySQL 实例，如果没有可以直接使用 Dockerfile_mysql 构建一个 docker 的 MySQL 容器：
 ```shell
-  # 删除旧版container（如果有的话）
+  # 删除旧版 container （如果有的话）
   docker stop mysql_gpt && docker rm mysql_gpt
-  # 构建image
+  # 构建 image
   docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
-  # 运行container
+  # 运行 container
   docker run -d -p 3309:3306 \
        --name mysql_gpt \
        -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
@@ -123,7 +123,7 @@
 这里也提供下 java 应用构建镜像的方法。
 
 ```shell
-  # 删除旧版container（如果有的话）
+  # 删除旧版 container （如果有的话）
   docker stop chatgpt-web-java && docker rm chatgpt-web-java
   docker build -t chatgpt-web-java .
   docker run -d -p 3002:3002 chatgpt-web-java
@@ -131,10 +131,10 @@
 如果要显式指定 MySQL 和 chat-gpt 参数，可以在 `docker run` 后添加 `-e` 选项，配置 `application.yml` 用到的参数。例如：
 
 ```shell
-  # 删除旧版container（如果有的话）
+  # 删除旧版 container （如果有的话）
   docker stop chatgpt-web-java && docker rm chatgpt-web-java
   docker build -t chatgpt-web-java . 
-  # 如果这里要使用java的容器访问mysql容器，需要使用host.docker.internal而不是localhost，才可以访问到宿主机的3009端口（mysql开放了3009端口）
+  # 如果这里要使用 java 的容器访问 mysql 容器，需要使用 host.docker.internal 而不是 localhost，才可以访问到宿主机的 3009 端口（mysql开放了3009端口）
   docker run -d -p 3002:3002 \
       -e JDBC_URL=jdbc:mysql://host.docker.internal:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
       -e MYSQL_USER_NAME=root \
