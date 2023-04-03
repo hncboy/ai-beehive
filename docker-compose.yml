@@ -15,11 +15,9 @@ services:
       context: ./
       dockerfile: Dockerfile_mysql
     container_name: mysql_gpt
-    # 这里暴露给宿主机方便调试
-    ports:
-      - 3309:3306
-    #    environment:
-    #      MYSQL_ROOT_PASSWORD: 123456 #设置root帐号密码
+    # 这里debug时暴露给宿主机方便调试
+#    ports:
+#      - 3309:3306
     volumes:
       - ~/mydata/mysql/data:/var/lib/mysql #数据文件挂载
       - ~/mydata/mysql/conf:/etc/mysql/conf.d #配置文件挂载
