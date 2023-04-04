@@ -1,5 +1,7 @@
 # chatgpt-web-java
 
+中文版 | [English](README-EN.md)
+
 # 介绍
 
 - [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的 Java 后台，最新代码在 main 分支
