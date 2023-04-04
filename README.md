@@ -1,14 +1,21 @@
 # chatgpt-web-java
 
-# 分支 main
+# 介绍
 
-## 介绍 
-
-- [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的 Java 后台
+- [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的 Java 后台，最新代码在 main 分支
 - 该分支关联项目的 [2.10.8](https://github.com/Chanzhaoyu/chatgpt-web/releases/tag/v2.10.8) 版本，在不改动前端的情况下更新后台
-- [管理端开源代码](https://github.com/hncboy/chatgpt-web-admin)
+- 管理端开源代码 https://github.com/hncboy/chatgpt-web-admin
 
-## 框架
+# 注意
+
+### 关于提问
+
+有问题优先通过文档和 issue 解决，也许你遇到的问题已经有解决方案了，没有的话可以提新的 issue。
+### 关于 ApiKey
+
+当前网站免费提问，因 ApiKey 额度有限，限流频率会比较高，如果有大佬赞助供网站使用的话十分感激。
+
+# 框架
 
 - Spring Boot 2.7.10
 - JDK 17
@@ -21,11 +28,13 @@
 - [SaToken](https://sa-token.cc/) 权限校验
 - [Grt1228 ChatGPT java sdk](https://github.com/Grt1228/chatgpt-java)
 
-## 地址
+# 地址
 
 - 接口文档：http://localhost:3002/swagger-ui.html
 - 客户端：https://front.stargpt.top/ 密码：stargpt
 - 管理端：https://admin.stargpt.top/ 账号密码 admin-admin
+
+# 功能
 
 ## 已实现功能
 
@@ -53,49 +62,40 @@
 
 ## 待实现功能
 
-- GPT 接口异常信息特定封装返回
+- GPT 接口异常信息特定封装返回，
 - 其他没发现的点
 
 ## 存在问题
 
 - 在接口返回报错信息时，不会携带 conversationid 和 parentMessageId，导致前端下一次发送消息时会丢失这两个字段，丢失上下文关系。
 
-## 管理端
+# 管理端
 
-### 消息记录
+## 消息记录
 
 展示消息的列表，问题和回答各是一条消息。通过父消息 id 关联上一条消息。父消息和当前消息一定是同一个聊天室的。
 
 ![](pics/chat_message_1.png)
 
-### 限流记录
+## 限流记录
 
 查看各个 ip 的限流记录，只记录在限流时间范围的限流次数。
 
 ![](pics/rate_limit_1.png)
 
-### 聊天室管理
+## 聊天室管理
 
 查看聊天室。这里的聊天室和客户端左边的对话不是同一个概念。在同一个窗口中，我们既可以选择关联上下文发送后者不关联上下文发送。如果不关联上下文发送每次发送消息都会产生一个聊天室。
 
 ![](pics/chat_room_1.png)
 
-### 敏感词管理
+## 敏感词管理
 
 查看敏感词列表，目前只提供了查询的功能，后期可以增加管理。
 
 ![](pics/sensitive_word_1.png)
 
-## 接口
-
-| 路径          | 功能         | 完成情况 |
-| ------------- | ------------ | -------- |
-| /config       | 获取聊天配置 | 已完成   |
-| /chat-process | 消息处理     | 已完成   |
-| /verify       | 校验密码     | 已完成   |
-| /session      | 获取模型信息 | 已完成   |
-
-## 运行
+# 运行部署
 
 ### 运行
 
@@ -152,64 +152,18 @@
 
 在 `docker-compose.yml` 文件中配置好 chat-gpt 配置后，使用 `docker-compose up -d` 可一键启动。
 
-## 表结构
+# 数据库表
 
-具体可以参见 sql 文件，路径是 `chatgpt-bootstrap/src/main/resources/db/schema-mysql.sql`。
+表结构路径：`chatgpt-bootstrap/src/main/resources/db`。 不需要额外数据库的可以自行连接  H2 地址，改下连接方式就可以。
+
 
 - 聊天室表
-
-| 列名                  | 数据类型     | 约束             | 说明                       |
-| --------------------- | ------------ | ---------------- | -------------------------- |
-| id                    | BIGINT       | PRIMARY KEY      | 主键                       |
-| ip                    | VARCHAR(255) |                  | ip                         |
-| conversation_id       | VARCHAR(64)  | UNIQUE, NULL     | 对话 id，唯一              |
-| first_chat_message_id | BIGINT       | UNIQUE, NOT NULL | 第一条消息主键，唯一       |
-| first_message_id      | VARCHAR(64)  | UNIQUE, NOT NULL | 第一条消息 id，唯一        |
-| title                 | VARCHAR(255) | NOT NULL         | 对话标题，从第一条消息截取 |
-| api_type              | VARCHAR(20)  | NOT NULL         | API 类型                   |
-| create_time           | DATETIME     | NOT NULL         | 创建时间                   |
-| update_time           | DATETIME     | NOT NULL         | 更新时间                   |
-
 - 聊天记录表
-
-| 列名                       | 数据类型      | 约束        | 说明                     |
-| -------------------------- | ------------- | ----------- | ------------------------ |
-| id                         | BIGINT        | PRIMARY KEY | 主键                     |
-| message_id                 | VARCHAR(64)   | NOT NULL    | 消息 id                  |
-| parent_message_id          | VARCHAR(64)   |             | 父级消息 id              |
-| parent_answer_message_id   | VARCHAR(64)   |             | 父级回答消息 id          |
-| parent_question_message_id | VARCHAR(64)   |             | 父级问题消息 id          |
-| context_count              | BIGINT        | NOT NULL    | 上下文数量               |
-| question_context_count     | BIGINT        | NOT NULL    | 问题上下文数量           |
-| message_type               | INTEGER       | NOT NULL    | 消息类型枚举             |
-| chat_room_id               | BIGINT        | NOT NULL    | 聊天室 id                |
-| conversation_id            | VARCHAR(64)   |             | 对话 id                  |
-| api_type                   | VARCHAR(20)   | NOT NULL    | API 类型                 |
-| ip                         | VARCHAR(255)  |             | ip                       |
-| api_key                    | VARCHAR(255)  |             | ApiKey                   |
-| content                    | VARCHAR(5000) | NOT NULL    | 消息内容                 |
-| original_data              | TEXT          |             | 消息的原始请求或响应数据 |
-| response_error_data        | TEXT          |             | 错误的响应数据           |
-| prompt_tokens              | BIGINT        |             | 输入消息的 tokens        |
-| completion_tokens          | BIGINT        |             | 输出消息的 tokens        |
-| total_tokens               | BIGINT        |             | 累计 Tokens              |
-| status                     | INTEGER       | NOT NULL    | 聊天记录状态             |
-| is_hide                    | TINYINT       | NOT NULL    | 是否隐藏 0 否 1 是       |
-| create_time                | DATETIME      | NOT NULL    | 创建时间                 |
-| update_time                | DATETIME      | NOT NULL    | 更新时间                 |
-
 - 敏感词表
 
-| 字段名      | 数据类型     | 约束        | 描述                      |
-| ----------- | ------------ | ----------- | ------------------------- |
-| id          | BIGINT       | PRIMARY KEY | 主键                      |
-| word        | VARCHAR(255) | NOT NULL    | 敏感词内容                |
-| status      | INTEGER      | NOT NULL    | 状态，1为启用，2为停用    |
-| is_deleted  | INTEGER      | NULL        | 是否删除，0为否，NULL为是 |
-| create_time | DATETIME     | NOT NULL    | 创建时间                  |
-| update_time | DATETIME     | NOT NULL    | 更新时间                  |
-
 # 联系
+
+进群请遵守规则，禁止讨论敏感信息。
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
@@ -223,8 +177,6 @@
     <p>631171246</p>
   </div>
 </div>
-
-
 # 赞助
 
 如果觉得项目对你有帮助的，条件允许的话可以点个 Star 或者在赞助一小点。感谢支持~
@@ -239,7 +191,6 @@
     <p>支付宝</p>
   </div>
 </div>
+# LICENSE
 
-## License
-
-MIT © [hncboy](license)
+MIT © [hncboy](LICENSE)
