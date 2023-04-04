@@ -1,10 +1,10 @@
 version: '3'
 services:
-
+  # MySQL 服务
   mysql_gpt:
     image: yryxspe/chatgpt-web-mysql:latest
     container_name: mysql_gpt
-    # 这里debug时暴露给宿主机方便调试
+    # 这里 debug 时暴露给宿主机方便调试
 #    ports:
 #      - 3309:3306
     volumes:
@@ -18,14 +18,12 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
-
+  # Java 服务
   java_gpt:
-    # FIXME 这里等mr合并进去之后并且发布了新的hncboy/chatgpt-web-java再改回来
-#    image: hncboy/chatgpt-web-java:latest
-    image: yryxspe/chatgpt-web-java:latest
+    image: hncboy/chatgpt-web-java:latest
     container_name: java_gpt
     environment:
-      # 这里要用mysql_gpt的3306端口
+      # 这里要用 mysql_gpt 的 3306 端口
       - JDBC_URL=jdbc:mysql://mysql_gpt:3306/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
       - MYSQL_USER_NAME=root
       - MYSQL_PASSWORD=123456
@@ -33,7 +31,6 @@ services:
       - CHAT_OPENAI_ACCESS_TOKEN=
       - CHAT_OPENAI_API_BASE_URL=https://api.openai.com/
       - CHAT_HTTP_PROXY_HOST:127.0.0.1
-      - CHAT_HTTP_PROXY_PORT:33210
     ports:
       - 3002:3002
     depends_on:

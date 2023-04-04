@@ -97,13 +97,18 @@
 
 # 运行部署
 
-### 运行
+## IDEA 运行
 
-#### 需要提前准备好的应用
+前端代码使用 WebStom、Vs Code 或者 pnpm install & dev 运行，后端 IDEA 运行。
 
-1. 前端代码参考 [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的启动流程。
+## Docker
 
-2. 需要本地提前准备好端口为 3309 的 MySQL 实例，如果没有可以直接使用 Dockerfile_mysql 构建一个 docker 的 MySQL 容器：
+需要 clone 仓库并在根目录下执行
+
+### MySQL
+
+通过 Dockerfile_mysql  构建带有数据库表结构的镜像并运行，本地有 MySQL 可以跳过
+
 ```shell
   # 删除旧版 container （如果有的话）
   docker stop mysql_gpt && docker rm mysql_gpt
@@ -118,9 +123,9 @@
        mysql_gpt_img:latest
 ```
 
-之后使用`chatgpt-bootstrap`下的`ChatGptApplication`类启动即可。
+### Java
 
-这里也提供下 java 应用构建镜像的方法。
+通过 Docker 构建 Java 应用镜像并运行
 
 ```shell
   # 删除旧版 container （如果有的话）
@@ -128,7 +133,7 @@
   docker build -t chatgpt-web-java .
   docker run -d -p 3002:3002 chatgpt-web-java
 ```
-如果要显式指定 MySQL 和 chat-gpt 参数，可以在 `docker run` 后添加 `-e` 选项，配置 `application.yml` 用到的参数。例如：
+如果要显式指定参数，可以在 `docker run` 后添加 `-e` 选项，配置 `application.yml` 用到的参数。例如：
 
 ```shell
   # 删除旧版 container （如果有的话）
@@ -148,9 +153,9 @@
 ```
   ![](pics/docker_run.png)
 
-### docker-compose运行
+## docker-compose
 
-在 `docker-compose.yml` 文件中配置好 chat-gpt 配置后，使用 `docker-compose up -d` 可一键启动。
+在 `docker-compose.yml` 文件中配置好配置后，使用 `docker-compose up -d` 可一键启动。
 
 # 数据库表
 
