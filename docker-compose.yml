@@ -34,9 +34,8 @@ services:
       - CHAT_OPENAI_API_BASE_URL=https://api.openai.com/
       - CHAT_HTTP_PROXY_HOST:127.0.0.1
       - CHAT_HTTP_PROXY_PORT:33210
-    # 这里debug时暴露给宿主机方便调试
-#    ports:
-#      - 3002:3002
+    ports:
+      - 3002:3002
     depends_on:
       - mysql_gpt
     restart: on-failure
