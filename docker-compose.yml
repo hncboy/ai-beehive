@@ -1,13 +1,48 @@
 version: '3'
 services:
-  java:
-    image: hncboy/chatgpt-web-java:latest
-    ports:
-      - "3002:3002"
+
+  mysql_gpt:
+    image: yryxspe/chatgpt-web-mysql:latest
+    container_name: mysql_gpt
+    # 这里debug时暴露给宿主机方便调试
+#    ports:
+#      - 3309:3306
+    volumes:
+      - ~/mydata/mysql/data:/var/lib/mysql #数据文件挂载
+      - ~/mydata/mysql/conf:/etc/mysql/conf.d #配置文件挂载
+      - ~/mydata/mysql/log:/var/log/mysql #日志文件挂载
+    networks:
+      gpt_network:
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping" , "-h", "localhost" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  java_gpt:
+    # FIXME 这里等mr合并进去之后并且发布了新的hncboy/chatgpt-web-java再改回来
+#    image: hncboy/chatgpt-web-java:latest
+    image: yryxspe/chatgpt-web-java:latest
+    container_name: java_gpt
     environment:
-      PARAMS: --spring.datasource.url=jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
-        --spring.datasource.username=root \
-        --spring.datasource.password=123456 \
-        --chat.openai_api_key=xxxxx
-        --chat.http_proxy_host= \
-        --chat.http_proxy_port= \
+      # 这里要用mysql_gpt的3306端口
+      - JDBC_URL=jdbc:mysql://mysql_gpt:3306/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+      - MYSQL_USER_NAME=root
+      - MYSQL_PASSWORD=123456
+      - CHAT_OPENAI_API_KEY=xxx
+      - CHAT_OPENAI_ACCESS_TOKEN=
+      - CHAT_OPENAI_API_BASE_URL=https://api.openai.com/
+      - CHAT_HTTP_PROXY_HOST:127.0.0.1
+      - CHAT_HTTP_PROXY_PORT:33210
+    # 这里debug时暴露给宿主机方便调试
+#    ports:
+#      - 3002:3002
+    depends_on:
+      - mysql_gpt
+    restart: on-failure
+    networks:
+      gpt_network:
+
+networks:
+  gpt_network:
+

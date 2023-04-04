@@ -13,10 +13,17 @@ VOLUME /var/lib/mysql
 # 本地映射配置数据卷
 VOLUME /etc/mysql/conf.d
 
-# 暴露端口为3309
-EXPOSE 3309
+# 暴露端口为3306
+EXPOSE 3306
+# 如果需要改MySQL container的端口需要在env中设定
+# ENV MYSQL_TCP_PORT=3309
 
 # 设置MySQL root的密码
 ENV MYSQL_ROOT_PASSWORD=123456
 
+# 健康检查
+HEALTHCHECK --interval=5s --timeout=3s \
+    CMD mysql -h localhost -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e 'SELECT 1' 2>/dev/null || exit 1
+
 CMD ["mysqld"]
+

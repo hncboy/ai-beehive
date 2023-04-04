@@ -97,125 +97,65 @@
 
 # 运行部署
 
-- IDEA、Dockfile
+### 运行
 
-- application.yml
+#### 需要提前准备好的应用
 
-  ```yaml
-  spring:
-    datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: root
-      password: 123456
-      url: jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
-  
-  #mybatis-plus:
-  #  configuration:
-      # 控制台打印 SQL
-  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  
-  chat:
-    # 访问密码
-    auth_secret_key: 123456
-    # OpenAI API Key - https://platform.openai.com/overview
-    openai_api_key: xxx
-    # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
-    openai_access_token: xxx
-    # OpenAI API Base URL - https://api.openai.com/，要加/后缀
-    openai_api_base_url: https://api.openai.com/
-    # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
-    openai_api_model:
-    # 反向代理地址 AccessToken 时使用
-    api_reverse_proxy: https://bypass.duti.tech/api/conversation
-    # 超时毫秒
-    timeout_ms: 100000
-    # HTTP 代理
-    http_proxy_host: 127.0.0.1
-    http_proxy_port:
-    # 管理端账号
-    admin_account: admin
-    # 管理端密码
-    admin_password: admin
-    # 管理端敏感词是否脱敏，演示用
-    admin_sensitive_word_desensitized_enabled: true
-    # 全局时间内最大请求次数
-    maxRequest: 5
-    # 全局最大请求时间间隔（秒）
-    maxRequestSecond: 3600
-    # ip 时间内最大请求次数
-    ipMaxRequest: 10
-    # ip 最大请求时间间隔（秒）
-    ipMaxRequestSecond: 3600
-    # 限制上下文对话的数量
-    limitQuestionContextCount: 3
-  ```
-  
-  
+1. 前端代码参考 [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目的启动流程。
 
-## Docker 
-
-### Appliction Build & Run
-
+2. 需要本地提前准备好端口为 3309 的 MySQL 实例，如果没有可以直接使用 Dockerfile_mysql 构建一个 docker 的 MySQL 容器：
 ```shell
- docker build -t chatgpt-web-java .
- docker run -d -p 3002:3002 chatgpt-web-java
+  # 删除旧版 container （如果有的话）
+  docker stop mysql_gpt && docker rm mysql_gpt
+  # 构建 image
+  docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
+  # 运行 container
+  docker run -d -p 3309:3306 \
+       --name mysql_gpt \
+       -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
+       -v  ~/mydata/mysql_dummy/conf:/etc/mysql/conf.d \
+       -v ~/mydata/mysql_dummy/log:/var/log/mysql \
+       mysql_gpt_img:latest
 ```
 
-- 配置参数，在环境变量 PARAMS 中配置 application yml 用到的参数，如下示例
+之后使用`chatgpt-bootstrap`下的`ChatGptApplication`类启动即可。
 
-  ```
-  --spring.datasource.url=jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
-               --spring.datasource.username=root \
-               --spring.datasource.password=123456 \
-               --chat.openai_api_key=xxx \
-               --chat.openai_access_token=xxx
-  ```
+这里也提供下 java 应用构建镜像的方法。
 
+```shell
+  # 删除旧版 container （如果有的话）
+  docker stop chatgpt-web-java && docker rm chatgpt-web-java
+  docker build -t chatgpt-web-java .
+  docker run -d -p 3002:3002 chatgpt-web-java
+```
+如果要显式指定 MySQL 和 chat-gpt 参数，可以在 `docker run` 后添加 `-e` 选项，配置 `application.yml` 用到的参数。例如：
+
+```shell
+  # 删除旧版 container （如果有的话）
+  docker stop chatgpt-web-java && docker rm chatgpt-web-java
+  docker build -t chatgpt-web-java . 
+  # 如果这里要使用 java 的容器访问 mysql 容器，需要使用 host.docker.internal 而不是 localhost，才可以访问到宿主机的 3009 端口（mysql开放了3009端口）
+  docker run -d -p 3002:3002 \
+      -e JDBC_URL=jdbc:mysql://host.docker.internal:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
+      -e MYSQL_USER_NAME=root \
+      -e MYSQL_PASSWORD=123456 \
+      -e CHAT_OPENAI_API_KEY=xxx \
+      -e CHAT_OPENAI_ACCESS_TOKEN=xxx \
+      -e CHAT_OPENAI_API_BASE_URL=http://xxx.com \
+      -e CHAT_HTTP_PROXY_HOST=127.0.0.1 \
+      -e CHAT_HTTP_PROXY_PORT=7890 \
+      chatgpt-web-java
+```
   ![](pics/docker_run.png)
 
-### Mysql Build & Run
+### docker-compose运行
 
-MySQL容器运行，运行后可以系统可以直接连接docker MySQL容器
-
-```shell
-# 删除旧版container（如果有的话）
-docker stop mysql_gpt && docker rm mysql_gpt
-# 构建image
-docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
-# 运行container
-docker run -d -p 3309:3309 \
-  --name mysql_gpt \
-  -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
-  -v  ~/mydata/mysql_dummy/conf:/etc/mysql/conf.d \
-  -v ~/mydata/mysql_dummy/log:/var/log/mysql \
-  mysql_gpt_img:latest
-```
-
-### Docker compose
-
-[Docker Hub](https://hub.docker.com/repository/docker/hncboy/chatgpt-web-java)
-
-docker-compose up -d
-
-```yaml
-version: '3'
-services:
-  java:
-    image: hncboy/chatgpt-web-java:latest
-    ports:
-      - "3002:3002"
-    environment:
-      PARAMS: --spring.datasource.url=jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
-        --spring.datasource.username=root \
-        --spring.datasource.password=123456 \
-        --chat.openai_api_key=xxxxx
-        --chat.http_proxy_host= \
-        --chat.http_proxy_port= \
-```
+在 `docker-compose.yml` 文件中配置好 chat-gpt 配置后，使用 `docker-compose up -d` 可一键启动。
 
 # 数据库表
 
-表结构路径：/resources/db，不需要额外数据库的可以自行连接  H2 地址，改下连接方式就可以。
+表结构路径：`chatgpt-bootstrap/src/main/resources/db`。 不需要额外数据库的可以自行连接  H2 地址，改下连接方式就可以。
+
 
 - 聊天室表
 - 聊天记录表

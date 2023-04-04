@@ -18,9 +18,5 @@ ENV TZ=Asia/Shanghai
 # 设置容器的时区
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# 环境变量
-ENV PARAMS="--spring.datasource.url=jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
-             --spring.datasource.username=root \
-             --spring.datasource.password=123456"
 # 定义启动命令
-ENTRYPOINT ["sh","-c","java -jar app.jar $PARAMS"]
+ENTRYPOINT ["sh","-c","java -jar app.jar"]
