@@ -1,0 +1,13 @@
+FROM openjdk:17-jdk-slim
+# 从宿主机复制 jar 文件到容器中并设置工作目录
+COPY chatgpt-bootstrap/target/*.jar /app/app.jar
+WORKDIR /app
+
+# 设置时区为 Asia/Shanghai
+ENV TZ=Asia/Shanghai
+# 设置容器的时区
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 暴露端口并运行启动脚本
+EXPOSE 3002
+ENTRYPOINT ["sh","-c","java -jar app.jar"]
