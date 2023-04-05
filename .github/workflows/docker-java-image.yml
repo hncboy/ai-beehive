@@ -5,7 +5,7 @@ name: Build and Push Java Docker Image
 on:
   push:
     # Push 到 main 分支触发
-    branches: [main]
+    branches: [dev]
     
 # 定义环境变量
 env:
@@ -59,6 +59,6 @@ jobs:
           context: .
           file: ./Dockerfile_jar
           push: true
-          tags: ${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
         env:
           DOCKER_BUILDKIT: 1 # 启用BuildKit构建引擎
