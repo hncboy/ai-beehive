@@ -21,6 +21,6 @@ ENV MYSQL_ROOT_PASSWORD=123456
 
 # 健康检查
 HEALTHCHECK --interval=5s --timeout=3s \
-    CMD mysql -h localhost -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e 'SELECT 1' 2>/dev/null || exit 1
+    CMD mysql -h localhost -uroot -p${MYSQL_ROOT_PASSWORD} -e 'SELECT 1' 2>/dev/null || exit 1
 
 CMD ["mysqld"]
