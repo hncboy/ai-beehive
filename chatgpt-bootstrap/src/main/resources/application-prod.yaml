@@ -3,44 +3,49 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USER_NAME:root}
     password: ${MYSQL_PASSWORD:123456}
-    url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false}
+    url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
 
-#mybatis-plus:
-#  configuration:
+    #mybatis-plus:
+    #  configuration:
     # 控制台打印 SQL
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 chat:
   # 访问密码
-  auth_secret_key: 123456
+  auth_secret_key: ${CHAT_AUTH_SECRET_KEY:123456}
   # OpenAI API Key - https://platform.openai.com/overview
-  openai_api_key: ${CHAT_OPENAI_API_KEY}
+  openai_api_key: ${CHAT_OPENAI_API_KEY:}
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
-  openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN}
+  openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN:}
   # OpenAI API Base URL - https://api.openai.com/，要加/后缀
-  openai_api_base_url: ${CHAT_OPENAI_API_BASE_URL:https://api.openai.com/}
+  openai_api_base_url: ${CHAT_OPENAI_API_BASE_URL:https://api.openai.com/}}
   # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
-  openai_api_model:
+  openai_api_model: ${CHAT_OPENAI_API_MODEL:}
   # 反向代理地址 AccessToken 时使用
-  api_reverse_proxy: https://bypass.churchless.tech/api/conversation
+  api_reverse_proxy: ${CHAT_API_REVERSE_PROXY:https://bypass.churchless.tech/api/conversation}
   # 超时毫秒
-  timeout_ms: 100000
+  timeout_ms: ${CHAT_TIMEOUT_MS:100000}
   # HTTP 代理
   http_proxy_host: ${CHAT_HTTP_PROXY_HOST:127.0.0.1}
-  http_proxy_port: ${CHAT_HTTP_PROXY_PORT:33210}
+  # HTTP 代理
+  http_proxy_port: ${CHAT_HTTP_PROXY_PORT:}
   # 管理端账号
-  admin_account: admin
+  admin_account: ${CHAT_ADMIN_ACCOUNT:admin}
   # 管理端密码
-  admin_password: admin
+  admin_password: ${CHAT_ADMIN_PASSWORD:admin}
   # 管理端敏感词是否脱敏，演示用
-  admin_sensitive_word_desensitized_enabled: true
+  admin_sensitive_word_desensitized_enabled: ${CHAT_ADMIN_SENSITIVE_WORD_DESENSITIZED_ENABLED:true}
   # 全局时间内最大请求次数
-  maxRequest: 60
+  maxRequest: ${CHAT_MAX_REQUEST:60}
   # 全局最大请求时间间隔（秒）
-  maxRequestSecond: 1800
+  maxRequestSecond: ${CHAT_MAX_REQUEST_SECOND:1800}
   # ip 时间内最大请求次数
-  ipMaxRequest: 5
+  ipMaxRequest: ${CHAT_IP_MAX_REQUEST:5}
   # ip 最大请求时间间隔（秒）
-  ipMaxRequestSecond: 3600
+  ipMaxRequestSecond: ${CHAT_IP_MAX_REQUEST_SECOND:3600}
   # 限制上下文对话的数量
-  limitQuestionContextCount: 3
+  limitQuestionContextCount: ${CHAT_LIMIT_QUESTION_CONTEXT_COUNT:3}
+  # 是否展示余额，默认不展示
+  isShowBalance: ${CHAT_IS_SHOW_BALANCE:false}
+  # 是否展示管理端隐藏的消息，默认不展示
+  isAdminShowHiddenMessage: ${CHAT_IS_ADMIN_SHOW_HIDDEN_MESSAGE:false}
