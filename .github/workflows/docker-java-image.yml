@@ -5,7 +5,7 @@ name: Build and Push Java Docker Image
 on:
   push:
     # Push 到 main 分支触发
-    branches: [dev]
+    branches: [main]
     
 # 定义环境变量
 env:
@@ -34,7 +34,7 @@ jobs:
           
       # Maven 缓存
       - name: Maven Dependies Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: chatweb-web-java-maven-${{ hashFiles('**/pom.xml') }}
