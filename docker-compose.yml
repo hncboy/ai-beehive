@@ -2,9 +2,8 @@ version: '3'
 services:
   # MySQL 服务
   mysql_gpt:
-    image: yryxspe/chatgpt-web-mysql:latest
+    image: hncboy/chatgpt-web-java-mysql:latest
     container_name: mysql_gpt
-    # 这里 debug 时暴露给宿主机方便调试
 #    ports:
 #      - 3309:3306
     volumes:

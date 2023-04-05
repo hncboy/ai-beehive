@@ -5,8 +5,8 @@ name: Build and Push MySQL Docker Image
 on:
   push:
     # Push 到 main 分支触发
-    branches: [dev-mysql]
-    # 当 chatgpt-bootstrap/src/main/resources/db/schema-mysql.sql 发生更改时触发
+    branches: [main]
+    # 当 sql 发生更改时触发
     paths:
       - 'chatgpt-bootstrap/src/main/resources/db/schema-mysql.sql'
 
