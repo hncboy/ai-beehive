@@ -18,11 +18,11 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author hncboy
  * @date 2023/3/23 00:19
- * 填写注释
+ * FrontPreAuth 用户端切面
  */
 @Aspect
 @Component
-public class PreAuthAspect {
+public class FrontPreAuthAspect {
 
     @Resource
     private ChatConfig chatConfig;

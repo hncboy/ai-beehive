@@ -81,7 +81,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
 
         // 构建事件监听器
         ParsedEventSourceListener parsedEventSourceListener = new ParsedEventSourceListener.Builder()
-                .addListener(new ConsoleStreamListener())
+//                .addListener(new ConsoleStreamListener())
                 .addListener(new ResponseBodyEmitterStreamListener(emitter))
                 .setParser(parser)
                 .setDataStorage(dataStorage)
