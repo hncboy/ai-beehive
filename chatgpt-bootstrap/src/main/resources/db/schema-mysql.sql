@@ -1,6 +1,7 @@
 -- 创建 database
 CREATE DATABASE IF NOT EXISTS chat DEFAULT CHARACTER SET utf8;
 
+-- 进入 chat 库
 USE chat;
 
 -- 聊天室表
