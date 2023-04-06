@@ -33,8 +33,13 @@
 # 地址
 
 - 接口文档：http://localhost:3002/swagger-ui.html
-- 客户端：https://front.stargpt.top/ 密码：stargpt
-- 管理端：https://admin.stargpt.top/ 账号密码 admin-admin
+- 用户端：
+  - https://front.stargpt.top/ (被封)
+  - https://front1.stargpt.top/
+  - https://front2.stargpt.top/
+  - https://front3.stargpt.top/
+
+- 管理端关闭对外开放
 
 # 功能
 
