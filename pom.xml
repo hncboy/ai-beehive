@@ -32,7 +32,7 @@
     </modules>
 
     <properties>
-        <revision>0.0.1-SNAPSHOT</revision>
+        <revision>1.0.0</revision>
         <java.version>17</java.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
