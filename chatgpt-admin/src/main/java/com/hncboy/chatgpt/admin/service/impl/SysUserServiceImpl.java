@@ -7,7 +7,7 @@ import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.exception.AuthException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @author hncboy
