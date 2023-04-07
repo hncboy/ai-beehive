@@ -19,7 +19,7 @@ import com.unfbx.chatgpt.entity.chat.Message;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Collections;
 import java.util.UUID;
 

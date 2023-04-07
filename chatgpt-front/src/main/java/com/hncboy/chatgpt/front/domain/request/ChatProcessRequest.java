@@ -3,7 +3,7 @@ package com.hncboy.chatgpt.front.domain.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 /**
  * @author hncboy

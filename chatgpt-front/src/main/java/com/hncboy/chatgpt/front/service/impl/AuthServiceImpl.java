@@ -9,7 +9,7 @@ import com.hncboy.chatgpt.front.domain.vo.ApiModelVO;
 import com.hncboy.chatgpt.front.service.AuthService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Objects;
 
 /**

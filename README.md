@@ -19,7 +19,7 @@
 
 # 框架
 
-- Spring Boot 2.7.10
+- Spring Boot 3.0.5
 - JDK 17
 - MySQL 8.x
 - SpringDoc 接口文档
@@ -34,7 +34,7 @@
 
 - 接口文档：http://localhost:3002/swagger-ui.html
 - 用户端：
-  - https://front.stargpt.top/ (被封)
+  - https://front.stargpt.top/ (失效)
   - https://front1.stargpt.top/
   - https://front2.stargpt.top/
   - https://front3.stargpt.top/
