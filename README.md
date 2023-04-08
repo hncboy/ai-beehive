@@ -29,6 +29,7 @@
 - [Hutool](https://hutool.cn/) 
 - [SaToken](https://sa-token.cc/) 权限校验
 - [Grt1228 ChatGPT java sdk](https://github.com/Grt1228/chatgpt-java)
+- ......
 
 # 地址
 
@@ -38,8 +39,6 @@
   - https://front1.stargpt.top/
   - https://front2.stargpt.top/
   - https://front3.stargpt.top/
-
-- 管理端关闭对外开放
 
 # 功能
 
@@ -177,38 +176,29 @@
 
 本项目仅供学习和研究使用，不鼓励用于商业用途。对于因使用本项目而导致的任何损失，我们不承担任何责任。
 
-# 联系
+# 感谢&赞助
+
+- 非常感谢大家对我们项目和开发工作的支持和认可。我们深知在开源软件开发过程中，用户和社区的反馈和支持是至关重要的。我们的项目代码已经提供了 README 和 issue，方便用户进行部署和解决问题，同时也可以促进我们项目的活跃度，会优先关注 issue 的问题。
+- 然而，对于一些用户可能存在需要二次开发或部署方面的困难，我们在开发任务繁忙的情况下，难以抽出时间回答所有用户的问题，但我们会尽最大努力去回答用户的问题。同时，我们也可以提供付费的解答服务，为用户提供更多的支持。
+- 我们的开发工作也在持续进行中，我们会不断迭代优化我们的技术设计方案和业务功能，项目不仅仅会提供所需的业务功能，也可以通过项目来学习一些技术的使用。如果您认为我们的开源项目有价值能帮助到您，并愿意支持我们的开发工作，可以为项目点个小星星或者请作者[喝一杯可乐发电](https://afdian.net/a/stargpt) 。我们将非常感谢。
+
+# 联系方式
 
 进群请遵守规则，禁止讨论敏感信息。
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
-    <img style="max-width: 100%" src="pics/wechat_group.png" alt="微信" />
+    <img style="max-width: 100%" src="pics/wechat_group_join.png" alt="微信" />
     <p>微信群</p>
   </div>
 </div>
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
-    <img style="max-width: 100%" src="pics/qq_group.png" alt="QQ" />
+    <img style="max-width: 100%" src="pics/qq_group_join.png" alt="QQ" />
     <p>631171246</p>
   </div>
 </div>
 
-
-# 赞助
-
-如果觉得项目对你有帮助的，条件允许的话可以点个 Star 或者在赞助一小点。感谢支持~
-
-<div style="display: flex; align-items: center; gap: 20px;">
-  <div style="text-align: center">
-    <img style="max-width: 100%" src="pics/wechat_pay.png" alt="微信" />
-    <p>微信支付</p>
-  </div>
-  <div style="text-align: center">
-    <img style="max-width: 100%" src="pics/zhifubao_pay.png" alt="支付宝" />
-    <p>支付宝</p>
-  </div>
-</div>
 
 # LICENSE
 

@@ -20,7 +20,7 @@ The current website allows free questions, but due to limited ApiKey quota, the 
 
 # Framework
 
-- Spring Boot 2.7.10
+- Spring Boot 3.0.5
 - JDK 17
 - MySQL 8.x
 - SpringDoc API Documentation
@@ -30,12 +30,16 @@ The current website allows free questions, but due to limited ApiKey quota, the 
 - [Hutool](https://hutool.cn/) 
 - [SaToken](https://sa-token.cc/) Authentication
 - [Grt1228 ChatGPT java sdk](https://github.com/Grt1228/chatgpt-java)
+- ......
 
 # URLs
 
 - API Documentation: http://localhost:3002/swagger-ui.html
-- Client: https://front.stargpt.top/ Password: stargpt
-- Admin: https://admin.stargpt.top/ Username & Password: admin-admin
+- Client：
+  - https://front.stargpt.top/ (invalid)
+  - https://front1.stargpt.top/
+  - https://front2.stargpt.top/
+  - https://front3.stargpt.top/
 
 # Features
 
@@ -171,17 +175,28 @@ Table structure path: `chatgpt-bootstrap/src/main/resources/db`. If you don't ne
 - Chat record table
 - Sensitive word table
 
-# Contact
+# Thank you & Sponsorship
+
+- We are extremely grateful for the support and recognition our project and development work has received from everyone. We understand that in the process of open-source software development, feedback and support from users and the community are crucial. Our project code already provides a README and issue section, making it convenient for users to deploy and troubleshoot while also promoting the activity of our project. We will prioritize addressing the issues raised in the issue section.
+- However, some users may encounter difficulties in secondary development or deployment, and with our busy development schedule, it is challenging for us to find time to answer all user questions. Nevertheless, we will do our best to respond to user inquiries. Additionally, we can offer paid support services to provide users with more assistance.
+- Our development work is ongoing, and we will continuously iterate and optimize our technical design solutions and business features. The project will not only provide the required business functionalities but also enable users to learn about various technologies through the project. If you believe our open-source project has value and can help you, and you are willing to support our development work, please consider giving the project a little star or treating the author to a [power-up drink](https://afdian.net/a/stargpt). We would greatly appreciate it.
+
+# Contact Information
 
 Please follow the rules when joining the group and avoid discussing sensitive information.
 
-<div style="display: flex; align-items: center; gap: 20px;">   <div style="text-align: center">     <img style="max-width: 100%" src="pics/wechat_group.png" alt="WeChat" />     <p>WeChat Group</p>   </div> </div> <div style="display: flex; align-items: center; gap: 20px;">   <div style="text-align: center">     <img style="max-width: 100%" src="pics/qq_group.png" alt="QQ" />     <p>631171246</p>   </div> </div>
-
- # Sponsorship
-
-If you find the project helpful and your situation permits, consider giving a Star or a small sponsorship. Thank you for your support~
-
-<div style="display: flex; align-items: center; gap: 20px;">   <div style="text-align: center">     <img style="max-width: 100%" src="pics/wechat_pay.png" alt="WeChat" />     <p>WeChat Pay</p>   </div>   <div style="text-align: center">     <img style="max-width: 100%" src="pics/zhifubao_pay.png" alt="Alipay" />     <p>Alipay</p>   </div> </div>
+<div style="display: flex; align-items: center; gap: 20px;">
+  <div style="text-align: center">
+    <img style="max-width: 100%" src="pics/wechat_group_join.png" alt="WeChat" />
+    <p>WeChat Group</p>
+  </div>
+</div>
+<div style="display: flex; align-items: center; gap: 20px;">
+  <div style="text-align: center">
+    <img style="max-width: 100%" src="pics/qq_group_join.png" alt="QQ" />
+    <p>631171246</p>
+  </div>
+</div>
 
 # LICENSE
 
