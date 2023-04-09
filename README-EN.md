@@ -4,9 +4,9 @@
 
 # Introduction
 
-- Java backend for the [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) project, latest code in the main branch
-- This branch is associated with version [2.10.8](https://github.com/Chanzhaoyu/chatgpt-web/releases/tag/v2.10.8) of the project, updating the backend without modifying the frontend
-- Open-source admin code: https://github.com/hncboy/chatgpt-web-admin
+- Java backend for the ChatGPT shuowenjiezi frontend
+- Front-end - Shuowen User-end Open Source Code: https://github.com/mjjh1717/chatgpt-shuowen
+- Front-end - Jiezi Management-end Open Source Code: https://github.com/hncboy/chatgpt-jiezi
 
 # Notice
 
