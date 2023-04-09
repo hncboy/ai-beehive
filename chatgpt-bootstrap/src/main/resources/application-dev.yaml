@@ -12,7 +12,7 @@ spring:
 
 chat:
   # 访问密码
-  auth_secret_key: ${CHAT_AUTH_SECRET_KEY:123456}
+  auth_secret_key: ${CHAT_AUTH_SECRET_KEY:}
   # OpenAI API Key - https://platform.openai.com/overview
   openai_api_key: ${CHAT_OPENAI_API_KEY:}
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
