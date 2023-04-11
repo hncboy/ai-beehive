@@ -1,6 +1,5 @@
 package com.hncboy.chatgpt.front.service.impl;
 
-import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.handler.emitter.ChatMessageEmitterChain;
@@ -8,7 +7,6 @@ import com.hncboy.chatgpt.front.handler.emitter.IpRateLimiterEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.SensitiveWordEmitterChain;
 import com.hncboy.chatgpt.front.service.ChatService;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
@@ -21,9 +19,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 @Slf4j
 @Service
 public class ChatServiceImpl implements ChatService {
-
-    @Resource
-    private ChatConfig chatConfig;
 
     @Override
     public ResponseBodyEmitter chatProcess(ChatProcessRequest chatProcessRequest) {

@@ -114,7 +114,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
                     throw new ServiceException(StrUtil.format("当前对话类型为 AccessToken 使用模型不一样，请开启新的对话"));
                 }
             }
-
+            // TODO 判断 tokens 数量是否超过 4096
             // ApiKey 限制上下文问题的数量
             if (chatMessageDO.getApiType() == ApiTypeEnum.API_KEY
                     && chatMessageDO.getQuestionContextCount() > chatConfig.getLimitQuestionContextCount()) {
