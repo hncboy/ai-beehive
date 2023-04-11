@@ -184,20 +184,14 @@
 
 # 联系方式
 
-进群请遵守规则，禁止讨论敏感信息。
+技术交流添加微信，备注 Github ChatGPT
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
-    <img style="max-width: 100%" src="pics/wechat_group_join.png" alt="微信" />
-    <p>微信群</p>
+    <img style="max-width: 100%" src="pics/wechat.png" alt="微信" />
   </div>
 </div>
-<div style="display: flex; align-items: center; gap: 20px;">
-  <div style="text-align: center">
-    <img style="max-width: 100%" src="pics/qq_group_join.png" alt="QQ" />
-    <p>631171246</p>
-  </div>
-</div>
+
 
 
 # LICENSE
