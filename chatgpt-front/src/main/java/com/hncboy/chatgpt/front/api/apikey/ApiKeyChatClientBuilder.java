@@ -2,12 +2,15 @@ package com.hncboy.chatgpt.front.api.apikey;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.hncboy.chatgpt.base.config.ChatConfig;
-import com.unfbx.chatgpt.OpenAiClient;
+import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
+import com.hncboy.chatgpt.base.util.OkHttpClientUtil;
 import com.unfbx.chatgpt.OpenAiStreamClient;
 import lombok.experimental.UtilityClass;
+import okhttp3.OkHttpClient;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Collections;
 
 /**
  * @author hncboy
@@ -24,29 +27,13 @@ public class ApiKeyChatClientBuilder {
      */
     public OpenAiStreamClient buildOpenAiStreamClient() {
         ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
-        return OpenAiStreamClient.builder()
-                .connectTimeout(chatConfig.getTimeoutMs())
-                .readTimeout(chatConfig.getTimeoutMs())
-                .writeTimeout(chatConfig.getTimeoutMs())
-                .apiKey(chatConfig.getOpenaiApiKey())
-                .proxy(getProxy())
-                .apiHost(chatConfig.getOpenaiApiBaseUrl())
-                .build();
-    }
 
-    /**
-     * 构建 API 请求客户端
-     *
-     * @return OpenAiClient
-     */
-    public OpenAiClient buildOpenAiClient() {
-        ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
-        return OpenAiClient.builder()
-                .connectTimeout(chatConfig.getTimeoutMs())
-                .readTimeout(chatConfig.getTimeoutMs())
-                .writeTimeout(chatConfig.getTimeoutMs())
-                .apiKey(chatConfig.getOpenaiApiKey())
-                .proxy(getProxy())
+        OkHttpClient okHttpClient = OkHttpClientUtil.getInstance(ApiTypeEnum.API_KEY, chatConfig.getTimeoutMs(),
+                chatConfig.getTimeoutMs(), chatConfig.getTimeoutMs(), getProxy());
+
+        return OpenAiStreamClient.builder()
+                .okHttpClient(okHttpClient)
+                .apiKey(Collections.singletonList(chatConfig.getOpenaiApiKey()))
                 .apiHost(chatConfig.getOpenaiApiBaseUrl())
                 .build();
     }

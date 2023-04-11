@@ -1,24 +1,17 @@
 package com.hncboy.chatgpt.front.service.impl;
 
-import cn.hutool.core.text.StrPool;
-import cn.hutool.core.util.BooleanUtil;
-import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.base.config.ChatConfig;
-import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
-import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
-import com.hncboy.chatgpt.front.domain.vo.ChatConfigVO;
 import com.hncboy.chatgpt.front.handler.emitter.ChatMessageEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.IpRateLimiterEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.SensitiveWordEmitterChain;
 import com.hncboy.chatgpt.front.service.ChatService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
-
-import jakarta.annotation.Resource;
 
 /**
  * @author hncboy
@@ -31,25 +24,6 @@ public class ChatServiceImpl implements ChatService {
 
     @Resource
     private ChatConfig chatConfig;
-
-    @Override
-    public ChatConfigVO getChatConfig() {
-        ChatConfigVO chatConfigVO = new ChatConfigVO();
-        chatConfigVO.setApiModel(chatConfig.getApiTypeEnum());
-        if (chatConfig.getApiTypeEnum() == ApiTypeEnum.ACCESS_TOKEN || BooleanUtil.isFalse(chatConfig.getIsShowBalance())) {
-            chatConfigVO.setBalance(StrUtil.DASHED);
-        } else {
-            // TODO 加缓存
-            chatConfigVO.setBalance(String.valueOf(ApiKeyChatClientBuilder.buildOpenAiClient().creditGrants().getTotalAvailable()));
-        }
-        chatConfigVO.setHttpsProxy(StrUtil.isAllNotEmpty(chatConfig.getHttpProxyHost(), String.valueOf(chatConfig.getHttpProxyPort()))
-                ? String.format("%s:%s", chatConfig.getHttpProxyHost(), chatConfig.getHttpProxyPort())
-                : StrPool.DASHED);
-        chatConfigVO.setReverseProxy(chatConfig.getApiReverseProxy());
-        chatConfigVO.setSocksProxy(StrPool.DASHED);
-        chatConfigVO.setTimeoutMs(chatConfig.getTimeoutMs());
-        return chatConfigVO;
-    }
 
     @Override
     public ResponseBodyEmitter chatProcess(ChatProcessRequest chatProcessRequest) {

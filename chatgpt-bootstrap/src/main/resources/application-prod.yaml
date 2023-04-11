@@ -12,13 +12,13 @@ spring:
 
 chat:
   # 访问密码
-  auth_secret_key: ${CHAT_AUTH_SECRET_KEY:123456}
+  auth_secret_key: ${CHAT_AUTH_SECRET_KEY:}
   # OpenAI API Key - https://platform.openai.com/overview
   openai_api_key: ${CHAT_OPENAI_API_KEY:}
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
   openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN:}
   # OpenAI API Base URL - https://api.openai.com/，要加/后缀
-  openai_api_base_url: ${CHAT_OPENAI_API_BASE_URL:https://api.openai.com/}}
+  openai_api_base_url: ${CHAT_OPENAI_API_BASE_URL:https://api.openai.com/}
   # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
   openai_api_model: ${CHAT_OPENAI_API_MODEL:}
   # 反向代理地址 AccessToken 时使用

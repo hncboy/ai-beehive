@@ -7,8 +7,8 @@ import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.hncboy.chatgpt.front.service.ChatRoomService;
-
 import jakarta.annotation.Resource;
+
 import java.util.Date;
 
 /**
@@ -38,6 +38,7 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
         answerChatMessageDO.setParentQuestionMessageId(questionChatMessageDO.getMessageId());
         answerChatMessageDO.setContextCount(questionChatMessageDO.getContextCount());
         answerChatMessageDO.setQuestionContextCount(questionChatMessageDO.getQuestionContextCount());
+        answerChatMessageDO.setModelName(questionChatMessageDO.getModelName());
         answerChatMessageDO.setMessageType(ChatMessageTypeEnum.ANSWER);
         answerChatMessageDO.setChatRoomId(questionChatMessageDO.getChatRoomId());
         answerChatMessageDO.setApiType(questionChatMessageDO.getApiType());
@@ -81,7 +82,6 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
      */
     abstract void onErrorMessage(ChatMessageStorage chatMessageStorage);
 
-
     @Override
     public void onComplete(ChatMessageStorage chatMessageStorage) {
         ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionChatMessageDO();
@@ -114,45 +114,36 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
         // 消息流条数大于 0 表示部分成功
         ChatMessageStatusEnum chatMessageStatusEnum = chatMessageStorage.getCurrentStreamMessageCount() > 0 ? ChatMessageStatusEnum.PART_SUCCESS : ChatMessageStatusEnum.ERROR;
 
-        // 更新问题消息记录
-        updateErrorQuestionChatMessage(chatMessageStorage, chatMessageStatusEnum);
-
-        // 错误消息
-        onErrorMessage(chatMessageStorage);
-
-        // 还没收到回复就断了，跳过回答消息记录更新
-        if (chatMessageStatusEnum == ChatMessageStatusEnum.ERROR) {
-            return;
-        }
-
-        // 更新问题消息记录
-        ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerChatMessageDO();
-        answerChatMessageDO.setStatus(chatMessageStatusEnum);
-        // 原始响应数据
-        answerChatMessageDO.setOriginalData(chatMessageStorage.getOriginalResponseData());
-        // 错误响应数据
-        answerChatMessageDO.setResponseErrorData(chatMessageStorage.getErrorResponseData());
-        // 更新时间
-        answerChatMessageDO.setUpdateTime(new Date());
-        // 更新消息
-        chatMessageService.updateById(answerChatMessageDO);
-    }
-
-    /**
-     * 更新错误的问题消息记录
-     *
-     * @param chatMessageStorage    消息记录存储
-     * @param chatMessageStatusEnum 消息记录状态枚举
-     */
-    private void updateErrorQuestionChatMessage(ChatMessageStorage chatMessageStorage, ChatMessageStatusEnum chatMessageStatusEnum) {
+        // 填充问题消息记录
         ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionChatMessageDO();
         questionChatMessageDO.setStatus(chatMessageStatusEnum);
-
         // 原始请求数据
         questionChatMessageDO.setOriginalData(chatMessageStorage.getOriginalRequestData());
         // 错误响应数据
         questionChatMessageDO.setResponseErrorData(chatMessageStorage.getErrorResponseData());
         questionChatMessageDO.setUpdateTime(new Date());
-        chatMessageService.updateById(questionChatMessageDO);
+
+        // 还没收到回复就断了，跳过回答消息记录更新
+        if (chatMessageStatusEnum != ChatMessageStatusEnum.ERROR) {
+            // 填充问题消息记录
+            ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerChatMessageDO();
+            answerChatMessageDO.setStatus(chatMessageStatusEnum);
+            // 原始响应数据
+            answerChatMessageDO.setOriginalData(chatMessageStorage.getOriginalResponseData());
+            // 错误响应数据
+            answerChatMessageDO.setResponseErrorData(chatMessageStorage.getErrorResponseData());
+            // 更新时间
+            answerChatMessageDO.setUpdateTime(new Date());
+        }
+
+        // 填充错误消息
+        onErrorMessage(chatMessageStorage);
+
+        // 更新错误的问题消息记录
+        chatMessageService.updateById(chatMessageStorage.getQuestionChatMessageDO());
+        // 更新错误的回答消息记录
+        if (chatMessageStatusEnum != ChatMessageStatusEnum.ERROR) {
+            chatMessageService.updateById(chatMessageStorage.getAnswerChatMessageDO());
+        }
     }
 }

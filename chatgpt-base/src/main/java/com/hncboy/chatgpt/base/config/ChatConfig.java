@@ -238,7 +238,7 @@ public class ChatConfig implements InitializingBean {
                 return;
             }
 
-            if (!ConversationModelEnum.NAME_MAP.containsKey(openaiApiKey)) {
+            if (!ConversationModelEnum.NAME_MAP.containsKey(openaiApiModel)) {
                 throw new RuntimeException("AccessToken apiModel 填写错误");
             }
         }

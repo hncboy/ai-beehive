@@ -16,10 +16,10 @@ import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.mapper.ChatMessageMapper;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.hncboy.chatgpt.front.service.ChatRoomService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Resource;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
@@ -52,10 +52,11 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
             chatMessageDO.setApiKey(chatConfig.getOpenaiApiKey());
         }
         chatMessageDO.setContent(chatProcessRequest.getPrompt());
+        chatMessageDO.setModelName(chatConfig.getOpenaiApiModel());
         chatMessageDO.setOriginalData(null);
-        chatMessageDO.setPromptTokens(-1L);
-        chatMessageDO.setCompletionTokens(-1L);
-        chatMessageDO.setTotalTokens(-1L);
+        chatMessageDO.setPromptTokens(-1);
+        chatMessageDO.setCompletionTokens(-1);
+        chatMessageDO.setTotalTokens(-1);
         chatMessageDO.setIp(WebUtil.getIp());
         chatMessageDO.setStatus(ChatMessageStatusEnum.INIT);
         chatMessageDO.setCreateTime(new Date());
@@ -107,6 +108,12 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
             chatMessageDO.setConversationId(parentChatMessage.getConversationId());
             chatMessageDO.setContextCount(parentChatMessage.getContextCount() + 1);
             chatMessageDO.setQuestionContextCount(parentChatMessage.getQuestionContextCount() + 1);
+
+            if (chatMessageDO.getApiType() == ApiTypeEnum.ACCESS_TOKEN) {
+                if (!Objects.equals(chatMessageDO.getModelName(), parentChatMessage.getModelName())) {
+                    throw new ServiceException(StrUtil.format("当前对话类型为 AccessToken 使用模型不一样，请开启新的对话"));
+                }
+            }
 
             // ApiKey 限制上下文问题的数量
             if (chatMessageDO.getApiType() == ApiTypeEnum.API_KEY
