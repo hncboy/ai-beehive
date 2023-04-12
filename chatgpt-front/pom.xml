@@ -13,7 +13,7 @@
         <dependency>
             <groupId>com.hncboy</groupId>
             <artifactId>chatgpt-base</artifactId>
-            <version>${revision}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

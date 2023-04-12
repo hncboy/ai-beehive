@@ -52,6 +52,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
 
         // 所有消息
         LinkedList<Message> messages = new LinkedList<>();
+        // TODO 需要包含上下文 tokens 计算
         // 添加用户上下文消息
         addContextChatMessage(chatMessageDO, messages);
 
