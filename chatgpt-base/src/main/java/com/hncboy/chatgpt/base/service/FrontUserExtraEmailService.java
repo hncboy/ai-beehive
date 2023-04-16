@@ -13,13 +13,25 @@ public interface FrontUserExtraEmailService extends IService<FrontUserExtraEmail
     /**
      * 是否已使用
      *
-     * @param username 用户名，邮箱方式下是邮箱，手机方式下是手机号码
+     * @param username 邮箱
      * @return 是否已使用，true已使用；false未使用
      */
     boolean isUsed(String username);
 
+    /**
+     * 获取一个未被验证的邮箱账号信息
+     *
+     * @param identity 邮箱
+     * @return 邮箱信息
+     */
     FrontUserExtraEmailDO getUnverifiedEmailAccount(String identity);
 
+    /**
+     * 根据用户名获取邮箱账号信息
+     *
+     * @param username 邮箱
+     * @return 邮箱信息
+     */
     FrontUserExtraEmailDO getEmailAccount(String username);
 
     /**

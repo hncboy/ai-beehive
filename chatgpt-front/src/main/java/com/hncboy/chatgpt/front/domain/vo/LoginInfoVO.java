@@ -17,8 +17,10 @@ import lombok.NoArgsConstructor;
 @Data
 @Schema(title = "登录成功后返回前端登录结果")
 public class LoginInfoVO {
+
     @Schema(title = "登录的Token")
     private String token;
+
     @Schema(title = "基础用户ID")
     private Integer baseUserId;
 }

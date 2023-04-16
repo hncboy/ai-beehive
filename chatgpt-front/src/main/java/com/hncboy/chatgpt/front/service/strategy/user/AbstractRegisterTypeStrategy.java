@@ -1,6 +1,6 @@
 package com.hncboy.chatgpt.front.service.strategy.user;
 
-import cn.dev33.satoken.util.SaResult;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.extra.spring.SpringUtil;
 import com.hncboy.chatgpt.base.enums.FrontUserRegisterTypeEnum;
@@ -16,9 +16,12 @@ import java.nio.charset.StandardCharsets;
  *
  * @author CoDeleven
  */
-public abstract class RegisterTypeStrategy {
-    // 后续其他登录方式往这里添加
-    private final static RegisterTypeStrategy EMAIL_STRATEGY = SpringUtil.getBean("EmailRegisterStrategy", RegisterTypeStrategy.class);
+public abstract class AbstractRegisterTypeStrategy {
+
+    /**
+     * 邮箱注册策略
+     */
+    private final static AbstractRegisterTypeStrategy EMAIL_STRATEGY = SpringUtil.getBean(EmailAbstractRegisterStrategy.class);
 
     /**
      * 根据注册类型获取逻辑处理策略
@@ -26,12 +29,16 @@ public abstract class RegisterTypeStrategy {
      * @param registerType 注册类型
      * @return 策略
      */
-    public static RegisterTypeStrategy findStrategyByRegisterType(FrontUserRegisterTypeEnum registerType) {
+    public static AbstractRegisterTypeStrategy findStrategyByRegisterType(FrontUserRegisterTypeEnum registerType) {
         switch (registerType) {
-            case EMAIL: return EMAIL_STRATEGY;
-            case PHONE:
+            case EMAIL -> {
+                return EMAIL_STRATEGY;
+            }
+            case PHONE -> {
+
+            }
         }
-        throw new ServiceException("暂不支持" + registerType.getDesc() + "注册逻辑");
+        throw new ServiceException(StrUtil.format("暂不支持{}注册逻辑", registerType.getDesc()));
     }
 
     /**
@@ -55,18 +62,16 @@ public abstract class RegisterTypeStrategy {
      * 执行注册逻辑
      *
      * @param request 注册请求
-     * @return 是否处理成功
      */
-    public abstract Boolean register(RegisterFrontUserForEmailRequest request);
+    public abstract void register(RegisterFrontUserForEmailRequest request);
 
     /**
      * 校验验证码是否通过
      *
-     * @param identity 用户账号，可能为空。一般邮箱情况下会为空，手机情况下不为空
+     * @param identity   用户账号，可能为空。一般邮箱情况下会为空，手机情况下不为空
      * @param verifyCode 邮箱策略时为邮箱验证码；手机策略时为手机短信验证码
-     * @return true校验通过；false校验失败
      */
-    public abstract boolean checkVerifyCode(String identity, String verifyCode);
+    public abstract void checkVerifyCode(String identity, String verifyCode);
 
     /**
      * 登录

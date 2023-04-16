@@ -5,12 +5,20 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hncboy.chatgpt.base.enums.EmailBizTypeEnum;
 
 /**
- * 针对表【email_verify_code(邮箱验证码核销记录表，记录某个邮箱发送了什么验证码，方便验证)】的数据库操作Service
-* @author CoDeleven
-*/
+ * 邮箱验证码核销记录业务接口
+ *
+ * @author CoDeleven
+ */
 public interface EmailVerifyCodeService extends IService<EmailVerifyCodeDO> {
 
-    EmailVerifyCodeDO createVerifyCode(EmailBizTypeEnum registerVerify, String identity);
+    /**
+     * 创建校验码
+     *
+     * @param emailBizTypeEnum 业务用途枚举
+     * @param identity         标识
+     * @return 校验码
+     */
+    EmailVerifyCodeDO createVerifyCode(EmailBizTypeEnum emailBizTypeEnum, String identity);
 
     /**
      * 根据验证码查找一个有效（未过期，未验证）的验证记录

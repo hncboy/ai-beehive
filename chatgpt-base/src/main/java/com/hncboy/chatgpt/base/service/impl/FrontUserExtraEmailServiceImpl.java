@@ -1,10 +1,12 @@
 package com.hncboy.chatgpt.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.base.domain.entity.FrontUserExtraEmailDO;
 import com.hncboy.chatgpt.base.mapper.FrontUserExtraEmailMapper;
 import com.hncboy.chatgpt.base.service.FrontUserExtraEmailService;
+import com.hncboy.chatgpt.base.util.ThrowExceptionUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -15,15 +17,14 @@ import java.util.Objects;
  * @author CoDeleven
  */
 @Service("CommonFrontUserExtraEmailServiceImpl")
-public class FrontUserExtraEmailServiceImpl extends ServiceImpl<FrontUserExtraEmailMapper, FrontUserExtraEmailDO>
-        implements FrontUserExtraEmailService {
+public class FrontUserExtraEmailServiceImpl extends ServiceImpl<FrontUserExtraEmailMapper, FrontUserExtraEmailDO> implements FrontUserExtraEmailService {
 
     @Override
     public boolean isUsed(String username) {
         FrontUserExtraEmailDO userExtraEmail = this.getOne(new LambdaQueryWrapper<FrontUserExtraEmailDO>()
                 .select(FrontUserExtraEmailDO::getVerified, FrontUserExtraEmailDO::getId)
                 .eq(FrontUserExtraEmailDO::getUsername, username));
-        if(Objects.isNull(userExtraEmail)) {
+        if (Objects.isNull(userExtraEmail)) {
             return false;
         }
         return userExtraEmail.getVerified();
@@ -43,7 +44,10 @@ public class FrontUserExtraEmailServiceImpl extends ServiceImpl<FrontUserExtraEm
 
     @Override
     public void verifySuccess(FrontUserExtraEmailDO emailExtraInfo) {
-        emailExtraInfo.setVerified(true);
-        this.updateById(emailExtraInfo);
+        ThrowExceptionUtil.isFalse(update(new FrontUserExtraEmailDO(), new LambdaUpdateWrapper<FrontUserExtraEmailDO>()
+                        .set(FrontUserExtraEmailDO::getVerified, true)
+                        .eq(FrontUserExtraEmailDO::getVerified, false)
+                        .eq(FrontUserExtraEmailDO::getId, emailExtraInfo.getId())))
+                .throwMessage("邮箱验证码失败");
     }
 }

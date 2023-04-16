@@ -11,14 +11,21 @@ import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
 import com.hncboy.chatgpt.base.exception.ServiceException;
+import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.base.util.WebUtil;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
+import com.hncboy.chatgpt.front.handler.emitter.ChatMessageEmitterChain;
+import com.hncboy.chatgpt.front.handler.emitter.IpRateLimiterEmitterChain;
+import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitterChain;
+import com.hncboy.chatgpt.front.handler.emitter.SensitiveWordEmitterChain;
 import com.hncboy.chatgpt.front.mapper.ChatMessageMapper;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.hncboy.chatgpt.front.service.ChatRoomService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import java.util.Date;
 import java.util.Objects;
@@ -30,6 +37,7 @@ import java.util.UUID;
  * @date 2023/3/25 16:33
  * 聊天记录相关业务实现类
  */
+@Slf4j
 @Service("FrontChatMessageServiceImpl")
 public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatMessageDO> implements ChatMessageService {
 
@@ -38,6 +46,22 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
 
     @Resource
     private ChatRoomService chatRoomService;
+
+    @Override
+    public ResponseBodyEmitter sendMessage(ChatProcessRequest chatProcessRequest) {
+        // 超时时间设置 3 分钟
+        ResponseBodyEmitter emitter = new ResponseBodyEmitter(3 * 60 * 1000L);
+        emitter.onCompletion(() -> log.debug("请求参数：{}，Front-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
+        emitter.onTimeout(() -> log.error("请求参数：{}，Back-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
+
+        // 构建 emitter 处理链路
+        ResponseEmitterChain ipRateLimiterEmitterChain = new IpRateLimiterEmitterChain();
+        ResponseEmitterChain sensitiveWordEmitterChain = new SensitiveWordEmitterChain();
+        sensitiveWordEmitterChain.setNext(new ChatMessageEmitterChain());
+        ipRateLimiterEmitterChain.setNext(sensitiveWordEmitterChain);
+        ipRateLimiterEmitterChain.doChain(chatProcessRequest, emitter);
+        return emitter;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -117,6 +141,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
             // TODO 判断 tokens 数量是否超过 4096
             // ApiKey 限制上下文问题的数量
             if (chatMessageDO.getApiType() == ApiTypeEnum.API_KEY
+                    && chatConfig.getLimitQuestionContextCount() > 0
                     && chatMessageDO.getQuestionContextCount() > chatConfig.getLimitQuestionContextCount()) {
                 throw new ServiceException(StrUtil.format("当前允许连续对话的问题数量为[{}]次，已达到上限，请关闭上下文对话重新发送", chatConfig.getLimitQuestionContextCount()));
             }

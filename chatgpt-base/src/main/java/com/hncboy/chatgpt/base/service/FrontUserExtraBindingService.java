@@ -1,18 +1,32 @@
 package com.hncboy.chatgpt.base.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.hncboy.chatgpt.base.domain.entity.FrontUserBaseDO;
 import com.hncboy.chatgpt.base.domain.entity.FrontUserExtraBindingDO;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.hncboy.chatgpt.base.domain.entity.FrontUserExtraEmailDO;
 import com.hncboy.chatgpt.base.enums.FrontUserRegisterTypeEnum;
 
 /**
- * 针对表【front_user_extra_binding(前端用户绑定表)】的数据库操作Service
-* @author CoDeleven
-*/
+ * 前端用户绑定相关业务接口
+ *
+ * @author CoDeleven
+ */
 public interface FrontUserExtraBindingService extends IService<FrontUserExtraBindingDO> {
 
-    void bindEmail(FrontUserBaseDO baseUser, FrontUserExtraEmailDO emailInfo);
+    /**
+     * 绑定邮箱
+     *
+     * @param baseUser     基础用户
+     * @param extraEmailDO 邮件扩展信息
+     */
+    void bindEmail(FrontUserBaseDO baseUser, FrontUserExtraEmailDO extraEmailDO);
 
-    FrontUserExtraBindingDO findBindingRelations(FrontUserRegisterTypeEnum frontUserRegisterTypeEnum, Integer extraInfoId);
+    /**
+     * 找到绑定关系
+     *
+     * @param frontUserRegisterTypeEnum 注册类型
+     * @param extraInfoId               扩展信息 id
+     * @return 绑定关系
+     */
+    FrontUserExtraBindingDO findExtraBinding(FrontUserRegisterTypeEnum frontUserRegisterTypeEnum, Integer extraInfoId);
 }

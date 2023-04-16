@@ -1,8 +1,8 @@
 package com.hncboy.chatgpt.front.controller;
 
-import com.hncboy.chatgpt.base.annotation.FrontPreAuth;
+import cn.hutool.core.date.DateUtil;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
-import com.hncboy.chatgpt.front.service.ChatService;
+import com.hncboy.chatgpt.front.service.ChatMessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,19 +20,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
  * @date 2023/3/22 19:47
  * 聊天相关接口
  */
-@FrontPreAuth
 @AllArgsConstructor
 @Tag(name = "聊天相关接口")
-@RestController
-@RequestMapping
-public class ChatController {
+@RestController("FrontChatMessageController")
+@RequestMapping("/chat_message")
+public class ChatMessageController {
 
-    private final ChatService chatService;
+    private final ChatMessageService chatMessageService;
 
-    @Operation(summary = "消息处理")
-    @PostMapping("/chat_process")
-    public ResponseBodyEmitter chatProcess(@RequestBody @Validated ChatProcessRequest chatProcessRequest, HttpServletResponse response) {
+    @Operation(summary = "发送消息")
+    @PostMapping("/send")
+    public ResponseBodyEmitter sendMessage(@RequestBody @Validated ChatProcessRequest chatProcessRequest, HttpServletResponse response) {
+        // TODO 后续调整
+        chatProcessRequest.setSystemMessage("You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.\\nKnowledge cutoff: 2021-09-01\\nCurrent date: ".concat(DateUtil.today()));
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        return chatService.chatProcess(chatProcessRequest);
+        return chatMessageService.sendMessage(chatProcessRequest);
     }
 }

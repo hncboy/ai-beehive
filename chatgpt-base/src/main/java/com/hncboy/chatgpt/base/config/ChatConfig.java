@@ -23,11 +23,6 @@ import java.util.Objects;
 public class ChatConfig implements InitializingBean {
 
     /**
-     * 密码
-     */
-    private String authSecretKey;
-
-    /**
      * OpenAI API Key - https://beta.openai.com/docs/api-reference/authentication
      */
     private String openaiApiKey;
@@ -123,15 +118,6 @@ public class ChatConfig implements InitializingBean {
     }
 
     /**
-     * 判断是否有鉴权
-     *
-     * @return true/false
-     */
-    public Boolean hasAuth() {
-        return StrUtil.isNotEmpty(getAuthSecretKey());
-    }
-
-    /**
      * 获取 API 类型枚举
      *
      * @return API 类型枚举
@@ -186,7 +172,7 @@ public class ChatConfig implements InitializingBean {
      * @return 限制数量
      */
     public Integer getLimitQuestionContextCount() {
-        return Opt.ofNullable(limitQuestionContextCount).orElse(1);
+        return Opt.ofNullable(limitQuestionContextCount).orElse(0);
     }
 
     /**

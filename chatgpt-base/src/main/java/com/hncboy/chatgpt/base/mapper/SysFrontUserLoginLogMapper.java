@@ -4,13 +4,10 @@ import com.hncboy.chatgpt.base.domain.entity.SysFrontUserLoginLogDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * 针对表【sys_front_user_login_log(前端用户登录日志表)】的数据库操作Mapper
-* @author CoDeleven
-*/
+ * 前端用户登录日志数据访问层
+ *
+ * @author CoDeleven
+ */
 public interface SysFrontUserLoginLogMapper extends BaseMapper<SysFrontUserLoginLogDO> {
 
 }
-
-
-
-

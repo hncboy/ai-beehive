@@ -1,10 +1,9 @@
 package com.hncboy.chatgpt.base.handler.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author hncboy
@@ -17,9 +16,6 @@ public class R<T> {
 
     @Schema(title = "状态码")
     private int code;
-
-    @Schema(title = "状态字符串")
-    private ResultStatusEnum status;
 
     @Schema(title = "承载数据")
     private T data;
@@ -47,19 +43,6 @@ public class R<T> {
         this.code = code;
         this.data = data;
         this.message = msg;
-        this.status = resultCodeToStatus(code);
-    }
-
-    private static ResultStatusEnum resultCodeToStatus(int code) {
-        ResultStatusEnum status = ResultStatusEnum.SUCCESS;
-        if (code != ResultCode.SUCCESS.getCode()) {
-            if (code == ResultCode.UN_AUTHORIZED.getCode()) {
-                status = ResultStatusEnum.Unauthorized;
-            } else {
-                status = ResultStatusEnum.FAIL;
-            }
-        }
-        return status;
     }
 
     /**

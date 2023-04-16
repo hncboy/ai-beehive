@@ -40,14 +40,14 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendForVerifyCode(String targetEmail, String verifyCode) {
-        String url = UrlBuilder.of(emailConfig.getVerificationRedirectUrl()).addQuery("verifyCode", verifyCode).build();
+        String url = emailConfig.getVerificationRedirectUrl().concat(verifyCode);
         String content = "点击下面的网址完成【StarGPT】账号的注册：" + url;
 
         // 记录日志
         try {
             String sendMsgId = this.sendMessage(targetEmail, url);
             emailLogService.createSuccessLogBySysLog(sendMsgId, mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, content);
-        }catch (Exception e) {
+        } catch (Exception e) {
             emailLogService.createFailedLogBySysLog("", mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, content, e.getMessage());
         }
     }

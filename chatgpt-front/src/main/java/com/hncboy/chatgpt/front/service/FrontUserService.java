@@ -1,8 +1,6 @@
 package com.hncboy.chatgpt.front.service;
 
-import cn.dev33.satoken.util.SaResult;
 import com.hncboy.chatgpt.base.enums.FrontUserRegisterTypeEnum;
-import com.hncboy.chatgpt.base.handler.response.R;
 import com.hncboy.chatgpt.front.domain.request.RegisterFrontUserForEmailRequest;
 import com.hncboy.chatgpt.front.domain.vo.LoginInfoVO;
 import com.hncboy.chatgpt.front.domain.vo.RegisterCaptchaVO;
@@ -19,25 +17,23 @@ public interface FrontUserService {
      * 处理注册请求
      *
      * @param request 注册请求
-     * @return 注册结果
      */
-    R<Boolean> register(RegisterFrontUserForEmailRequest request);
+    void register(RegisterFrontUserForEmailRequest request);
 
     /**
      * 验证码验证
      *
      * @param frontUserRegisterTypeEnum 注册类型
-     * @param code 验证码，可以是邮箱也可以是手机
-     * @return true验证成功；false验证失败
+     * @param code                      验证码，可以是邮箱也可以是手机
      */
-    Boolean verifyCode(FrontUserRegisterTypeEnum frontUserRegisterTypeEnum, String code);
+    void verifyCode(FrontUserRegisterTypeEnum frontUserRegisterTypeEnum, String code);
 
     /**
      * 执行登录
      *
      * @param registerType 注册类型
-     * @param username 登录用户名，可以是邮箱，可以是手机
-     * @param password 登录口令
+     * @param username     登录用户名，可以是邮箱，可以是手机
+     * @param password     登录口令
      * @return Sa-Token的登录结果
      */
     LoginInfoVO login(FrontUserRegisterTypeEnum registerType, String username, String password);
@@ -46,7 +42,7 @@ public interface FrontUserService {
      * 根据注册类型+其他绑定信息表获取该用户的登录信息
      *
      * @param registerType 注册类型
-     * @param extraInfoId 对应注册类型的表ID
+     * @param extraInfoId  对应注册类型的表ID
      * @return 登录用户信息
      */
     UserInfoVO getUserInfo(FrontUserRegisterTypeEnum registerType, Integer extraInfoId);
@@ -59,9 +55,9 @@ public interface FrontUserService {
     UserInfoVO getLoginUserInfo();
 
     /**
-     * 生成基于Base64的图形验证码
+     * 生成基于 Base64 的图形验证码
      *
-     * @return Base64图形验证码
+     * @return Base64 图形验证码
      */
     RegisterCaptchaVO generateCaptcha();
 }

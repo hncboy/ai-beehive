@@ -14,34 +14,42 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "email")
 public class EmailConfig {
+
     /**
      * 邮箱服务器地址
      */
     private String host;
+
     /**
      * 邮箱服务器端口，默认25
      */
     private String port;
+
     /**
      * 发件邮箱地址
      */
     private String from;
+
     /**
      * 发件人名称
      */
     private String user;
+
     /**
      * 授权码
      */
     private String pass;
+
     /**
      * 是否需要授权
      */
     private Boolean auth;
+
     /**
      * 用于跳转验证的URL模板
      */
     private String verificationRedirectUrl;
+
     /**
      * 邮箱验证码过期时间，单位分钟。默认15分钟
      */
@@ -56,5 +64,4 @@ public class EmailConfig {
         return StrUtil.isNotBlank(host) && StrUtil.isNotBlank(port) && StrUtil.isNotBlank(from)
                 && StrUtil.isNotBlank(user);
     }
-
 }

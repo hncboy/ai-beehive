@@ -1,78 +1,70 @@
 package com.hncboy.chatgpt.base.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.Date;
-
 import com.hncboy.chatgpt.base.enums.EmailBizTypeEnum;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
- * 邮箱验证码核销记录表，记录某个邮箱发送了什么验证码，方便验证
+ * 邮箱验证码核销记录表实体类
+ * 记录某个邮箱发送了什么验证码，方便验证
+ *
  * @author CoDeleven
  */
-@TableName(value ="email_verify_code")
+@TableName(value = "email_verify_code")
 @Data
-public class EmailVerifyCodeDO implements Serializable {
+public class EmailVerifyCodeDO {
+
     /**
-     * 
+     * 主键
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
      * 验证码接收邮箱地址
      */
-    @TableField(value = "to_email_address")
     private String toEmailAddress;
 
     /**
-     * 验证码
+     * 验证码唯一
      */
-    @TableField(value = "verify_code")
     private String verifyCode;
 
     /**
-     * 使用状态，0表示未使用，1表示已使用
+     * 是否使用，false 否，true 是
      */
-    @TableField(value = "status")
-    private Integer status;
+    private Boolean isUsed;
 
     /**
      * 核销IP，方便识别一些机器人账号
      */
-    @TableField(value = "verify_ip")
     private String verifyIp;
 
     /**
-     * 该条验证码何时过期，一般是发送时间+15分钟
+     * 验证码过期时间
      */
-    @TableField(value = "expire_at")
     private Date expireAt;
 
     /**
      * 当前邮箱业务
      */
-    @TableField(value = "biz_type")
     private EmailBizTypeEnum bizType;
 
     /**
      * 创建时间
      */
-    @TableField(value = "create_time")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @TableField(value = "update_time")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 }

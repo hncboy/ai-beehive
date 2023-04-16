@@ -3,19 +3,27 @@ package com.hncboy.chatgpt.base.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.base.domain.entity.SysFrontUserLoginLogDO;
 import com.hncboy.chatgpt.base.enums.FrontUserRegisterTypeEnum;
-import com.hncboy.chatgpt.base.service.SysFrontUserLoginLogService;
 import com.hncboy.chatgpt.base.mapper.SysFrontUserLoginLogMapper;
+import com.hncboy.chatgpt.base.service.FrontUserBaseService;
+import com.hncboy.chatgpt.base.service.SysFrontUserLoginLogService;
 import com.hncboy.chatgpt.base.util.WebUtil;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 针对表【sys_front_user_login_log(前端用户登录日志表)】的数据库操作Service实现
-* @author CoDeleven
-*/
+ * 前端用户登录日志业务实现类
+ *
+ * @author CoDeleven
+ */
 @Service
-public class SysFrontUserLoginLogServiceImpl extends ServiceImpl<SysFrontUserLoginLogMapper, SysFrontUserLoginLogDO>
-    implements SysFrontUserLoginLogService{
+public class SysFrontUserLoginLogServiceImpl extends ServiceImpl<SysFrontUserLoginLogMapper, SysFrontUserLoginLogDO> implements SysFrontUserLoginLogService {
 
+    @Resource
+    private FrontUserBaseService frontUserBaseService;
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     @Override
     public void loginFailed(FrontUserRegisterTypeEnum registerType, Integer extraInfoId, Integer baseUserId, String message) {
         SysFrontUserLoginLogDO logDO = new SysFrontUserLoginLogDO();
@@ -38,6 +46,9 @@ public class SysFrontUserLoginLogServiceImpl extends ServiceImpl<SysFrontUserLog
         logDO.setMessage("success");
         logDO.setLoginIp(WebUtil.getIp());
         this.save(logDO);
+
+        // 更新上次登录时间
+        frontUserBaseService.updateLastLoginIp(baseUserId);
     }
 }
 

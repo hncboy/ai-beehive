@@ -1,6 +1,6 @@
-package com.hncboy.chatgpt.front.validation.annotation;
+package com.hncboy.chatgpt.front.handler.validation.annotation;
 
-import com.hncboy.chatgpt.front.validation.impl.FrontUserRegisterAvailableValidator;
+import com.hncboy.chatgpt.front.handler.validation.impl.FrontUserRegisterAvailableValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

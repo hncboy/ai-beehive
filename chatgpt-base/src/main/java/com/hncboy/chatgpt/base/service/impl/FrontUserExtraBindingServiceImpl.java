@@ -1,5 +1,6 @@
 package com.hncboy.chatgpt.base.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.base.domain.entity.FrontUserBaseDO;
@@ -12,28 +13,28 @@ import com.hncboy.chatgpt.base.mapper.FrontUserExtraBindingMapper;
 import org.springframework.stereotype.Service;
 
 /**
- * 针对表【front_user_extra_binding(前端用户绑定表)】的数据库操作Service实现
-* @author CoDeleven
-*/
+ * 前端用户绑定相关业务实现类
+ *
+ * @author CoDeleven
+ */
 @Service
 public class FrontUserExtraBindingServiceImpl extends ServiceImpl<FrontUserExtraBindingMapper, FrontUserExtraBindingDO>
-    implements FrontUserExtraBindingService{
+        implements FrontUserExtraBindingService {
 
     @Override
-    public void bindEmail(FrontUserBaseDO baseUser, FrontUserExtraEmailDO emailInfo) {
+    public void bindEmail(FrontUserBaseDO baseUser, FrontUserExtraEmailDO extraEmailDO) {
         FrontUserExtraBindingDO bindingDO = new FrontUserExtraBindingDO();
         bindingDO.setBindingType(UserExtraBindingTypeEnum.BIND_EMAIL);
-        bindingDO.setExtraInfoId(emailInfo.getId());
+        bindingDO.setExtraInfoId(extraEmailDO.getId());
         bindingDO.setBaseUserId(baseUser.getId());
         this.save(bindingDO);
     }
 
     @Override
-    public FrontUserExtraBindingDO findBindingRelations(FrontUserRegisterTypeEnum registerType,
-                                                        Integer extraInfoId) {
-        return this.getOne(new QueryWrapper<FrontUserExtraBindingDO>()
-                .eq("binding_type", registerType.getCode())
-                .eq("extra_info_id", extraInfoId));
+    public FrontUserExtraBindingDO findExtraBinding(FrontUserRegisterTypeEnum registerType, Integer extraInfoId) {
+        return getOne(new LambdaQueryWrapper<FrontUserExtraBindingDO>()
+                .eq(FrontUserExtraBindingDO::getBindingType, registerType)
+                .eq(FrontUserExtraBindingDO::getExtraInfoId, extraInfoId));
     }
 }
 
