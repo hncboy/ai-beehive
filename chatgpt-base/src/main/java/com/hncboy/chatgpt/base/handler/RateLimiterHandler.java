@@ -73,8 +73,8 @@ public class RateLimiterHandler {
         removeExpiredRequests(GLOBAL_REQUEST_TIMESTAMP_QUEUE, now, chatConfig.getMaxRequestSecond());
 
         // 检查 IP 和全局限流是否触发
-        boolean ipAllowed = ipTimestampDeque.size() < chatConfig.getIpMaxRequest();
-        boolean globalAllowed = GLOBAL_REQUEST_TIMESTAMP_QUEUE.size() < chatConfig.getMaxRequest();
+        boolean ipAllowed = chatConfig.getIpMaxRequest() <= 0 || ipTimestampDeque.size() < chatConfig.getIpMaxRequest();
+        boolean globalAllowed = chatConfig.getMaxRequest() <= 0 || GLOBAL_REQUEST_TIMESTAMP_QUEUE.size() < chatConfig.getMaxRequest();
 
         // 如果 IP 和全局限流均未触发，则添加请求到队列
         if (ipAllowed && globalAllowed) {

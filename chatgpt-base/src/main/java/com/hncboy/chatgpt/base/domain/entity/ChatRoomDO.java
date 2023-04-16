@@ -26,6 +26,11 @@ public class ChatRoomDO {
     private Long id;
 
     /**
+     * 用户 id
+     */
+    private Integer userId;
+
+    /**
      * 对话 id
      * 唯一
      */

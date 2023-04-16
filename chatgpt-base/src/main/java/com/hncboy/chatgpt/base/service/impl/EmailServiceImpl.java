@@ -1,6 +1,5 @@
 package com.hncboy.chatgpt.base.service.impl;
 
-import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailUtil;
 import com.hncboy.chatgpt.base.config.EmailConfig;

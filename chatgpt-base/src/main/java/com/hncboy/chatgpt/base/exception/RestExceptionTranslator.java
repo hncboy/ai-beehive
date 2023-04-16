@@ -82,8 +82,7 @@ public class RestExceptionTranslator {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public R<Void> handleError(MethodArgumentNotValidException e) {
-        log.error("PostBody校验不通过", e);
-
+        log.warn("PostBody校验不通过", e);
         return wrapErrors(e.getAllErrors());
     }
 
@@ -105,15 +104,14 @@ public class RestExceptionTranslator {
      * 封装validator的错误信息列表
      *
      * @param errors 错误信息列表
-     * @return
      */
     private R<Void> wrapErrors(List<ObjectError> errors) {
-        if(CollectionUtil.isEmpty(errors)){
+        if (CollectionUtil.isEmpty(errors)) {
             return R.fail(ResultCode.FAILURE, ResultCode.FAILURE.getMessage());
         }
         StringBuilder sb = new StringBuilder();
         // 自定义校验，error类型为 ViolationObjectError
-        errors.forEach(error-> sb.append(error.getDefaultMessage()));
+        errors.forEach(error -> sb.append(error.getDefaultMessage()));
 
         return R.fail(ResultCode.FAILURE, sb.toString());
     }

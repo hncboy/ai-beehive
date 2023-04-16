@@ -21,6 +21,7 @@ import com.hncboy.chatgpt.front.handler.emitter.SensitiveWordEmitterChain;
 import com.hncboy.chatgpt.front.mapper.ChatMessageMapper;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.hncboy.chatgpt.front.service.ChatRoomService;
+import com.hncboy.chatgpt.front.util.FrontUserUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
         if (apiTypeEnum == ApiTypeEnum.API_KEY) {
             chatMessageDO.setApiKey(chatConfig.getOpenaiApiKey());
         }
+        chatMessageDO.setUserId(FrontUserUtil.getUserId());
         chatMessageDO.setContent(chatProcessRequest.getPrompt());
         chatMessageDO.setModelName(chatConfig.getOpenaiApiModel());
         chatMessageDO.setOriginalData(null);
@@ -113,6 +115,8 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
         if (StrUtil.isAllNotBlank(parentMessageId, conversationId)) {
             // 寻找父级消息
             ChatMessageDO parentChatMessage = getOne(new LambdaQueryWrapper<ChatMessageDO>()
+                    // 用户 id 一致
+                    .eq(ChatMessageDO::getUserId, FrontUserUtil.getUserId())
                     // 消息 id 一致
                     .eq(ChatMessageDO::getMessageId, parentMessageId)
                     // 对话 id 一致

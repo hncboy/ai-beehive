@@ -6,6 +6,7 @@ USE chat;
 
 CREATE TABLE IF NOT EXISTS `chat_message`  (
     `id` bigint NOT NULL COMMENT '主键',
+    `user_id` int NOT NULL COMMENT '用户 id',
     `message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '消息 id',
     `parent_message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '父级消息 id',
     `parent_answer_message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '父级回答消息 id',
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `chat_message`  (
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS `chat_room`  (
     `id` bigint NOT NULL COMMENT '主键',
+    `user_id` int NOT NULL COMMENT '用户 id',
     `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ip',
     `conversation_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '对话 id，唯一',
     `first_chat_message_id` bigint NOT NULL COMMENT '第一条消息主键',

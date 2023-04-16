@@ -94,19 +94,9 @@ public class ChatConfig implements InitializingBean {
     private Integer ipMaxRequestSecond;
 
     /**
-     * 限制上下文对话的问题数量，默认 1 次
+     * 限制上下文对话的问题数量，默认不限制
      */
     private Integer limitQuestionContextCount;
-
-    /**
-     * 是否展示余额，默认不展示
-     */
-    private Boolean isShowBalance;
-
-    /**
-     * 管理端是否展示隐藏的消息，默认不展示
-     */
-    private Boolean isAdminShowHiddenMessage;
 
     /**
      * 判断是否有 http 代理
@@ -173,15 +163,6 @@ public class ChatConfig implements InitializingBean {
      */
     public Integer getLimitQuestionContextCount() {
         return Opt.ofNullable(limitQuestionContextCount).orElse(0);
-    }
-
-    /**
-     * 是否展示管理端隐藏的消息，默认不展示
-     *
-     * @return true/false
-     */
-    public Boolean getIsAdminShowHiddenMessage() {
-        return Opt.ofNullable(isAdminShowHiddenMessage).orElse(false);
     }
 
     @Override

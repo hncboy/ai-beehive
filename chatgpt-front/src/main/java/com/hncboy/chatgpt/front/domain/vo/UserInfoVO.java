@@ -17,13 +17,19 @@ import lombok.NoArgsConstructor;
 @Data
 @Schema(title = "登录成功后返回前端用户信息")
 public class UserInfoVO {
+
     @Schema(title = "基础用户ID")
     private Integer baseUserId;
+
     @Schema(title = "用户昵称")
     private String nickname;
+
+    @Schema(title = "邮箱")
+    private String email;
+
     @Schema(title = "自我介绍")
     private String description;
+
     @Schema(title = "头像地址")
     private String avatarUrl;
-    // TODO 付费相关内容拓展
 }

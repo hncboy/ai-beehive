@@ -121,6 +121,8 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
 
     @Override
     public UserInfoVO getLoginUserInfo(Integer extraInfoId) {
+        FrontUserExtraEmailDO extraEmailDO = userExtraEmailService.getById(extraInfoId);
+
         // 根据注册类型+extraInfoId获取 当前邮箱绑定在了哪个用户上
         FrontUserExtraBindingDO bindingRelations = bindingService.findExtraBinding(FrontUserRegisterTypeEnum.EMAIL, extraInfoId);
         if (Objects.isNull(bindingRelations)) {
@@ -136,6 +138,7 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
         return UserInfoVO.builder().baseUserId(baseUser.getId())
                 .description(baseUser.getDescription())
                 .nickname(baseUser.getNickname())
+                .email(extraEmailDO.getUsername())
                 .avatarUrl("").build();
     }
 

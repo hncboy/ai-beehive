@@ -28,6 +28,11 @@ public class ChatMessageDO {
     private Long id;
 
     /**
+     * 用户 id
+     */
+    private Integer userId;
+
+    /**
      * 消息 id
      */
     private String messageId;

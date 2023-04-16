@@ -34,6 +34,7 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
         ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionChatMessageDO();
         ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerChatMessageDO();
         answerChatMessageDO.setParentMessageId(questionChatMessageDO.getMessageId());
+        answerChatMessageDO.setUserId(questionChatMessageDO.getUserId());
         answerChatMessageDO.setParentAnswerMessageId(questionChatMessageDO.getParentAnswerMessageId());
         answerChatMessageDO.setParentQuestionMessageId(questionChatMessageDO.getMessageId());
         answerChatMessageDO.setContextCount(questionChatMessageDO.getContextCount());
