@@ -9,6 +9,7 @@ import com.hncboy.chatgpt.front.domain.request.RegisterFrontUserForEmailRequest;
 import com.hncboy.chatgpt.base.annotation.FrontSaCheckLogin;
 import com.hncboy.chatgpt.front.domain.vo.LoginInfoVO;
 import com.hncboy.chatgpt.front.domain.vo.RegisterCaptchaVO;
+import com.hncboy.chatgpt.front.domain.vo.UserInfoVO;
 import com.hncboy.chatgpt.front.service.FrontUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,7 +41,7 @@ public class FrontUserController {
      * @return 发送结果
      */
     @Operation(summary = "邮件验证回调")
-    @GetMapping("/verifyEmailCode")
+    @GetMapping("/verify_email_code")
     public R<Boolean> verifyEmailCode(@Parameter(description = "邮箱验证码") @RequestParam("code") String code) {
         Boolean data = frontUserService.verifyCode(FrontUserRegisterTypeEnum.EMAIL, code);
         return R.data(data);
@@ -66,9 +67,8 @@ public class FrontUserController {
     @Operation(summary = "获取前端登录的用户信息")
     @GetMapping("/info")
     @FrontSaCheckLogin
-    public R<LoginInfoVO> getUserInfo() {
-        LoginInfoVO userInfo = frontUserService.getLoginUserInfo();
-        System.out.println(StpUtil.getTokenTimeout());
+    public R<UserInfoVO> getUserInfo() {
+        UserInfoVO userInfo = frontUserService.getLoginUserInfo();
         return R.data(userInfo);
     }
 
@@ -78,7 +78,7 @@ public class FrontUserController {
      * @return 图片验证码，Base64
      */
     @Operation(summary = "获取图片验证码")
-    @GetMapping("/getPicCode")
+    @GetMapping("/get_pic_code")
     public R<RegisterCaptchaVO> getPictureVerificationCode() {
         RegisterCaptchaVO captcha = frontUserService.generateCaptcha();
         return R.data(captcha);
@@ -91,7 +91,8 @@ public class FrontUserController {
      */
     @Operation(summary = "使用邮箱进行登录")
     @PostMapping("/login/email")
-    public SaResult login(@RequestBody LoginFrontUserByEmailRequest request) {
-        return frontUserService.login(FrontUserRegisterTypeEnum.EMAIL, request.getUsername(), request.getPassword());
+    public R<LoginInfoVO> login(@RequestBody LoginFrontUserByEmailRequest request) {
+        LoginInfoVO loginInfo = frontUserService.login(FrontUserRegisterTypeEnum.EMAIL, request.getUsername(), request.getPassword());
+        return R.data(loginInfo);
     }
 }

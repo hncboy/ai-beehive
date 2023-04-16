@@ -73,3 +73,4 @@ sa-token:
   jwt-secret-key: ${JWT_SECRET:starGPT666}
   # JWT有效期
   timeout: ${LOGIN_TIMEOUT_SECONDS:86400}
+  token-name: satoken

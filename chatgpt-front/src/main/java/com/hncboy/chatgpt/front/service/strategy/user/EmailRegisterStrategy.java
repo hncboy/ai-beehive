@@ -16,6 +16,7 @@ import com.hncboy.chatgpt.base.service.*;
 import com.hncboy.chatgpt.base.enums.EmailBizTypeEnum;
 import com.hncboy.chatgpt.front.domain.request.RegisterFrontUserForEmailRequest;
 import com.hncboy.chatgpt.front.domain.vo.LoginInfoVO;
+import com.hncboy.chatgpt.front.domain.vo.UserInfoVO;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -67,8 +68,10 @@ public class EmailRegisterStrategy extends RegisterTypeStrategy{
         FrontUserExtraEmailDO emailExtraInfo = userExtraEmailService.getUnverifiedEmailAccount(availableVerifyCode.getToEmailAddress());
         // 绑定两张表
         bindingService.bindEmail(baseUser, emailExtraInfo);
-        // 验证完毕
+        // 验证完毕，写入日志
         emailVerifyCodeService.verifySuccess(availableVerifyCode);
+        // 设置邮箱已验证
+        userExtraEmailService.verifySuccess(emailExtraInfo);
         return true;
     }
 
@@ -110,7 +113,7 @@ public class EmailRegisterStrategy extends RegisterTypeStrategy{
     }
 
     @Override
-    public LoginInfoVO getLoginUserInfo(Integer extraInfoId) {
+    public UserInfoVO getLoginUserInfo(Integer extraInfoId) {
         // 根据注册类型+extraInfoId获取 当前邮箱绑定在了哪个用户上
         FrontUserExtraBindingDO bindingRelations = bindingService.findBindingRelations(FrontUserRegisterTypeEnum.EMAIL, extraInfoId);
         if(Objects.isNull(bindingRelations)) {
@@ -123,37 +126,38 @@ public class EmailRegisterStrategy extends RegisterTypeStrategy{
             throw new ServiceException(StrUtil.format("基础用户不存在：{}", bindingRelations.getBaseUserId()));
         }
         // 封装基础用户信息并返回
-        return LoginInfoVO.builder().baseUserId(baseUser.getId())
+        return UserInfoVO.builder().baseUserId(baseUser.getId())
                 .description(baseUser.getDescription())
                 .nickname(baseUser.getNickname())
                 .avatarUrl("").build();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public SaResult login(String username, String password) {
+    public LoginInfoVO login(String username, String password) {
         // 验证账号信息
         FrontUserExtraEmailDO account = userExtraEmailService.getEmailAccount(username);
         if(Objects.isNull(account)) {
-            return SaResult.error("账号或密码错误");
+            throw new ServiceException("账号或密码错误");
         }
         // 二次加密，验证账号密码
         String salt = account.getSalt();
         String afterEncryptedPassword = this.encryptRawPassword(password, salt);
         if(!Objects.equals(afterEncryptedPassword, account.getPassword())) {
             loginLogService.loginFailed(FrontUserRegisterTypeEnum.EMAIL, account.getId(), 0, "账号或密码错误");
-            return SaResult.error("账号或密码错误");
+            throw new ServiceException("账号或密码错误");
         }
         // 获取登录用户信息
-        LoginInfoVO loginInfoVO = this.getLoginUserInfo(account.getId());
+        UserInfoVO userInfo = this.getLoginUserInfo(account.getId());
 
         // 执行登录
         StpUtil.login(account.getId(), SaLoginModel.create()
                 .setExtra(FRONT_JWT_USERNAME, account.getUsername())
                 .setExtra(ApplicationConstant.FRONT_JWT_REGISTER_TYPE_CODE, FrontUserRegisterTypeEnum.EMAIL.getCode())
-                .setExtra(FRONT_JWT_BASE_USER_ID, loginInfoVO.getBaseUserId()));
+                .setExtra(FRONT_JWT_BASE_USER_ID, userInfo.getBaseUserId()));
 
         // 记录登录日志
-        loginLogService.loginSuccess(FrontUserRegisterTypeEnum.EMAIL, account.getId(), loginInfoVO.getBaseUserId());
-        return SaResult.ok().setData(loginInfoVO);
+        loginLogService.loginSuccess(FrontUserRegisterTypeEnum.EMAIL, account.getId(), userInfo.getBaseUserId());
+        return LoginInfoVO.builder().token(StpUtil.getTokenValue()).baseUserId(userInfo.getBaseUserId()).build();
     }
 }

@@ -7,6 +7,7 @@ import com.hncboy.chatgpt.base.enums.FrontUserRegisterTypeEnum;
 import com.hncboy.chatgpt.base.exception.ServiceException;
 import com.hncboy.chatgpt.front.domain.request.RegisterFrontUserForEmailRequest;
 import com.hncboy.chatgpt.front.domain.vo.LoginInfoVO;
+import com.hncboy.chatgpt.front.domain.vo.UserInfoVO;
 
 import java.nio.charset.StandardCharsets;
 
@@ -74,7 +75,7 @@ public abstract class RegisterTypeStrategy {
      * @param password 短信验证码/密码
      * @return 登录成功后的信息
      */
-    public abstract SaResult login(String username, String password);
+    public abstract LoginInfoVO login(String username, String password);
 
     /**
      * 获取登录用户信息
@@ -82,5 +83,5 @@ public abstract class RegisterTypeStrategy {
      * @param extraInfoId 绑定信息表ID
      * @return 登录用户信息
      */
-    public abstract LoginInfoVO getLoginUserInfo(Integer extraInfoId);
+    public abstract UserInfoVO getLoginUserInfo(Integer extraInfoId);
 }

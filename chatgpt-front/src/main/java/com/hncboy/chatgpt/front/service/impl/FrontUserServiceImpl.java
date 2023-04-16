@@ -10,6 +10,7 @@ import com.hncboy.chatgpt.base.util.SimpleCaptchaUtil;
 import com.hncboy.chatgpt.front.domain.request.RegisterFrontUserForEmailRequest;
 import com.hncboy.chatgpt.front.domain.vo.LoginInfoVO;
 import com.hncboy.chatgpt.front.domain.vo.RegisterCaptchaVO;
+import com.hncboy.chatgpt.front.domain.vo.UserInfoVO;
 import com.hncboy.chatgpt.front.service.FrontUserService;
 import com.hncboy.chatgpt.front.service.strategy.user.RegisterTypeStrategy;
 import org.springframework.stereotype.Service;
@@ -38,13 +39,13 @@ public class FrontUserServiceImpl implements FrontUserService {
     }
 
     @Override
-    public SaResult login(FrontUserRegisterTypeEnum registerType, String username, String password) {
+    public LoginInfoVO login(FrontUserRegisterTypeEnum registerType, String username, String password) {
         RegisterTypeStrategy strategy = RegisterTypeStrategy.findStrategyByRegisterType(registerType);
         return strategy.login(username, password);
     }
 
     @Override
-    public LoginInfoVO getUserInfo(FrontUserRegisterTypeEnum registerType, Integer extraInfoId) {
+    public UserInfoVO getUserInfo(FrontUserRegisterTypeEnum registerType, Integer extraInfoId) {
         RegisterTypeStrategy strategy = RegisterTypeStrategy.findStrategyByRegisterType(registerType);
         return strategy.getLoginUserInfo(extraInfoId);
     }
@@ -62,7 +63,7 @@ public class FrontUserServiceImpl implements FrontUserService {
     }
 
     @Override
-    public LoginInfoVO getLoginUserInfo() {
+    public UserInfoVO getLoginUserInfo() {
         // 获取当前登录用户ID，一般是extraInfoId
         Integer extraInfoId = NumberUtil.parseInt(String.valueOf(StpUtil.getLoginId()));
         // 从JWT中提取注册类型

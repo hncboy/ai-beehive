@@ -21,4 +21,11 @@ public interface FrontUserExtraEmailService extends IService<FrontUserExtraEmail
     FrontUserExtraEmailDO getUnverifiedEmailAccount(String identity);
 
     FrontUserExtraEmailDO getEmailAccount(String username);
+
+    /**
+     * 邮件验证完毕
+     *
+     * @param emailExtraInfo 邮箱登录信息
+     */
+    void verifySuccess(FrontUserExtraEmailDO emailExtraInfo);
 }
