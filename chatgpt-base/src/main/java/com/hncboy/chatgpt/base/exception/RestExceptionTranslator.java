@@ -31,7 +31,7 @@ import java.util.List;
 public class RestExceptionTranslator {
 
     /**
-     * 管理端登录异常处理
+     * Sa-token 鉴权拦截
      * HTTP 状态为 401
      *
      * @param e 异常信息
@@ -40,8 +40,19 @@ public class RestExceptionTranslator {
     @ExceptionHandler(NotLoginException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public R<Void> handleError(NotLoginException e) {
-        log.error("管理端登录异常", e);
-        return R.fail(ResultCode.UN_AUTHORIZED, e.getMessage());
+        log.warn("鉴权拦截", e);
+        // 判断场景值，定制化异常信息
+        String message = "";
+        if (e.getType().equals(NotLoginException.NOT_TOKEN)) {
+            message = "未提供 token";
+        } else if (e.getType().equals(NotLoginException.INVALID_TOKEN)) {
+            message = "token 无效";
+        } else if (e.getType().equals(NotLoginException.TOKEN_TIMEOUT)) {
+            message = "token 已过期";
+        } else {
+            message = "当前会话未登录";
+        }
+        return R.fail(ResultCode.UN_AUTHORIZED, message);
     }
 
     /**
