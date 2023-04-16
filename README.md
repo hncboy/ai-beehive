@@ -36,7 +36,7 @@
 - 接口文档：http://localhost:3002/swagger-ui.html
 - 用户端：
   - https://front.stargpt.top/ (失效)
-  - https://front1.stargpt.top/
+  - https://front1.stargpt.top/ (失效)
   - https://front2.stargpt.top/
   - https://front3.stargpt.top/
 
@@ -184,7 +184,7 @@
 
 # 联系方式
 
-技术交流添加微信，备注 Github ChatGPT
+技术交流添加微信，备注 Github ChatGPT 以及原因
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
