@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-oracle
 # 从宿主机复制 jar 文件到容器中并设置工作目录
 COPY chatgpt-bootstrap/target/*.jar /app/app.jar
 WORKDIR /app
