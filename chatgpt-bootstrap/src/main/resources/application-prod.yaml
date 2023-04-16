@@ -49,3 +49,27 @@ chat:
   isShowBalance: ${CHAT_IS_SHOW_BALANCE:false}
   # 是否展示管理端隐藏的消息，默认不展示
   isAdminShowHiddenMessage: ${CHAT_IS_ADMIN_SHOW_HIDDEN_MESSAGE:false}
+
+  # 邮箱验证相关
+email:
+  # SMTP服务器地址
+  host: ${EMAIL_HOST:smtp.163.com}
+  # 服务器一般默认25端口
+  port: ${EMAIL_PORT:994}
+  # 邮箱地址
+  from: ${EMAIL_FROM:stargpt@163.com}
+  # 用户名，发件人前缀
+  user: ${EMAIL_USER:stargpt@163.com}
+  # 如果要授权码，这里就是传授权码
+  pass: ${EMAIL_PASS:QGPFIFYFFRQBGATA}
+  # 是否需要授权，决定是否要设置授权码
+  auth: ${EMAIL_AUTH:true}
+  # 邮箱验证码有效期（单位，分钟）
+  verifyCodeExpireMinutes: ${EMAIL_CODE_EXPIRE_MINUTES:15}
+  # 邮箱验证，跳转地址基础路径（可以携带参数），这里的type无特殊作用，仅用于演示
+  verificationRedirectUrl: ${EMAIL_VERIFY_REDIRECT_URL:https://stargpt.hncboy.com?type=email}
+sa-token:
+  # 前端用户登录，用于加密JWT
+  jwt-secret-key: ${JWT_SECRET:starGPT666}
+  # JWT有效期
+  timeout: ${LOGIN_TIMEOUT_SECONDS:86400}
