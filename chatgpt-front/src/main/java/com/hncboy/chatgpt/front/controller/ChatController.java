@@ -30,7 +30,7 @@ public class ChatController {
     private final ChatService chatService;
 
     @Operation(summary = "消息处理")
-    @PostMapping("/chat-process")
+    @PostMapping("/chat_process")
     public ResponseBodyEmitter chatProcess(@RequestBody @Validated ChatProcessRequest chatProcessRequest, HttpServletResponse response) {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         return chatService.chatProcess(chatProcessRequest);

@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USER_NAME:root}
-    password: ${MYSQL_PASSWORD:123456}
-    url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
+    password: ${MYSQL_PASSWORD:111111}
+    url: ${JDBC_URL:jdbc:mysql://192.168.1.33:3306/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
 
 #mybatis-plus:
 #  configuration:
@@ -14,7 +14,7 @@ chat:
   # 访问密码
   auth_secret_key: ${CHAT_AUTH_SECRET_KEY:}
   # OpenAI API Key - https://platform.openai.com/overview
-  openai_api_key: ${CHAT_OPENAI_API_KEY:}
+  openai_api_key: ${CHAT_OPENAI_API_KEY:123}
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
   openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN:}
   # OpenAI API Base URL - https://api.openai.com/，要加/后缀
@@ -73,3 +73,4 @@ sa-token:
   jwt-secret-key: ${JWT_SECRET:starGPT666}
   # JWT有效期
   timeout: ${LOGIN_TIMEOUT_SECONDS:86400}
+  token-name: satoken

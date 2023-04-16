@@ -6,6 +6,7 @@ import com.hncboy.chatgpt.base.handler.response.R;
 import com.hncboy.chatgpt.front.domain.request.RegisterFrontUserForEmailRequest;
 import com.hncboy.chatgpt.front.domain.vo.LoginInfoVO;
 import com.hncboy.chatgpt.front.domain.vo.RegisterCaptchaVO;
+import com.hncboy.chatgpt.front.domain.vo.UserInfoVO;
 
 /**
  * 前端用户服务，提供注册、认证、授权等功能服务
@@ -39,7 +40,7 @@ public interface FrontUserService {
      * @param password 登录口令
      * @return Sa-Token的登录结果
      */
-    SaResult login(FrontUserRegisterTypeEnum registerType, String username, String password);
+    LoginInfoVO login(FrontUserRegisterTypeEnum registerType, String username, String password);
 
     /**
      * 根据注册类型+其他绑定信息表获取该用户的登录信息
@@ -48,14 +49,14 @@ public interface FrontUserService {
      * @param extraInfoId 对应注册类型的表ID
      * @return 登录用户信息
      */
-    LoginInfoVO getUserInfo(FrontUserRegisterTypeEnum registerType, Integer extraInfoId);
+    UserInfoVO getUserInfo(FrontUserRegisterTypeEnum registerType, Integer extraInfoId);
 
     /**
      * 根据当前登录的状态获取用户信息
      *
      * @return 登录的用户信息
      */
-    LoginInfoVO getLoginUserInfo();
+    UserInfoVO getLoginUserInfo();
 
     /**
      * 生成基于Base64的图形验证码

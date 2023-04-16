@@ -40,4 +40,10 @@ public class FrontUserExtraEmailServiceImpl extends ServiceImpl<FrontUserExtraEm
         return this.getOne(new LambdaQueryWrapper<FrontUserExtraEmailDO>()
                 .eq(FrontUserExtraEmailDO::getUsername, username));
     }
+
+    @Override
+    public void verifySuccess(FrontUserExtraEmailDO emailExtraInfo) {
+        emailExtraInfo.setVerified(true);
+        this.updateById(emailExtraInfo);
+    }
 }
