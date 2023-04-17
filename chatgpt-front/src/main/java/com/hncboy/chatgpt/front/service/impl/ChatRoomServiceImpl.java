@@ -1,5 +1,7 @@
 package com.hncboy.chatgpt.front.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.lang.intern.InternUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,6 +10,7 @@ import com.hncboy.chatgpt.base.domain.entity.ChatRoomDO;
 import com.hncboy.chatgpt.base.util.WebUtil;
 import com.hncboy.chatgpt.front.mapper.ChatRoomMapper;
 import com.hncboy.chatgpt.front.service.ChatRoomService;
+import com.hncboy.chatgpt.front.util.FrontUserUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -32,6 +35,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomMapper, ChatRoomDO>
         chatRoom.setTitle(StrUtil.sub(chatMessageDO.getContent(), 0, 50));
         chatRoom.setCreateTime(new Date());
         chatRoom.setUpdateTime(new Date());
+        chatRoom.setUserId(FrontUserUtil.getUserId());
         save(chatRoom);
         return chatRoom;
     }
