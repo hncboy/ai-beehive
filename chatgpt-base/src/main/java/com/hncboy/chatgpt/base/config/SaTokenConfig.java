@@ -37,7 +37,10 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 // 放行用户端图形验证码
                 .excludePathPatterns("/user/get_pic_code")
                 // 放行用户端邮箱登录
-                .excludePathPatterns("/user/login/email");
+                .excludePathPatterns("/user/login/email")
+                // swagger 放行
+                .excludePathPatterns("/swagger-ui/**")
+                .excludePathPatterns("/v3/api-docs/**");
     }
 
     @Bean
