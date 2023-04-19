@@ -4,24 +4,28 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
+import com.hncboy.chatgpt.base.enums.APIKeyTokenLimiterEnum;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.front.api.apikey.ApiKeyChatClientBuilder;
-import com.hncboy.chatgpt.front.api.listener.ConsoleStreamListener;
 import com.hncboy.chatgpt.front.api.listener.ParsedEventSourceListener;
 import com.hncboy.chatgpt.front.api.listener.ResponseBodyEmitterStreamListener;
 import com.hncboy.chatgpt.front.api.parser.ChatCompletionResponseParser;
 import com.hncboy.chatgpt.front.api.storage.ApiKeyDatabaseDataStorage;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
+import com.hncboy.chatgpt.front.domain.vo.ChatReplyMessageVO;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import com.unfbx.chatgpt.entity.chat.Message;
+import com.unfbx.chatgpt.utils.TikTokensUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import jakarta.annotation.Resource;
+
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -52,9 +56,17 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
 
         // 所有消息
         LinkedList<Message> messages = new LinkedList<>();
-        // TODO 需要包含上下文 tokens 计算
         // 添加用户上下文消息
         addContextChatMessage(chatMessageDO, messages);
+        // 获取 包含上下文 的 token 数量
+        int totalTokenCount = TikTokensUtil.tokens(chatMessageDO.getModelName(), messages);
+        // 检查 tokenCount 是否超出当前模型的 Token 数量限制
+        if (exceedModelTokenLimit(chatProcessRequest, chatMessageDO.getModelName(), totalTokenCount, emitter)) {
+            chatMessageDO.setPromptTokens(totalTokenCount);
+            chatMessageDO.setStatus(ChatMessageStatusEnum.EXCEPTION_TOKEN_EXCEED_LIMIT);
+            chatMessageService.updateById(chatMessageDO);
+            return emitter;
+        }
 
         // 系统角色消息
         if (StrUtil.isNotBlank(chatProcessRequest.getSystemMessage())) {
@@ -92,6 +104,30 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
 
         ApiKeyChatClientBuilder.buildOpenAiStreamClient().streamChatCompletion(chatCompletion, parsedEventSourceListener);
         return emitter;
+    }
+
+    /**
+     * 检查上下文消息的Token数是否超出模型限制
+     *
+     * @param chatProcessRequest 对话请求
+     * @param modelName          当前使用的chat模型名称
+     * @param tokenCount         当前上下的总Token数量
+     * @param emitter            ResponseBodyEmitter
+     */
+    private boolean exceedModelTokenLimit(ChatProcessRequest chatProcessRequest, String modelName, int tokenCount, ResponseBodyEmitter emitter) {
+        // token 数量超出限制，抛出异常
+        if (APIKeyTokenLimiterEnum.exceedsLimit(modelName, tokenCount)) {
+            try {
+                ChatReplyMessageVO chatReplyMessageVO = ChatReplyMessageVO.onEmitterChainException(chatProcessRequest);
+                chatReplyMessageVO.setText(StrUtil.format("当前模型：{} 的Token上限为：{}，当前上下文Token数量：{}，请缩减字数重试", modelName, APIKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(modelName), tokenCount));
+                emitter.send(ObjectMapperUtil.toJson(chatReplyMessageVO));
+                emitter.complete();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
