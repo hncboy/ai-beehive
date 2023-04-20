@@ -85,7 +85,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         // 构建聊天参数
         ChatCompletion chatCompletion = ChatCompletion.builder()
                 // 最大的 tokens = 模型的最大上线 - 本次 prompt 消耗的 tokens
-                .maxTokens(ApiKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(chatConfig.getOpenaiApiModel()) - totalTokenCount)
+                .maxTokens(ApiKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(chatConfig.getOpenaiApiModel()) - totalTokenCount - 1)
                 .model(chatConfig.getOpenaiApiModel())
                 // [0, 2] 越低越精准
                 .temperature(0.8)
