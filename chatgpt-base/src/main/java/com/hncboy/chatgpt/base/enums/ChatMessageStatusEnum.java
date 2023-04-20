@@ -39,7 +39,7 @@ public enum ChatMessageStatusEnum {
 
     /**
      * 发送问题
-     * 问题Token超过指定模型上限
+     * 问题 Token 超过指定模型上限
      */
     EXCEPTION_TOKEN_EXCEED_LIMIT(4)
     ;

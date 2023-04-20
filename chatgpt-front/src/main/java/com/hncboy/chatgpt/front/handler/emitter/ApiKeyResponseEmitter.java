@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
-import com.hncboy.chatgpt.base.enums.APIKeyTokenLimiterEnum;
+import com.hncboy.chatgpt.base.enums.ApiKeyTokenLimiterEnum;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
@@ -20,10 +20,9 @@ import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import com.unfbx.chatgpt.entity.chat.Message;
 import com.unfbx.chatgpt.utils.TikTokensUtil;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
-
-import jakarta.annotation.Resource;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -58,15 +57,6 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         LinkedList<Message> messages = new LinkedList<>();
         // 添加用户上下文消息
         addContextChatMessage(chatMessageDO, messages);
-        // 获取 包含上下文 的 token 数量
-        int totalTokenCount = TikTokensUtil.tokens(chatMessageDO.getModelName(), messages);
-        // 检查 tokenCount 是否超出当前模型的 Token 数量限制
-        if (exceedModelTokenLimit(chatProcessRequest, chatMessageDO.getModelName(), totalTokenCount, emitter)) {
-            chatMessageDO.setPromptTokens(totalTokenCount);
-            chatMessageDO.setStatus(ChatMessageStatusEnum.EXCEPTION_TOKEN_EXCEED_LIMIT);
-            chatMessageService.updateById(chatMessageDO);
-            return emitter;
-        }
 
         // 系统角色消息
         if (StrUtil.isNotBlank(chatProcessRequest.getSystemMessage())) {
@@ -78,9 +68,24 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
             messages.addFirst(systemMessage);
         }
 
+        // 获取 包含上下文 的 token 数量
+        int totalTokenCount = TikTokensUtil.tokens(chatMessageDO.getModelName(), messages);
+        // 设置 promptTokens
+        chatMessageDO.setPromptTokens(totalTokenCount);
+
+        // 检查 tokenCount 是否超出当前模型的 Token 数量限制
+        String exceedModelTokenLimitMsg = exceedModelTokenLimit(chatProcessRequest, chatMessageDO.getModelName(), totalTokenCount, emitter);
+        if (Objects.nonNull(exceedModelTokenLimitMsg)) {
+            chatMessageDO.setStatus(ChatMessageStatusEnum.EXCEPTION_TOKEN_EXCEED_LIMIT);
+            chatMessageDO.setResponseErrorData(exceedModelTokenLimitMsg);
+            chatMessageService.updateById(chatMessageDO);
+            return emitter;
+        }
+
         // 构建聊天参数
         ChatCompletion chatCompletion = ChatCompletion.builder()
-                .maxTokens(1000)
+                // 最大的 tokens = 模型的最大上线 - 本次 prompt 消耗的 tokens
+                .maxTokens(ApiKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(chatConfig.getOpenaiApiModel()) - totalTokenCount)
                 .model(chatConfig.getOpenaiApiModel())
                 // [0, 2] 越低越精准
                 .temperature(0.8)
@@ -107,27 +112,47 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
     }
 
     /**
-     * 检查上下文消息的Token数是否超出模型限制
+     * 检查上下文消息的 Token 数是否超出模型限制
      *
      * @param chatProcessRequest 对话请求
-     * @param modelName          当前使用的chat模型名称
-     * @param tokenCount         当前上下的总Token数量
+     * @param modelName          当前使用的模型名称
+     * @param tokenCount         当前上下的总 Token 数量
      * @param emitter            ResponseBodyEmitter
      */
-    private boolean exceedModelTokenLimit(ChatProcessRequest chatProcessRequest, String modelName, int tokenCount, ResponseBodyEmitter emitter) {
-        // token 数量超出限制，抛出异常
-        if (APIKeyTokenLimiterEnum.exceedsLimit(modelName, tokenCount)) {
-            try {
-                ChatReplyMessageVO chatReplyMessageVO = ChatReplyMessageVO.onEmitterChainException(chatProcessRequest);
-                chatReplyMessageVO.setText(StrUtil.format("当前模型：{} 的Token上限为：{}，当前上下文Token数量：{}，请缩减字数重试", modelName, APIKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(modelName), tokenCount));
-                emitter.send(ObjectMapperUtil.toJson(chatReplyMessageVO));
-                emitter.complete();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    private String exceedModelTokenLimit(ChatProcessRequest chatProcessRequest, String modelName, int tokenCount, ResponseBodyEmitter emitter) {
+        // 当前模型最大 tokens
+        int maxTokens = ApiKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(modelName);
+
+        String msg;
+        // 判断 token 数量是否超过限制
+        if (ApiKeyTokenLimiterEnum.exceedsLimit(modelName, tokenCount)) {
+            // 获取当前 prompt 消耗的 tokens
+            int currentPromptTokens = TikTokensUtil.tokens(modelName, chatProcessRequest.getPrompt());
+            // 判断历史上下文是否超过限制
+            int remainingTokens = tokenCount - currentPromptTokens;
+            if (ApiKeyTokenLimiterEnum.exceedsLimit(modelName, remainingTokens)) {
+                msg = "当前上下文字数已经达到上限，请关闭上下文或开启新的对话";
+            } else {
+                msg = StrUtil.format("当前上下文 Token 数量：{}，超过上限：{}，请减少字数发送或关闭上下文或开启新的对话", tokenCount, maxTokens);
             }
-            return true;
         }
-        return false;
+        // 剩余的 token 太少也直返返回异常信息
+        else if (maxTokens - tokenCount <= 10) {
+            msg = "当前上下文字数不足以连续对话，请关闭上下文或开启新的对话";
+        } else {
+            return null;
+        }
+
+        try {
+            ChatReplyMessageVO chatReplyMessageVO = ChatReplyMessageVO.onEmitterChainException(chatProcessRequest);
+            chatReplyMessageVO.setText(msg);
+            emitter.send(ObjectMapperUtil.toJson(chatReplyMessageVO));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            emitter.complete();
+        }
+        return msg;
     }
 
     /**
@@ -143,8 +168,8 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         // 父级消息id为空，表示是第一条消息，直接添加到message里
         if (Objects.isNull(chatMessageDO.getParentMessageId())) {
             messages.addFirst(Message.builder().role(Message.Role.USER)
-              .content(chatMessageDO.getContent())
-              .build());
+                    .content(chatMessageDO.getContent())
+                    .build());
             return;
         }
 
@@ -171,7 +196,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
                 .content(chatMessageDO.getContent())
                 .build());
         ChatMessageDO parentMessage = chatMessageService.getOne(new LambdaQueryWrapper<ChatMessageDO>()
-            .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentMessageId()));
+                .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentMessageId()));
         addContextChatMessage(parentMessage, messages);
     }
 }
