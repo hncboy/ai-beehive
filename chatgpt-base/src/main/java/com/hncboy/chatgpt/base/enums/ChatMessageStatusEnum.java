@@ -35,7 +35,14 @@ public enum ChatMessageStatusEnum {
      * 针对问题和回答
      * 消息发送失败
      */
-    ERROR(3);
+    ERROR(3),
+
+    /**
+     * 发送问题
+     * 问题 Token 超过指定模型上限
+     */
+    EXCEPTION_TOKEN_EXCEED_LIMIT(4)
+    ;
 
     @Getter
     @EnumValue
