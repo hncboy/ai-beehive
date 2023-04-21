@@ -22,7 +22,7 @@ public enum ApiKeyTokenLimiterEnum {
      * @see <a href="https://platform.openai.com/docs/models/gpt-3-5">GPT3.5 Token 限制文档</a>
      */
     GPT_3_5_TURBO(ChatCompletion.Model.GPT_3_5_TURBO, 4096),
-    GPT_3_5_TURBO_0301(ChatCompletion.Model.GPT_3_5_TURBO, 4096),
+    GPT_3_5_TURBO_0301(ChatCompletion.Model.GPT_3_5_TURBO_0301, 4096),
 
     /**
      * GPT4 Token 限制文档
