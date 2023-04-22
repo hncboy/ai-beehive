@@ -1,7 +1,5 @@
 # chatgpt-web-java
 
-中文版 | [English](README-EN.md)
-
 # 介绍
 
 - ChatGPT 说文解字前端的 Java 后台
@@ -42,7 +40,7 @@
 
 # 功能
 
-## 已实现功能
+## 已实现
 
 ### 上下文聊天
 
@@ -66,14 +64,15 @@
 
 ![](pics/rate_limit_test.png)
 
-## 待实现功能
+### 登录注册
 
-- GPT 接口异常信息特定封装返回，
-- 其他没发现的点
+通过邮箱进行登录注册
 
-## 存在问题
+![](pics/register_1.png)
 
-- 在接口返回报错信息时，不会携带 conversationid 和 parentMessageId，导致前端下一次发送消息时会丢失这两个字段，丢失上下文关系。
+## 待实现
+
+- 目前聊天长度受上下文限制，后期调整为动态的控制上下文。
 
 # 管理端
 
@@ -168,9 +167,15 @@
 表结构路径：`chatgpt-bootstrap/src/main/resources/db`。 不需要额外数据库的可以自行连接  H2 地址，改下连接方式就可以。
 
 
-- 聊天室表
-- 聊天记录表
-- 敏感词表
+- chat_message 聊天室表
+- chat_room 聊天记录表
+- email_verify_code 邮件验证码表
+- front_user_base 前端基础用户表
+- front_user_extra_binding 前端基础用户扩展绑定表
+- front_user_extra_email 前端基础用户邮箱扩展
+- sensitive_word 敏感词表
+- sys_email_send_log 邮件发送日志表
+- sys_front_user_login_log 前端用户登录日志表
 
 # 风险声明
 
