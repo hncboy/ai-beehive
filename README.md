@@ -187,6 +187,12 @@
 - 然而，对于一些用户可能存在需要二次开发或部署方面的困难，我们在开发任务繁忙的情况下，难以抽出时间回答所有用户的问题，但我们会尽最大努力去回答用户的问题。同时，我们也可以提供付费的解答服务，为用户提供更多的支持。
 - 我们的开发工作也在持续进行中，我们会不断迭代优化我们的技术设计方案和业务功能，项目不仅仅会提供所需的业务功能，也可以通过项目来学习一些技术的使用。如果您认为我们的开源项目有价值能帮助到您，并愿意支持我们的开发工作，可以为项目点个小星星或者请作者[喝一杯可乐发电](https://afdian.net/a/stargpt) 。我们将非常感谢。
 
+# 参与贡献
+
+- 代码规范：[阿里巴巴 Java 开发手册](https://github.com/alibaba/p3c/blob/master/Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C(%E9%BB%84%E5%B1%B1%E7%89%88).pdf)
+- 注释规范：[中文技术文档的写作规范](https://github.com/ruanyf/document-style-guide)
+- Git Commit Message：[conventional-changelog 标准](https://www.conventionalcommits.org/en/v1.0.0/)
+
 # 联系方式
 
 技术交流添加微信，备注 Github ChatGPT 以及原因
