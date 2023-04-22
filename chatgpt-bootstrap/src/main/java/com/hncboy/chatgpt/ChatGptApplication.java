@@ -3,6 +3,7 @@ package com.hncboy.chatgpt;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 
 /**
  * @author hncboy
@@ -10,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * ChatGptApplication
  */
 @MapperScan(value = {"com.hncboy.**.mapper"})
-@SpringBootApplication
+@SpringBootApplication(nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class)
 public class ChatGptApplication {
 
     public static void main(String[] args) {

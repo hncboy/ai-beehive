@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.admin.domain.query.SensitiveWordPageQuery;
 import com.hncboy.chatgpt.admin.domain.vo.SensitiveWordVO;
 import com.hncboy.chatgpt.admin.handler.converter.SensitiveWordConverter;
-import com.hncboy.chatgpt.admin.mapper.SensitiveWordMapper;
 import com.hncboy.chatgpt.admin.service.SensitiveWordService;
 import com.hncboy.chatgpt.base.domain.entity.SensitiveWordDO;
+import com.hncboy.chatgpt.base.mapper.SensitiveWordMapper;
 import com.hncboy.chatgpt.base.util.PageUtil;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ import java.util.Objects;
  * @date 2023/3/28 21:08
  * 敏感词业务实现类
  */
-@Service("AdminSensitiveWordServiceImpl")
+@Service
 public class SensitiveWordServiceImpl extends ServiceImpl<SensitiveWordMapper, SensitiveWordDO> implements SensitiveWordService {
 
     @Override

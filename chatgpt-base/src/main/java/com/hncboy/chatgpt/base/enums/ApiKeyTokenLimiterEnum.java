@@ -45,21 +45,6 @@ public enum ApiKeyTokenLimiterEnum {
     private final int tokenLimit;
 
     /**
-     * 根据 Jar 包的 Model 获取 Token 数量限制
-     *
-     * @param outerJarModel Jar 包的 Model （{@link com.unfbx.chatgpt.entity.chat.ChatCompletion.Model}）
-     * @return 限制的 Token 数量
-     */
-    public static int getTokenLimitByOuterJarModel(ChatCompletion.Model outerJarModel) {
-        for (ApiKeyTokenLimiterEnum modelItem : ApiKeyTokenLimiterEnum.values()) {
-            if (modelItem.model == outerJarModel) {
-                return modelItem.tokenLimit;
-            }
-        }
-        return 0;
-    }
-
-    /**
      * 根据 Jar 包的 Model 的 name，获取 Token 数量限制
      *
      * @param outerJarModelName Jar 包的 Model 的 name （{@link com.unfbx.chatgpt.entity.chat.ChatCompletion.Model}）

@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.admin.domain.query.ChatRoomPageQuery;
 import com.hncboy.chatgpt.admin.domain.vo.ChatRoomVO;
 import com.hncboy.chatgpt.admin.handler.converter.ChatRoomConverter;
-import com.hncboy.chatgpt.admin.mapper.ChatRoomMapper;
 import com.hncboy.chatgpt.admin.service.ChatRoomService;
 import com.hncboy.chatgpt.base.domain.entity.ChatRoomDO;
+import com.hncboy.chatgpt.base.mapper.ChatRoomMapper;
 import com.hncboy.chatgpt.base.util.PageUtil;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @date 2023/3/27 21:46
  * 聊天室业务实现类
  */
-@Service("AdminChatRoomServiceImpl")
+@Service
 public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomMapper, ChatRoomDO> implements ChatRoomService {
 
     @Override

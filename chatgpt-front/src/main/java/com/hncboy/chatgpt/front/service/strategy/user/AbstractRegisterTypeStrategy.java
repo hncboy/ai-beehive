@@ -19,11 +19,6 @@ import java.nio.charset.StandardCharsets;
 public abstract class AbstractRegisterTypeStrategy {
 
     /**
-     * 邮箱注册策略
-     */
-    private final static AbstractRegisterTypeStrategy EMAIL_STRATEGY = SpringUtil.getBean(EmailAbstractRegisterStrategy.class);
-
-    /**
      * 根据注册类型获取逻辑处理策略
      *
      * @param registerType 注册类型
@@ -31,8 +26,9 @@ public abstract class AbstractRegisterTypeStrategy {
      */
     public static AbstractRegisterTypeStrategy findStrategyByRegisterType(FrontUserRegisterTypeEnum registerType) {
         switch (registerType) {
+            // 邮箱注册策略
             case EMAIL -> {
-                return EMAIL_STRATEGY;
+                return SpringUtil.getBean(EmailAbstractRegisterStrategy.class);
             }
             case PHONE -> {
 

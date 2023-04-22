@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.admin.domain.query.ChatMessagePageQuery;
 import com.hncboy.chatgpt.admin.domain.vo.ChatMessageVO;
 import com.hncboy.chatgpt.admin.handler.converter.ChatMessageConverter;
-import com.hncboy.chatgpt.admin.mapper.ChatMessageMapper;
 import com.hncboy.chatgpt.admin.service.ChatMessageService;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
+import com.hncboy.chatgpt.base.mapper.ChatMessageMapper;
 import com.hncboy.chatgpt.base.util.PageUtil;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ import java.util.Objects;
  * @date 2023/3/27 21:46
  * 聊天记录业务实现类
  */
-@Service("AdminChatMessageServiceImpl")
+@Service
 public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatMessageDO> implements ChatMessageService {
 
     @Override

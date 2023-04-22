@@ -18,6 +18,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = FrontUserRegisterAvailableValidator.class)
 public @interface FrontUserRegisterAvailable {
+
     String message() default "校验不通过";
 
     Class<?>[] groups() default {};

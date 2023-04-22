@@ -17,5 +17,11 @@ public interface SensitiveWordConverter {
 
     SensitiveWordConverter INSTANCE = Mappers.getMapper(SensitiveWordConverter.class);
 
+    /**
+     * entityToVO
+     *
+     * @param sensitiveWordDOList sensitiveWordDOList
+     * @return List<SensitiveWordVO>
+     */
     List<SensitiveWordVO> entityToVO(List<SensitiveWordDO> sensitiveWordDOList);
 }

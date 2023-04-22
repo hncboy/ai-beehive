@@ -11,6 +11,7 @@ import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
 import com.hncboy.chatgpt.base.exception.ServiceException;
+import com.hncboy.chatgpt.base.mapper.ChatMessageMapper;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import com.hncboy.chatgpt.base.util.WebUtil;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
@@ -18,7 +19,6 @@ import com.hncboy.chatgpt.front.handler.emitter.ChatMessageEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.IpRateLimiterEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.SensitiveWordEmitterChain;
-import com.hncboy.chatgpt.front.mapper.ChatMessageMapper;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.hncboy.chatgpt.front.service.ChatRoomService;
 import com.hncboy.chatgpt.front.util.FrontUserUtil;
@@ -39,7 +39,7 @@ import java.util.UUID;
  * 聊天记录相关业务实现类
  */
 @Slf4j
-@Service("FrontChatMessageServiceImpl")
+@Service
 public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatMessageDO> implements ChatMessageService {
 
     @Resource
@@ -142,7 +142,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
                     throw new ServiceException(StrUtil.format("当前对话类型为 AccessToken 使用模型不一样，请开启新的对话"));
                 }
             }
-            // TODO 判断 tokens 数量是否超过 4096
+
             // ApiKey 限制上下文问题的数量
             if (chatMessageDO.getApiType() == ApiTypeEnum.API_KEY
                     && chatConfig.getLimitQuestionContextCount() > 0

@@ -23,23 +23,26 @@ import java.util.Objects;
 public class ChatConfig implements InitializingBean {
 
     /**
-     * OpenAI API Key - https://beta.openai.com/docs/api-reference/authentication
+     * OpenAI API Key
+     * @link <a href="https://beta.openai.com/docs/api-reference/authentication"/>
      */
     private String openaiApiKey;
 
     /**
-     * OpenAI Access Token - https://beta.openai.com/docs/api-reference/authentication
-     * Change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
+     * Access Token
+     * @link <a href="https://chat.openai.com/api/auth/session"/>
      */
     private String openaiAccessToken;
 
     /**
-     * OpenAI API Base URL - https://api.openai.com
+     * OpenAI API Base URL
+     * @link <a href="https://api.openai.com"/>
      */
     private String openaiApiBaseUrl;
 
     /**
-     * OpenAI API Model - https://beta.openai.com/docs/models
+     * OpenAI API Model
+     * @link <a href="https://beta.openai.com/docs/models"/>
      */
     private String openaiApiModel;
 
