@@ -44,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
 
         // 记录日志
         try {
-            String sendMsgId = this.sendMessage(targetEmail, url);
+            String sendMsgId = this.sendMessage(targetEmail, content);
             emailLogService.createSuccessLogBySysLog(sendMsgId, mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, content);
         } catch (Exception e) {
             emailLogService.createFailedLogBySysLog("", mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, content, e.getMessage());
