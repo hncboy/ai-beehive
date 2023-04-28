@@ -1,4 +1,4 @@
-package com.hncboy.chatgpt.base.service;
+package com.hncboy.chatgpt.front.service;
 
 /**
  * 邮箱服务

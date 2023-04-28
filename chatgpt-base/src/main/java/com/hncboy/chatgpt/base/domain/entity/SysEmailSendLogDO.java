@@ -62,7 +62,7 @@ public class SysEmailSendLogDO {
     private String messageId;
 
     /**
-     * 发送后的消息，用于记录成功/失败的信息，成功默认为success
+     * 发送后的消息，用于记录成功/失败的信息，成功默认为 success
      */
     private String message;
 

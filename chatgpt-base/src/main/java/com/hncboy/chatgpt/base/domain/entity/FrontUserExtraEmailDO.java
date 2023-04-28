@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 前端用户邮箱登录表实体类
+ * 前端用户邮箱扩展表实体类
  *
  * @author CoDeleven
  */

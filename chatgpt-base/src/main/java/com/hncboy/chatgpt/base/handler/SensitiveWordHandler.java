@@ -8,7 +8,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.hncboy.chatgpt.base.domain.entity.SensitiveWordDO;
 import com.hncboy.chatgpt.base.enums.EnableDisableStatusEnum;
-import com.hncboy.chatgpt.base.service.SensitiveWordService;
+import com.hncboy.chatgpt.base.mapper.SensitiveWordMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,8 +44,8 @@ public class SensitiveWordHandler {
                 public @NotNull WordTree load(@NotNull String s) {
                     log.warn("开始构建敏感词树");
                     WordTree wordTree = new WordTree();
-                    SensitiveWordService sensitiveWordService = SpringUtil.getBean(SensitiveWordService.class);
-                    List<SensitiveWordDO> sensitiveWords = sensitiveWordService.list(new LambdaQueryWrapper<SensitiveWordDO>()
+                    SensitiveWordMapper sensitiveWordMapper = SpringUtil.getBean(SensitiveWordMapper.class);
+                    List<SensitiveWordDO> sensitiveWords = sensitiveWordMapper.selectList(new LambdaQueryWrapper<SensitiveWordDO>()
                             .select(SensitiveWordDO::getWord)
                             .eq(SensitiveWordDO::getStatus, EnableDisableStatusEnum.ENABLE));
                     log.warn("查询数据库，敏感词数量为：{} 个", sensitiveWords.size());
@@ -71,18 +71,6 @@ public class SensitiveWordHandler {
             return Collections.emptyList();
         }
         return wordTree.matchAll(content, -1, false, false);
-    }
-
-    /**
-     * 判断敏感词是否已经存在
-     *
-     * @param word 敏感词
-     */
-    public static boolean isSensitiveWordExist(String word) {
-        SensitiveWordService sensitiveWordService = SpringUtil.getBean(SensitiveWordService.class);
-        return sensitiveWordService.getBaseMapper()
-                .exists(new LambdaQueryWrapper<SensitiveWordDO>()
-                        .eq(SensitiveWordDO::getWord, word));
     }
 }
 

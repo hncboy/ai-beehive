@@ -1,4 +1,4 @@
-package com.hncboy.chatgpt.base.service.impl;
+package com.hncboy.chatgpt.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,7 +8,7 @@ import com.hncboy.chatgpt.base.domain.entity.FrontUserExtraEmailDO;
 import com.hncboy.chatgpt.base.enums.FrontUserRegisterTypeEnum;
 import com.hncboy.chatgpt.base.enums.UserExtraBindingTypeEnum;
 import com.hncboy.chatgpt.base.mapper.FrontUserExtraBindingMapper;
-import com.hncboy.chatgpt.base.service.FrontUserExtraBindingService;
+import com.hncboy.chatgpt.front.service.FrontUserExtraBindingService;
 import org.springframework.stereotype.Service;
 
 /**

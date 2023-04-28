@@ -1,11 +1,11 @@
-package com.hncboy.chatgpt.base.service.impl;
+package com.hncboy.chatgpt.front.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.base.domain.entity.SysEmailSendLogDO;
 import com.hncboy.chatgpt.base.enums.EmailBizTypeEnum;
 import com.hncboy.chatgpt.base.mapper.SysEmailSendLogMapper;
-import com.hncboy.chatgpt.base.service.SysEmailSendLogService;
 import com.hncboy.chatgpt.base.util.WebUtil;
+import com.hncboy.chatgpt.front.service.SysEmailSendLogService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
  * @author CoDeleven
  */
 @Service
-public class SysEmailSendLogServiceImpl extends ServiceImpl<SysEmailSendLogMapper, SysEmailSendLogDO>
-        implements SysEmailSendLogService {
+public class SysEmailSendLogServiceImpl extends ServiceImpl<SysEmailSendLogMapper, SysEmailSendLogDO> implements SysEmailSendLogService {
 
     /**
      * 邮件发送成功的默认消息
@@ -40,6 +39,16 @@ public class SysEmailSendLogServiceImpl extends ServiceImpl<SysEmailSendLogMappe
         this.save(log);
     }
 
+    /**
+     * 创建日志
+     *
+     * @param messageId 响应消息 id
+     * @param from      from 邮件地址
+     * @param to        to 邮件地址
+     * @param bizType   业务类型
+     * @param content   内容
+     * @return 组装结果
+     */
     private SysEmailSendLogDO createLogBySysLog(String messageId, String from, String to, EmailBizTypeEnum bizType, String content) {
         SysEmailSendLogDO sendLog = new SysEmailSendLogDO();
         sendLog.setFromEmailAddress(from);

@@ -1,12 +1,12 @@
-package com.hncboy.chatgpt.base.service.impl;
+package com.hncboy.chatgpt.front.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.base.domain.entity.SysFrontUserLoginLogDO;
 import com.hncboy.chatgpt.base.enums.FrontUserRegisterTypeEnum;
 import com.hncboy.chatgpt.base.mapper.SysFrontUserLoginLogMapper;
-import com.hncboy.chatgpt.base.service.FrontUserBaseService;
-import com.hncboy.chatgpt.base.service.SysFrontUserLoginLogService;
 import com.hncboy.chatgpt.base.util.WebUtil;
+import com.hncboy.chatgpt.front.service.FrontUserBaseService;
+import com.hncboy.chatgpt.front.service.SysFrontUserLoginLogService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

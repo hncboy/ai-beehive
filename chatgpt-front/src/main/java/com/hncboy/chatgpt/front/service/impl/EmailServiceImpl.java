@@ -1,11 +1,11 @@
-package com.hncboy.chatgpt.base.service.impl;
+package com.hncboy.chatgpt.front.service.impl;
 
 import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailUtil;
 import com.hncboy.chatgpt.base.config.EmailConfig;
 import com.hncboy.chatgpt.base.enums.EmailBizTypeEnum;
-import com.hncboy.chatgpt.base.service.EmailService;
-import com.hncboy.chatgpt.base.service.SysEmailSendLogService;
+import com.hncboy.chatgpt.front.service.EmailService;
+import com.hncboy.chatgpt.front.service.SysEmailSendLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -47,10 +47,18 @@ public class EmailServiceImpl implements EmailService {
             String sendMsgId = this.sendMessage(targetEmail, content);
             emailLogService.createSuccessLogBySysLog(sendMsgId, mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, content);
         } catch (Exception e) {
+            // FIXME 发送失败前端仍然显示成功
             emailLogService.createFailedLogBySysLog("", mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, content, e.getMessage());
         }
     }
 
+    /**
+     * 发送消息
+     *
+     * @param targetEmail 目标邮件地址
+     * @param content     内容
+     * @return 响应
+     */
     protected String sendMessage(String targetEmail, String content) {
         return MailUtil.send(mailAccount, targetEmail, "【StarGPT】账号注册", content, false);
     }

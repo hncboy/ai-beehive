@@ -1,22 +1,22 @@
-package com.hncboy.chatgpt.base.service.impl;
+package com.hncboy.chatgpt.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.chatgpt.base.domain.entity.FrontUserExtraEmailDO;
 import com.hncboy.chatgpt.base.mapper.FrontUserExtraEmailMapper;
-import com.hncboy.chatgpt.base.service.FrontUserExtraEmailService;
 import com.hncboy.chatgpt.base.util.ThrowExceptionUtil;
+import com.hncboy.chatgpt.front.service.FrontUserExtraEmailService;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 /**
- * 通用的前端用户邮箱登录方式服务
+ * 前端用户邮箱扩展业务实现类
  *
  * @author CoDeleven
  */
-@Service("CommonFrontUserExtraEmailServiceImpl")
+@Service
 public class FrontUserExtraEmailServiceImpl extends ServiceImpl<FrontUserExtraEmailMapper, FrontUserExtraEmailDO> implements FrontUserExtraEmailService {
 
     @Override

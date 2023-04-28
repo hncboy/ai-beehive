@@ -1,10 +1,10 @@
-package com.hncboy.chatgpt.base.service;
+package com.hncboy.chatgpt.front.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hncboy.chatgpt.base.domain.entity.FrontUserExtraEmailDO;
 
 /**
- * 使用邮箱登录的前端用户服务
+ * 前端用户邮箱扩展业务接口
  *
  * @author CoDeleven
  */

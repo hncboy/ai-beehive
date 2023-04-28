@@ -1,4 +1,4 @@
-package com.hncboy.chatgpt.base.service;
+package com.hncboy.chatgpt.front.service;
 
 import com.hncboy.chatgpt.base.domain.entity.SysFrontUserLoginLogDO;
 import com.baomidou.mybatisplus.extension.service.IService;

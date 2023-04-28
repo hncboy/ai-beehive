@@ -1,4 +1,4 @@
-package com.hncboy.chatgpt.base.service.impl;
+package com.hncboy.chatgpt.front.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -9,9 +9,9 @@ import com.hncboy.chatgpt.base.config.EmailConfig;
 import com.hncboy.chatgpt.base.domain.entity.EmailVerifyCodeDO;
 import com.hncboy.chatgpt.base.enums.EmailBizTypeEnum;
 import com.hncboy.chatgpt.base.mapper.EmailVerifyCodeMapper;
-import com.hncboy.chatgpt.base.service.EmailVerifyCodeService;
 import com.hncboy.chatgpt.base.util.ThrowExceptionUtil;
 import com.hncboy.chatgpt.base.util.WebUtil;
+import com.hncboy.chatgpt.front.service.EmailVerifyCodeService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +23,7 @@ import java.util.Date;
  * @author CoDeleven
  */
 @Service
-public class EmailVerifyCodeServiceImpl extends ServiceImpl<EmailVerifyCodeMapper, EmailVerifyCodeDO>
-        implements EmailVerifyCodeService {
+public class EmailVerifyCodeServiceImpl extends ServiceImpl<EmailVerifyCodeMapper, EmailVerifyCodeDO> implements EmailVerifyCodeService {
 
     @Resource
     private EmailConfig emailConfig;
