@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 
 /**
  * @author hncboy
- * @date 2023/3/25 17:54
+ * @date 2023-3-25
  * 聊天记录相关转换
  */
 @Mapper

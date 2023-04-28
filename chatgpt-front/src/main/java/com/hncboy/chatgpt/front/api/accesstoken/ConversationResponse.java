@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * @author hncboy
- * @date 2023/3/25 02:42
+ * @date 2023-3-25
  * AccessToken 对话响应参数
  */
 @Data

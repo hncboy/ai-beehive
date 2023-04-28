@@ -17,7 +17,7 @@ import jakarta.annotation.Resource;
 
 /**
  * @author hncboy
- * @date 2023/3/27 21:39
+ * @date 2023-3-27
  * 聊天记录相关接口
  */
 @AllArgsConstructor
@@ -28,7 +28,7 @@ public class ChatMessageController {
     @Resource
     private final ChatMessageService chatMessageService;
 
-    @Operation(summary = "记录分页列表")
+    @Operation(summary = "分页列表")
     @PostMapping("/page")
     public R<IPage<ChatMessageVO>> page(@Validated @RequestBody ChatMessagePageQuery chatMessagePageQuery) {
         return R.data(chatMessageService.pageChatMessage(chatMessagePageQuery));

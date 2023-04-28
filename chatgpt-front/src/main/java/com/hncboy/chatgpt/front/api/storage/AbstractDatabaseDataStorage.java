@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/3/25 17:11
+ * @date 2023-3-25
  * 数据库数据存储抽象类
  */
 public abstract class AbstractDatabaseDataStorage implements DataStorage {

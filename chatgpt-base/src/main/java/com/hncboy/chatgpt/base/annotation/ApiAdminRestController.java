@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 
 /**
  * @author hncboy
- * @date 2023/3/27 21:40
+ * @date 2023-3-27
  * 管理端接口路径前端
  */
 @Target(ElementType.TYPE)

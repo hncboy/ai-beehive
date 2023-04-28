@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 
 /**
  * @author hncboy
- * @date 2023/3/27 23:14
+ * @date 2023-3-27
  * 聊天记录分页查询
  */
 @Data

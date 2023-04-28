@@ -2,7 +2,7 @@ package com.hncboy.chatgpt.front.api.storage;
 
 /**
  * @author hncboy
- * @date 2023/3/25 16:55
+ * @date 2023-3-25
  * 数据存储接口
  */
 public interface DataStorage {

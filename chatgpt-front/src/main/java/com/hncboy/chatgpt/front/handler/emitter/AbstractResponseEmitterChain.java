@@ -2,7 +2,7 @@ package com.hncboy.chatgpt.front.handler.emitter;
 
 /**
  * @author hncboy
- * @date 2023/3/29 13:09
+ * @date 2023-3-29
  * 抽象的响应 Emitter 链路实现类，实现了 ResponseEmitterChain 接口
  */
 public abstract class AbstractResponseEmitterChain implements ResponseEmitterChain {

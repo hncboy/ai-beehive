@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @author hncboy
- * @date 2023/3/29 11:58
+ * @date 2023-3-29
  * 敏感词检测
  */
 public class SensitiveWordEmitterChain extends AbstractResponseEmitterChain {

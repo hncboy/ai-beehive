@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/3/27 23:21
+ * @date 2023-3-27
  * 聊天室展示参数
  */
 @Data

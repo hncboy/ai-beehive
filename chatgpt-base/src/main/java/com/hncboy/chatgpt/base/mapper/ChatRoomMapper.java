@@ -5,7 +5,7 @@ import com.hncboy.chatgpt.base.domain.entity.ChatRoomDO;
 
 /**
  * @author hncboy
- * @date 2023/4/22 20:07
+ * @date 2023-4-22
  * 聊天室数据访问层
  */
 public interface ChatRoomMapper extends BaseMapper<ChatRoomDO> {

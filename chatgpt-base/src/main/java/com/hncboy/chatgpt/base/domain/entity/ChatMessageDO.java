@@ -14,7 +14,7 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/3/25 16:19
+ * @date 2023-3-25
  * 聊天记录表实体类
  */
 @Data

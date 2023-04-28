@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/3/28 20:41
+ * @date 2023-3-28
  * MybatisPlus 配置
  */
 @Configuration

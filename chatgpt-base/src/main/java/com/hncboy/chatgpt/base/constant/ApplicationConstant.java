@@ -2,7 +2,7 @@ package com.hncboy.chatgpt.base.constant;
 
 /**
  * @author hncboy
- * @date 2023/3/27 21:41
+ * @date 2023-3-27
  * 应用相关常量
  */
 public interface ApplicationConstant {

@@ -6,7 +6,7 @@ import com.hncboy.chatgpt.base.domain.entity.ChatRoomDO;
 
 /**
  * @author hncboy
- * @date 2023/3/25 16:30
+ * @date 2023-3-25
  * 聊天室相关业务接口
  */
 public interface ChatRoomService extends IService<ChatRoomDO> {

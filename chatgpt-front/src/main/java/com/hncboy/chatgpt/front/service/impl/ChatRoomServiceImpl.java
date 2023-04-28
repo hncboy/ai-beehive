@@ -15,7 +15,7 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/3/25 16:31
+ * @date 2023-3-25
  * 聊天室相关业务实现类
  */
 @Service
@@ -29,10 +29,8 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomMapper, ChatRoomDO>
         chatRoom.setIp(WebUtil.getIp());
         chatRoom.setFirstChatMessageId(chatMessageDO.getId());
         chatRoom.setFirstMessageId(chatMessageDO.getMessageId());
-        // 取一部分内容当标题 TODO 不太好，可以通过 GPT 生成标题
+        // 取一部分内容当标题，可以通过 GPT 生成标题
         chatRoom.setTitle(StrUtil.sub(chatMessageDO.getContent(), 0, 50));
-        chatRoom.setCreateTime(new Date());
-        chatRoom.setUpdateTime(new Date());
         chatRoom.setUserId(FrontUserUtil.getUserId());
         save(chatRoom);
         return chatRoom;

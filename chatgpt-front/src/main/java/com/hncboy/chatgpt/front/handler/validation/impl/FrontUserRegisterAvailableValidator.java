@@ -52,13 +52,6 @@ public class FrontUserRegisterAvailableValidator implements ConstraintValidator<
             log.info("注册 {} 注册账号：{} 验证码错误，校验不通过", registerType.getDesc(), registerRequest.getIdentity());
             return false;
         }
-        // 手机注册时，检验短信验证码
-        // TODO 看看怎么校验一下邮箱、手机
-//        isValid = checkVerifyCode(registerType, identity, registerRequest.getSmsVerificationCode(), context);
-//        if(!isValid) {
-//            log.info("注册 {} 注册账号：{} 格式不正确，校验不通过", registerType.getDesc(), registerRequest.getIdentity());
-//            return false;
-//        }
         return true;
     }
 

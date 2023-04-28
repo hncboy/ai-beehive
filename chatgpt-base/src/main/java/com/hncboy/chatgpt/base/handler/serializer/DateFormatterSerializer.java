@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/4/1 04:29
+ * @date 2023-4-1
  * 日期格式化序列化
  */
 public class DateFormatterSerializer extends JsonSerializer<Date> {

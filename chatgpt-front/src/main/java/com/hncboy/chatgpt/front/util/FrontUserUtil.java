@@ -9,7 +9,7 @@ import lombok.experimental.UtilityClass;
 
 /**
  * @author hncboy
- * @date 2023/4/16 17:23
+ * @date 2023-4-16
  * 前端用户工具类
  */
 @UtilityClass

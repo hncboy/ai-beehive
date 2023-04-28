@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /**
  * @author hncboy
- * @date 2023/3/22 20:36
+ * @date 2023-3-22
  * 聊天配置参数
  */
 @Data

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 
 /**
  * @author hncboy
- * @date 2023/3/29 12:38
+ * @date 2023-3-29
  * 正常发送消息链路，最后一个节点
  */
 public class ChatMessageEmitterChain extends AbstractResponseEmitterChain {

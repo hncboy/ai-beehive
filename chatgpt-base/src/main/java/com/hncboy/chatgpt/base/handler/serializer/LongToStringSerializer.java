@@ -8,7 +8,7 @@ import java.io.IOException;
 
 /**
  * @author hncboy
- * @date 2023/4/1 03:34
+ * @date 2023-4-1
  * Long 转 String
  */
 public class LongToStringSerializer extends JsonSerializer<Long> {

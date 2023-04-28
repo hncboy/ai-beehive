@@ -5,7 +5,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 
 /**
  * @author hncboy
- * @date 2023/3/29 11:51
+ * @date 2023-3-29
  * ResponseBodyEmitter 链路
  * 责任链模式实现
  */

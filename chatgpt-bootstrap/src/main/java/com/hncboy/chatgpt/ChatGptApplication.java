@@ -7,7 +7,7 @@ import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGe
 
 /**
  * @author hncboy
- * @date 2023/3/22 16:50
+ * @date 2023-3-22
  * ChatGptApplication
  */
 @MapperScan(value = {"com.hncboy.**.mapper"})

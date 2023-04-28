@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author hncboy
- * @date 2023/3/23 12:34
+ * @date 2023-3-23
  * 结果状态码
  */
 @Getter

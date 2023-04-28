@@ -7,7 +7,7 @@ import lombok.Data;
 
 /**
  * @author hncboy
- * @date 2023/3/27 23:14
+ * @date 2023-3-27
  * 分页参数
  */
 @Data

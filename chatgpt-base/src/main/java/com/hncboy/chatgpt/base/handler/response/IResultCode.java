@@ -2,7 +2,7 @@ package com.hncboy.chatgpt.base.handler.response;
 
 /**
  * @author hncboy
- * @date 2023/3/23 12:34
+ * @date 2023-3-23
  * 结果状态码接口
  */
 public interface IResultCode {

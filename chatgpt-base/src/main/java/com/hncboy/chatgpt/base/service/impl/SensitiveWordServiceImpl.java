@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author hncboy
- * @date 2023/3/28 20:47
+ * @date 2023-3-28
  * 敏感词业务实现类
  */
 @Service("CommonSensitiveWordServiceImpl")

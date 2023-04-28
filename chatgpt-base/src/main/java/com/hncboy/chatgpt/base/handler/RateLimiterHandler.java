@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 
 /**
  * @author hncboy
- * @date 2023/3/30 21:01
+ * @date 2023-3-30
  * 限流处理器
  */
 @Slf4j

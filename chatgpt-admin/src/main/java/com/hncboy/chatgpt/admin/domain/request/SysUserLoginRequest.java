@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * @author hncboy
- * @date 2023/3/28 09:56
+ * @date 2023-3-28
  * 系统用户登录参数
  */
 @Schema(title = "系统用户登录参数")

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
  * @author hncboy
- * @date 2023/3/24 19:56
+ * @date 2023-3-24
  * SseEmitterStreamListener 消息流监听
  */
 @RequiredArgsConstructor

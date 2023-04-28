@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author hncboy
- * @date 2023/3/24 17:02
+ * @date 2023-3-24
  * 控制台消息流监听
  */
 public class ConsoleStreamListener extends AbstractStreamListener {

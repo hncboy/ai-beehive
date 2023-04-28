@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author hncboy
- * @date 2023/4/11 12:47
+ * @date 2023-4-11
  * OkHttpClient 工具
  */
 public class OkHttpClientUtil {

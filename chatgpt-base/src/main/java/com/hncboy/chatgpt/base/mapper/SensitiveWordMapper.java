@@ -5,7 +5,7 @@ import com.hncboy.chatgpt.base.domain.entity.SensitiveWordDO;
 
 /**
  * @author hncboy
- * @date 2023/3/28 20:47
+ * @date 2023-3-28
  * 敏感词数据库访问层
  */
 public interface SensitiveWordMapper extends BaseMapper<SensitiveWordDO> {

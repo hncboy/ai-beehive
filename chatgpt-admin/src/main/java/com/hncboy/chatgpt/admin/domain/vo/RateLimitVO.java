@@ -5,7 +5,7 @@ import lombok.Data;
 
 /**
  * @author hncboy
- * @date 2023/3/30 18:10
+ * @date 2023-3-30
  * 限流处展示参数
  */
 @Data

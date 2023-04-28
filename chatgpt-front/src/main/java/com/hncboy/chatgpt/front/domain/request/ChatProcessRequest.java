@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 
 /**
  * @author hncboy
- * @date 2023/3/23 13:17
+ * @date 2023-3-23
  * 消息处理请求
  */
 @Data

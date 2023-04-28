@@ -4,7 +4,7 @@ import com.hncboy.chatgpt.base.exception.ServiceException;
 
 /**
  * @author hncboy
- * @date 2023/3/28 22:47
+ * @date 2023-3-28
  * 异常抛出工具类
  */
 public class ThrowExceptionUtil {

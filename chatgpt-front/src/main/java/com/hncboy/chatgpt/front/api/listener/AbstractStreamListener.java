@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author hncboy
- * @date 2023/3/24 16:21
+ * @date 2023-3-24
  * 消息流监听器抽象类
  */
 public abstract class AbstractStreamListener {

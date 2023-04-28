@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author hncboy
- * @date 2023/3/28 12:48
+ * @date 2023-3-28
  * SaToken 配置，目前针对管理端鉴权
  */
 @Configuration

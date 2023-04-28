@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/4/1 03:34
+ * @date 2023-4-1
  * Jackson 配置
  */
 @Configuration

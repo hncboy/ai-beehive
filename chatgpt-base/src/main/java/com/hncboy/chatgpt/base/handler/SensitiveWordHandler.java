@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author hncboy
- * @date 2023/3/28 20:48
+ * @date 2023-3-28
  * 敏感词处理
  */
 @Slf4j

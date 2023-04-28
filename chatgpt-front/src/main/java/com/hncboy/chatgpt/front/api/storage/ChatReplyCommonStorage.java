@@ -5,7 +5,7 @@ import lombok.Data;
 
 /**
  * @author hncboy
- * @date 2023/3/25 17:00
+ * @date 2023-3-25
  * 聊天回复的通用信息
  * 基本用于 AccessToken
  */

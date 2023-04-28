@@ -6,7 +6,7 @@ import lombok.Getter;
 
 /**
  * @author hncboy
- * @date 2023/3/23 12:49
+ * @date 2023-3-23
  * 鉴权异常
  */
 public class AuthException extends RuntimeException {

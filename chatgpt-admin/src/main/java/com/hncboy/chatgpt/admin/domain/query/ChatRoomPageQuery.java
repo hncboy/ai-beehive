@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * @author hncboy
- * @date 2023/3/27 23:18
+ * @date 2023-3-27
  * 聊天记录分页查询
  */
 @Data

@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 /**
  * @author hncboy
- * @date 2023/3/22 20:16
+ * @date 2023-3-22
  * 响应结果
  */
 @Data

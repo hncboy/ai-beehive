@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 
 /**
  * @author hncboy
- * @date 2023/3/25 16:30
+ * @date 2023-3-25
  * 聊天记录相关业务接口
  */
 public interface ChatMessageService extends IService<ChatMessageDO> {

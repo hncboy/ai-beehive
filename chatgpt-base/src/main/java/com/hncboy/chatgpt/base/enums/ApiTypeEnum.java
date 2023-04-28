@@ -8,7 +8,7 @@ import lombok.Getter;
 
 /**
  * @author hncboy
- * @date 2023/3/22 22:19
+ * @date 2023-3-22
  * API 类型枚举
  */
 @AllArgsConstructor

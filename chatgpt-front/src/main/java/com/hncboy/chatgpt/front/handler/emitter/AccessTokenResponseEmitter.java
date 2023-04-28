@@ -24,7 +24,7 @@ import java.util.UUID;
 
 /**
  * @author hncboy
- * @date 2023/3/24 13:12
+ * @date 2023-3-24
  * AccessToken 响应处理
  */
 @Component
@@ -43,7 +43,7 @@ public class AccessTokenResponseEmitter implements ResponseEmitter {
     private AccessTokenDatabaseDataStorage dataStorage;
 
     @Override
-    public ResponseBodyEmitter requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter) {
+    public void requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter) {
         // 构建 accessTokenApiClient
         AccessTokenApiClient accessTokenApiClient = AccessTokenApiClient.builder()
                 .accessToken(chatConfig.getOpenaiAccessToken())
@@ -69,7 +69,6 @@ public class AccessTokenResponseEmitter implements ResponseEmitter {
 
         // 发送请求
         accessTokenApiClient.streamChatCompletions(conversationRequest, parsedEventSourceListener);
-        return emitter;
     }
 
     /**

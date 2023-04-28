@@ -17,7 +17,7 @@ import static com.hncboy.chatgpt.base.handler.RateLimiterHandler.IP_REQUEST_TIME
 
 /**
  * @author hncboy
- * @date 2023/4/1 00:08
+ * @date 2023-4-1
  * 限流器启动器
  */
 @Slf4j

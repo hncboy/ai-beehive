@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.StpLogic;
 
 /**
  * @author hncboy
- * @date 2023/4/16 23:20
+ * @date 2023-4-16
  * 填写注释
  */
 public class StpAdminUtil {

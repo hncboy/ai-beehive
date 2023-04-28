@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author hncboy
- * @date 2023/3/25 23:59
+ * @date 2023-3-25
  * AccessToken 数据库数据存储
  */
 @Component

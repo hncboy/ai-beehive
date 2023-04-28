@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * @author hncboy
- * @date 2023/3/28 20:59
+ * @date 2023-3-28
  * 敏感词相关接口
  */
 @AllArgsConstructor

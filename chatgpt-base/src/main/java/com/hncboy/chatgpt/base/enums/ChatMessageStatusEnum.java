@@ -6,7 +6,7 @@ import lombok.Getter;
 
 /**
  * @author hncboy
- * @date 2023/3/25 16:36
+ * @date 2023-3-25
  * 聊天消息状态
  */
 @AllArgsConstructor

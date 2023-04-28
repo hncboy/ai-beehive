@@ -4,7 +4,7 @@ import com.hncboy.chatgpt.admin.domain.request.SysUserLoginRequest;
 
 /**
  * @author hncboy
- * @date 2023/3/28 12:43
+ * @date 2023-3-28
  * 系统用户相关接口
  */
 public interface SysUserService {

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author hncboy
- * @date 2023/4/1 03:07
+ * @date 2023-4-1
  * MyBatisPlus 配置
  */
 @Configuration

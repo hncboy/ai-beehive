@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/3/28 20:43
+ * @date 2023-3-28
  * 敏感词表实体类
  */
 @Data

@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author hncboy
- * @date 2023/3/28 12:39
+ * @date 2023-3-28
  * 聊天记录相关转换
  */
 @Mapper

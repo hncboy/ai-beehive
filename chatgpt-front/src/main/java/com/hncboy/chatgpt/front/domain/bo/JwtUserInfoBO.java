@@ -5,7 +5,7 @@ import lombok.Data;
 
 /**
  * @author hncboy
- * @date 2023/4/16 17:44
+ * @date 2023-4-16
  * JWT 用户信息业务参数
  */
 @Data

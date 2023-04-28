@@ -5,7 +5,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 
 /**
  * @author hncboy
- * @date 2023/3/24 13:07
+ * @date 2023-3-24
  * 响应内容
  */
 public interface ResponseEmitter {
@@ -14,8 +14,7 @@ public interface ResponseEmitter {
      * 消息请求转 Emitter
      *
      * @param chatProcessRequest 消息处理请求
-     * @param emitter ResponseBodyEmitter
-     * @return ResponseBodyEmitter
+     * @param emitter            ResponseBodyEmitter
      */
-    ResponseBodyEmitter requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter);
+    void requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter);
 }

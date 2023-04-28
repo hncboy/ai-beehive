@@ -7,7 +7,7 @@ import lombok.Data;
 
 /**
  * @author hncboy
- * @date 2023/3/25 17:17
+ * @date 2023-3-25
  * 聊天消息数据存储业业务参数
  */
 @Data

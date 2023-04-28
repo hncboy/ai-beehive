@@ -2,7 +2,7 @@ package com.hncboy.chatgpt.front.api.parser;
 
 /**
  * @author hncboy
- * @date 2023/3/24 17:43
+ * @date 2023-3-24
  * 响应数据解析器接口
  */
 public interface ResponseParser<SUCCESS> {

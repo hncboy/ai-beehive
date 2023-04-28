@@ -30,7 +30,7 @@ import java.util.Objects;
 
 /**
  * @author hncboy
- * @date 2023/3/24 15:51
+ * @date 2023-3-24
  * ApiKey 响应处理
  */
 @Component
@@ -49,7 +49,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
     private ApiKeyDatabaseDataStorage dataStorage;
 
     @Override
-    public ResponseBodyEmitter requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter) {
+    public void requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter) {
         // 初始化聊天消息
         ChatMessageDO chatMessageDO = chatMessageService.initChatMessage(chatProcessRequest, ApiTypeEnum.API_KEY);
 
@@ -79,7 +79,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
             chatMessageDO.setStatus(ChatMessageStatusEnum.EXCEPTION_TOKEN_EXCEED_LIMIT);
             chatMessageDO.setResponseErrorData(exceedModelTokenLimitMsg);
             chatMessageService.updateById(chatMessageDO);
-            return emitter;
+            return;
         }
 
         // 构建聊天参数
@@ -108,7 +108,6 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
                 .build();
 
         ApiKeyChatClientBuilder.buildOpenAiStreamClient().streamChatCompletion(chatCompletion, parsedEventSourceListener);
-        return emitter;
     }
 
     /**
