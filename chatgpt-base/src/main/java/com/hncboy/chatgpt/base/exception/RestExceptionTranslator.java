@@ -37,7 +37,7 @@ public class RestExceptionTranslator {
     public R<Void> handleError(NotLoginException e) {
         log.warn("鉴权拦截", e);
         // 判断场景值，定制化异常信息
-        String message = "";
+        String message;
         if (e.getType().equals(NotLoginException.NOT_TOKEN)) {
             message = "未提供 token";
         } else if (e.getType().equals(NotLoginException.INVALID_TOKEN)) {
