@@ -11,7 +11,7 @@ spring:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 chat:
-  # OpenAI API Key - https://platform.openai.com/overview
+  # OpenAI API Key - https://platform.openai.com/account/api-keys
   openai_api_key: ${CHAT_OPENAI_API_KEY:}
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
   openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN:}

@@ -15,6 +15,10 @@ WORKDIR /app
 EXPOSE 3002
 # 设置时区为 Asia/Shanghai
 ENV TZ=Asia/Shanghai
+
+RUN apt-get update
+# 安装字体配置包，验证码需要
+RUN apt-get install -y fontconfig
 # 设置容器的时区
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 

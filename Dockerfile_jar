@@ -1,10 +1,14 @@
-FROM openjdk:17-oracle
+FROM openjdk:17-jdk-slim
 # 从宿主机复制 jar 文件到容器中并设置工作目录
 COPY chatgpt-bootstrap/target/*.jar /app/app.jar
 WORKDIR /app
 
 # 设置时区为 Asia/Shanghai
 ENV TZ=Asia/Shanghai
+
+RUN apt-get update
+# 安装字体配置包，验证码需要
+RUN apt-get install -y fontconfig
 # 设置容器的时区
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
