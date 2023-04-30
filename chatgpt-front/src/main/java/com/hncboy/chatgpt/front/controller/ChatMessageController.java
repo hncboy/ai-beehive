@@ -32,6 +32,7 @@ public class ChatMessageController {
     @PostMapping("/send")
     public ResponseBodyEmitter sendMessage(@RequestBody @Validated ChatProcessRequest chatProcessRequest, HttpServletResponse response) {
         // TODO 后续调整
+        response.setHeader("X-Accel-Buffering","no");
         chatProcessRequest.setSystemMessage("You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.\\nKnowledge cutoff: 2021-09-01\\nCurrent date: ".concat(DateUtil.today()));
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         return chatMessageService.sendMessage(chatProcessRequest);
