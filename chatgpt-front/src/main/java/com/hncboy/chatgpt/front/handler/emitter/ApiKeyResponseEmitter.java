@@ -17,7 +17,7 @@ import com.hncboy.chatgpt.front.api.storage.ApiKeyDatabaseDataStorage;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.domain.vo.ChatReplyMessageVO;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
-import com.hncboy.chatgpt.front.util.ApiKeyHolder;
+import com.hncboy.chatgpt.front.api.apikey.ApiKeyHolder;
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import com.unfbx.chatgpt.entity.chat.Message;
 import com.unfbx.chatgpt.utils.TikTokensUtil;

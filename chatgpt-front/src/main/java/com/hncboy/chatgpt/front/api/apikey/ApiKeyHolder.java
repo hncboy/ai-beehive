@@ -1,4 +1,4 @@
-package com.hncboy.chatgpt.front.util;
+package com.hncboy.chatgpt.front.api.apikey;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.NumberUtil;
