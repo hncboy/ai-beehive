@@ -52,7 +52,7 @@ public class AccessTokenResponseEmitter implements ResponseEmitter {
                 .build();
 
         // 初始化聊天消息
-        ChatMessageDO chatMessageDO = chatMessageService.initChatMessage(chatProcessRequest, ApiTypeEnum.ACCESS_TOKEN);
+        ChatMessageDO chatMessageDO = chatMessageService.initChatMessage(chatProcessRequest, ApiTypeEnum.ACCESS_TOKEN, "");
 
         // 构建 ConversationRequest
         ConversationRequest conversationRequest = buildConversationRequest(chatMessageDO);

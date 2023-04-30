@@ -25,7 +25,7 @@ public class ApiKeyChatClientBuilder {
      *
      * @return OpenAiStreamClient
      */
-    public OpenAiStreamClient buildOpenAiStreamClient() {
+    public OpenAiStreamClient buildOpenAiStreamClient(String apiKey) {
         ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
 
         OkHttpClient okHttpClient = OkHttpClientUtil.getInstance(ApiTypeEnum.API_KEY, chatConfig.getTimeoutMs(),
@@ -33,7 +33,7 @@ public class ApiKeyChatClientBuilder {
 
         return OpenAiStreamClient.builder()
                 .okHttpClient(okHttpClient)
-                .apiKey(Collections.singletonList(chatConfig.getOpenaiApiKey()))
+                .apiKey(Collections.singletonList(apiKey))
                 .apiHost(chatConfig.getOpenaiApiBaseUrl())
                 .build();
     }

@@ -159,3 +159,22 @@ CREATE TABLE IF NOT EXISTS `sys_front_user_login_log`  (
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '前端用户登录日志表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for current_key
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `current_key`  (
+    `id` int(0) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `current_key` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '已给用户分配的key',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '为实现轮流给用户分配key，记录已使用的key' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for front_user_api_key_rel
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `front_user_api_key_rel`  (
+    `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `user_id` int(0) NULL DEFAULT NULL COMMENT '客户端用户ID',
+    `api_key` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT 'ApiKey',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '客户端用户和ApiKey的绑定关系' ROW_FORMAT = Dynamic;

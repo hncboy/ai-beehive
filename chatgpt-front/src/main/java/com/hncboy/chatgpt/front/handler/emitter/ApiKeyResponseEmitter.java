@@ -17,6 +17,7 @@ import com.hncboy.chatgpt.front.api.storage.ApiKeyDatabaseDataStorage;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.domain.vo.ChatReplyMessageVO;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
+import com.hncboy.chatgpt.front.util.ApiKeyHolder;
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import com.unfbx.chatgpt.entity.chat.Message;
 import com.unfbx.chatgpt.utils.TikTokensUtil;
@@ -50,8 +51,9 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
 
     @Override
     public void requestToResponseEmitter(ChatProcessRequest chatProcessRequest, ResponseBodyEmitter emitter) {
+        String apiKey = ApiKeyHolder.getInstance().get();
         // 初始化聊天消息
-        ChatMessageDO chatMessageDO = chatMessageService.initChatMessage(chatProcessRequest, ApiTypeEnum.API_KEY);
+        ChatMessageDO chatMessageDO = chatMessageService.initChatMessage(chatProcessRequest, ApiTypeEnum.API_KEY, apiKey);
 
         // 所有消息
         LinkedList<Message> messages = new LinkedList<>();
@@ -107,7 +109,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
                 .setChatMessageDO(chatMessageDO)
                 .build();
 
-        ApiKeyChatClientBuilder.buildOpenAiStreamClient().streamChatCompletion(chatCompletion, parsedEventSourceListener);
+        ApiKeyChatClientBuilder.buildOpenAiStreamClient(apiKey).streamChatCompletion(chatCompletion, parsedEventSourceListener);
     }
 
     /**

@@ -66,7 +66,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ChatMessageDO initChatMessage(ChatProcessRequest chatProcessRequest, ApiTypeEnum apiTypeEnum) {
+    public ChatMessageDO initChatMessage(ChatProcessRequest chatProcessRequest, ApiTypeEnum apiTypeEnum, String apiKey) {
         ChatMessageDO chatMessageDO = new ChatMessageDO();
         chatMessageDO.setId(IdWorker.getId());
         // 消息 id 手动生成
@@ -74,7 +74,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
         chatMessageDO.setMessageType(ChatMessageTypeEnum.QUESTION);
         chatMessageDO.setApiType(apiTypeEnum);
         if (apiTypeEnum == ApiTypeEnum.API_KEY) {
-            chatMessageDO.setApiKey(chatConfig.getOpenaiApiKey());
+            chatMessageDO.setApiKey(apiKey);
         }
         chatMessageDO.setUserId(FrontUserUtil.getUserId());
         chatMessageDO.setContent(chatProcessRequest.getPrompt());
