@@ -11,12 +11,12 @@ spring:
       port: 6376
       password: ${REDIS_PASSWORD:123456}
       timeout: 10s
-    lettuce:
-      pool:
-        max-active: 200
-        max-wait: -1ms
-        max-idle: 10
-        min-idle: 0
+      lettuce:
+        pool:
+          max-active: 200
+          max-wait: -1ms
+          max-idle: 10
+          min-idle: 0
 
 #mybatis-plus:
 #  configuration:
