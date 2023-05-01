@@ -17,6 +17,13 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
+  # Redis 服务
+  redis_gpt:
+    image: redis:7.0.11
+    command: redis-server --requirepass 123456
+    restart: always
+    ports:
+      - "6376:6379"
   # Java 服务
   java_gpt:
     image: hncboy/chatgpt-web-java:latest

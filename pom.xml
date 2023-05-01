@@ -125,6 +125,11 @@
             <artifactId>sa-token-jwt</artifactId>
             <version>${satoken.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-dao-redis</artifactId>
+            <version>${satoken.version}</version>
+        </dependency>
         <!-- guava -->
         <dependency>
             <groupId>com.google.guava</groupId>

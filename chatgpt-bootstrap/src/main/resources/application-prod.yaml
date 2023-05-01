@@ -4,6 +4,19 @@ spring:
     username: ${MYSQL_USER_NAME:root}
     password: ${MYSQL_PASSWORD:123456}
     url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
+  data:
+    redis:
+      database: 1
+      host: 127.0.0.1
+      port: 6376
+      password: ${REDIS_PASSWORD:123456}
+      timeout: 10s
+    lettuce:
+      pool:
+        max-active: 200
+        max-wait: -1ms
+        max-idle: 10
+        min-idle: 0
 
 #mybatis-plus:
 #  configuration:
