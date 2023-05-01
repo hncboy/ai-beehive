@@ -165,7 +165,7 @@ To explicitly specify parameters, add the `-e` option after `docker run`, and co
 
 ## docker-compose
 
-Configure the `docker-compose.yml` file, then use `docker-compose up -d` to start with one click.
+Configure the `docker-compose.yml` file, then use `docker-compose up -d` to start with one click. The development mode can start the MYSQL and Redis environment with one click using `docker-compose -f docker-compose-dev.yml up -d`.
 
 # Database Tables
 
