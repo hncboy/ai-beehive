@@ -82,7 +82,7 @@ public class ApiKeyHolder {
         for (int i = 0; i < apiKeyList.size(); i++) {
             String n = apiKeyList.get(i);
             if (currentKeyDO.getCurrentKey().equals(n)) {
-                if (apiKeyList.size() >= i + 1) {
+                if (apiKeyList.size() > i + 1) {
                     currentApiKey = apiKeyList.get(i + 1);
                 } else {
                     currentApiKey = apiKeyList.get(0);
