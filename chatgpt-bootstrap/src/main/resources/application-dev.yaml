@@ -48,9 +48,9 @@ email:
   host: ${EMAIL_HOST:xxxxxx}
   # 服务器一般默认 25 端口
   port: ${EMAIL_PORT:25}
-  # 邮箱地址
+  # 发件人前缀
   from: ${EMAIL_FROM:xxxxxx}
-  # 用户名，发件人前缀
+  # 用户名
   user: ${EMAIL_USER:xxxxxx}
   # 如果要授权码，这里就是传授权码
   pass: ${EMAIL_PASS:}
