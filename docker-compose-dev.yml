@@ -3,7 +3,7 @@ services:
   # MySQL 服务
   mysql_gpt:
     image: hncboy/chatgpt-web-java-mysql:latest
-#    image: mysql_gpt_img
+#    image: chatgpt-web-java-mysql
     container_name: mysql_gpt
     ports:
       - "3309:3306"

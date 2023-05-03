@@ -118,16 +118,16 @@ Build a Docker image containing the database structure using Dockerfile_mysql an
 
 ```shell
   # Remove old container (if any)
-  docker stop mysql_gpt && docker rm mysql_gpt
+  docker stop chatgpt-web-java-mysql && docker rm chatgpt-web-java-mysql
   # Build image
-  docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
+  docker build -t chatgpt-web-java-mysql:latest . -f Dockerfile_mysql
   # Run container
   docker run -d -p 3309:3306 \
-       --name mysql_gpt \
+       --name chatgpt-web-java-mysql \
        -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
        -v  ~/mydata/mysql_dummy/conf:/etc/mysql/conf.d \
        -v ~/mydata/mysql_dummy/log:/var/log/mysql \
-       mysql_gpt_img:latest
+       chatgpt-web-java-mysql:latest
 ```
 
 ### Java
