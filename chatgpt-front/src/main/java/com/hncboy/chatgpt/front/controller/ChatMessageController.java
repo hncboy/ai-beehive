@@ -32,7 +32,9 @@ public class ChatMessageController {
     @PostMapping("/send")
     public ResponseBodyEmitter sendMessage(@RequestBody @Validated ChatProcessRequest chatProcessRequest, HttpServletResponse response) {
         // TODO 后续调整
-        chatProcessRequest.setSystemMessage("You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.\\nKnowledge cutoff: 2021-09-01\\nCurrent date: ".concat(DateUtil.today()));
+       chatProcessRequest.setSystemMessage(chatProcessRequest.getSystemMessage() == null
+				? "You are ChatGPT, a large language model trained by OpenAI. Answer as concise and concise as possible in Chinese."
+				: chatProcessRequest.getSystemMessage().concat(DateUtil.today()));
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         return chatMessageService.sendMessage(chatProcessRequest);
     }
