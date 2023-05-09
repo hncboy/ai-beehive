@@ -7,7 +7,7 @@ import com.hncboy.chatgpt.base.util.OkHttpClientUtil;
 import com.unfbx.chatgpt.OpenAiStreamClient;
 import lombok.experimental.UtilityClass;
 import okhttp3.OkHttpClient;
-
+import com.unfbx.chatgpt.OpenAiClient;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Collections;
@@ -37,7 +37,20 @@ public class ApiKeyChatClientBuilder {
                 .apiHost(chatConfig.getOpenaiApiBaseUrl())
                 .build();
     }
+    /**
+	 * 构建 API 请求客户端
+	 *
+	 * @return OpenAiStreamClient
+	 */
+	public OpenAiClient buildOpenAiClient() {
+		ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
+		OkHttpClient okHttpClient = OkHttpClientUtil.getInstance(ApiTypeEnum.API_KEY, chatConfig.getTimeoutMs(),
+				chatConfig.getTimeoutMs(), chatConfig.getTimeoutMs(), getProxy());
 
+		return OpenAiClient.builder().okHttpClient(okHttpClient)
+				.apiKey(Arrays.asList(chatConfig.getOpenaiApiKey().split(","))).keyStrategy(new KeyRandomStrategy())
+				.apiHost(chatConfig.getOpenaiApiBaseUrl()).build();
+	}
     /**
      * 获取 Proxy
      *
