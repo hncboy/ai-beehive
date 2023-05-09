@@ -26,17 +26,14 @@ public class ApiKeyChatClientBuilder {
      * @return OpenAiStreamClient
      */
     public OpenAiStreamClient buildOpenAiStreamClient() {
-        ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
+		ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
+		OkHttpClient okHttpClient = OkHttpClientUtil.getInstance(ApiTypeEnum.API_KEY, chatConfig.getTimeoutMs(),
+				chatConfig.getTimeoutMs(), chatConfig.getTimeoutMs(), getProxy());
 
-        OkHttpClient okHttpClient = OkHttpClientUtil.getInstance(ApiTypeEnum.API_KEY, chatConfig.getTimeoutMs(),
-                chatConfig.getTimeoutMs(), chatConfig.getTimeoutMs(), getProxy());
-
-        return OpenAiStreamClient.builder()
-                .okHttpClient(okHttpClient)
-                .apiKey(Collections.singletonList(chatConfig.getOpenaiApiKey()))
-                .apiHost(chatConfig.getOpenaiApiBaseUrl())
-                .build();
-    }
+		return OpenAiStreamClient.builder().okHttpClient(okHttpClient)
+				.apiKey(Arrays.asList(chatConfig.getOpenaiApiKey().split(","))).keyStrategy(new KeyRandomStrategy())
+				.apiHost(chatConfig.getOpenaiApiBaseUrl()).build();
+	}
     /**
 	 * 构建 API 请求客户端
 	 *
