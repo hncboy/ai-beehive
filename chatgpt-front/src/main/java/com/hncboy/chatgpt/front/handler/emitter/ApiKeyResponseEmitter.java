@@ -161,6 +161,10 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
      * @param messages      消息列表
      */
     private void addContextChatMessage(ChatMessageDO chatMessageDO, LinkedList<Message> messages) {
+        // 上下文只存入8条消息发送OpenAI，超过就跳出
+		if (messages.size() == 8) {
+			return;
+		}
         if (Objects.isNull(chatMessageDO)) {
             return;
         }
