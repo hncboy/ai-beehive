@@ -116,16 +116,16 @@
 
 ```shell
   # 删除旧版 container （如果有的话）
-  docker stop mysql_gpt && docker rm mysql_gpt
+  docker stop chatgpt-web-java-mysql && docker rm chatgpt-web-java-mysql
   # 构建 image
-  docker build -t mysql_gpt_img:latest . -f Dockerfile_mysql
+  docker build -t chatgpt-web-java-mysql:latest . -f Dockerfile_mysql
   # 运行 container
   docker run -d -p 3309:3306 \
-       --name mysql_gpt \
+       --name chatgpt-web-java-mysql \
        -v ~/mydata/mysql_dummy/data:/var/lib/mysql \
        -v  ~/mydata/mysql_dummy/conf:/etc/mysql/conf.d \
        -v ~/mydata/mysql_dummy/log:/var/log/mysql \
-       mysql_gpt_img:latest
+       chatgpt-web-java-mysql:latest
 ```
 
 ### Java
@@ -160,8 +160,8 @@
 
 ## docker-compose
 
-在 `docker-compose.yml` 文件中配置好配置后，使用 `docker-compose up -d` 可一键启动。
-
+在 `docker-compose.yml` 文件中配置好配置后，使用 `docker-compose up -d` 可一键启动。开发模式可以通过 `docker-compose -f docker-compose-dev.yml up -d` 一键启动 mysql
+和 redis 环境。
 # 数据库表
 
 表结构路径：`chatgpt-bootstrap/src/main/resources/db`。 不需要额外数据库的可以自行连接  H2 地址，改下连接方式就可以。

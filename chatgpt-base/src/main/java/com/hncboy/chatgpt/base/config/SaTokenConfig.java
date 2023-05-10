@@ -1,7 +1,7 @@
 package com.hncboy.chatgpt.base.config;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
-import cn.dev33.satoken.jwt.StpLogicJwtForStateless;
+import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
@@ -39,12 +39,13 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 // 放行用户端邮箱登录
                 .excludePathPatterns("/user/login/email")
                 // swagger 放行
+                .excludePathPatterns("/swagger-ui.html")
                 .excludePathPatterns("/swagger-ui/**")
                 .excludePathPatterns("/v3/api-docs/**");
     }
 
     @Bean
     public StpLogic getStpLogicJwt() {
-        return new StpLogicJwtForStateless();
+        return new StpLogicJwtForSimple();
     }
 }
