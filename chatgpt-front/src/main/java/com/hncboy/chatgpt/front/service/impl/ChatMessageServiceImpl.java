@@ -17,6 +17,7 @@ import com.hncboy.chatgpt.base.util.WebUtil;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.handler.emitter.ChatMessageEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.IpRateLimiterEmitterChain;
+import com.hncboy.chatgpt.front.handler.emitter.ModerationEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.ResponseEmitterChain;
 import com.hncboy.chatgpt.front.handler.emitter.SensitiveWordEmitterChain;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
@@ -57,7 +58,9 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
 
         // 构建 emitter 处理链路
         ResponseEmitterChain ipRateLimiterEmitterChain = new IpRateLimiterEmitterChain();
-        ResponseEmitterChain sensitiveWordEmitterChain = new SensitiveWordEmitterChain();
+        //使用OpenAI官方的审核接口
+        ResponseEmitterChain sensitiveWordEmitterChain = new ModerationEmitterChain();
+        // ResponseEmitterChain sensitiveWordEmitterChain = new SensitiveWordEmitterChain();
         sensitiveWordEmitterChain.setNext(new ChatMessageEmitterChain());
         ipRateLimiterEmitterChain.setNext(sensitiveWordEmitterChain);
         ipRateLimiterEmitterChain.doChain(chatProcessRequest, emitter);
