@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.beehive</groupId>
+        <artifactId>ai-beehive</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <packaging>pom</packaging>
+    <artifactId>beehive-cell</artifactId>
+
+    <modules>
+        <module>beehive-cell-base</module>
+        <module>beehive-cell-openai</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.beehive</groupId>
+            <artifactId>beehive-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

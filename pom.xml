@@ -17,22 +17,22 @@
     </developers>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.hncboy</groupId>
-    <artifactId>chatgpt-web-java</artifactId>
+    <groupId>cn.beehive</groupId>
+    <artifactId>ai-beehive</artifactId>
     <version>${revision}</version>
-    <name>ChatGPT</name>
-    <description>ChatGPT</description>
+    <name>beehive</name>
     <packaging>pom</packaging>
 
     <modules>
-        <module>chatgpt-base</module>
-        <module>chatgpt-front</module>
-        <module>chatgpt-admin</module>
-        <module>chatgpt-bootstrap</module>
+        <module>beehive-base</module>
+        <module>beehive-web</module>
+        <module>beehive-admin</module>
+        <module>beehive-bootstrap</module>
+        <module>beehive-cell</module>
     </modules>
 
     <properties>
-        <revision>1.0.2</revision>
+        <revision>2.0.0</revision>
         <java.version>17</java.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
@@ -151,7 +151,7 @@
 
     <issueManagement>
         <system>Github Issue</system>
-        <url>https://github.com/hncboy/chatgpt-web-java/issues</url>
+        <url>https://github.com/hncboy/ai-bee-hive/issues</url>
     </issueManagement>
 
     <build>

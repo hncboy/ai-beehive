@@ -1,5 +1,0 @@
-server:
-  port: 3002
-spring:
-  profiles:
-    active: dev

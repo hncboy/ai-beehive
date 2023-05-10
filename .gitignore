@@ -34,4 +34,4 @@ build/
 
 ### pom flatten ###
 **/.flattened-pom.xml
-/chatgpt-bootstrap/src/main/resources/application-local.yaml
+/beehive-bootstrap/src/main/resources/application-local.yaml
