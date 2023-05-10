@@ -8,5 +8,4 @@
         <version>${revision}</version>
     </parent>
     <artifactId>beehive-base</artifactId>
-
 </project>

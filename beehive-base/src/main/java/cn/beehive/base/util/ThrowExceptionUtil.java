@@ -10,6 +10,20 @@ import cn.beehive.base.exception.ServiceException;
 public class ThrowExceptionUtil {
 
     /**
+     * 如果参数为 true 抛出异常
+     *
+     * @param result true/false
+     * @return ThrowExceptionFunction
+     **/
+    public static ThrowExceptionFunction isTrue(boolean result) {
+        return (errorMessage) -> {
+            if (result) {
+                throw new ServiceException(errorMessage);
+            }
+        };
+    }
+
+    /**
      * 如果参数为 false 抛出异常
      *
      * @param result true/false
