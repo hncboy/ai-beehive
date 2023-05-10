@@ -5,6 +5,7 @@ import cn.beehive.admin.domain.request.SysParamRequest;
 import cn.beehive.admin.domain.vo.SysParamVO;
 import cn.beehive.admin.handler.converter.SysParamConverter;
 import cn.beehive.admin.service.SysParamService;
+import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.domain.entity.SysParamDO;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.mapper.SysParamMapper;
@@ -41,15 +42,19 @@ public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParamDO>
     @Override
     public Integer save(SysParamRequest request) {
         // 校验 key 是否唯一
-        checkKeyUnique(request.getKey());
+        checkKeyUnique(request.getParamKey());
 
         // 保存系统参数
         SysParamDO sysParamDO = new SysParamDO();
         sysParamDO.setName(request.getName());
-        sysParamDO.setParamKey(request.getKey());
-        sysParamDO.setParamValue(request.getValue());
+        sysParamDO.setParamKey(request.getParamKey());
+        sysParamDO.setParamValue(request.getParamValue());
         sysParamDO.setIsDeleted(0);
         save(sysParamDO);
+
+        // 保存缓存
+        SysParamCache.setValue(request.getParamKey(), request.getParamValue());
+
         return sysParamDO.getId();
     }
 
@@ -57,21 +62,25 @@ public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParamDO>
     public void update(SysParamRequest request) {
         SysParamDO sysParamDO = checkExist(request.getId());
         // key 改动的话需要校验是否重复
-        if (ObjectUtil.notEqual(sysParamDO.getParamKey(), request.getKey())) {
-            checkKeyUnique(request.getKey());
+        if (ObjectUtil.notEqual(sysParamDO.getParamKey(), request.getParamKey())) {
+            checkKeyUnique(request.getParamKey());
         }
 
         sysParamDO.setName(request.getName());
-        sysParamDO.setParamKey(request.getKey());
-        sysParamDO.setParamValue(request.getValue());
+        sysParamDO.setParamKey(request.getParamKey());
+        sysParamDO.setParamValue(request.getParamValue());
         updateById(sysParamDO);
+
+        // 先删除再保存
+        SysParamCache.deleteKey(request.getParamKey());
+        SysParamCache.setValue(request.getParamKey(), request.getParamValue());
     }
 
     @Override
     public void remove(Integer id) {
-        checkExist(id);
+        SysParamDO sysParamDO = checkExist(id);
         removeById(id);
-        // TODO 删除缓存
+        SysParamCache.deleteKey(sysParamDO.getParamKey());
     }
 
     /**

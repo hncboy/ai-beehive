@@ -4,6 +4,16 @@ spring:
     username: ${MYSQL_USER_NAME:root}
     password: ${MYSQL_PASSWORD:123456}
     url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
+  data:
+    redis:
+      # 地址
+      host: localhost
+      # 端口
+      port: 6379
+      # 密码
+      password: password
+      # 连接超时
+      connect-timeout: 1000
 
 mybatis-plus:
   configuration:
