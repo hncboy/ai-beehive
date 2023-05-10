@@ -195,13 +195,17 @@
 
 # 联系方式
 
-技术交流添加微信，备注 Github ChatGPT 以及原因
+添加微信备注 Github ChatGPT 以及原因
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
     <img style="max-width: 100%" src="pics/wechat.png" alt="微信" />
   </div>
+    <div style="text-align: center">
+    <img style="max-width: 30%" src="pics/wechat_group.png" alt="微信群" />
+  </div>
 </div>
+
 
 
 
