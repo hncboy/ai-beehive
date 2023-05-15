@@ -5,6 +5,7 @@
 - ChatGPT 说文解字前端的 Java 后台
 - 前端-说文用户端开源代码 https://github.com/mjjh1717/chatgpt-shuowen
 - 前端-解字管理端开源代码 https://github.com/hncboy/chatgpt-jiezi
+- 2.0 升级版开发中
 
 # 注意
 
@@ -52,7 +53,7 @@
 
 ### 敏感词过滤
 
-在项目启动时会将敏感词文件 sensitive_word_base64.txt 的数据导入到敏感词表，目前还未提供后台管理敏感词的接口，提供后这种方式可以去掉。在文件中敏感词以 base64 形式存放。并将敏感词表的数据构建到 HuTool 提供的 WordTree 类中。在发送消息调用方法判断是否属于敏感词，是的话消息发送不成功。为了兼容前端保持上下文关系，在消息内容属于敏感词的情况下会正常返回消息格式，但是带的是请求的的 conversationI 和 parentMessagId。
+在发送消息调用方法判断是否属于敏感词，是的话消息发送不成功。为了兼容前端保持上下文关系，在消息内容属于敏感词的情况下会正常返回消息格式，但是带的是请求的的 conversationId 和 parentMessagId，敏感词需要自己导入数据库。
 
 ![](pics/sensitive_word_test.png)
 
