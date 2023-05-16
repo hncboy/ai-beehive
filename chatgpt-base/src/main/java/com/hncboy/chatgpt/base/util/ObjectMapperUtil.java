@@ -2,6 +2,7 @@ package com.hncboy.chatgpt.base.util;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ObjectMapperUtil {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    static {
+        // 忽略未知字段
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
 
     /**
      * 将一个 Java 对象转换为 JSON 字符串
