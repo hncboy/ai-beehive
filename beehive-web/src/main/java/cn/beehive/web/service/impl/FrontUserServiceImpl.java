@@ -3,14 +3,14 @@ package cn.beehive.web.service.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.beehive.base.enums.FrontUserRegisterTypeEnum;
 import cn.beehive.base.util.SimpleCaptchaUtil;
-import cn.beehive.web.domain.bo.JwtUserInfoBO;
+import cn.beehive.base.domain.bo.JwtUserInfoBO;
 import cn.beehive.web.domain.request.RegisterFrontUserForEmailRequest;
 import cn.beehive.web.domain.vo.LoginInfoVO;
 import cn.beehive.web.domain.vo.RegisterCaptchaVO;
 import cn.beehive.web.domain.vo.UserInfoVO;
 import cn.beehive.web.service.FrontUserService;
 import cn.beehive.web.service.strategy.user.AbstractRegisterTypeStrategy;
-import cn.beehive.web.util.FrontUserUtil;
+import cn.beehive.base.util.FrontUserUtil;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,10 +1,10 @@
-package cn.beehive.web.util;
+package cn.beehive.base.util;
 
+import cn.beehive.base.constant.ApplicationConstant;
+import cn.beehive.base.domain.bo.JwtUserInfoBO;
+import cn.beehive.base.enums.FrontUserRegisterTypeEnum;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.NumberUtil;
-import cn.beehive.base.constant.ApplicationConstant;
-import cn.beehive.base.enums.FrontUserRegisterTypeEnum;
-import cn.beehive.web.domain.bo.JwtUserInfoBO;
 import lombok.experimental.UtilityClass;
 
 /**

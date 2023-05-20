@@ -1,4 +1,4 @@
-package cn.beehive.web.domain.bo;
+package cn.beehive.base.domain.bo;
 
 import cn.beehive.base.enums.FrontUserRegisterTypeEnum;
 import lombok.Data;

@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.beehive</groupId>
+        <artifactId>beehive-cell</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>beehive-cell-midjourney</artifactId>
+
+    <properties>
+        <dataurl.version>2.0.0</dataurl.version>
+        <jda.version>5.0.0-beta.9</jda.version>
+    </properties>
+
+    <dependencies>
+        <!-- JDA -->
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>${jda.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>club.minnced</groupId>
+                    <artifactId>opus-java</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- 处理 Data url -->
+        <dependency>
+            <groupId>eu.maxschuster</groupId>
+            <artifactId>dataurl</artifactId>
+            <version>${dataurl.version}</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -21,7 +21,7 @@ import cn.beehive.web.handler.emitter.ResponseEmitterChain;
 import cn.beehive.web.handler.emitter.SensitiveWordEmitterChain;
 import cn.beehive.web.service.ChatMessageService;
 import cn.beehive.web.service.ChatRoomService;
-import cn.beehive.web.util.FrontUserUtil;
+import cn.beehive.base.util.FrontUserUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

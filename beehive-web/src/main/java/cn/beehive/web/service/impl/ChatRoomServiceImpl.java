@@ -8,7 +8,7 @@ import cn.beehive.base.domain.entity.ChatRoomDO;
 import cn.beehive.base.mapper.ChatRoomMapper;
 import cn.beehive.base.util.WebUtil;
 import cn.beehive.web.service.ChatRoomService;
-import cn.beehive.web.util.FrontUserUtil;
+import cn.beehive.base.util.FrontUserUtil;
 import org.springframework.stereotype.Service;
 
 /**

@@ -11,6 +11,7 @@
 
     <modules>
         <module>beehive-cell-base</module>
+        <module>beehive-cell-midjourney</module>
         <module>beehive-cell-openai</module>
     </modules>
 

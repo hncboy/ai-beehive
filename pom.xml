@@ -45,6 +45,8 @@
         <guava.version>31.1-jre</guava.version>
         <mysql.version>8.0.32</mysql.version>
         <chatgpt-sdk.version>1.0.11</chatgpt-sdk.version>
+        <forest.version>1.5.31</forest.version>
+        <lock4j-redisson.version>2.2.4</lock4j-redisson.version>
     </properties>
 
     <dependencies>
@@ -152,11 +154,23 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <!-- forest -->
+        <dependency>
+            <groupId>com.dtflys.forest</groupId>
+            <artifactId>forest-spring-boot3-starter</artifactId>
+            <version>${forest.version}</version>
+        </dependency>
+        <!-- lock4j-redisson -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redisson-spring-boot-starter</artifactId>
+            <version>${lock4j-redisson.version}</version>
+        </dependency>
     </dependencies>
 
     <issueManagement>
         <system>Github Issue</system>
-        <url>https://github.com/hncboy/ai-bee-hive/issues</url>
+        <url>https://github.com/hncboy/ai-beehive/issues</url>
     </issueManagement>
 
     <build>

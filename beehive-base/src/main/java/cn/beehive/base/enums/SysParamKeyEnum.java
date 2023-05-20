@@ -11,9 +11,24 @@ import lombok.AllArgsConstructor;
 public enum SysParamKeyEnum {
 
     /**
-     * openai 的 apiKey
+     * 是否启用 Midjourney
      */
-    OPENAI_API_KEY("openai_api_key");
+    ENABLE_MIDJOURNEY("enable_midjourney"),
+
+    /**
+     * 是否启用 HTTP 代理
+     */
+    ENABLE_PROXY("enable_http_proxy"),
+
+    /**
+     * HTTP 代理主机
+     */
+    HTTP_PROXY_HOST("http_proxy_host"),
+
+    /**
+     * HTTP 代理端口
+     */
+    HTTP_PROXY_PORT("http_proxy_port");
 
     /**
      * paramKey

@@ -12,10 +12,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class RedisUtil {
 
-    private static final StringRedisTemplate stringRedisTemplate;
+    private static final StringRedisTemplate STRING_REDIS_TEMPLATE;
 
     static {
-        stringRedisTemplate = SpringUtil.getBean(StringRedisTemplate.class);
+        STRING_REDIS_TEMPLATE = SpringUtil.getBean(StringRedisTemplate.class);
     }
 
     /**
@@ -25,7 +25,7 @@ public class RedisUtil {
      * @param value value
      */
     public static void set(String key, String value) {
-        stringRedisTemplate.opsForValue().set(key, value);
+        STRING_REDIS_TEMPLATE.opsForValue().set(key, value);
     }
 
     /**
@@ -37,7 +37,7 @@ public class RedisUtil {
      * @param unit    单位
      */
     public static void set(String key, String value, long timeout, TimeUnit unit) {
-        stringRedisTemplate.opsForValue().set(key, value, timeout, unit);
+        STRING_REDIS_TEMPLATE.opsForValue().set(key, value, timeout, unit);
     }
 
     /**
@@ -48,7 +48,7 @@ public class RedisUtil {
      * @return set 是否成功
      */
     public static Boolean setIfAbsent(String key, String value) {
-        return stringRedisTemplate.opsForValue().setIfAbsent(key, value);
+        return STRING_REDIS_TEMPLATE.opsForValue().setIfAbsent(key, value);
     }
 
     /**
@@ -61,16 +61,17 @@ public class RedisUtil {
      * @return set 是否成功
      */
     public static Boolean setIfAbsent(String key, String value, long timeout, TimeUnit unit) {
-        return stringRedisTemplate.opsForValue().setIfAbsent(key, value, timeout, unit);
+        return STRING_REDIS_TEMPLATE.opsForValue().setIfAbsent(key, value, timeout, unit);
     }
 
     /**
      * 删除 key
      *
      * @param key key
+     * @return 是否删除成功
      */
-    public static void delete(String key) {
-        stringRedisTemplate.delete(key);
+    public static Boolean delete(String key) {
+        return STRING_REDIS_TEMPLATE.delete(key);
     }
 
     /**
@@ -80,7 +81,7 @@ public class RedisUtil {
      * @return value
      */
     public static String get(String key) {
-        return stringRedisTemplate.opsForValue().get(key);
+        return STRING_REDIS_TEMPLATE.opsForValue().get(key);
     }
 
     /**
@@ -90,7 +91,7 @@ public class RedisUtil {
      * @return true/false
      */
     public static Boolean hasKey(String key) {
-        return stringRedisTemplate.hasKey(key);
+        return STRING_REDIS_TEMPLATE.hasKey(key);
     }
 
     /**
@@ -102,7 +103,40 @@ public class RedisUtil {
      * @return result
      */
     public static Boolean expire(String key, long timeout, TimeUnit unit) {
-        return stringRedisTemplate.expire(key, timeout, unit);
+        return STRING_REDIS_TEMPLATE.expire(key, timeout, unit);
+    }
+
+    /** ------------------------list相关操作---------------------------- */
+
+    /**
+     * 存储在 list 头部
+     *
+     * @param key   key
+     * @param value value
+     * @return list 长度
+     */
+    public static Long lLeftPush(String key, String value) {
+        return STRING_REDIS_TEMPLATE.opsForList().leftPush(key, value);
+    }
+
+    /**
+     * 移出并获取列表的第一个元素
+     *
+     * @param key key
+     * @return 删除的元素
+     */
+    public static String lLeftPop(String key) {
+        return STRING_REDIS_TEMPLATE.opsForList().leftPop(key);
+    }
+
+    /**
+     * 获取列表长度
+     *
+     * @param key key
+     * @return 长度
+     */
+    public static Long lLen(String key) {
+        return STRING_REDIS_TEMPLATE.opsForList().size(key);
     }
 }
 

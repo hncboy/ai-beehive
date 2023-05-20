@@ -23,6 +23,7 @@ public class SysParamCache {
 
     /**
      * 获取参数值
+     * TODO 改成使用 hash，并且可以同时获取多个参数
      *
      * @param paramKeyEnum paramKeyEnum
      * @return String
