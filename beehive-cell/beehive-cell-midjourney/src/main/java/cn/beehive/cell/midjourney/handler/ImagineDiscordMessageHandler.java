@@ -7,6 +7,7 @@ import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import net.dv8tion.jda.api.entities.Message;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Objects;
  */
 
 @Component
-public class ImagineMessageHandler extends MessageHandler {
+public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
 
     @Override
     public void onMessageReceived(Message message) {
@@ -36,6 +37,9 @@ public class ImagineMessageHandler extends MessageHandler {
 
         // 提取房间消息 id
         Long roomMjMsgId = MjDiscordMessageUtil.findMsgIdByFinalPrompt(messageBO.getPrompt());
+        if (Objects.isNull(roomMjMsgId)) {
+            return;
+        }
         RoomMjMsgDO roomMjMsgDO = roomMjMsgService.getById(roomMjMsgId);
         if (Objects.isNull(roomMjMsgDO)) {
             return;
@@ -43,17 +47,14 @@ public class ImagineMessageHandler extends MessageHandler {
 
         roomMjMsgDO.setDiscordMessageId(message.getId());
 
-        // 根据状态操作
+        // 开始处理
         if ("Waiting to start".equals(messageBO.getStatus())) {
+            roomMjMsgDO.setDiscordStartTime(new Date());
             roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_IN_PROGRESS);
-        } else {
-            roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_SUCCESS);
-            // 获取图片
-            roomMjMsgDO.setDiscordImageUrl(message.getAttachments().get(0).getUrl());
-            // 下载图片
-            roomMjMsgDO.setImageName(downloadImage(roomMjMsgDO.getDiscordImageUrl(), roomMjMsgDO.getId()));
-            // 结束执行中任务
-            mjTaskQueueHandler.finishExecuteTask(roomMjMsgId);
+        }
+        // 处理成功
+        else {
+            finishImageTask(roomMjMsgDO, message);
         }
 
         roomMjMsgDO.setResponseContent(message.getContentRaw());
@@ -69,7 +70,15 @@ public class ImagineMessageHandler extends MessageHandler {
 
         // 提取房间消息 id
         Long roomMjMsgId = MjDiscordMessageUtil.findMsgIdByFinalPrompt(messageBO.getPrompt());
+        if (Objects.isNull(roomMjMsgId)) {
+            return;
+        }
         RoomMjMsgDO roomMjMsgDO = roomMjMsgService.getById(roomMjMsgId);
+        if (Objects.isNull(roomMjMsgDO)) {
+            return;
+        }
+
+        roomMjMsgDO.setDiscordMessageId(message.getId());
         roomMjMsgDO.setResponseContent(message.getContentRaw());
         roomMjMsgDO.setDiscordImageUrl(message.getAttachments().get(0).getUrl());
         // 下载图片

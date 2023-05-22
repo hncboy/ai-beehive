@@ -15,6 +15,10 @@ import lombok.Data;
 @Schema(title = "Midjourney UV 转换请求参数")
 public class MjConvertRequest {
 
+    @NotNull(message = "房间 id 不能为空")
+    @Schema(title = "房间 id")
+    private Long roomId;
+
     @NotNull(message = "消息 id 不能为空")
     @Schema(title = "消息 id")
     private Long msgId;

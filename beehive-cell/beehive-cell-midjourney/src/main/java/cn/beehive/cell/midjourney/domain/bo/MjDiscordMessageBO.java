@@ -22,7 +22,7 @@ public class MjDiscordMessageBO {
     private String prompt;
 
     /**
-     * 索引
+     * 位置
      */
     private Integer index;
 

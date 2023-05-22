@@ -7,7 +7,7 @@ import cn.beehive.base.domain.entity.ChatMessageDO;
 import cn.beehive.base.enums.ApiKeyTokenLimiterEnum;
 import cn.beehive.base.enums.ApiTypeEnum;
 import cn.beehive.base.enums.ChatMessageStatusEnum;
-import cn.beehive.base.enums.ChatMessageTypeEnum;
+import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.web.api.apikey.ApiKeyChatClientBuilder;
 import cn.beehive.web.api.listener.ParsedEventSourceListener;
@@ -173,11 +173,11 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         }
 
         // 根据消息类型去选择角色，需要添加问题和回答到上下文
-        Message.Role role = (chatMessageDO.getMessageType() == ChatMessageTypeEnum.ANSWER) ?
+        Message.Role role = (chatMessageDO.getMessageType() == MessageTypeEnum.ANSWER) ?
                 Message.Role.ASSISTANT : Message.Role.USER;
 
         // 回答不成功的情况下，不添加回答消息记录和该回答的问题消息记录
-        if (chatMessageDO.getMessageType() == ChatMessageTypeEnum.ANSWER
+        if (chatMessageDO.getMessageType() == MessageTypeEnum.ANSWER
                 && chatMessageDO.getStatus() != ChatMessageStatusEnum.PART_SUCCESS
                 && chatMessageDO.getStatus() != ChatMessageStatusEnum.COMPLETE_SUCCESS) {
             // 没有父级回答消息直接跳过

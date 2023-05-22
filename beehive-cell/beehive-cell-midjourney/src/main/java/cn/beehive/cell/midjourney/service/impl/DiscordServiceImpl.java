@@ -32,9 +32,11 @@ public class DiscordServiceImpl implements DiscordService {
     private static final String DISCORD_API_URL = "https://discord.com/api/v9/interactions";
 
     private final String imagineParamsJson;
+    private final String upscaleParamsJson;
 
     public DiscordServiceImpl() {
         this.imagineParamsJson = ResourceUtil.readUtf8Str("midjourney/imagine.json");
+        this.upscaleParamsJson = ResourceUtil.readUtf8Str("midjourney/upscale.json");
     }
 
     @Override
@@ -43,6 +45,17 @@ public class DiscordServiceImpl implements DiscordService {
                 .replace("$guild_id", midjourneyConfig.getGuildId())
                 .replace("$channel_id", midjourneyConfig.getChannelId())
                 .replace("$prompt", prompt);
+        return executeRequest(requestBodyStr);
+    }
+
+    @Override
+    public Pair<Boolean, String> upscale(String discordMessageId, int index, String discordMessageHash) {
+        String requestBodyStr = upscaleParamsJson
+                .replace("$guild_id", midjourneyConfig.getGuildId())
+                .replace("$channel_id", midjourneyConfig.getChannelId())
+                .replace("$message_id", discordMessageId)
+                .replace("$index", String.valueOf(index))
+                .replace("$message_hash", discordMessageHash);
         return executeRequest(requestBodyStr);
     }
 

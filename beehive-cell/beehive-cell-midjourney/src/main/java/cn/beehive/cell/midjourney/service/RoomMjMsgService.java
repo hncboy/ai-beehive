@@ -37,14 +37,14 @@ public interface RoomMjMsgService extends IService<RoomMjMsgDO> {
      *
      * @param convertRequest 请求参数
      */
-    void uConvert(MjConvertRequest convertRequest);
+    void upscale(MjConvertRequest convertRequest);
 
     /**
      * v 转换
      *
      * @param convertRequest 请求参数
      */
-    void vConvert(MjConvertRequest convertRequest);
+    void variation(MjConvertRequest convertRequest);
 
     /**
      * 根据图片生成描述

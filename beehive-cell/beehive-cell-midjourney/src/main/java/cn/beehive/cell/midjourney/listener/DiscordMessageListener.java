@@ -1,6 +1,9 @@
-package cn.beehive.cell.midjourney.handler;
+package cn.beehive.cell.midjourney.listener;
 
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
+import cn.beehive.cell.midjourney.handler.DescribeDiscordMessageHandler;
+import cn.beehive.cell.midjourney.handler.ImagineDiscordMessageHandler;
+import cn.beehive.cell.midjourney.handler.UVDiscordMessageHandler;
 import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +29,13 @@ public class DiscordMessageListener extends ListenerAdapter {
     private MidjourneyConfig midjourneyConfig;
 
     @Resource
-    private ImagineMessageHandler imagineMessageHandler;
+    private ImagineDiscordMessageHandler imagineDiscordMessageHandler;
 
     @Resource
-    private UVMessageHandler uvMessageHandler;
+    private UVDiscordMessageHandler uvMessageHandler;
 
     @Resource
-    private DescribeMessageHandler describeMessageHandler;
+    private DescribeDiscordMessageHandler describeMessageHandler;
 
     /**
      * 是否忽略消息
@@ -64,7 +67,7 @@ public class DiscordMessageListener extends ListenerAdapter {
         if (Objects.nonNull(message.getInteraction()) && "describe".equals(message.getInteraction().getName())) {
             describeMessageHandler.onMessageUpdate(message);
         } else if (Objects.nonNull(message.getInteraction()) && "imagine".equals(message.getInteraction().getName())) {
-            imagineMessageHandler.onMessageUpdate(message);
+            imagineDiscordMessageHandler.onMessageUpdate(message);
         } else {
             uvMessageHandler.onMessageUpdate(message);
         }
@@ -78,10 +81,9 @@ public class DiscordMessageListener extends ListenerAdapter {
         }
 
         if (MessageType.SLASH_COMMAND.equals(message.getType()) || MessageType.DEFAULT.equals(message.getType())) {
-            imagineMessageHandler.onMessageReceived(message);
+            imagineDiscordMessageHandler.onMessageReceived(message);
         } else if (MessageType.INLINE_REPLY.equals(message.getType()) && message.getReferencedMessage() != null) {
             uvMessageHandler.onMessageReceived(message);
         }
     }
-
 }

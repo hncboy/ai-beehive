@@ -21,7 +21,8 @@ public class FrontUserUtil {
      * @return 用户 id
      */
     public Integer getUserId() {
-        return NumberUtil.parseInt(String.valueOf(StpUtil.getLoginId()));
+        return 1;
+//        return NumberUtil.parseInt(String.valueOf(StpUtil.getLoginId()));
     }
 
     /**

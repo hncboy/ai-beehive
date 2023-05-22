@@ -9,7 +9,7 @@ import cn.beehive.base.domain.entity.ChatMessageDO;
 import cn.beehive.base.domain.entity.ChatRoomDO;
 import cn.beehive.base.enums.ApiTypeEnum;
 import cn.beehive.base.enums.ChatMessageStatusEnum;
-import cn.beehive.base.enums.ChatMessageTypeEnum;
+import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.mapper.ChatMessageMapper;
 import cn.beehive.base.util.ObjectMapperUtil;
@@ -71,7 +71,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
         chatMessageDO.setId(IdWorker.getId());
         // 消息 id 手动生成
         chatMessageDO.setMessageId(UUID.randomUUID().toString());
-        chatMessageDO.setMessageType(ChatMessageTypeEnum.QUESTION);
+        chatMessageDO.setMessageType(MessageTypeEnum.QUESTION);
         chatMessageDO.setApiType(apiTypeEnum);
         if (apiTypeEnum == ApiTypeEnum.API_KEY) {
             chatMessageDO.setApiKey(chatConfig.getOpenaiApiKey());
@@ -124,7 +124,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
                     // Api 类型一致
                     .eq(ChatMessageDO::getApiType, chatMessageDO.getApiType())
                     // 消息类型为回答
-                    .eq(ChatMessageDO::getMessageType, ChatMessageTypeEnum.ANSWER));
+                    .eq(ChatMessageDO::getMessageType, MessageTypeEnum.ANSWER));
             if (Objects.isNull(parentChatMessage)) {
                 throw new ServiceException("父级消息不存在，本次对话出错，请先关闭上下文或开启新的对话窗口");
             }

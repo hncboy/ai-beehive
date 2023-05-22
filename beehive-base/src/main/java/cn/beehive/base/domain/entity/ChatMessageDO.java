@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import cn.beehive.base.enums.ApiTypeEnum;
 import cn.beehive.base.enums.ChatMessageStatusEnum;
-import cn.beehive.base.enums.ChatMessageTypeEnum;
+import cn.beehive.base.enums.MessageTypeEnum;
 import lombok.Data;
 
 import java.util.Date;
@@ -74,7 +74,7 @@ public class ChatMessageDO {
      * 消息类型枚举
      * 第一条消息一定是问题
      */
-    private ChatMessageTypeEnum messageType;
+    private MessageTypeEnum messageType;
 
     /**
      * 聊天室 id

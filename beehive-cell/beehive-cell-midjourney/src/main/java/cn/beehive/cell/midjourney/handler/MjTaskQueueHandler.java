@@ -42,6 +42,7 @@ public class MjTaskQueueHandler {
 
     /**
      * 执行任务 key 前綴
+     * TODO 监听过期，用来减少 EXECUTE_TASK_COUNT_KEY
      */
     private static final String PREFIX_EXECUTE_TASK_KEY = PREFIX + "execute:task:";
 
@@ -158,7 +159,7 @@ public class MjTaskQueueHandler {
             Pair<Boolean, String> imagineResultPair = discordService.imagine(newRoomMjMsgDO.getFinalPrompt());
             // 调用失败的情况，应该是少数情况，这里不重试
             if (!imagineResultPair.getKey()) {
-                newRoomMjMsgDO.setStatus(MjMsgStatusEnum.SYS_FAILURE);
+                newRoomMjMsgDO.setStatus(MjMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE);
                 newRoomMjMsgDO.setResponseContent("系统异常，排队中调用 imagine 接口失败，请稍后再试");
                 newRoomMjMsgDO.setFailureReason(imagineResultPair.getValue());
             } else {

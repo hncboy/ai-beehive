@@ -1,11 +1,9 @@
-package cn.beehive.cell.midjourney.handler;
+package cn.beehive.cell.midjourney.listener;
 
 import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.SysParamKeyEnum;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
-import cn.beehive.cell.midjourney.handler.DiscordMessageListener;
 import cn.hutool.core.util.BooleanUtil;
-import com.dtflys.forest.http.ForestProxy;
 import com.neovisionaries.ws.client.ProxySettings;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import jakarta.annotation.Resource;

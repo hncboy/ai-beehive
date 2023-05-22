@@ -2,7 +2,7 @@ package cn.beehive.admin.domain.vo;
 
 import cn.beehive.base.enums.ApiTypeEnum;
 import cn.beehive.base.enums.ChatMessageStatusEnum;
-import cn.beehive.base.enums.ChatMessageTypeEnum;
+import cn.beehive.base.enums.MessageTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -36,7 +36,7 @@ public class ChatMessageVO {
     private Integer questionContextCount;
 
     @Schema(title = "消息类型枚举", description = "第一条消息一定是问题")
-    private ChatMessageTypeEnum messageType;
+    private MessageTypeEnum messageType;
 
     @Schema(title = "聊天室 id")
     private Long chatRoomId;

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import cn.beehive.base.domain.entity.ChatMessageDO;
 import cn.beehive.base.domain.entity.ChatRoomDO;
 import cn.beehive.base.enums.ChatMessageStatusEnum;
-import cn.beehive.base.enums.ChatMessageTypeEnum;
+import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.web.service.ChatMessageService;
 import cn.beehive.web.service.ChatRoomService;
 import jakarta.annotation.Resource;
@@ -40,7 +40,7 @@ public abstract class AbstractDatabaseDataStorage implements DataStorage {
         answerChatMessageDO.setContextCount(questionChatMessageDO.getContextCount());
         answerChatMessageDO.setQuestionContextCount(questionChatMessageDO.getQuestionContextCount());
         answerChatMessageDO.setModelName(questionChatMessageDO.getModelName());
-        answerChatMessageDO.setMessageType(ChatMessageTypeEnum.ANSWER);
+        answerChatMessageDO.setMessageType(MessageTypeEnum.ANSWER);
         answerChatMessageDO.setChatRoomId(questionChatMessageDO.getChatRoomId());
         answerChatMessageDO.setApiType(questionChatMessageDO.getApiType());
         answerChatMessageDO.setApiKey(questionChatMessageDO.getApiKey());

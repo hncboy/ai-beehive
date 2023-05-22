@@ -1,6 +1,6 @@
 package cn.beehive.base.domain.entity;
 
-import cn.beehive.base.enums.ChatMessageTypeEnum;
+import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MjMsgStatusEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -40,7 +40,7 @@ public class RoomMjMsgDO {
     /**
      * 消息类型
      */
-    private ChatMessageTypeEnum type;
+    private MessageTypeEnum type;
 
     /**
      * 用户输入
@@ -63,11 +63,6 @@ public class RoomMjMsgDO {
     private MjMsgActionEnum action;
 
     /**
-     * discord 图片地址
-     */
-    private String discordImageUrl;
-
-    /**
      * 图片名称
      */
     private String imageName;
@@ -79,10 +74,15 @@ public class RoomMjMsgDO {
 
     /**
      * uv 指令使用比特位
-     * 00000000
+     * 末尾 8 位 00000000
      * 分别表示 U1 U2 U3 U4 V1 V2 V3 V4
      */
     private Integer uvUseBit;
+
+    /**
+     * uv 位置
+     */
+    private Integer uvIndex;
 
     /**
      * 状态
@@ -100,14 +100,24 @@ public class RoomMjMsgDO {
     private Date discordFinishTime;
 
     /**
-     * 失败原因
-     */
-    private String failureReason;
-
-    /**
      * discord message id
      */
     private String discordMessageId;
+
+    /**
+     * discord 频道 id
+     */
+    private String discordChannelId;
+
+    /**
+     * discord 图片地址
+     */
+    private String discordImageUrl;
+
+    /**
+     * 失败原因
+     */
+    private String failureReason;
 
     /**
      * 是否删除

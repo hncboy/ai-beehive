@@ -45,17 +45,17 @@ public class RoomMidjourneyController {
         return R.data(true);
     }
 
-    @Operation(summary = "u 转换")
-    @PostMapping("/u")
-    public R<Boolean> uConvert(@Validated @RequestBody MjConvertRequest convertRequest) {
-        roomMjMsgService.uConvert(convertRequest);
+    @Operation(summary = "upscale")
+    @PostMapping("/upscale")
+    public R<Boolean> upscale(@Validated @RequestBody MjConvertRequest convertRequest) {
+        roomMjMsgService.upscale(convertRequest);
         return R.data(true);
     }
 
-    @Operation(summary = "v 转换")
-    @PostMapping("/v")
-    public R<Boolean> vConvert(@Validated @RequestBody MjConvertRequest convertRequest) {
-        roomMjMsgService.vConvert(convertRequest);
+    @Operation(summary = "variation")
+    @PostMapping("/variation")
+    public R<Boolean> variation(@Validated @RequestBody MjConvertRequest convertRequest) {
+        roomMjMsgService.variation(convertRequest);
         return R.data(true);
     }
 

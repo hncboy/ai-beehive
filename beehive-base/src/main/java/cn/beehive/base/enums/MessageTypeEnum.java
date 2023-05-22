@@ -7,10 +7,10 @@ import lombok.Getter;
 /**
  * @author hncboy
  * @date 2023-3-26
- * 聊天消息类型枚举
+ * 消息类型枚举
  */
 @AllArgsConstructor
-public enum ChatMessageTypeEnum {
+public enum MessageTypeEnum {
 
     /**
      * 问题

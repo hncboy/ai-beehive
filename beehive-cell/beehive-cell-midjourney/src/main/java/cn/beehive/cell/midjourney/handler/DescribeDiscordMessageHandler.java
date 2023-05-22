@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class DescribeMessageHandler extends MessageHandler {
+public class DescribeDiscordMessageHandler extends DiscordMessageHandler {
 
     @Override
     public void onMessageReceived(Message message) {
