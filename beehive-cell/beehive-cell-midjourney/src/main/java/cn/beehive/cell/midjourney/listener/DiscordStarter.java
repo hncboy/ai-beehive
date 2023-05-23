@@ -20,7 +20,6 @@ import java.net.Proxy;
  * @author hncboy
  * @date 2023/5/18
  * Discord 启动类
- * TODO 不使用 ApplicationListener
  */
 @Component("discordStarter")
 public class DiscordStarter implements InitializingBean {

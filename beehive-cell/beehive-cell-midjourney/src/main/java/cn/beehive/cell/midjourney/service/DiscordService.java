@@ -1,6 +1,8 @@
 package cn.beehive.cell.midjourney.service;
 
 import cn.hutool.core.lang.Pair;
+import com.dtflys.forest.http.ForestResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author hncboy
@@ -15,7 +17,7 @@ public interface DiscordService {
      * @param prompt prompt
      * @return 调用结果
      */
-    Pair<Boolean, String> imagine(String prompt);
+    ForestResponse<?> imagine(String prompt);
 
     /**
      * upscale
@@ -25,7 +27,7 @@ public interface DiscordService {
      * @param discordMessageHash Discord 消息 hash
      * @return 调用结果
      */
-    Pair<Boolean, String> upscale(String discordMessageId, int index, String discordMessageHash);
+    ForestResponse<?> upscale(String discordMessageId, int index, String discordMessageHash);
 
     /**
      * variation
@@ -36,5 +38,22 @@ public interface DiscordService {
      * @param discordMessageHash Discord 消息 hash
      * @return 调用结果
      */
-    Pair<Boolean, String> variation(String discordMessageId, int index, String discordMessageHash);
+    ForestResponse<?> variation(String discordMessageId, int index, String discordMessageHash);
+
+    /**
+     * 上传图片
+     *
+     * @param fileName      文件名
+     * @param multipartFile 文件
+     * @return 调用结果
+     */
+    Pair<Boolean, String> uploadImage(String fileName, MultipartFile multipartFile);
+
+    /**
+     * 描述图片
+     *
+     * @param uploadFileName 上传的文件名
+     * @return 调用结果
+     */
+    ForestResponse<?> describe(String uploadFileName);
 }

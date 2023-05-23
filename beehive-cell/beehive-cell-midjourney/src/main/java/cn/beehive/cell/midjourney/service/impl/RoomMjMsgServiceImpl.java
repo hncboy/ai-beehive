@@ -4,7 +4,9 @@ import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MjMsgStatusEnum;
+import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.mapper.RoomMjMsgMapper;
+import cn.beehive.base.util.FileUtil;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
 import cn.beehive.cell.midjourney.domain.query.RoomMjMsgCursorQuery;
@@ -17,12 +19,15 @@ import cn.beehive.cell.midjourney.handler.MjTaskQueueHandler;
 import cn.beehive.cell.midjourney.service.DiscordService;
 import cn.beehive.cell.midjourney.service.RoomMjMsgService;
 import cn.hutool.core.lang.Pair;
+import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dtflys.forest.http.ForestResponse;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -53,6 +58,7 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
     public void imagine(MjImagineRequest imagineRequest) {
         // 检查是否有正在处理的任务
         MjRoomMessageHandler.checkExistProcessingTask();
+        // TODO 校验 roomid
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
         // 生成问题的消息 id
@@ -111,12 +117,12 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
         // 调用 discord 接口
         if (answerStatus == MjMsgStatusEnum.MJ_WAIT_RECEIVED) {
-            Pair<Boolean, String> imagineResultPair = discordService.imagine(questionMessage.getFinalPrompt());
+            ForestResponse<?> forestResponse = discordService.imagine(questionMessage.getFinalPrompt());
             // 调用失败的情况，应该是少数情况，这里不重试
-            if (!imagineResultPair.getKey()) {
+            if (forestResponse.isError()) {
                 answerMessage.setStatus(MjMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE);
                 answerMessage.setResponseContent("系统异常，直接调用 imagine 接口失败，请稍后再试");
-                answerMessage.setFailureReason(imagineResultPair.getValue());
+                answerMessage.setFailureReason(forestResponse.getContent());
                 updateById(answerMessage);
 
                 // 结束执行中任务
@@ -185,12 +191,12 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
         // 调用 discord 接口
         if (answerStatus == MjMsgStatusEnum.MJ_WAIT_RECEIVED) {
-            Pair<Boolean, String> imagineResultPair = discordService.upscale(questionMessage.getDiscordMessageId(), convertRequest.getIndex(), MjRoomMessageHandler.getDiscordMessageHash(parentRoomMjMsgDO.getDiscordImageUrl()));
+            ForestResponse<?> forestResponse = discordService.upscale(questionMessage.getDiscordMessageId(), convertRequest.getIndex(), MjRoomMessageHandler.getDiscordMessageHash(parentRoomMjMsgDO.getDiscordImageUrl()));
             // 调用失败的情况，应该是少数情况，这里不重试
-            if (!imagineResultPair.getKey()) {
+            if (forestResponse.isError()) {
                 answerMessage.setStatus(MjMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE);
                 answerMessage.setResponseContent("系统异常，直接调用 upscale 接口失败，请稍后再试");
-                answerMessage.setFailureReason(imagineResultPair.getValue());
+                answerMessage.setFailureReason(forestResponse.getContent());
                 updateById(answerMessage);
 
                 // 结束执行中任务
@@ -258,12 +264,12 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
         // 调用 discord 接口
         if (answerStatus == MjMsgStatusEnum.MJ_WAIT_RECEIVED) {
-            Pair<Boolean, String> imagineResultPair = discordService.variation(questionMessage.getDiscordMessageId(), convertRequest.getIndex(), MjRoomMessageHandler.getDiscordMessageHash(parentRoomMjMsgDO.getDiscordImageUrl()));
+            ForestResponse<?> forestResponse = discordService.variation(questionMessage.getDiscordMessageId(), convertRequest.getIndex(), MjRoomMessageHandler.getDiscordMessageHash(parentRoomMjMsgDO.getDiscordImageUrl()));
             // 调用失败的情况，应该是少数情况，这里不重试
-            if (!imagineResultPair.getKey()) {
+            if (forestResponse.isError()) {
                 answerMessage.setStatus(MjMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE);
                 answerMessage.setResponseContent("系统异常，直接调用 variation 接口失败，请稍后再试");
-                answerMessage.setFailureReason(imagineResultPair.getValue());
+                answerMessage.setFailureReason(forestResponse.getContent());
                 updateById(answerMessage);
 
                 // 结束执行中任务
@@ -274,5 +280,97 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
     @Override
     public void describe(MjDescribeRequest describeRequest) {
+        // TODO 校验 roomid
+
+        // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
+        // 生成问题的消息 id
+        long questionMessageId = IdWorker.getId();
+        // 生成回答消息的 id
+        long answerMessageId = IdWorker.getId();
+
+        MultipartFile multipartFile = describeRequest.getFile();
+        // 新文件名：describe_ + 消息 id + 后缀
+        String newFileName = "describe_" + answerMessageId + StrPool.DOT + FileUtil.getFileExtension(multipartFile.getOriginalFilename());
+        // 保存文件
+        FileUtil.downloadFromMultipartFile(multipartFile, midjourneyConfig.getImageLocation(), newFileName);
+
+        // TODO 异常也当作消息记录
+
+        // 判断文件大小
+        if (multipartFile.getSize() > midjourneyConfig.getMaxFileSize()) {
+            throw new ServiceException(StrUtil.format("文件大小超过限制，不能超过 {}MB", midjourneyConfig.getMaxFileSize() / 1024 / 1024));
+        }
+
+        // 判断文件后缀是否符合
+        if (!StrUtil.equalsAnyIgnoreCase(multipartFile.getContentType(), "image/jpeg", "image/png")) {
+            throw new ServiceException("文件格式不符合要求，只能是 jpg 或 png 格式");
+        }
+
+        // 上传图片
+        Pair<Boolean, String> uploadResponsePair = discordService.uploadImage(newFileName, multipartFile);
+        if (!uploadResponsePair.getKey()) {
+            throw new ServiceException(uploadResponsePair.getValue());
+        }
+
+        // 上面的操作应该没有并发限制，所以上面的上传图片操作就不考虑队列限制
+
+        String discordUploadFileName = uploadResponsePair.getValue();
+        // 检查是否有正在处理的任务
+        MjRoomMessageHandler.checkExistProcessingTask();
+
+        // 问题消息创建插入
+        RoomMjMsgDO questionMessage = new RoomMjMsgDO();
+        questionMessage.setId(questionMessageId);
+        questionMessage.setRoomId(describeRequest.getRoomId());
+        questionMessage.setUserId(FrontUserUtil.getUserId());
+        questionMessage.setType(MessageTypeEnum.QUESTION);
+        questionMessage.setImageName(newFileName);
+        questionMessage.setDiscordImageUrl(discordUploadFileName);
+        ;
+        questionMessage.setAction(MjMsgActionEnum.DESCRIBE);
+        questionMessage.setStatus(MjMsgStatusEnum.SYS_SUCCESS);
+        questionMessage.setDiscordChannelId(midjourneyConfig.getChannelId());
+        questionMessage.setIsDeleted(false);
+        save(questionMessage);
+
+        // 创建任务并返回回答的状态
+        MjMsgStatusEnum answerStatus = mjTaskQueueHandler.pushNewTask(answerMessageId);
+
+        // 答案消息创建插入
+        RoomMjMsgDO answerMessage = new RoomMjMsgDO();
+        answerMessage.setId(answerMessageId);
+        answerMessage.setRoomId(questionMessage.getRoomId());
+        answerMessage.setUserId(FrontUserUtil.getUserId());
+        answerMessage.setImageName(newFileName);
+        answerMessage.setDiscordImageUrl(discordUploadFileName);
+        ;
+        answerMessage.setType(MessageTypeEnum.ANSWER);
+        answerMessage.setAction(MjMsgActionEnum.DESCRIBE);
+        answerMessage.setStatus(answerStatus);
+        answerMessage.setDiscordStartTime(new Date());
+        answerMessage.setDiscordChannelId(midjourneyConfig.getChannelId());
+        answerMessage.setUUseBit(0);
+        answerMessage.setIsDeleted(false);
+
+        // 达到队列上限
+        if (answerStatus == MjMsgStatusEnum.SYS_MAX_QUEUE) {
+            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyConfig.getMaxWaitQueueSize()));
+        }
+        save(answerMessage);
+
+        // 调用 discord 接口
+        if (answerStatus == MjMsgStatusEnum.MJ_WAIT_RECEIVED) {
+            ForestResponse<?> forestResponse = discordService.describe(discordUploadFileName);
+            // 调用失败的情况，应该是少数情况，这里不重试
+            if (forestResponse.isError()) {
+                answerMessage.setStatus(MjMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE);
+                answerMessage.setResponseContent("系统异常，直接调用 describe 接口失败，请稍后再试");
+                answerMessage.setFailureReason(forestResponse.getContent());
+                updateById(answerMessage);
+
+                // 结束执行中任务
+                mjTaskQueueHandler.finishExecuteTask(answerMessageId);
+            }
+        }
     }
 }

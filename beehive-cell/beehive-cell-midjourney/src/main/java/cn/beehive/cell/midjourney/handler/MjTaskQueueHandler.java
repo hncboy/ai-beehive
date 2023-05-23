@@ -1,6 +1,7 @@
 package cn.beehive.cell.midjourney.handler;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
+import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MjMsgStatusEnum;
 import cn.beehive.base.util.RedisUtil;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
@@ -9,6 +10,7 @@ import cn.beehive.cell.midjourney.service.RoomMjMsgService;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.annotation.Lock4j;
+import com.dtflys.forest.http.ForestResponse;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -156,16 +158,19 @@ public class MjTaskQueueHandler {
 
             // 调用 imagine 接口
             DiscordService discordService = SpringUtil.getBean(DiscordService.class);
-            Pair<Boolean, String> imagineResultPair = discordService.imagine(newRoomMjMsgDO.getFinalPrompt());
-            // 调用失败的情况，应该是少数情况，这里不重试
-            if (!imagineResultPair.getKey()) {
-                newRoomMjMsgDO.setStatus(MjMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE);
-                newRoomMjMsgDO.setResponseContent("系统异常，排队中调用 imagine 接口失败，请稍后再试");
-                newRoomMjMsgDO.setFailureReason(imagineResultPair.getValue());
-            } else {
-                newRoomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_WAIT_RECEIVED);
+            if (newRoomMjMsgDO.getAction() == MjMsgActionEnum.IMAGINE) {
+                ForestResponse<?> forestResponse = discordService.imagine(newRoomMjMsgDO.getFinalPrompt());
+                // 调用失败的情况，应该是少数情况，这里不重试
+                if (forestResponse.isError()) {
+                    newRoomMjMsgDO.setStatus(MjMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE);
+                    newRoomMjMsgDO.setResponseContent("系统异常，排队中调用 imagine 接口失败，请稍后再试");
+                    newRoomMjMsgDO.setFailureReason(forestResponse.getContent());
+                } else {
+                    newRoomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_WAIT_RECEIVED);
+                }
+                roomMjMsgService.updateById(newRoomMjMsgDO);
             }
-            roomMjMsgService.updateById(newRoomMjMsgDO);
+            // TODO
         }
     }
 

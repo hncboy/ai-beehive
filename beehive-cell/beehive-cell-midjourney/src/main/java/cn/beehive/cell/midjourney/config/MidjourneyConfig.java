@@ -58,4 +58,27 @@ public class MidjourneyConfig {
      * 执行队列最大长度
      */
     private Integer maxExecuteQueueSize = 2;
+
+    /**
+     * 最大文件大小，用于 descibe 上传图片，单位字节
+     * 默认 6M
+     */
+    private Integer maxFileSize = 1024 * 1024 * 6;
+
+    /**
+     * Discord Api Url
+     */
+    private String discordApiUrl = "https://discord.com/api/v9/interactions";
+
+    /**
+     * Discord 上传图片 Url
+     */
+    private String discordUploadUrl;
+
+    /**
+     * 获取 Discord 上传图片 Url
+     */
+    public String getDiscordUploadUrl() {
+        return "https://discord.com/api/v9/channels/" + channelId + "/attachments";
+    }
 }

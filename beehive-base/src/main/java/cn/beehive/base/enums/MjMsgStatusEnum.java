@@ -28,19 +28,24 @@ public enum MjMsgStatusEnum {
     SYS_SUCCESS(3),
 
     /**
+     * 系统失败
+     */
+    SYS_FAILURE(4),
+
+    /**
      * 系统等待 MJ 接收消息失败
      */
-    SYS_WAIT_MJ_RECEIVED_FAILURE(4),
+    SYS_WAIT_MJ_RECEIVED_FAILURE(5),
 
     /**
      * 系统发送 MJ 请求失败
      */
-    SYS_SEND_MJ_REQUEST_FAILURE(5),
+    SYS_SEND_MJ_REQUEST_FAILURE(6),
 
     /**
      * 系统完成 MJ 执行中任务失败
      */
-    SYS_FINISH_MJ_IN_PROGRESS_FAILURE(6),
+    SYS_FINISH_MJ_IN_PROGRESS_FAILURE(7),
 
     /* 下面为进入 MJ 后的参数 */
 

@@ -50,7 +50,7 @@ public abstract class DiscordMessageHandler {
      */
     public String downloadImage(String discordImageUrl, Long roomMjMsgId) {
         String fileName = roomMjMsgId + ".png";
-        FileUtil.downloadLocalFromUrl(discordImageUrl, midjourneyConfig.getImageLocation() + fileName);
+        FileUtil.downloadFromUrl(discordImageUrl, midjourneyConfig.getImageLocation() + fileName);
         return fileName;
     }
 

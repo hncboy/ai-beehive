@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +62,7 @@ public class RoomMidjourneyController {
 
     @Operation(summary = "describe")
     @PostMapping("/describe")
-    public R<Boolean> describe(@Validated @RequestBody MjDescribeRequest describeRequest) {
+    public R<Boolean> describe(@Validated @ModelAttribute MjDescribeRequest describeRequest) {
         roomMjMsgService.describe(describeRequest);
         return R.data(true);
     }
