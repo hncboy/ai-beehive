@@ -33,10 +33,12 @@ public class DiscordServiceImpl implements DiscordService {
 
     private final String imagineParamsJson;
     private final String upscaleParamsJson;
+    private final String variationParamsJson;
 
     public DiscordServiceImpl() {
         this.imagineParamsJson = ResourceUtil.readUtf8Str("midjourney/imagine.json");
         this.upscaleParamsJson = ResourceUtil.readUtf8Str("midjourney/upscale.json");
+        this.variationParamsJson = ResourceUtil.readUtf8Str("midjourney/variation.json");
     }
 
     @Override
@@ -51,6 +53,17 @@ public class DiscordServiceImpl implements DiscordService {
     @Override
     public Pair<Boolean, String> upscale(String discordMessageId, int index, String discordMessageHash) {
         String requestBodyStr = upscaleParamsJson
+                .replace("$guild_id", midjourneyConfig.getGuildId())
+                .replace("$channel_id", midjourneyConfig.getChannelId())
+                .replace("$message_id", discordMessageId)
+                .replace("$index", String.valueOf(index))
+                .replace("$message_hash", discordMessageHash);
+        return executeRequest(requestBodyStr);
+    }
+
+    @Override
+    public Pair<Boolean, String> variation(String discordMessageId, int index, String discordMessageHash) {
+        String requestBodyStr = variationParamsJson
                 .replace("$guild_id", midjourneyConfig.getGuildId())
                 .replace("$channel_id", midjourneyConfig.getChannelId())
                 .replace("$message_id", discordMessageId)

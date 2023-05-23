@@ -1,9 +1,9 @@
 package cn.beehive.cell.midjourney.service.impl;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
+import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MjMsgStatusEnum;
-import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.mapper.RoomMjMsgMapper;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
@@ -127,9 +127,6 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
     @Override
     public void upscale(MjConvertRequest convertRequest) {
-        // TODO 重复 upscale discord 会怎么报错
-        // TODO 可能要加分布式锁
-
         // 检查是否有正在处理的任务
         MjRoomMessageHandler.checkExistProcessingTask();
         // 获取原消息
@@ -178,7 +175,6 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
         // 这里先赋值，因为回调监听没有可以赋值的地方
         answerMessage.setDiscordStartTime(new Date());
         answerMessage.setStatus(answerStatus);
-        answerMessage.setUvUseBit(0);
         answerMessage.setIsDeleted(false);
 
         // 达到队列上限
@@ -205,6 +201,75 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
     @Override
     public void variation(MjConvertRequest convertRequest) {
+        // 检查是否有正在处理的任务
+        MjRoomMessageHandler.checkExistProcessingTask();
+        // 获取原消息
+        RoomMjMsgDO parentRoomMjMsgDO = getOne(new LambdaQueryWrapper<RoomMjMsgDO>().eq(RoomMjMsgDO::getId, convertRequest.getMsgId())
+                .eq(RoomMjMsgDO::getRoomId, convertRequest.getRoomId())
+                .eq(RoomMjMsgDO::getUserId, FrontUserUtil.getUserId()));
+        // 检查是否可以 variation
+        MjRoomMessageHandler.checkCanVariation(parentRoomMjMsgDO, midjourneyConfig);
+
+        // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
+        // 生成问题的消息 id
+        long questionMessageId = IdWorker.getId();
+        // 生成回答消息的 id
+        long answerMessageId = IdWorker.getId();
+
+        // 问题消息创建插入
+        RoomMjMsgDO questionMessage = new RoomMjMsgDO();
+        questionMessage.setId(questionMessageId);
+        questionMessage.setRoomId(parentRoomMjMsgDO.getRoomId());
+        questionMessage.setUserId(parentRoomMjMsgDO.getUserId());
+        questionMessage.setType(MessageTypeEnum.QUESTION);
+        questionMessage.setPrompt(parentRoomMjMsgDO.getPrompt());
+        questionMessage.setFinalPrompt(parentRoomMjMsgDO.getFinalPrompt());
+        questionMessage.setUvParentId(parentRoomMjMsgDO.getId());
+        questionMessage.setUvIndex(convertRequest.getIndex());
+        questionMessage.setDiscordMessageId(parentRoomMjMsgDO.getDiscordMessageId());
+        questionMessage.setAction(MjMsgActionEnum.VARIATION);
+        questionMessage.setStatus(MjMsgStatusEnum.SYS_SUCCESS);
+        questionMessage.setIsDeleted(false);
+        save(questionMessage);
+
+        // 创建任务并返回回答的状态
+        MjMsgStatusEnum answerStatus = mjTaskQueueHandler.pushNewTask(answerMessageId);
+
+        // 答案消息创建插入
+        RoomMjMsgDO answerMessage = new RoomMjMsgDO();
+        answerMessage.setId(answerMessageId);
+        answerMessage.setRoomId(questionMessage.getRoomId());
+        answerMessage.setUserId(FrontUserUtil.getUserId());
+        answerMessage.setPrompt(questionMessage.getPrompt());
+        answerMessage.setFinalPrompt(questionMessage.getFinalPrompt());
+        answerMessage.setType(MessageTypeEnum.ANSWER);
+        answerMessage.setAction(MjMsgActionEnum.VARIATION);
+        answerMessage.setUvParentId(parentRoomMjMsgDO.getId());
+        answerMessage.setUvIndex(convertRequest.getIndex());
+        answerMessage.setDiscordStartTime(new Date());
+        answerMessage.setStatus(answerStatus);
+        answerMessage.setIsDeleted(false);
+
+        // 达到队列上限
+        if (answerStatus == MjMsgStatusEnum.SYS_MAX_QUEUE) {
+            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyConfig.getMaxWaitQueueSize()));
+        }
+        save(answerMessage);
+
+        // 调用 discord 接口
+        if (answerStatus == MjMsgStatusEnum.MJ_WAIT_RECEIVED) {
+            Pair<Boolean, String> imagineResultPair = discordService.variation(questionMessage.getDiscordMessageId(), convertRequest.getIndex(), MjRoomMessageHandler.getDiscordMessageHash(parentRoomMjMsgDO.getDiscordImageUrl()));
+            // 调用失败的情况，应该是少数情况，这里不重试
+            if (!imagineResultPair.getKey()) {
+                answerMessage.setStatus(MjMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE);
+                answerMessage.setResponseContent("系统异常，直接调用 variation 接口失败，请稍后再试");
+                answerMessage.setFailureReason(imagineResultPair.getValue());
+                updateById(answerMessage);
+
+                // 结束执行中任务
+                mjTaskQueueHandler.finishExecuteTask(answerMessageId);
+            }
+        }
     }
 
     @Override

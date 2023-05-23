@@ -17,8 +17,14 @@ import java.util.Objects;
  * @author hncboy
  * @date 2023/5/18
  * UV 命令消息处理器
+ *
+ * upscale
  * Midjounery Discord 消息变更 - Midjourney Bot: **[1660606423536029699] star,sky --v 5 --s 750** - <@1013002753796219000> (fast)
  * Midjounery Discord 消息接收 - Midjourney Bot: **[1660633960119070722] star,sky --v 5 --s 750** - Image #3 <@1013002753796219000>
+ *
+ * Variation
+ * Midjounery Discord 消息变更 - Midjourney Bot: **[1660639025269575682] star, boy --v 5 --s 750** - Remix by <@1013002753796219000> (fast)
+ * Midjounery Discord 消息接收 - Midjourney Bot: **[1660639025269575682] star, boy --v 5 --s 750** - Variations by <@1013002753796219000> (fast)
  */
 @Component
 public class UVDiscordMessageHandler extends DiscordMessageHandler {
@@ -56,7 +62,6 @@ public class UVDiscordMessageHandler extends DiscordMessageHandler {
             }
 
             // 更新 upscale 消息
-            upscaleRoomMjMsgDO.setDiscordMessageId(message.getId());
             finishImageTask(upscaleRoomMjMsgDO, message);
             roomMjMsgService.updateById(upscaleRoomMjMsgDO);
 
@@ -64,10 +69,32 @@ public class UVDiscordMessageHandler extends DiscordMessageHandler {
             parentRoomMjMsgDO.setUvUseBit(MjRoomMessageUtil.setUVUse(parentRoomMjMsgDO.getUvUseBit(), upscaleRoomMjMsgDO.getUvIndex(), MjMsgActionEnum.UPSCALE));
             roomMjMsgService.updateById(parentRoomMjMsgDO);
         }
+
+        // 如果是 variation 消息
+        if (messageBO.getAction() == MjMsgActionEnum.VARIATION) {
+            // 找对应的 variation 消息，这里不知道 v 几，理论上只会有一条
+            RoomMjMsgDO variationRoomMjMsgDO = roomMjMsgService.getOne(new LambdaQueryWrapper<RoomMjMsgDO>()
+                    // 只会有等待接收状态
+                    .eq(RoomMjMsgDO::getStatus, MjMsgStatusEnum.MJ_WAIT_RECEIVED)
+                    .eq(RoomMjMsgDO::getAction, MjMsgActionEnum.VARIATION)
+                    .eq(RoomMjMsgDO::getType, MessageTypeEnum.ANSWER)
+                    // 找子消息
+                    .eq(RoomMjMsgDO::getUvParentId, parentRoomMjMsgId));
+            if (Objects.isNull(variationRoomMjMsgDO)) {
+                return;
+            }
+
+            // 更新 variation 消息
+            finishImageTask(variationRoomMjMsgDO, message);
+            roomMjMsgService.updateById(variationRoomMjMsgDO);
+            // 不更新父消息
+        }
     }
 
     @Override
     public void onMessageUpdate(Message message) {
-        // 这里能接收到 U 消息，但是不处理，因为这里区分不出是 U 几，虽然可以更新 MJ_WAIT_RECEIVED 状态的数据，因为理论上一个用户只允许一个 MJ_WAIT_RECEIVED 状态的数据，但是不考虑了。
+        // 这里能接收到 upscale 消息，但是不处理，因为这里区分不出是 U 几，虽然可以更新 MJ_WAIT_RECEIVED 状态的数据，因为理论上一个用户只允许一个 MJ_WAIT_RECEIVED 状态的数据，但是不考虑了。
+        // 这里能接收到 variation 消息，但是不处理，因为这里区分不出是 V 几，虽然可以更新 MJ_WAIT_RECEIVED 状态的数据，因为理论上一个用户只允许一个 MJ_WAIT_RECEIVED 状态的数据，但是不考虑了。
+        // variation 消息在 discord 会有过程，但是这里监听不到，所以处理不了
     }
 }

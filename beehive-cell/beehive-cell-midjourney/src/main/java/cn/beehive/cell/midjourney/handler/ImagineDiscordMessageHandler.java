@@ -4,6 +4,7 @@ import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.enums.MjMsgStatusEnum;
 import cn.beehive.cell.midjourney.domain.bo.MjDiscordMessageBO;
 import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Message;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ import java.util.Objects;
  * 消息变更 - Midjourney Bot: **[6601101751104431] blue sky --v 5 --s 250** - <@1013002753796219000> (93%) (fast)
  * 消息接收 - Midjourney Bot: **[6601101751104431] blue sky --v 5 --s 250** - <@1013002753796219000> (fast)
  */
-
+@Slf4j
 @Component
 public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
 
@@ -45,12 +46,12 @@ public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
             return;
         }
 
-        roomMjMsgDO.setDiscordMessageId(message.getId());
 
-        // 开始处理
+        // 开始处理，不考虑消息乱序和丢失的情况
         if ("Waiting to start".equals(messageBO.getStatus())) {
             roomMjMsgDO.setDiscordStartTime(new Date());
             roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_IN_PROGRESS);
+            roomMjMsgDO.setDiscordMessageId(message.getId());
         }
         // 处理成功
         else {

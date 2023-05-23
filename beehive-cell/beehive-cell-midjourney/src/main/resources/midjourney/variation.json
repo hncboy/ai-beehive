@@ -4,10 +4,10 @@
   "channel_id": "$channel_id",
   "message_id": "$message_id",
   "application_id": "936929561302675456",
-  "session_id": "03a82b463787c6f5c87d8e6739a5bb85",
+  "session_id": "fe32c5005d572085d68a1ba725b99aaa",
   "message_flags": 0,
   "data": {
     "component_type": 2,
-    "custom_id": "MJ::JOB::upsample::$index::$message_hash"
+    "custom_id": "MJ::JOB::variation::$index::$message_hash"
   }
 }

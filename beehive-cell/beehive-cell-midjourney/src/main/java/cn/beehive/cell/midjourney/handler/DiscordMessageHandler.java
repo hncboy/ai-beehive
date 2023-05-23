@@ -61,6 +61,7 @@ public abstract class DiscordMessageHandler {
      * @param message     discord 消息
      */
     public void finishImageTask(RoomMjMsgDO roomMjMsgDO, Message message) {
+        roomMjMsgDO.setDiscordMessageId(message.getId());
         roomMjMsgDO.setDiscordFinishTime(new Date());
         if (CollectionUtil.isEmpty(message.getAttachments())) {
             // MJ 返回空图片
