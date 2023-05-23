@@ -33,7 +33,7 @@ public class MidjourneyScheduler {
     @Resource
     private RoomMjMsgService roomMjMsgService;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void handlerTask() {
         log.info("Midjourney 定时任务开始");
 

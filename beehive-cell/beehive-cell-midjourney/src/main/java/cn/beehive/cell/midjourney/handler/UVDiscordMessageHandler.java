@@ -17,11 +17,11 @@ import java.util.Objects;
  * @author hncboy
  * @date 2023/5/18
  * UV 命令消息处理器
- *
+ * <p>
  * upscale
  * Midjounery Discord 消息变更 - Midjourney Bot: **[1660606423536029699] star,sky --v 5 --s 750** - <@1013002753796219000> (fast)
  * Midjounery Discord 消息接收 - Midjourney Bot: **[1660633960119070722] star,sky --v 5 --s 750** - Image #3 <@1013002753796219000>
- *
+ * <p>
  * Variation
  * Midjounery Discord 消息变更 - Midjourney Bot: **[1660639025269575682] star, boy --v 5 --s 750** - Remix by <@1013002753796219000> (fast)
  * Midjounery Discord 消息接收 - Midjourney Bot: **[1660639025269575682] star, boy --v 5 --s 750** - Variations by <@1013002753796219000> (fast)
@@ -66,7 +66,7 @@ public class UVDiscordMessageHandler extends DiscordMessageHandler {
             roomMjMsgService.updateById(upscaleRoomMjMsgDO);
 
             // 更新父消息
-            parentRoomMjMsgDO.setUvUseBit(MjRoomMessageUtil.setUVUse(parentRoomMjMsgDO.getUvUseBit(), upscaleRoomMjMsgDO.getUvIndex(), MjMsgActionEnum.UPSCALE));
+            parentRoomMjMsgDO.setUUseBit(MjRoomMessageUtil.setUpscaleUse(parentRoomMjMsgDO.getUUseBit(), upscaleRoomMjMsgDO.getUvIndex(), MjMsgActionEnum.UPSCALE));
             roomMjMsgService.updateById(parentRoomMjMsgDO);
         }
 

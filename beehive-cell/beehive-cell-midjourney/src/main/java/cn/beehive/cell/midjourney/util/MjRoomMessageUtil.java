@@ -11,37 +11,31 @@ public class MjRoomMessageUtil {
 
     /**
      * 判断指定位置的 uv 是否使用
-     * 末尾 8 位 00000000，分别表示 U1 U2 U3 U4 V1 V2 V3 V4
+     * 末尾 4 位 0000，分别表示 U1 U2 U3 U4
      *
      * @param index  位置
      * @param action 动作
      * @return 是否使用
      */
-    public static boolean isUVUse(int uvUseBit, int index, MjMsgActionEnum action) {
+    public static boolean isUpscaleUse(int uUseBit, int index, MjMsgActionEnum action) {
         if (action == MjMsgActionEnum.UPSCALE) {
-            return isBitSet(uvUseBit, 8 - index);
+            return isBitSet(uUseBit, 4 - index);
         }
-        if (action == MjMsgActionEnum.VARIATION) {
-            return isBitSet(uvUseBit, 4 - index);
-        }
-        throw new IllegalArgumentException("Mj 判断 nv 的 action 不合法");
+        throw new IllegalArgumentException("Mj 判断的 action 不合法");
     }
 
     /**
-     * 设置指定位置的 uv 使用
+     * 设置指定位置的 upscale 使用
      *
      * @param index  位置
      * @param action 动作
      * @return 设置后的 uv 使用
      */
-    public static int setUVUse(int uvUseBit, int index, MjMsgActionEnum action) {
+    public static int setUpscaleUse(int uvUseBit, int index, MjMsgActionEnum action) {
         if (action == MjMsgActionEnum.UPSCALE) {
-            return setBit(uvUseBit, 8 - index);
-        }
-        if (action == MjMsgActionEnum.VARIATION) {
             return setBit(uvUseBit, 4 - index);
         }
-        throw new IllegalArgumentException("Mj 设置 nv 的 action 不合法");
+        throw new IllegalArgumentException("Mj 设置的 action 不合法");
     }
 
     /**

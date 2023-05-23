@@ -52,7 +52,7 @@ public class MjRoomMessageHandler {
         // 检查是否可以进行 upscale
         checkCanUpscaleAndVariation(parentRoomMjMsgDO, midjourneyConfig);
         // 判断是否已经 u 转换过
-        boolean isUse = MjRoomMessageUtil.isUVUse(parentRoomMjMsgDO.getUvUseBit(), convertRequest.getIndex(), MjMsgActionEnum.UPSCALE);
+        boolean isUse = MjRoomMessageUtil.isUpscaleUse(parentRoomMjMsgDO.getUUseBit(), convertRequest.getIndex(), MjMsgActionEnum.UPSCALE);
         if (isUse) {
             throw new ServiceException("该消息已经进行过 U" + convertRequest.getIndex());
         }

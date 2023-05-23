@@ -73,11 +73,11 @@ public class RoomMjMsgDO {
     private Long uvParentId;
 
     /**
-     * uv 指令使用比特位
-     * 末尾 8 位 00000000
-     * 分别表示 U1 U2 U3 U4 V1 V2 V3 V4
+     * u 指令使用比特位
+     * 末尾 4 位 0000
+     * 分别表示 U1 U2 U3 U4
      */
-    private Integer uvUseBit;
+    private Integer uUseBit;
 
     /**
      * uv 位置

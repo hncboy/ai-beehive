@@ -100,7 +100,7 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
         answerMessage.setAction(MjMsgActionEnum.IMAGINE);
         answerMessage.setStatus(answerStatus);
         answerMessage.setDiscordChannelId(midjourneyConfig.getChannelId());
-        answerMessage.setUvUseBit(0);
+        answerMessage.setUUseBit(0);
         answerMessage.setIsDeleted(false);
 
         // 达到队列上限
