@@ -6,14 +6,13 @@ spring:
     url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
   data:
     redis:
-      # 地址
       host: localhost
-      # 端口
-      port: 6379
-      # 密码
       password: password
-      # 连接超时
       connect-timeout: 1000
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 mybatis-plus:
   configuration:
@@ -81,3 +80,15 @@ sa-token:
   token-name: satoken
   # 关闭 banner
   is-print: false
+
+# lock4j 分布式锁
+lock4j:
+  # 前缀
+  lock-key-prefix: bh
+
+# forest 配置
+forest:
+  # 数据读取超时时间
+  read-timeout: 30000
+  # 连接超时时间
+  connect-timeout: 30000

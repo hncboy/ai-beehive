@@ -1,14 +1,15 @@
 package cn.beehive.base.exception;
 
-import cn.dev33.satoken.exception.NotLoginException;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.beehive.base.handler.response.R;
 import cn.beehive.base.handler.response.ResultCode;
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.text.StrPool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -79,17 +80,24 @@ public class RestExceptionTranslator {
     }
 
     /**
-     * 自定义校验规则异常
+     * 参数校验异常处理
      * HTTP 状态为 400
      *
      * @param e 异常信息
      * @return 返回值
      */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R<Void> handleError(MethodArgumentNotValidException e) {
-        log.warn("PostBody校验不通过", e);
-        return wrapErrors(e.getAllErrors());
+    public R<Void> handleError(BindException e) {
+        log.warn("参数校验不通过", e);
+
+        List<ObjectError> errors = e.getAllErrors();
+        if (CollectionUtil.isEmpty(errors)) {
+            return R.fail(ResultCode.FAILURE, ResultCode.FAILURE.getMessage());
+        }
+        StringBuilder sb = new StringBuilder();
+        errors.forEach(error -> sb.append(error.getDefaultMessage()).append(StrPool.COMMA));
+        return R.fail(ResultCode.FAILURE, sb.toString());
     }
 
     /**
@@ -105,21 +113,4 @@ public class RestExceptionTranslator {
         log.error("服务器异常", e);
         return R.fail(ResultCode.INTERNAL_SERVER_ERROR, ResultCode.INTERNAL_SERVER_ERROR.getMessage());
     }
-
-    /**
-     * 封装validator的错误信息列表
-     *
-     * @param errors 错误信息列表
-     */
-    private R<Void> wrapErrors(List<ObjectError> errors) {
-        if (CollectionUtil.isEmpty(errors)) {
-            return R.fail(ResultCode.FAILURE, ResultCode.FAILURE.getMessage());
-        }
-        StringBuilder sb = new StringBuilder();
-        // 自定义校验，error类型为 ViolationObjectError
-        errors.forEach(error -> sb.append(error.getDefaultMessage()));
-
-        return R.fail(ResultCode.FAILURE, sb.toString());
-    }
-
 }

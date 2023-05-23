@@ -7,7 +7,6 @@ import cn.beehive.base.util.RedisUtil;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
 import cn.beehive.cell.midjourney.service.DiscordService;
 import cn.beehive.cell.midjourney.service.RoomMjMsgService;
-import cn.hutool.core.lang.Pair;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.annotation.Lock4j;
 import com.dtflys.forest.http.ForestResponse;
