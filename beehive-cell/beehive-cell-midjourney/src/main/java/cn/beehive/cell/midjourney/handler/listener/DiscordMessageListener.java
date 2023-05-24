@@ -1,9 +1,6 @@
-package cn.beehive.cell.midjourney.listener;
+package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
-import cn.beehive.cell.midjourney.handler.DescribeDiscordMessageHandler;
-import cn.beehive.cell.midjourney.handler.ImagineDiscordMessageHandler;
-import cn.beehive.cell.midjourney.handler.UVDiscordMessageHandler;
 import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

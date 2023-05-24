@@ -1,4 +1,4 @@
-package cn.beehive.cell.midjourney.scheduler;
+package cn.beehive.cell.midjourney.handler.scheduler;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.enums.MjMsgStatusEnum;

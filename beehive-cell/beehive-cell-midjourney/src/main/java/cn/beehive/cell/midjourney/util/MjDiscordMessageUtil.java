@@ -19,17 +19,22 @@ public class MjDiscordMessageUtil {
     /**
      * imagine 消息正则
      */
-    private static final String IMAGINE_CONTENT_REGEX = "\\*\\*(.*?)\\*\\* - <@(\\d+)> \\((.*?)\\)";
+    private static final Pattern IMAGINE_CONTENT_REGEX_PATTERN = Pattern.compile("\\*\\*(.*?)\\*\\* - <@(\\d+)> \\((.*?)\\)");
 
     /**
      * uv 消息正则
      */
-    private static final String MJ_UV_CONTENT_REGEX = "\\*\\*(.*?)\\*\\* - (.*?) by <@(\\d+)> \\((.*?)\\)";
+    private static final Pattern MJ_UV_CONTENT_REGEX_PATTERN = Pattern.compile("\\*\\*(.*?)\\*\\* - (.*?) by <@(\\d+)> \\((.*?)\\)");
 
     /**
      * u 消息正则
      */
-    private static final String MJ_U_CONTENT_REGEX = "\\*\\*(.*?)\\*\\* - Image #(\\d) <@(\\d+)>";
+    private static final Pattern MJ_U_CONTENT_REGEX_PATTERN = Pattern.compile("\\*\\*(.*?)\\*\\* - Image #(\\d) <@(\\d+)>");
+
+    /**
+     * describe 消息替换其中的链接正则
+     */
+    private static final String MJ_DESCRIBE_HREF_REPLACE_REGEX = "\\[(.*?)\\]\\(https://goo.gl/search.*?\\)";
 
     /**
      * 提取 imagine 消息中的消息 id
@@ -53,8 +58,7 @@ public class MjDiscordMessageUtil {
      * @return imagine 消息
      */
     public static MjDiscordMessageBO matchImagineMessage(Message message) {
-        Pattern pattern = Pattern.compile(IMAGINE_CONTENT_REGEX);
-        Matcher matcher = pattern.matcher(message.getContentRaw());
+        Matcher matcher = IMAGINE_CONTENT_REGEX_PATTERN.matcher(message.getContentRaw());
         if (!matcher.find()) {
             return null;
         }
@@ -72,8 +76,7 @@ public class MjDiscordMessageUtil {
      * @return uv 消息
      */
     public static MjDiscordMessageBO matchUVMessage(Message message) {
-        Pattern pattern = Pattern.compile(MJ_UV_CONTENT_REGEX);
-        Matcher matcher = pattern.matcher(message.getContentRaw());
+        Matcher matcher = MJ_UV_CONTENT_REGEX_PATTERN.matcher(message.getContentRaw());
         if (!matcher.find()) {
             return matchUContent(message);
         }
@@ -93,8 +96,7 @@ public class MjDiscordMessageUtil {
      * @return u 消息
      */
     private static MjDiscordMessageBO matchUContent(Message message) {
-        Pattern pattern = Pattern.compile(MJ_U_CONTENT_REGEX);
-        Matcher matcher = pattern.matcher(message.getContentRaw());
+        Matcher matcher = MJ_U_CONTENT_REGEX_PATTERN.matcher(message.getContentRaw());
         if (!matcher.find()) {
             return null;
         }
@@ -104,5 +106,15 @@ public class MjDiscordMessageUtil {
         messageBO.setStatus("complete");
         messageBO.setIndex(Integer.parseInt(matcher.group(2)));
         return messageBO;
+    }
+
+    /**
+     * 替换 describe 消息中的链接
+     *
+     * @param prompt 原始消息
+     * @return 替换后的消息
+     */
+    public static String replacePrompt(String prompt) {
+        return prompt.replaceAll(MJ_DESCRIBE_HREF_REPLACE_REGEX, "$1");
     }
 }

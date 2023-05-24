@@ -16,6 +16,7 @@ import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
 import cn.beehive.cell.midjourney.domain.vo.RoomMjMsgVO;
 import cn.beehive.cell.midjourney.handler.MjRoomMessageHandler;
 import cn.beehive.cell.midjourney.handler.MjTaskQueueHandler;
+import cn.beehive.cell.midjourney.handler.converter.RoomMjMsgConverter;
 import cn.beehive.cell.midjourney.service.DiscordService;
 import cn.beehive.cell.midjourney.service.RoomMjMsgService;
 import cn.hutool.core.lang.Pair;
@@ -51,7 +52,12 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
     @Override
     public List<RoomMjMsgVO> list(RoomMjMsgCursorQuery cursorQuery) {
-        return null;
+        List<RoomMjMsgDO> roomMjMsgDOList = list(new LambdaQueryWrapper<RoomMjMsgDO>()
+                .eq(RoomMjMsgDO::getRoomId, cursorQuery.getRoomId())
+                .gt(cursorQuery.getIsUseCursor() && cursorQuery.getIsAsc(), RoomMjMsgDO::getId, cursorQuery.getCursor())
+                .lt(cursorQuery.getIsUseCursor() && !cursorQuery.getIsAsc(), RoomMjMsgDO::getId, cursorQuery.getCursor())
+                .orderBy(true, cursorQuery.getIsAsc(), RoomMjMsgDO::getId));
+        return RoomMjMsgConverter.INSTANCE.entityToVO(roomMjMsgDOList);
     }
 
     @Override

@@ -1,10 +1,9 @@
-package cn.beehive.cell.midjourney.handler;
+package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.enums.MjMsgStatusEnum;
 import cn.beehive.cell.midjourney.domain.bo.MjDiscordMessageBO;
 import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
-import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Message;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,6 @@ import java.util.Objects;
  * 消息变更 - Midjourney Bot: **[6601101751104431] blue sky --v 5 --s 250** - <@1013002753796219000> (93%) (fast)
  * 消息接收 - Midjourney Bot: **[6601101751104431] blue sky --v 5 --s 250** - <@1013002753796219000> (fast)
  */
-@Slf4j
 @Component
 public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
 

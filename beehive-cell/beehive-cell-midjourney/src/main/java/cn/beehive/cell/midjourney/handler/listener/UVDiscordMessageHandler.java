@@ -1,4 +1,4 @@
-package cn.beehive.cell.midjourney.handler;
+package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.enums.MessageTypeEnum;
