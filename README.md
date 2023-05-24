@@ -5,7 +5,7 @@
 - ChatGPT 说文解字前端的 Java 后台
 - 前端-说文用户端开源代码 https://github.com/mjjh1717/chatgpt-shuowen
 - 前端-解字管理端开源代码 https://github.com/hncboy/chatgpt-jiezi
-- 2.0 升级版开发中
+- 2.0 升级版开发中，会接入 openai embeddings、Midjourney 等等
 
 # 注意
 
@@ -196,15 +196,11 @@
 
 # 联系方式
 
-添加微信备注 Github ChatGPT 以及原因
+添加微信备注 Github ChatGPT 以及原因，微信群请在 [issue](https://github.com/hncboy/chatgpt-web-java/issues/77) 查看
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
     <img style="max-width: 100%" src="pics/wechat.png" alt="微信" />
-  </div>
-    <div style="text-align: center">
-    <img style="max-width: 30%" src="pics/wechat_group.png" alt="微信群" />
-  </div>
 </div>
 
 
