@@ -1,0 +1,7 @@
+configItemList:
+  -
+    keyName: "1"
+    defaultValue: "1"
+  -
+    keyName: "2"
+    defaultValue: "2"
