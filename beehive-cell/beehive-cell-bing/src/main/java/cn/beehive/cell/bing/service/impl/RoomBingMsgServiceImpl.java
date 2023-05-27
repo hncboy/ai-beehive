@@ -52,6 +52,11 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
      */
     private static final String DELIMITER = "\u001E";
 
+    /**
+     * 最大失败重试次数
+     */
+    private static final int MAX_FAILURE_RETRIES = 3;
+
     @Resource
     private RoomBingService roomBingService;
 
@@ -82,7 +87,7 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
 
         try {
             // 建立 WebSocket 连接并发送消息
-            buildWebSocketAndSendMessage(roomBingDO, sendRequest, emitter);
+            buildWebSocketAndSendMessage(roomBingDO, sendRequest, emitter, MAX_FAILURE_RETRIES);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -96,9 +101,10 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
      * @param roomBingDO             房间信息
      * @param roomBingMsgSendRequest 发送消息请求
      * @param responseBodyEmitter    响应
+     * @param retries                重试次数
      * @throws Exception 异常
      */
-    private void buildWebSocketAndSendMessage(RoomBingDO roomBingDO, RoomBingMsgSendRequest roomBingMsgSendRequest, ResponseBodyEmitter responseBodyEmitter) throws Exception {
+    private void buildWebSocketAndSendMessage(RoomBingDO roomBingDO, RoomBingMsgSendRequest roomBingMsgSendRequest, ResponseBodyEmitter responseBodyEmitter, int retries) throws Exception {
         // 连接地址
         URI uri = new URI("wss://sydney.bing.com/sydney/ChatHub");
 
@@ -117,13 +123,13 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
             public void onOpen(ServerHandshake serverHandshake) {
                 // 第一句
                 send("{\"protocol\":\"json\",\"version\":1}" + DELIMITER);
-                System.out.println("握手成功");
+                log.debug("NewBing 房间：{}，请求参数：{}，WebSocket 连接成功", roomBingDO.getRoomId(), ObjectMapperUtil.toJson(roomBingMsgSendRequest));
                 this.emitter = responseBodyEmitter;
             }
 
             @Override
             public void onMessage(String message) {
-                System.out.println("收到消息" + message);
+                log.debug("NewBing 房间：{}，收到消息：{}", roomBingDO.getRoomId(), message);
                 String[] events = message.split(DELIMITER);
                 for (String event : events) {
                     // 空 JSON={}，用来响应第一句消息，这里发送问题
@@ -142,22 +148,41 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
                     if (type == 1) {
                         handleType1Response(message, emitter);
                     } else if (type == 2) {
-                        handleType2Response(roomBingDO, message, emitter);
-                        // 关闭连接
+                        boolean isNewTopic = handleType2Response(roomBingDO, message, emitter);
+                        // 关闭当前连接
                         close();
+                        // 需要开启新话题，得重新建立连接
+                        if (isNewTopic) {
+                            try {
+                                // 再次尝试连接
+                                if (retries > 0) {
+                                    log.debug("NewBing 房间：{}，尝试第 {} 次重新建立话题", roomBingDO.getRoomId(), MAX_FAILURE_RETRIES - retries + 1);
+                                    // 刷新房间重新建立连接
+                                    buildWebSocketAndSendMessage(roomBingService.refreshRoom(roomBingDO), roomBingMsgSendRequest, responseBodyEmitter, retries - 1);
+                                } else {
+                                    log.warn("NewBing 房间：{}，尝试重新建立话题失败，重试次数已用完", roomBingDO.getRoomId());
+                                    emitter.send("发送对话失败，请稍后重试。");
+                                    emitter.complete();
+                                }
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            // 正常结束
+                            emitter.complete();
+                        }
                     }
                 }
             }
 
             @Override
             public void onClose(int i, String s, boolean b) {
-                System.out.println("链接已关闭");
-                emitter.complete();
+                log.debug("NewBing 房间：{}，WebSocket 连接关闭", roomBingDO.getRoomId());
             }
 
             @Override
             public void onError(Exception e) {
-                System.out.println("发生错误已关闭");
+                log.error("NewBing 房间：{}，WebSocket 连接发生错误", roomBingDO.getRoomId(), e);
                 emitter.complete();
             }
         };
@@ -193,8 +218,9 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
      * @param roomBingDO     房间信息
      * @param receiveMessage 响应结果
      * @param emitter        响应流
+     * @return 是否需要开启新话题
      */
-    private void handleType2Response(RoomBingDO roomBingDO, String receiveMessage, ResponseBodyEmitter emitter) {
+    private boolean handleType2Response(RoomBingDO roomBingDO, String receiveMessage, ResponseBodyEmitter emitter) {
         BingApiSendType2ResultBO resultBO = ObjectMapperUtil.fromJson(receiveMessage, BingApiSendType2ResultBO.class);
         String resultValue = resultBO.getItem().getResult().getValue();
 
@@ -204,15 +230,12 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
             // 过滤出机器人回复的那一条
             List<BingApiSendMessageResultBO> botMessages = messages.stream().filter(message -> Objects.equals(message.getAuthor(), "bot")).toList();
             if (CollectionUtil.isEmpty(botMessages)) {
-                System.out.println("bing 生气了，不想回复了，需要开启新话题");
-                // TODO 开启新话题
-                return;
+                // bing 生气了，不想回复了，需要开启新话题
+                return true;
             }
 
             // 获取回复消息
             BingApiSendMessageResultBO botMessage = botMessages.get(0);
-            System.out.println("最终回复：" + botMessage.getText());
-
             RoomBingStreamMsgVO roomBingStreamMsgVO = new RoomBingStreamMsgVO();
             roomBingStreamMsgVO.setContent(botMessage.getText());
 
@@ -226,11 +249,9 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
             BingApiSendThrottlingResultBO throttling = resultBO.getItem().getThrottling();
             roomBingStreamMsgVO.setNumUserMessagesInConversation(throttling.getNumUserMessagesInConversation());
             roomBingStreamMsgVO.setMaxNumUserMessagesInConversation(throttling.getMaxNumUserMessagesInConversation());
-            // 超过最大提问次数会一直回复：
+            // 超过最大提问次数会一直回复：Thanks for this conversation! I've reached my limit, will you hit “New topic,” please?
             if (throttling.getNumUserMessagesInConversation() > throttling.getMaxNumUserMessagesInConversation()) {
-                // TODO 开启新话题
-                System.out.println("超过最大提问次数，需要开启新话题");
-                return;
+                return true;
             }
 
             // 更新房间提问次数
@@ -243,12 +264,11 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
                 throw new RuntimeException(e);
             }
 
-            System.out.println("成功结束");
-            return;
+            // 成功
+            return false;
         }
 
-
-        // TODO 开启新话题
-        System.out.println("未记录的异常");
+        // 非成功就开启新话题
+        return true;
     }
 }

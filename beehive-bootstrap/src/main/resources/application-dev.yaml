@@ -92,3 +92,8 @@ forest:
   read-timeout: 30000
   # 连接超时时间
   connect-timeout: 30000
+
+# 日志配置
+logging:
+  level:
+    root: info

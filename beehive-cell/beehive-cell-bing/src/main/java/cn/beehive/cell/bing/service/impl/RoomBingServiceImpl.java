@@ -58,6 +58,20 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
     }
 
     @Override
+    public RoomBingDO refreshRoom(RoomBingDO roomBingDO) {
+        // 创建 bing 对话
+        BingApiCreateConversationResultBO bingConversation = createConversation(roomBingDO.getRoomId());
+
+        roomBingDO.setConversationId(bingConversation.getConversationId());
+        roomBingDO.setClientId(bingConversation.getClientId());
+        roomBingDO.setConversationSignature(bingConversation.getConversationSignature());
+        roomBingDO.setMaxNumUserMessagesInConversation(0);
+        roomBingDO.setNumUserMessagesInConversation(0);
+        updateById(roomBingDO);
+        return roomBingDO;
+    }
+
+    @Override
     public void updateRoomMessageNum(RoomBingDO roomBingDO, BingApiSendThrottlingResultBO throttling) {
         roomBingDO.setMaxNumUserMessagesInConversation(throttling.getMaxNumUserMessagesInConversation());
         roomBingDO.setNumUserMessagesInConversation(throttling.getNumUserMessagesInConversation());

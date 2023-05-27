@@ -20,6 +20,14 @@ public interface RoomBingService extends IService<RoomBingDO> {
     RoomBingDO getRoom(Long roomId);
 
     /**
+     * 刷新房间信息
+     *
+     * @param roomBingDO 房间信息
+     * @return 房间信息
+     */
+    RoomBingDO refreshRoom(RoomBingDO roomBingDO);
+
+    /**
      * 更新房间累计提问次数
      *
      * @param roomBingDO 房间信息
