@@ -1,7 +1,7 @@
 package cn.beehive.cell.midjourney.service;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
-import cn.beehive.cell.midjourney.domain.query.RoomMjMsgCursorQuery;
+import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
@@ -23,7 +23,7 @@ public interface RoomMjMsgService extends IService<RoomMjMsgDO> {
      * @param cursorQuery 请求参数
      * @return 消息列表
      */
-    List<RoomMjMsgVO> list(RoomMjMsgCursorQuery cursorQuery);
+    List<RoomMjMsgVO> list(RoomMsgCursorQuery cursorQuery);
 
     /**
      * 根据描述创建图像

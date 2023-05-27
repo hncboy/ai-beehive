@@ -47,6 +47,7 @@
         <chatgpt-sdk.version>1.0.11</chatgpt-sdk.version>
         <forest.version>1.5.31</forest.version>
         <lock4j-redisson.version>2.2.4</lock4j-redisson.version>
+        <websocket.version>1.5.3</websocket.version>
     </properties>
 
     <dependencies>
@@ -165,6 +166,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>lock4j-redisson-spring-boot-starter</artifactId>
             <version>${lock4j-redisson.version}</version>
+        </dependency>
+        <!-- WebSocket -->
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>${websocket.version}</version>
         </dependency>
     </dependencies>
 

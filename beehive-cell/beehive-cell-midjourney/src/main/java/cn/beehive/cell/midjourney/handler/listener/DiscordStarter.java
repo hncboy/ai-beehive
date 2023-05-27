@@ -1,4 +1,4 @@
-package cn.beehive.cell.midjourney.listener;
+package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.SysParamKeyEnum;

@@ -35,6 +35,11 @@
             <artifactId>beehive-cell-midjourney</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.beehive</groupId>
+            <artifactId>beehive-cell-bing</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

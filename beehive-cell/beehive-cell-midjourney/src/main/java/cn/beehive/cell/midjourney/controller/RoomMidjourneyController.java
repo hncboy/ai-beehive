@@ -1,7 +1,7 @@
 package cn.beehive.cell.midjourney.controller;
 
+import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.handler.response.R;
-import cn.beehive.cell.midjourney.domain.query.RoomMjMsgCursorQuery;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
@@ -35,7 +35,7 @@ public class RoomMidjourneyController {
 
     @Operation(summary = "消息列表")
     @GetMapping("/list")
-    public R<List<RoomMjMsgVO>> list(@Validated RoomMjMsgCursorQuery cursorQuery) {
+    public R<List<RoomMjMsgVO>> list(@Validated RoomMsgCursorQuery cursorQuery) {
         return R.data(roomMjMsgService.list(cursorQuery));
     }
 

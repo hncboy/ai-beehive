@@ -1,10 +1,10 @@
-package cn.beehive.cell.midjourney.handler;
+package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.enums.MjMsgStatusEnum;
+import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,6 @@ import java.util.Objects;
  * Midjounery Discord 消息变更 - Midjourney Bot:
  */
 @Component
-@RequiredArgsConstructor
 public class DescribeDiscordMessageHandler extends DiscordMessageHandler {
 
     @Override
@@ -62,13 +61,13 @@ public class DescribeDiscordMessageHandler extends DiscordMessageHandler {
         // 返回的提示语
         String prompt = messageEmbed.getDescription();
 
-        roomMjMsgDO.setPrompt(prompt);
         roomMjMsgDO.setDiscordMessageId(message.getId());
         roomMjMsgDO.setDiscordFinishTime(new Date());
         if (StrUtil.isBlank(prompt)) {
             // MJ 返回提示语为空，不知道什么情况会出现
             roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_FAILURE);
         } else {
+            roomMjMsgDO.setResponseContent(MjDiscordMessageUtil.replacePrompt(prompt));
             roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_SUCCESS);
             roomMjMsgDO.setDiscordImageUrl(discordImageUrl);
         }

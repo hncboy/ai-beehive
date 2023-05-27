@@ -28,11 +28,6 @@ public enum MjMsgActionEnum {
     VARIATION("variation"),
 
     /**
-     * 重新生成
-     */
-    RESET("reset"),
-
-    /**
      * 图转 prompt
      */
     DESCRIBE("describe");

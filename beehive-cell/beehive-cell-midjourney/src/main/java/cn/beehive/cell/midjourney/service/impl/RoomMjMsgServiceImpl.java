@@ -1,6 +1,7 @@
 package cn.beehive.cell.midjourney.service.impl;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
+import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MjMsgStatusEnum;
@@ -9,13 +10,13 @@ import cn.beehive.base.mapper.RoomMjMsgMapper;
 import cn.beehive.base.util.FileUtil;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
-import cn.beehive.cell.midjourney.domain.query.RoomMjMsgCursorQuery;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
 import cn.beehive.cell.midjourney.domain.vo.RoomMjMsgVO;
 import cn.beehive.cell.midjourney.handler.MjRoomMessageHandler;
 import cn.beehive.cell.midjourney.handler.MjTaskQueueHandler;
+import cn.beehive.cell.midjourney.handler.converter.RoomMjMsgConverter;
 import cn.beehive.cell.midjourney.service.DiscordService;
 import cn.beehive.cell.midjourney.service.RoomMjMsgService;
 import cn.hutool.core.lang.Pair;
@@ -50,8 +51,14 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
     private MjTaskQueueHandler mjTaskQueueHandler;
 
     @Override
-    public List<RoomMjMsgVO> list(RoomMjMsgCursorQuery cursorQuery) {
-        return null;
+    public List<RoomMjMsgVO> list(RoomMsgCursorQuery cursorQuery) {
+        List<RoomMjMsgDO> roomMjMsgDOList = list(new LambdaQueryWrapper<RoomMjMsgDO>()
+                .eq(RoomMjMsgDO::getRoomId, cursorQuery.getRoomId())
+                .gt(cursorQuery.getIsUseCursor() && cursorQuery.getIsAsc(), RoomMjMsgDO::getId, cursorQuery.getCursor())
+                .lt(cursorQuery.getIsUseCursor() && !cursorQuery.getIsAsc(), RoomMjMsgDO::getId, cursorQuery.getCursor())
+                .last(StrUtil.format("limit {}", cursorQuery.getSize()))
+                .orderBy(true, cursorQuery.getIsAsc(), RoomMjMsgDO::getId));
+        return RoomMjMsgConverter.INSTANCE.entityToVO(roomMjMsgDOList);
     }
 
     @Override
@@ -326,7 +333,6 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
         questionMessage.setType(MessageTypeEnum.QUESTION);
         questionMessage.setImageName(newFileName);
         questionMessage.setDiscordImageUrl(discordUploadFileName);
-        ;
         questionMessage.setAction(MjMsgActionEnum.DESCRIBE);
         questionMessage.setStatus(MjMsgStatusEnum.SYS_SUCCESS);
         questionMessage.setDiscordChannelId(midjourneyConfig.getChannelId());
@@ -343,7 +349,6 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
         answerMessage.setUserId(FrontUserUtil.getUserId());
         answerMessage.setImageName(newFileName);
         answerMessage.setDiscordImageUrl(discordUploadFileName);
-        ;
         answerMessage.setType(MessageTypeEnum.ANSWER);
         answerMessage.setAction(MjMsgActionEnum.DESCRIBE);
         answerMessage.setStatus(answerStatus);

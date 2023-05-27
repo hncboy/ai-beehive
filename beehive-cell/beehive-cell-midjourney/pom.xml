@@ -9,7 +9,6 @@
     <artifactId>beehive-cell-midjourney</artifactId>
 
     <properties>
-        <dataurl.version>2.0.0</dataurl.version>
         <jda.version>5.0.0-beta.9</jda.version>
     </properties>
 
@@ -25,12 +24,6 @@
                     <artifactId>opus-java</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!-- 处理 Data url -->
-        <dependency>
-            <groupId>eu.maxschuster</groupId>
-            <artifactId>dataurl</artifactId>
-            <version>${dataurl.version}</version>
         </dependency>
     </dependencies>
 </project>

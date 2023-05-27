@@ -1,0 +1,37 @@
+{
+  "arguments": [
+    {
+      "source": "cib",
+      "optionsSets": [
+        "nlu_direct_response_filter",
+        "deepleo",
+        "disable_emoji_spoken_text",
+        "responsible_ai_policy_235",
+        "enablemm",
+        "harmonyv3",
+        "dtappid",
+        "trn8req120",
+        "h3ads",
+        "rai251",
+        "blocklistv2",
+        "localtime",
+        "dv3sugg"
+      ],
+      "isStartOfSession": "$isStartOfSession",
+      "message": {
+        "author": "user",
+        "inputMethod": "Keyboard",
+        "text": "$prompt",
+        "messageType": "Chat"
+      },
+      "conversationId": "$conversationId",
+      "conversationSignature": "$conversationSignature",
+      "participant": {
+        "id": "$clientId"
+      }
+    }
+  ],
+  "invocationId": "1",
+  "target": "chat",
+  "type": 4
+}
