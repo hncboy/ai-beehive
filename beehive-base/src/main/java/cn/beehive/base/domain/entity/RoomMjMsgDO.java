@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * @author hncboy
  * @date 2023/5/18
- * Midjourney 房间消息
+ * Midjourney 房间消息表实体类
  */
 @Data
 @TableName("bh_room_mj_msg")

@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * @author hncboy
  * @date 2023/5/26
- * NewBing 房间消息
+ * NewBing 房间消息表实体类
  */
 @Data
 @TableName("bh_room_bing_msg")

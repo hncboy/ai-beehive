@@ -5,7 +5,6 @@ import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.handler.mp.IBeehiveService;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import cn.beehive.cell.bing.domain.vo.RoomBingMsgVO;
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import java.util.List;

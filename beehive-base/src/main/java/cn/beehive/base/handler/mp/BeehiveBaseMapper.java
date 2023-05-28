@@ -24,7 +24,6 @@ public interface BeehiveBaseMapper<T> extends BaseMapper<T> {
      * @param queryWrapper   查询条件
      * @return 查询结果列表
      */
-    @SuppressWarnings("unchecked")
     default List<T> cursorList(CursorQuery cursorQuery, SFunction<T, ?> columnFunction, @Param(Constants.WRAPPER) LambdaQueryWrapper<T> queryWrapper) {
         // 多少条记录
         queryWrapper.last("LIMIT " + cursorQuery.getSize());

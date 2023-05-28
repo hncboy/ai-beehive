@@ -1,6 +1,8 @@
 package cn.beehive.base.domain.entity;
 
+import cn.beehive.base.enums.CellCodeEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -10,18 +12,18 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/5/26
- * NewBing 房间表实体类
+ * @date 2023/5/29
+ * 房间表实体类
  */
 @Data
-@TableName("bh_room_bing")
-public class RoomBingDO {
+@TableName("bh_room")
+public class RoomDO {
 
     /**
-     * 房间 id
+     * 主键
      */
-    @TableId
-    private Long roomId;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     /**
      * 用户 id
@@ -29,29 +31,34 @@ public class RoomBingDO {
     private Integer userId;
 
     /**
-     * bing conversationId
+     * 颜色，十六进制
      */
-    private String conversationId;
+    private String color;
 
     /**
-     * bing clientId
+     * 名称
      */
-    private String clientId;
+    private String name;
 
     /**
-     * bing conversationSignature
+     * 固定时间戳
      */
-    private String conversationSignature;
+    private Long pinTime;
 
     /**
-     * bing 最大提问次数
+     * ip
      */
-    private Integer maxNumUserMessagesInConversation;
+    private String ip;
 
     /**
-     * bing 累计提问次数
+     * cell code
      */
-    private Integer numUserMessagesInConversation;
+    private CellCodeEnum cellCode;
+
+    /**
+     * 是否删除 0 否 1 是
+     */
+    private Boolean isDeleted;
 
     /**
      * 创建时间
