@@ -18,7 +18,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @AllArgsConstructor
 @Data
 public class RoomParamKey {
-    private Integer cellId;
+    private Integer configId;
     private Integer roomId;
     private Integer userId;
 
@@ -34,11 +34,11 @@ public class RoomParamKey {
 
         RoomParamKey that = (RoomParamKey) o;
 
-        return new EqualsBuilder().append(cellId, that.cellId).append(roomId, that.roomId).append(userId, that.userId).isEquals();
+        return new EqualsBuilder().append(configId, that.configId).append(roomId, that.roomId).append(userId, that.userId).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(cellId).append(roomId).append(userId).toHashCode();
+        return new HashCodeBuilder(17, 37).append(configId).append(roomId).append(userId).toHashCode();
     }
 }

@@ -130,6 +130,15 @@ public class CellConfigPropertyManager {
     }
 
     /**
+     * 获取 Cell 的ID
+     *
+     * @return Cell的唯一ID
+     */
+    public final Integer getCellId() {
+        return this.belongCell.getId();
+    }
+
+    /**
      * 持久化配置项属性
      * 检查 cellConfigList 中的配置项是否都载入数据库了：
      * - 如果没有则插入
