@@ -1,7 +1,7 @@
 package cn.beehive.cell.bing.service;
 
 import cn.beehive.base.domain.entity.RoomBingDO;
-import cn.beehive.cell.bing.domain.bo.BingApiSendThrottlingResultBO;
+import cn.beehive.cell.bing.domain.bo.BingRoomBO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -14,24 +14,17 @@ public interface RoomBingService extends IService<RoomBingDO> {
     /**
      * 获取房间信息
      *
-     * @param roomId 房间 id
-     * @return 房间信息
+     * @param roomId     房间 id
+     * @param isNewTopic 是否是新话题
+     * @return 房间业务信息
      */
-    RoomBingDO getRoom(Long roomId);
+    BingRoomBO getRoom(Long roomId, boolean isNewTopic);
 
     /**
-     * 刷新房间信息
+     * 刷新房间业务信息
      *
-     * @param roomBingDO 房间信息
-     * @return 房间信息
+     * @param bingRoomBO 房间业务信息
+     * @return 房间业务信息
      */
-    RoomBingDO refreshRoom(RoomBingDO roomBingDO);
-
-    /**
-     * 更新房间累计提问次数
-     *
-     * @param roomBingDO 房间信息
-     * @param throttling bing 限流信息
-     */
-    void updateRoomMessageNum(RoomBingDO roomBingDO, BingApiSendThrottlingResultBO throttling);
+    BingRoomBO refreshRoom(BingRoomBO bingRoomBO);
 }

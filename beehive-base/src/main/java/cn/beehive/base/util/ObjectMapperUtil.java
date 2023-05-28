@@ -3,6 +3,7 @@ package cn.beehive.base.util;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,20 @@ public class ObjectMapperUtil {
             return OBJECT_MAPPER.readValue(json, clazz);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(StrUtil.format("{} Failed to convert JSON to object", json, e));
+        }
+    }
+
+    /**
+     * 将一个 JSON 字符串转换为 JsonNode
+     *
+     * @param json 待转换的 JSON 字符串
+     * @return 转换后的 JsonNode
+     */
+    public static JsonNode readTree(String json) {
+        try {
+            return OBJECT_MAPPER.readTree(json);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(StrUtil.format("{} Failed to convert JSON to JsonNode", json, e));
         }
     }
 }

@@ -26,6 +26,11 @@ public class RoomBingMsgDO {
     private Long id;
 
     /**
+     * 父消息 id
+     */
+    private Long parentMessageId;
+
+    /**
      * 房间 id
      */
     private Long roomId;
@@ -39,6 +44,51 @@ public class RoomBingMsgDO {
      * 消息类型
      */
     private MessageTypeEnum type;
+
+    /**
+     * 消息内容
+     */
+    private String content;
+
+    /**
+     * bing conversationId
+     */
+    private String conversationId;
+
+    /**
+     * bing clientId
+     */
+    private String clientId;
+
+    /**
+     * bing conversationSignature
+     */
+    private String conversationSignature;
+
+    /**
+     * bing 最大提问次数
+     */
+    private Integer maxNumUserMessagesInConversation;
+
+    /**
+     * bing 累计提问次数
+     */
+    private Integer numUserMessagesInConversation;
+
+    /**
+     * 是否新话题
+     */
+    private Boolean isNewTopic;
+
+    /**
+     * bing 刷新房间原因
+     */
+    private String refreshRoomReason;
+
+    /**
+     * bing 推荐提问
+     */
+    private String suggestResponses;
 
     /**
      * 创建时间

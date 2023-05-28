@@ -34,6 +34,7 @@ public class RoomBingMsgSendRequest {
     /**
      * 换模式了会自动开启
      */
+    @NotNull(message = "是否开启新话题不能为空")
     @Schema(title = "是否开启新话题")
     private Boolean isNewTopic;
 }
