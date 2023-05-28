@@ -2,6 +2,7 @@ package cn.beehive.cell.bing.service;
 
 import cn.beehive.base.domain.entity.RoomBingMsgDO;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
+import cn.beehive.base.handler.mp.IBeehiveService;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import cn.beehive.cell.bing.domain.vo.RoomBingMsgVO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -14,7 +15,7 @@ import java.util.List;
  * @date 2023/5/26
  * NewBing 房间消息业务接口
  */
-public interface RoomBingMsgService extends IService<RoomBingMsgDO> {
+public interface RoomBingMsgService extends IBeehiveService<RoomBingMsgDO> {
 
     /**
      * 查询消息列表

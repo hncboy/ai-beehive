@@ -3,6 +3,7 @@ package cn.beehive.cell.bing.service.impl;
 import cn.beehive.base.domain.entity.RoomBingMsgDO;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.enums.MessageTypeEnum;
+import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomBingMsgMapper;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
@@ -17,7 +18,6 @@ import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
@@ -37,7 +37,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomBingMsgDO> implements RoomBingMsgService {
+public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper, RoomBingMsgDO> implements RoomBingMsgService {
 
     /**
      * 消息分隔符
@@ -54,12 +54,8 @@ public class RoomBingMsgServiceImpl extends ServiceImpl<RoomBingMsgMapper, RoomB
 
     @Override
     public List<RoomBingMsgVO> list(RoomMsgCursorQuery cursorQuery) {
-        List<RoomBingMsgDO> roomBingMsgDOList = list(new LambdaQueryWrapper<RoomBingMsgDO>()
-                .eq(RoomBingMsgDO::getRoomId, cursorQuery.getRoomId())
-                .gt(cursorQuery.getIsUseCursor() && cursorQuery.getIsAsc(), RoomBingMsgDO::getId, cursorQuery.getCursor())
-                .lt(cursorQuery.getIsUseCursor() && !cursorQuery.getIsAsc(), RoomBingMsgDO::getId, cursorQuery.getCursor())
-                .last(StrUtil.format("limit {}", cursorQuery.getSize()))
-                .orderBy(true, cursorQuery.getIsAsc(), RoomBingMsgDO::getId));
+        List<RoomBingMsgDO> roomBingMsgDOList = cursorList(cursorQuery, RoomBingMsgDO::getId, new LambdaQueryWrapper<RoomBingMsgDO>()
+                .eq(RoomBingMsgDO::getRoomId, cursorQuery.getRoomId()));
         return RoomBingMsgConverter.INSTANCE.entityToVO(roomBingMsgDOList);
     }
 
