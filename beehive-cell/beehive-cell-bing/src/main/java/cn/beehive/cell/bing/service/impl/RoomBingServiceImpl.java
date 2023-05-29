@@ -4,14 +4,20 @@ import cn.beehive.base.domain.entity.RoomBingDO;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.mapper.RoomBingMapper;
 import cn.beehive.base.util.FrontUserUtil;
+import cn.beehive.cell.base.enums.BingCellConfigCodeEnum;
+import cn.beehive.cell.base.hander.RoomHandler;
+import cn.beehive.cell.base.hander.strategy.BingCellConfigStrategy;
+import cn.beehive.cell.base.hander.strategy.DataWrapper;
 import cn.beehive.cell.bing.domain.bo.BingApiCreateConversationResultBO;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
 import cn.beehive.cell.bing.handler.BingRoomHandler;
 import cn.beehive.cell.bing.service.RoomBingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -23,6 +29,9 @@ import java.util.Objects;
 @Service
 public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO> implements RoomBingService {
 
+    @Resource
+    private BingCellConfigStrategy bingCellConfigStrategy;
+
     @Override
     public BingRoomBO getRoom(Long roomId, boolean isNewTopic) {
         RoomBingDO roomBingDO = getById(roomId);
@@ -30,7 +39,8 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
         bingRoomBO.setRoomBingDO(roomBingDO);
 
         if (Objects.isNull(roomBingDO)) {
-            // TODO 查询通用房间，判断是否存在，不存在报错
+            // 校验房间
+            RoomHandler.checkRoomExist(roomId);
 
             roomBingDO = new RoomBingDO();
             roomBingDO.setRoomId(roomId);
@@ -54,7 +64,10 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
             return refreshRoom(bingRoomBO);
         }
 
-        // TODO 判断模式是否改变，改变的情况自动开启新话题
+        Map<BingCellConfigCodeEnum, DataWrapper> roomConfigParamMap = bingCellConfigStrategy.getRoomConfigParamAsMap(roomId);
+        String mode = roomConfigParamMap.get(BingCellConfigCodeEnum.MODE).asString();
+        // TODO
+        log.info("NewBing 房间 {} 的模式为 {}", roomId, mode);
 
         bingRoomBO.setIsNewTopic(false);
         return bingRoomBO;

@@ -22,5 +22,10 @@
             <artifactId>beehive-base</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.beehive</groupId>
+            <artifactId>beehive-cell-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

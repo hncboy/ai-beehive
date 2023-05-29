@@ -15,6 +15,7 @@ import cn.beehive.cell.bing.service.RoomBingMsgService;
 import cn.beehive.cell.bing.service.RoomBingService;
 import cn.hutool.core.collection.CollectionUtil;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
@@ -29,6 +30,7 @@ import java.util.Optional;
  * @date 2023/5/28
  * Bing Api type 响应消息处理器
  */
+@Slf4j
 @Component
 public class BingApiResponseTypeMessageHandler {
 
@@ -133,7 +135,9 @@ public class BingApiResponseTypeMessageHandler {
         }
 
         // 非成功就开启新话题
+        log.debug("NewBing 非成功状态，状态为 {}，需要开启新话题", resultValue);
         bingRoomBO.setRefreshRoomReason("非成功状态，状态为 " + resultValue);
+        roomBingService.refreshRoom(bingRoomBO);
         return true;
     }
 }

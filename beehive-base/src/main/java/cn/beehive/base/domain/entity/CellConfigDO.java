@@ -26,9 +26,14 @@ public class CellConfigDO {
     private Integer id;
 
     /**
-     * cellId
+     * cell id
      */
     private Integer cellId;
+
+    /**
+     * cell code
+     */
+    private String cellCode;
 
     /**
      * 名称

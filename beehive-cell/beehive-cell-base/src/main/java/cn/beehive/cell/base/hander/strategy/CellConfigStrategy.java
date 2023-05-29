@@ -22,7 +22,7 @@ public interface CellConfigStrategy {
      *
      * @return cell 配置项 code 枚举 Class
      */
-    Class<? extends ICellConfigCodeEnum> getCellConfigCodeEnumClazz();
+    Class<? extends ICellConfigCodeEnum<?>> getCellConfigCodeEnumClazz();
 
     /**
      * 校验
@@ -30,5 +30,5 @@ public interface CellConfigStrategy {
      * @param cellConfigCodeEnum   cell 配置项 code 枚举
      * @param roomConfigParamValue 房间配置项参数值
      */
-    void validate(ICellConfigCodeEnum cellConfigCodeEnum, String roomConfigParamValue);
+    void validate(ICellConfigCodeEnum<?> cellConfigCodeEnum, String roomConfigParamValue);
 }
