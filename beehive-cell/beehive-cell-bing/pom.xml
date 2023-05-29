@@ -7,4 +7,12 @@
         <version>${revision}</version>
     </parent>
     <artifactId>beehive-cell-bing</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.beehive</groupId>
+            <artifactId>beehive-cell-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

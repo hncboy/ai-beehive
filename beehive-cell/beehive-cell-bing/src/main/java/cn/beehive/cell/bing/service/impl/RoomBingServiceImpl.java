@@ -4,14 +4,15 @@ import cn.beehive.base.domain.entity.RoomBingDO;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.mapper.RoomBingMapper;
 import cn.beehive.base.util.FrontUserUtil;
-import cn.beehive.cell.base.enums.BingCellConfigCodeEnum;
 import cn.beehive.cell.base.hander.RoomHandler;
-import cn.beehive.cell.base.hander.strategy.BingCellConfigStrategy;
 import cn.beehive.cell.base.hander.strategy.DataWrapper;
 import cn.beehive.cell.bing.domain.bo.BingApiCreateConversationResultBO;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
+import cn.beehive.cell.bing.handler.BingCellConfigCodeEnum;
+import cn.beehive.cell.bing.handler.BingCellConfigStrategy;
 import cn.beehive.cell.bing.handler.BingRoomHandler;
 import cn.beehive.cell.bing.service.RoomBingService;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,10 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
         BingRoomBO bingRoomBO = new BingRoomBO();
         bingRoomBO.setRoomBingDO(roomBingDO);
 
+        // 获取房间配置参数
+        Map<BingCellConfigCodeEnum, DataWrapper> roomConfigParamMap = bingCellConfigStrategy.getRoomConfigParamAsMap(roomId);
+        String mode = roomConfigParamMap.get(BingCellConfigCodeEnum.MODE).asString();
+
         if (Objects.isNull(roomBingDO)) {
             // 校验房间
             RoomHandler.checkRoomExist(roomId);
@@ -45,6 +50,7 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
             roomBingDO = new RoomBingDO();
             roomBingDO.setRoomId(roomId);
             roomBingDO.setUserId(FrontUserUtil.getUserId());
+            roomBingDO.setMode(mode);
             // 初始化 bing 对话
             initConversation(roomBingDO);
             save(roomBingDO);
@@ -64,10 +70,11 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
             return refreshRoom(bingRoomBO);
         }
 
-        Map<BingCellConfigCodeEnum, DataWrapper> roomConfigParamMap = bingCellConfigStrategy.getRoomConfigParamAsMap(roomId);
-        String mode = roomConfigParamMap.get(BingCellConfigCodeEnum.MODE).asString();
-        // TODO
-        log.info("NewBing 房间 {} 的模式为 {}", roomId, mode);
+        // mode 改变需要开启新主题
+        if (ObjectUtil.notEqual(mode, roomBingDO.getMode())) {
+            bingRoomBO.setRefreshRoomReason("房间模式改变");
+            return refreshRoom(bingRoomBO);
+        }
 
         bingRoomBO.setIsNewTopic(false);
         return bingRoomBO;

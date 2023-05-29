@@ -29,6 +29,11 @@ public class RoomBingDO {
     private Integer userId;
 
     /**
+     * bing 模式
+     */
+    private String mode;
+
+    /**
      * bing conversationId
      */
     private String conversationId;

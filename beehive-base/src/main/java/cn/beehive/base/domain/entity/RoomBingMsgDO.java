@@ -51,6 +51,11 @@ public class RoomBingMsgDO {
     private String content;
 
     /**
+     * bing 模式
+     */
+    private String mode;
+
+    /**
      * bing conversationId
      */
     private String conversationId;

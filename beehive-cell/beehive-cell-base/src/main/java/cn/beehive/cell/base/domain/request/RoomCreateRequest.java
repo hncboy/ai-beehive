@@ -1,5 +1,6 @@
 package cn.beehive.cell.base.domain.request;
 
+import cn.beehive.base.enums.CellCodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -15,9 +16,9 @@ import java.util.List;
 @Schema(title = "房间创建请求参数")
 public class RoomCreateRequest {
 
-    @NotNull(message = "cellId 不能为空")
-    @Schema(title = "cellId")
-    private Integer cellId;
+    @NotNull(message = "cell code 不能为空")
+    @Schema(title = "cell code")
+    private CellCodeEnum cellCode;
 
     @NotNull(message = "房间信息不能为空")
     @Schema(title = "房间信息")
