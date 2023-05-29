@@ -2,11 +2,15 @@ package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.SysParamKeyEnum;
+import cn.beehive.cell.base.hander.strategy.ICellConfigCodeEnum;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
+import cn.beehive.cell.midjourney.handler.MidjourneyCellConfigCodeEnum;
+import cn.beehive.cell.midjourney.handler.MidjourneyCellConfigStrategy;
 import cn.hutool.core.util.BooleanUtil;
 import com.neovisionaries.ws.client.ProxySettings;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import okhttp3.OkHttpClient;
@@ -15,12 +19,14 @@ import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Map;
 
 /**
  * @author hncboy
  * @date 2023/5/18
  * Discord 启动类
  */
+@Slf4j
 @Component("discordStarter")
 public class DiscordStarter implements InitializingBean {
 
@@ -30,6 +36,9 @@ public class DiscordStarter implements InitializingBean {
     @Resource
     private DiscordMessageListener discordMessageListener;
 
+    @Resource
+    private MidjourneyCellConfigStrategy midjourneyCellConfigStrategy;
+
     @Override
     public void afterPropertiesSet() {
         // 判断是否启用 midjourney
@@ -37,7 +46,8 @@ public class DiscordStarter implements InitializingBean {
         if (!BooleanUtil.toBoolean(enable)) {
             return;
         }
-
+        Map<String, ICellConfigCodeEnum> cellConfigCodeMap = midjourneyCellConfigStrategy.getCellConfigCodeMap();
+        log.info("Midjourney 启动，配置项参数为：{}", cellConfigCodeMap);
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(midjourneyConfig.getBotToken(), GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT);
         builder.addEventListeners(this.discordMessageListener);
 

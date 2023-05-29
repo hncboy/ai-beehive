@@ -1,6 +1,7 @@
 package cn.beehive.cell.bing.service.impl;
 
 import cn.beehive.base.domain.entity.RoomBingDO;
+import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.mapper.RoomBingMapper;
 import cn.beehive.base.util.FrontUserUtil;
@@ -35,6 +36,9 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
 
     @Override
     public BingRoomBO getRoom(Long roomId, boolean isNewTopic) {
+        // 校验房间是否存在
+        RoomHandler.checkRoomExist(roomId, CellCodeEnum.NEW_BING);
+
         RoomBingDO roomBingDO = getById(roomId);
         BingRoomBO bingRoomBO = new BingRoomBO();
         bingRoomBO.setRoomBingDO(roomBingDO);
@@ -44,9 +48,6 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
         String mode = roomConfigParamMap.get(BingCellConfigCodeEnum.MODE).asString();
 
         if (Objects.isNull(roomBingDO)) {
-            // 校验房间
-            RoomHandler.checkRoomExist(roomId);
-
             roomBingDO = new RoomBingDO();
             roomBingDO.setRoomId(roomId);
             roomBingDO.setUserId(FrontUserUtil.getUserId());

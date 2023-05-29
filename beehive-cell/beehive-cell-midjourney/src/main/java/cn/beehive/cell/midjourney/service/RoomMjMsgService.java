@@ -2,11 +2,11 @@ package cn.beehive.cell.midjourney.service;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
+import cn.beehive.base.handler.mp.IBeehiveService;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
 import cn.beehive.cell.midjourney.domain.vo.RoomMjMsgVO;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2023/5/18
  * Midjourney 房间消息业务接口
  */
-public interface RoomMjMsgService extends IService<RoomMjMsgDO> {
+public interface RoomMjMsgService extends IBeehiveService<RoomMjMsgDO> {
 
     /**
      * 查询消息列表

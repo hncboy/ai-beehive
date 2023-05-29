@@ -45,7 +45,7 @@ public enum CellCodeEnum {
      */
     public static final Map<String, CellCodeEnum> CODE_MAP = Stream
             .of(CellCodeEnum.values())
-            .collect(Collectors.toMap(CellCodeEnum::getCode, Function.identity()));
+            .collect(Collectors.toMap(cellCodeEnum -> cellCodeEnum.getCode().toLowerCase(), Function.identity()));
 
     /**
      * 静态工厂反序列化

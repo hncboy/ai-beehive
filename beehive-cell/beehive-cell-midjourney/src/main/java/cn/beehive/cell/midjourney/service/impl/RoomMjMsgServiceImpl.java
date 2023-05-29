@@ -2,13 +2,16 @@ package cn.beehive.cell.midjourney.service.impl;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
+import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MjMsgStatusEnum;
 import cn.beehive.base.exception.ServiceException;
+import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomMjMsgMapper;
 import cn.beehive.base.util.FileUtil;
 import cn.beehive.base.util.FrontUserUtil;
+import cn.beehive.cell.base.hander.RoomHandler;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
@@ -24,7 +27,6 @@ import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dtflys.forest.http.ForestResponse;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -39,7 +41,7 @@ import java.util.List;
  * Midjourney 房间消息业务接口实现类
  */
 @Service
-public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsgDO> implements RoomMjMsgService {
+public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, RoomMjMsgDO> implements RoomMjMsgService {
 
     @Resource
     private DiscordService discordService;
@@ -52,20 +54,18 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
     @Override
     public List<RoomMjMsgVO> list(RoomMsgCursorQuery cursorQuery) {
-        List<RoomMjMsgDO> roomMjMsgDOList = list(new LambdaQueryWrapper<RoomMjMsgDO>()
-                .eq(RoomMjMsgDO::getRoomId, cursorQuery.getRoomId())
-                .gt(cursorQuery.getIsUseCursor() && cursorQuery.getIsAsc(), RoomMjMsgDO::getId, cursorQuery.getCursor())
-                .lt(cursorQuery.getIsUseCursor() && !cursorQuery.getIsAsc(), RoomMjMsgDO::getId, cursorQuery.getCursor())
-                .last(StrUtil.format("limit {}", cursorQuery.getSize()))
-                .orderBy(true, cursorQuery.getIsAsc(), RoomMjMsgDO::getId));
+        List<RoomMjMsgDO> roomMjMsgDOList = cursorList(cursorQuery, RoomMjMsgDO::getId, new LambdaQueryWrapper<RoomMjMsgDO>()
+                .eq(RoomMjMsgDO::getUserId, FrontUserUtil.getUserId())
+                .eq(RoomMjMsgDO::getRoomId, cursorQuery.getRoomId()));
         return RoomMjMsgConverter.INSTANCE.entityToVO(roomMjMsgDOList);
     }
 
     @Override
     public void imagine(MjImagineRequest imagineRequest) {
+        // 检查房间是否存在
+        RoomHandler.checkRoomExist(imagineRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
         // 检查是否有正在处理的任务
         MjRoomMessageHandler.checkExistProcessingTask();
-        // TODO 校验 roomid
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
         // 生成问题的消息 id
@@ -140,6 +140,8 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
     @Override
     public void upscale(MjConvertRequest convertRequest) {
+        // 检查房间是否存在
+        RoomHandler.checkRoomExist(convertRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
         // 检查是否有正在处理的任务
         MjRoomMessageHandler.checkExistProcessingTask();
         // 获取原消息
@@ -214,6 +216,8 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
     @Override
     public void variation(MjConvertRequest convertRequest) {
+        // 检查房间是否存在
+        RoomHandler.checkRoomExist(convertRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
         // 检查是否有正在处理的任务
         MjRoomMessageHandler.checkExistProcessingTask();
         // 获取原消息
@@ -287,7 +291,8 @@ public class RoomMjMsgServiceImpl extends ServiceImpl<RoomMjMsgMapper, RoomMjMsg
 
     @Override
     public void describe(MjDescribeRequest describeRequest) {
-        // TODO 校验 roomid
+        // 检查房间是否存在
+        RoomHandler.checkRoomExist(describeRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
         // 生成问题的消息 id

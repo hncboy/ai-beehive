@@ -1,6 +1,7 @@
 package cn.beehive.cell.base.hander.strategy;
 
 import cn.beehive.base.enums.CellCodeEnum;
+import cn.beehive.base.exception.ServiceException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -33,6 +34,6 @@ public class CellConfigFactory {
     public CellConfigStrategy getCellConfigStrategy(CellCodeEnum cellCode) {
         return Optional
                 .ofNullable(strategies.get(cellCode))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid cell code: " + cellCode));
+                .orElseThrow(() -> new ServiceException("Invalid cell code: " + cellCode));
     }
 }

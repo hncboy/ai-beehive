@@ -5,6 +5,7 @@ import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomBingMsgMapper;
+import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
@@ -55,6 +56,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
     @Override
     public List<RoomBingMsgVO> list(RoomMsgCursorQuery cursorQuery) {
         List<RoomBingMsgDO> roomBingMsgDOList = cursorList(cursorQuery, RoomBingMsgDO::getId, new LambdaQueryWrapper<RoomBingMsgDO>()
+                .eq(RoomBingMsgDO::getUserId, FrontUserUtil.getUserId())
                 .eq(RoomBingMsgDO::getRoomId, cursorQuery.getRoomId()));
         return RoomBingMsgConverter.INSTANCE.entityToVO(roomBingMsgDOList);
     }

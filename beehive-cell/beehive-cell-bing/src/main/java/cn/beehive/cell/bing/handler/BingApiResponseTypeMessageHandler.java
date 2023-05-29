@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -53,12 +52,10 @@ public class BingApiResponseTypeMessageHandler {
 
         if (Objects.nonNull(argument.getMessages())) {
             String responseText = argument.getMessages().get(0).getText();
-
-            try {
-                emitter.send(RoomBingStreamMsgVO.builder().content(responseText).build());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            RoomBingStreamMsgVO roomBingStreamMsgVO = new RoomBingStreamMsgVO();
+            roomBingStreamMsgVO.setContent(responseText);
+            // 发送消息
+            BingRoomHandler.sendEmitterMessage(emitter, roomBingStreamMsgVO);
         }
     }
 
@@ -123,12 +120,8 @@ public class BingApiResponseTypeMessageHandler {
             answerMessage.setSuggestResponses(Optional.ofNullable(roomBingStreamMsgVO.getSuggests()).orElse(Collections.emptyList()).toString());
             roomBingMsgService.save(answerMessage);
 
-            try {
-                // 发送消息
-                emitter.send(ObjectMapperUtil.toJson(roomBingStreamMsgVO));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            // 发送消息
+            BingRoomHandler.sendEmitterMessage(emitter, roomBingStreamMsgVO);
 
             // 成功
             return false;

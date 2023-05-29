@@ -2,6 +2,7 @@ package cn.beehive.cell.bing.handler;
 
 import cn.beehive.base.domain.entity.RoomBingDO;
 import cn.beehive.base.exception.ServiceException;
+import cn.beehive.base.handler.response.R;
 import cn.beehive.base.util.ForestRequestUtil;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
@@ -74,6 +75,9 @@ public class BingRoomHandler {
      * @return 请求参数
      */
     public static String buildBingChatRequest(RoomBingDO roomBingDO, RoomBingMsgSendRequest roomBingMsgSendRequest) {
+        // TODO 根据不同的模式构建不同的参数 NewBing 官网进不去了，无法调试
+        String mode = roomBingDO.getMode();
+
         // 先替换字符串
         String sendStr = CHAT_REQUEST_JSON_STR
                 .replace("$conversationId", roomBingDO.getConversationId())
@@ -93,11 +97,11 @@ public class BingRoomHandler {
      * 发送 emitter 消息
      *
      * @param emitter 响应流
-     * @param message 消息
+     * @param object 消息
      */
-    public static void sendEmitterMessage(ResponseBodyEmitter emitter, String message) {
+    public static void sendEmitterMessage(ResponseBodyEmitter emitter, Object object) {
         try {
-            emitter.send(message);
+            emitter.send(R.data(object));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

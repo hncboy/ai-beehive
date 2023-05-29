@@ -1,4 +1,4 @@
-package cn.beehive.cell.bing.handler;
+package cn.beehive.cell.midjourney.handler;
 
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.cell.base.hander.strategy.AbstractCellConfigStrategy;
@@ -7,19 +7,19 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author hncboy
- * @date 2023/5/29
- * NewBing cell 配置项策略
+ * @date 2023/5/30
+ * Midjourney cell 配置项策略
  */
 @Component
-public class BingCellConfigStrategy extends AbstractCellConfigStrategy {
+public class MidjourneyCellConfigStrategy extends AbstractCellConfigStrategy {
 
     @Override
     public CellCodeEnum getCellCode() {
-        return CellCodeEnum.NEW_BING;
+        return CellCodeEnum.MIDJOURNEY;
     }
 
     @Override
     public Class<? extends ICellConfigCodeEnum> getCellConfigCodeEnumClazz() {
-        return BingCellConfigCodeEnum.class;
+        return MidjourneyCellConfigCodeEnum.class;
     }
 }
