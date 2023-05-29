@@ -3,29 +3,20 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.beehive</groupId>
-        <artifactId>ai-beehive</artifactId>
+        <artifactId>beehive-cell</artifactId>
         <version>${revision}</version>
     </parent>
-    <packaging>pom</packaging>
-    <artifactId>beehive-cell</artifactId>
-
-    <modules>
-        <module>beehive-cell-base</module>
-        <module>beehive-cell-midjourney</module>
-        <module>beehive-cell-openai</module>
-        <module>beehive-cell-bing</module>
-        <module>beehive-cell-starter</module>
-    </modules>
+    <artifactId>beehive-cell-starter</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>cn.beehive</groupId>
-            <artifactId>beehive-base</artifactId>
+            <artifactId>beehive-cell-bing</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.beehive</groupId>
-            <artifactId>beehive-cell-base</artifactId>
+            <artifactId>beehive-cell-midjourney</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

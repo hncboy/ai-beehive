@@ -35,8 +35,14 @@ public interface RoomConverter {
      */
     RoomListVO entityToListVO(RoomDO roomDO);
 
+    /**
+     * entityToListVO 后置处理
+     *
+     * @param roomDO     RoomDO
+     * @param roomListVO RoomListVO
+     */
     @AfterMapping
-    default void entityToListVO(RoomDO roomDO, @MappingTarget RoomListVO roomListVO) {
+    default void afterEntityToListVO(RoomDO roomDO, @MappingTarget RoomListVO roomListVO) {
         roomListVO.setIsPinned(roomDO.getPinTime() > 0);
     }
 }

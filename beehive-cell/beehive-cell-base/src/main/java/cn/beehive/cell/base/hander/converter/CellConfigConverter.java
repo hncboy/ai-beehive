@@ -27,6 +27,11 @@ public interface CellConfigConverter {
      */
     List<CellConfigVO> entityToVO(List<CellConfigDO> cellConfigDOList);
 
+    /**
+     * entityToVO 后置处理
+     * @param cellConfigDO CellConfigDO
+     * @param cellConfigVO CellConfigVO
+     */
     @AfterMapping
     default void afterEntityToVO(CellConfigDO cellConfigDO, @MappingTarget CellConfigVO cellConfigVO) {
         if (!cellConfigDO.getIsUserValueVisible()) {
