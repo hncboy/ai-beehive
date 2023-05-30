@@ -2,6 +2,7 @@ package cn.beehive.cell.bing.service;
 
 import cn.beehive.base.domain.entity.RoomBingDO;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
+import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -14,11 +15,11 @@ public interface RoomBingService extends IService<RoomBingDO> {
     /**
      * 获取房间信息
      *
-     * @param roomId     房间 id
-     * @param isNewTopic 是否是新话题
+     * @param roomId      房间 id
+     * @param sendRequest 发送消息请求
      * @return 房间业务信息
      */
-    BingRoomBO getRoom(Long roomId, boolean isNewTopic);
+    BingRoomBO getRoom(Long roomId, RoomBingMsgSendRequest sendRequest);
 
     /**
      * 刷新房间业务信息

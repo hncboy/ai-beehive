@@ -9,11 +9,14 @@ import cn.beehive.cell.base.hander.RoomHandler;
 import cn.beehive.cell.base.hander.strategy.DataWrapper;
 import cn.beehive.cell.bing.domain.bo.BingApiCreateConversationResultBO;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
-import cn.beehive.cell.bing.handler.BingCellConfigCodeEnum;
+import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
+import cn.beehive.cell.bing.enums.BingCellConfigCodeEnum;
+import cn.beehive.cell.bing.enums.BingModeEnum;
 import cn.beehive.cell.bing.handler.BingCellConfigStrategy;
 import cn.beehive.cell.bing.handler.BingRoomHandler;
 import cn.beehive.cell.bing.service.RoomBingService;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -35,18 +38,22 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
     private BingCellConfigStrategy bingCellConfigStrategy;
 
     @Override
-    public BingRoomBO getRoom(Long roomId, boolean isNewTopic) {
+    public BingRoomBO getRoom(Long roomId, RoomBingMsgSendRequest sendRequest) {
         // 校验房间是否存在
         RoomHandler.checkRoomExist(roomId, CellCodeEnum.NEW_BING);
-
-        RoomBingDO roomBingDO = getById(roomId);
-        BingRoomBO bingRoomBO = new BingRoomBO();
-        bingRoomBO.setRoomBingDO(roomBingDO);
 
         // 获取房间配置参数
         Map<BingCellConfigCodeEnum, DataWrapper> roomConfigParamMap = bingCellConfigStrategy.getRoomConfigParamAsMap(roomId);
         String mode = roomConfigParamMap.get(BingCellConfigCodeEnum.MODE).asString();
+        // 根据不同模式校验字数
+        Integer limitWords = BingModeEnum.NAME_MAP.get(mode).getLimitWords();
+        if (limitWords <= sendRequest.getContent().length()) {
+            throw new ServiceException(StrUtil.format("字数超过限制 {} 字", limitWords));
+        }
 
+        RoomBingDO roomBingDO = getById(roomId);
+        BingRoomBO bingRoomBO = new BingRoomBO();
+        bingRoomBO.setRoomBingDO(roomBingDO);
         if (Objects.isNull(roomBingDO)) {
             roomBingDO = new RoomBingDO();
             roomBingDO.setRoomId(roomId);
@@ -66,7 +73,7 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
         }
 
         // 开启新对话就要刷新房间信息
-        if (isNewTopic) {
+        if (sendRequest.getIsNewTopic()) {
             bingRoomBO.setRefreshRoomReason("用户选择开启话题");
             return refreshRoom(bingRoomBO);
         }

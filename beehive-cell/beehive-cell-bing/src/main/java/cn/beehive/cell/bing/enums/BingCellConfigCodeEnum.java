@@ -1,4 +1,4 @@
-package cn.beehive.cell.bing.handler;
+package cn.beehive.cell.bing.enums;
 
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.cell.base.hander.strategy.DataWrapper;
@@ -23,13 +23,8 @@ public enum BingCellConfigCodeEnum implements ICellConfigCodeEnum {
 
         @Override
         public void firstValidate(DataWrapper dataWrapper) {
-            /*
-             * h3precise     -- 准确模式
-             * h3imaginative -- 创造模式
-             * harmonyv3     -- 均衡模式
-             */
             String mode = dataWrapper.asString();
-            if (StrUtil.containsAny(mode, "h3precise", "h3imaginative", "harmonyv3")) {
+            if (BingModeEnum.NAME_MAP.containsKey(mode)) {
                 return;
             }
             throw new ServiceException(StrUtil.format("NewBing 模式 {} 参数错误", mode));

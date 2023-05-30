@@ -69,7 +69,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
         emitter.onTimeout(() -> log.error("NewBing 请求参数：{}，Back-end closed the emitter connection.", ObjectMapperUtil.toJson(sendRequest)));
 
         // 获取一个房间
-        BingRoomBO bingRoomBO = roomBingService.getRoom(sendRequest.getRoomId(), sendRequest.getIsNewTopic());
+        BingRoomBO bingRoomBO = roomBingService.getRoom(sendRequest.getRoomId(), sendRequest);
 
         // 保存问题消息
         RoomBingMsgDO questionMessage = RoomBingMsgConverter.INSTANCE.bingRoomBOToEntity(bingRoomBO);

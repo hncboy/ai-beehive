@@ -4,7 +4,6 @@ import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.SysParamKeyEnum;
 import cn.beehive.cell.base.hander.strategy.ICellConfigCodeEnum;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
-import cn.beehive.cell.midjourney.handler.MidjourneyCellConfigCodeEnum;
 import cn.beehive.cell.midjourney.handler.MidjourneyCellConfigStrategy;
 import cn.hutool.core.util.BooleanUtil;
 import com.neovisionaries.ws.client.ProxySettings;

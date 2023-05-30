@@ -8,6 +8,7 @@ import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.cell.bing.domain.bo.BingApiCreateConversationResultBO;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
+import cn.beehive.cell.bing.enums.BingModeEnum;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -20,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hncboy
@@ -30,6 +34,11 @@ import java.io.IOException;
 public class BingRoomHandler {
 
     private static final String CHAT_REQUEST_JSON_STR = ResourceUtil.readUtf8Str("bing/send.json");
+    private static final Map<String, String> OPTIONS_JSON_MAP = new HashMap<>() {{
+        put(BingModeEnum.CREATIVE.getName(), ResourceUtil.readUtf8Str("bing/options_creative.json"));
+        put(BingModeEnum.BALANCE.getName(), ResourceUtil.readUtf8Str("bing/options_balance.json"));
+        put(BingModeEnum.PRECISE.getName(), ResourceUtil.readUtf8Str("bing/options_precise.json"));
+    }};
 
     /**
      * 生成随机 IP
@@ -75,20 +84,22 @@ public class BingRoomHandler {
      * @return 请求参数
      */
     public static String buildBingChatRequest(RoomBingDO roomBingDO, RoomBingMsgSendRequest roomBingMsgSendRequest) {
-        // TODO 根据不同的模式构建不同的参数 NewBing 官网进不去了，无法调试
-        String mode = roomBingDO.getMode();
 
-        // 先替换字符串
-        String sendStr = CHAT_REQUEST_JSON_STR
-                .replace("$conversationId", roomBingDO.getConversationId())
-                .replace("$conversationSignature", roomBingDO.getConversationSignature())
-                .replace("$clientId", roomBingDO.getClientId())
-                .replace("$prompt", roomBingMsgSendRequest.getContent());
+            // 先替换字符串
+            String sendStr = CHAT_REQUEST_JSON_STR
+                    .replace("$conversationId", roomBingDO.getConversationId())
+                    .replace("$conversationSignature", roomBingDO.getConversationSignature())
+                    .replace("$clientId", roomBingDO.getClientId())
+                    .replace("$prompt", roomBingMsgSendRequest.getContent());
         // 转换到 JsonNode
         JsonNode jsonNode = ObjectMapperUtil.readTree(sendStr);
         // 获取 "arguments" 数组的第一个元素，转换为 ObjectNode
         ObjectNode objectNode = (ObjectNode) jsonNode.get("arguments").get(0);
-        // 替换 boolean，第一条消息为 true，其他为 false；如果第一条消息为 false 会报错，如果其他为 true，则会一直重复第一条的回答
+
+        // TODO 根据不同的模式构建不同的参数 NewBing 官网进不去了，无法调试，均衡模式可以用，其他模式参数需要获取
+        objectNode.set("optionsSets",  ObjectMapperUtil.readTree(OPTIONS_JSON_MAP.get(roomBingDO.getMode())));
+
+        // 替换 isStartOfSession，第一条消息为 true，其他为 false；如果第一条消息为 false 会报错，如果其他为 true，则会一直重复第一条的回答
         objectNode.put("isStartOfSession", roomBingDO.getNumUserMessagesInConversation() == 0);
         return ObjectMapperUtil.toJson(jsonNode);
     }
@@ -97,7 +108,7 @@ public class BingRoomHandler {
      * 发送 emitter 消息
      *
      * @param emitter 响应流
-     * @param object 消息
+     * @param object  消息
      */
     public static void sendEmitterMessage(ResponseBodyEmitter emitter, Object object) {
         try {

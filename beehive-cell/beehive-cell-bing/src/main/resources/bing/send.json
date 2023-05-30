@@ -2,21 +2,7 @@
   "arguments": [
     {
       "source": "cib",
-      "optionsSets": [
-        "nlu_direct_response_filter",
-        "deepleo",
-        "disable_emoji_spoken_text",
-        "responsible_ai_policy_235",
-        "enablemm",
-        "harmonyv3",
-        "dtappid",
-        "trn8req120",
-        "h3ads",
-        "rai251",
-        "blocklistv2",
-        "localtime",
-        "dv3sugg"
-      ],
+      "optionsSets": "$optionsSets",
       "isStartOfSession": "$isStartOfSession",
       "message": {
         "author": "user",

@@ -3,6 +3,7 @@ package cn.beehive.cell.bing.handler;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.cell.base.hander.strategy.AbstractCellConfigStrategy;
 import cn.beehive.cell.base.hander.strategy.ICellConfigCodeEnum;
+import cn.beehive.cell.bing.enums.BingCellConfigCodeEnum;
 import org.springframework.stereotype.Component;
 
 /**
