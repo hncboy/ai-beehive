@@ -24,7 +24,7 @@ public enum OpenAiChatWebModeEnum {
 
     /**
      * 对应官网 GPT-4 Default
-     * 目前限制 3 小时 25 条消息
+     * 目前限制 3 小时 25 条消息，超过限制报什么错还没测试
      * ChatGPT Plus
      */
     GPT_4("gpt-4"),

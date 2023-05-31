@@ -2,7 +2,6 @@ package cn.beehive.cell.openai.module.chat.accesstoken;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import cn.beehive.base.enums.ConversationModelEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,19 +16,23 @@ import java.util.List;
  * {
  * 	"action": "next",
  * 	"messages": [{
- * 		"id": "3c9ff357-aa4b-427b-8528-e9a96ac409ad",
- * 		"role": "user",
+ * 		"id": "ffa32afc-2034-4af8-98a0-b3d4a64d66a0",
+ * 		"author": {
+ * 			"role": "user"
+ *                },
  * 		"content": {
- * 			"parts": ["hello"],
+ * 			"parts": ["我的上一句是什么"],
  * 			"content_type": "text"
- *                }    * 	}],
+ *        }    * 	}],
  * 	"model": "text-davinci-002-render-sha",
- * 	"parent_message_id": "3c9ff357-aa4b-427b-8528-e9a96ac409ad"
+ * 	"parent_message_id": "a011431c-af81-4209-9fb4-76f23655e239",
+ * 	"conversation_id": "1d4e146e-5318-4d50-a51d-b671b458ff35",
+ * 	"history_and_training_disabled": false
  * }
  */
 @Data
 @Builder
-public class ConversationRequest {
+public class ChatWebConversationRequest {
 
     /**
      * action 类型
@@ -44,7 +47,7 @@ public class ConversationRequest {
     /**
      * 模型
      */
-    private ConversationModelEnum model;
+    private String model;
 
     /**
      * 父级消息 id
@@ -72,9 +75,9 @@ public class ConversationRequest {
         private String id;
 
         /**
-         * 角色
+         * 作者
          */
-        private String role;
+        private Author author;
 
         /**
          * 内容
@@ -97,6 +100,16 @@ public class ConversationRequest {
          * 真正的 prompt 数组，为什么是个数组
          */
         private List<String> parts;
+    }
+
+    @Data
+    @Builder
+    public static class Author {
+
+        /**
+         * 角色
+         */
+        private String role;
     }
 
     /**

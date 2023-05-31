@@ -13,18 +13,33 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/5/31
- * OpenAi 对话房间消息表
+ * @date 2023/6/1
+ * OpenAi 对话 Web 房间消息表
  */
 @Data
-@TableName("bh_room_openai_chat_msg")
-public class RoomOpenAiChatMsgDO {
+@TableName("bh_room_openai_chat_web_msg")
+public class RoomOpenAiChatWebMsgDO {
 
     /**
      * 主键
      */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
+
+    /**
+     * 请求的 messageId
+     */
+    private String requestMessageId;
+
+    /**
+     * 请求的 conversationId
+     */
+    private String requestConversationId;
+
+    /**
+     * 请求的 parentMessageId
+     */
+    private String requestParentMessageId;
 
     /**
      * 用户 id
@@ -35,11 +50,6 @@ public class RoomOpenAiChatMsgDO {
      * 房间 id
      */
     private Long roomId;
-
-    /**
-     * 父级问题消息 id
-     */
-    private Long parentQuestionMessageId;
 
     /**
      * 消息类型枚举
@@ -54,16 +64,11 @@ public class RoomOpenAiChatMsgDO {
     /**
      * ip
      */
+    @TableField(fill = FieldFill.INSERT)
     private String ip;
 
     /**
-     * apiKey
-     */
-    private String apiKey;
-
-    /**
      * 消息内容
-     * 包含上下文的对话这里只会显示出用户发送的
      */
     private String content;
 
@@ -78,21 +83,6 @@ public class RoomOpenAiChatMsgDO {
      * 错误响应数据
      */
     private String responseErrorData;
-
-    /**
-     * 输入消息的 tokens
-     */
-    private Integer promptTokens;
-
-    /**
-     * 输出消息的 tokens
-     */
-    private Integer completionTokens;
-
-    /**
-     * 累计 Tokens
-     */
-    private Integer totalTokens;
 
     /**
      * 聊天信息状态

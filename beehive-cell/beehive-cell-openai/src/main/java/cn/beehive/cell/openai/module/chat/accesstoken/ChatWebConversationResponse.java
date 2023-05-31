@@ -13,7 +13,7 @@ import java.util.Map;
  * AccessToken 对话响应参数
  */
 @Data
-public class ConversationResponse {
+public class ChatWebConversationResponse {
 
     private Message message;
 

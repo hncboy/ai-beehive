@@ -1,7 +1,7 @@
 package cn.beehive.admin.domain.vo;
 
 import cn.beehive.base.enums.ApiTypeEnum;
-import cn.beehive.base.enums.ChatMessageStatusEnum;
+import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -66,7 +66,7 @@ public class ChatMessageVO {
     private Long totalTokens;
 
     @Schema(title = "聊天信息状态")
-    private ChatMessageStatusEnum status;
+    private RoomOpenAiChatMsgStatusEnum status;
 
     @Schema(title = "创建时间")
     private Date createTime;

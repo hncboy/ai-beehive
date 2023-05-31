@@ -2,7 +2,7 @@ package cn.beehive.cell.openai.module.chat.emitter;
 
 import cn.beehive.base.domain.entity.RoomOpenAiChatMsgDO;
 import cn.beehive.base.enums.ApiKeyTokenLimiterEnum;
-import cn.beehive.base.enums.ChatMessageStatusEnum;
+import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.handler.response.R;
 import cn.beehive.base.util.FrontUserUtil;
@@ -118,7 +118,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
         questionMessage.setApiKey(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.API_KEY).asString());
         questionMessage.setRoomConfigParamJson(ObjectMapperUtil.toJson(roomConfigParamAsMap));
         questionMessage.setContent(sendRequest.getContent());
-        questionMessage.setStatus(ChatMessageStatusEnum.INIT);
+        questionMessage.setStatus(RoomOpenAiChatMsgStatusEnum.INIT);
         return questionMessage;
     }
 
@@ -201,7 +201,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
         }
 
         // 超过限制次数更新问题消息
-        questionMessage.setStatus(ChatMessageStatusEnum.EXCEPTION_TOKEN_EXCEED_LIMIT);
+        questionMessage.setStatus(RoomOpenAiChatMsgStatusEnum.EXCEPTION_TOKEN_EXCEED_LIMIT);
         questionMessage.setResponseErrorData(msg);
 
         // 发送错误消息
@@ -250,7 +250,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
                 // 当前房间
                 .eq(RoomOpenAiChatMsgDO::getRoomId, questionMessage.getRoomId())
                 // 查询消息为成功的
-                .eq(RoomOpenAiChatMsgDO::getStatus, ChatMessageStatusEnum.COMPLETE_SUCCESS)
+                .eq(RoomOpenAiChatMsgDO::getStatus, RoomOpenAiChatMsgStatusEnum.COMPLETE_SUCCESS)
                 // 上下文的时间范围
                 .gt(relatedTimeHourDataWrapper.nonNull(), RoomOpenAiChatMsgDO::getCreateTime, DateUtil.offsetHour(new Date(), -relatedTimeHourDataWrapper.asInt()))
                 // 限制上下文条数

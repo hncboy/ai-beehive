@@ -1,132 +1,129 @@
-/*
 package cn.beehive.cell.openai.module.chat.storage;
 
-import cn.beehive.base.domain.entity.ChatMessageDO;
-import cn.beehive.base.domain.entity.ChatRoomDO;
-import cn.beehive.base.enums.ChatMessageStatusEnum;
+import cn.beehive.base.domain.entity.RoomOpenAiChatWebMsgDO;
 import cn.beehive.base.enums.MessageTypeEnum;
-import cn.beehive.cell.openai.module.chat.accesstoken.ConversationResponse;
+import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
+import cn.beehive.base.util.FrontUserUtil;
+import cn.beehive.cell.openai.module.chat.accesstoken.ChatWebConversationResponse;
+import cn.beehive.cell.openai.service.RoomOpenAiChatWebMsgService;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.util.UUID;
 
-*/
 /**
  * @author hncboy
  * @date 2023-3-25
  * AccessToken 数据库数据存储
- *//*
-
+ */
 @Component
 public class AccessTokenDatabaseDataStorage extends AbstractDatabaseDataStorage {
 
+    @Resource
+    private RoomOpenAiChatWebMsgService roomOpenAiChatWebMsgService;
+
     @Override
-    public void onFirstMessage(ChatMessageStorage chatMessageStorage) {
-
-        ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionMessageDO();
-        ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerMessageDO();
-        answerChatMessageDO.setParentMessageId(questionChatMessageDO.getMessageId());
-        answerChatMessageDO.setUserId(questionChatMessageDO.getUserId());
-        answerChatMessageDO.setParentAnswerMessageId(questionChatMessageDO.getParentAnswerMessageId());
-        answerChatMessageDO.setParentQuestionMessageId(questionChatMessageDO.getMessageId());
-        answerChatMessageDO.setContextCount(questionChatMessageDO.getContextCount());
-        answerChatMessageDO.setQuestionContextCount(questionChatMessageDO.getQuestionContextCount());
-        answerChatMessageDO.setModelName(questionChatMessageDO.getModelName());
-        answerChatMessageDO.setMessageType(MessageTypeEnum.ANSWER);
-        answerChatMessageDO.setChatRoomId(questionChatMessageDO.getChatRoomId());
-        answerChatMessageDO.setApiType(questionChatMessageDO.getApiType());
-        answerChatMessageDO.setApiKey(questionChatMessageDO.getApiKey());
-        answerChatMessageDO.setOriginalData(chatMessageStorage.getOriginalResponseData());
-        answerChatMessageDO.setStatus(ChatMessageStatusEnum.PART_SUCCESS);
-        answerChatMessageDO.setIp(questionChatMessageDO.getIp());
-        answerChatMessageDO.setCreateTime(new Date());
-        answerChatMessageDO.setUpdateTime(new Date());
-
-        // 填充第一条消息的字段
-        onFirstMessage(chatMessageStorage);
-
-        // 保存回答消息记录
-        chatMessageService.save(answerChatMessageDO);
-
-        // 聊天室更新 conversationId
-        chatRoomService.update(new LambdaUpdateWrapper<ChatRoomDO>()
-                .set(ChatRoomDO::getConversationId, answerChatMessageDO.getConversationId())
-                .eq(ChatRoomDO::getId, answerChatMessageDO.getChatRoomId()));
+    public void onFirstMessage(RoomOpenAiChatMessageStorage chatMessageStorage) {
         // 第一条消息
-        ConversationResponse conversationResponse = (ConversationResponse) chatMessageStorage.getParser().
+        ChatWebConversationResponse conversationResponse = (ChatWebConversationResponse) chatMessageStorage.getParser().
                 parseSuccess(chatMessageStorage.getOriginalResponseData());
-        ConversationResponse.Message message = conversationResponse.getMessage();
+        ChatWebConversationResponse.Message message = conversationResponse.getMessage();
+        String conversationId = conversationResponse.getConversationId();
 
-        // 第一条消息填充对话 id 和消息 id
-        ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerMessageDO();
-        answerChatMessageDO.setMessageId(message.getId());
-        answerChatMessageDO.setConversationId(conversationResponse.getConversationId());
+        // 填充并更新问题消息的对话 id
+        RoomOpenAiChatWebMsgDO questionMessage = (RoomOpenAiChatWebMsgDO) chatMessageStorage.getQuestionMessageDO();
+        questionMessage.setRequestConversationId(conversationId);
+        roomOpenAiChatWebMsgService.update(new RoomOpenAiChatWebMsgDO(), new LambdaUpdateWrapper<RoomOpenAiChatWebMsgDO>()
+                .set(RoomOpenAiChatWebMsgDO::getStatus, RoomOpenAiChatMsgStatusEnum.PART_SUCCESS)
+                .set(RoomOpenAiChatWebMsgDO::getRequestConversationId, conversationId)
+                .eq(RoomOpenAiChatWebMsgDO::getId, questionMessage.getId()));
 
-        // 填充问题消息的对话 id
-        chatMessageStorage.getQuestionMessageDO().setConversationId(conversationResponse.getConversationId());
+        // 回答消息填充请求对话 id 和请求消息 id
+        RoomOpenAiChatWebMsgDO answerChatMessage = new RoomOpenAiChatWebMsgDO();
+        answerChatMessage.setRequestMessageId(message.getId());
+        answerChatMessage.setRequestConversationId(conversationId);
+        answerChatMessage.setContent(chatMessageStorage.getReceivedMessage());
+        answerChatMessage.setStatus(RoomOpenAiChatMsgStatusEnum.PART_SUCCESS);
+        // 保存回答消息
+        saveAnswerMessage(answerChatMessage, questionMessage, chatMessageStorage);
+
+        chatMessageStorage.setAnswerMessageDO(answerChatMessage);
     }
 
     @Override
-    void onLastMessage(ChatMessageStorage chatMessageStorage) {
-        ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionMessageDO();
-        ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerMessageDO();
+    void onLastMessage(RoomOpenAiChatMessageStorage chatMessageStorage) {
+        RoomOpenAiChatWebMsgDO questionMessage = (RoomOpenAiChatWebMsgDO) chatMessageStorage.getQuestionMessageDO();
+        RoomOpenAiChatWebMsgDO answerMessage = (RoomOpenAiChatWebMsgDO) chatMessageStorage.getAnswerMessageDO();
 
         // 成功状态
-        questionChatMessageDO.setStatus(ChatMessageStatusEnum.COMPLETE_SUCCESS);
-        answerChatMessageDO.setStatus(ChatMessageStatusEnum.COMPLETE_SUCCESS);
+        questionMessage.setStatus(RoomOpenAiChatMsgStatusEnum.COMPLETE_SUCCESS);
+        answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.COMPLETE_SUCCESS);
 
         // 原始响应数据
-        answerChatMessageDO.setOriginalData(chatMessageStorage.getOriginalResponseData());
-
-        // 更新时间
-        questionChatMessageDO.setUpdateTime(new Date());
-        answerChatMessageDO.setUpdateTime(new Date());
-
-        // 最后一条消息
-        onLastMessage(chatMessageStorage);
+        answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
+        answerMessage.setContent(chatMessageStorage.getReceivedMessage());
 
         // 更新消息
-        chatMessageService.updateById(questionChatMessageDO);
-        chatMessageService.updateById(answerChatMessageDO);
+        roomOpenAiChatWebMsgService.updateById(questionMessage);
+        roomOpenAiChatWebMsgService.updateById(answerMessage);
     }
 
     @Override
-    void onErrorMessage(ChatMessageStorage chatMessageStorage) {
-// 消息流条数大于 0 表示部分成功
-        ChatMessageStatusEnum chatMessageStatusEnum = chatMessageStorage.getCurrentStreamMessageCount() > 0 ? ChatMessageStatusEnum.PART_SUCCESS : ChatMessageStatusEnum.ERROR;
+    void onErrorMessage(RoomOpenAiChatMessageStorage chatMessageStorage) {
+        // 消息流条数大于 0 表示部分成功
+        RoomOpenAiChatMsgStatusEnum roomOpenAiChatMsgStatusEnum = chatMessageStorage.getCurrentStreamMessageCount() > 0 ? RoomOpenAiChatMsgStatusEnum.PART_SUCCESS : RoomOpenAiChatMsgStatusEnum.ERROR;
 
         // 填充问题消息记录
-        ChatMessageDO questionChatMessageDO = chatMessageStorage.getQuestionMessageDO();
-        questionChatMessageDO.setStatus(chatMessageStatusEnum);
-        // 原始请求数据
-        questionChatMessageDO.setOriginalData(chatMessageStorage.getOriginalRequestData());
+        RoomOpenAiChatWebMsgDO questionMessage = (RoomOpenAiChatWebMsgDO) chatMessageStorage.getQuestionMessageDO();
+        questionMessage.setStatus(roomOpenAiChatMsgStatusEnum);
         // 错误响应数据
-        questionChatMessageDO.setResponseErrorData(chatMessageStorage.getErrorResponseData());
-        questionChatMessageDO.setUpdateTime(new Date());
+        questionMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
 
         // 还没收到回复就断了，跳过回答消息记录更新
-        if (chatMessageStatusEnum != ChatMessageStatusEnum.ERROR) {
+        if (roomOpenAiChatMsgStatusEnum != RoomOpenAiChatMsgStatusEnum.ERROR) {
             // 填充问题消息记录
-            ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerMessageDO();
-            answerChatMessageDO.setStatus(chatMessageStatusEnum);
+            RoomOpenAiChatWebMsgDO answerMessage = (RoomOpenAiChatWebMsgDO) chatMessageStorage.getAnswerMessageDO();
+            answerMessage.setStatus(roomOpenAiChatMsgStatusEnum);
             // 原始响应数据
-            answerChatMessageDO.setOriginalData(chatMessageStorage.getOriginalResponseData());
+            answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
             // 错误响应数据
-            answerChatMessageDO.setResponseErrorData(chatMessageStorage.getErrorResponseData());
-            // 更新时间
-            answerChatMessageDO.setUpdateTime(new Date());
+            answerMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
+            answerMessage.setContent(chatMessageStorage.getReceivedMessage());
+            // 更新错误的回答消息记录
+            roomOpenAiChatWebMsgService.updateById(answerMessage);
+        } else {
+            // 保存回答消息
+            RoomOpenAiChatWebMsgDO answerMessage = new RoomOpenAiChatWebMsgDO();
+            answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.ERROR);
+            answerMessage.setRequestMessageId("error");
+            answerMessage.setContent("系统异常，请稍后再试");
+            saveAnswerMessage(answerMessage, questionMessage, chatMessageStorage);
         }
-
-        // 填充错误消息
-        onErrorMessage(chatMessageStorage);
 
         // 更新错误的问题消息记录
-        chatMessageService.updateById(chatMessageStorage.getQuestionMessageDO());
-        // 更新错误的回答消息记录
-        if (chatMessageStatusEnum != ChatMessageStatusEnum.ERROR) {
-            chatMessageService.updateById(chatMessageStorage.getAnswerMessageDO());
-        }
+        roomOpenAiChatWebMsgService.updateById(questionMessage);
+    }
+
+    /**
+     * 保存回答消息
+     *
+     * @param answerMessage      回答消息
+     * @param questionMessage    问题消息
+     * @param chatMessageStorage 消息存储
+     */
+    private void saveAnswerMessage(RoomOpenAiChatWebMsgDO answerMessage, RoomOpenAiChatWebMsgDO questionMessage, RoomOpenAiChatMessageStorage chatMessageStorage) {
+        answerMessage.setUserId(FrontUserUtil.getUserId());
+        answerMessage.setRequestConversationId(questionMessage.getRequestConversationId());
+        // 请求 parentMessageId 为空的话随机生成一个
+        answerMessage.setRequestParentMessageId(questionMessage.getRequestMessageId());
+        answerMessage.setRoomId(questionMessage.getRoomId());
+        answerMessage.setIp(questionMessage.getIp());
+        answerMessage.setMessageType(MessageTypeEnum.ANSWER);
+        answerMessage.setModelName(questionMessage.getModelName());
+        answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
+        answerMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
+        // 保存回答消息
+        roomOpenAiChatWebMsgService.save(answerMessage);
     }
 }
-*/

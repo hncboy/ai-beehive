@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import cn.beehive.base.enums.ApiTypeEnum;
-import cn.beehive.base.enums.ChatMessageStatusEnum;
+import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
 import lombok.Data;
 
@@ -142,7 +142,7 @@ public class ChatMessageDO {
     /**
      * 聊天信息状态
      */
-    private ChatMessageStatusEnum status;
+    private RoomOpenAiChatMsgStatusEnum status;
 
     /**
      * 是否被隐藏

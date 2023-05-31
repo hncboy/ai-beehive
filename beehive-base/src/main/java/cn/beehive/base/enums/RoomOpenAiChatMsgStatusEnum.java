@@ -7,10 +7,10 @@ import lombok.Getter;
 /**
  * @author hncboy
  * @date 2023-3-25
- * 聊天消息状态
+ * OpenAi 对话房间消息状态枚举
  */
 @AllArgsConstructor
-public enum ChatMessageStatusEnum {
+public enum RoomOpenAiChatMsgStatusEnum {
 
     /**
      * 针对问题

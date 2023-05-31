@@ -17,10 +17,10 @@ public class RoomOpenAiChatResponseEmitterDispatcher {
      * 响应处理器
      */
     public static final Map<CellCodeEnum, RoomOpenAiChatResponseEmitter> RESPONSE_EMITTER_MAP = new HashMap<>() {{
-        put(CellCodeEnum.OPENAI_CHAT_3_5, SpringUtil.getBean(RoomOpenAiChatResponseEmitter.class));
-        put(CellCodeEnum.OPENAI_CHAT_4, SpringUtil.getBean(RoomOpenAiChatResponseEmitter.class));
-//        put(CellCodeEnum.OPENAI_CHAT_WEB_3_5, SpringUtil.getBean(RoomOpenAiChatWebResponseEmitter.class));
-//        put(CellCodeEnum.OPENAI_CHAT_WEB_4, SpringUtil.getBean(RoomOpenAiChatWebResponseEmitter.class));
+        put(CellCodeEnum.OPENAI_CHAT_3_5, SpringUtil.getBean(RoomOpenAiChatApiResponseEmitter.class));
+        put(CellCodeEnum.OPENAI_CHAT_4, SpringUtil.getBean(RoomOpenAiChatApiResponseEmitter.class));
+        put(CellCodeEnum.OPENAI_CHAT_WEB_3_5, SpringUtil.getBean(RoomOpenAiChatWebResponseEmitter.class));
+        put(CellCodeEnum.OPENAI_CHAT_WEB_4, SpringUtil.getBean(RoomOpenAiChatWebResponseEmitter.class));
     }};
 
     /**

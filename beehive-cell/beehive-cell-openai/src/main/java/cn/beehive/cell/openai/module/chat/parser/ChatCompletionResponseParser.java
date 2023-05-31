@@ -47,11 +47,11 @@ public class ChatCompletionResponseParser implements ResponseParser<ChatCompleti
             return null;
         }
         RoomOpenAiChatMsgVO roomOpenAiChatMsgVO = new RoomOpenAiChatMsgVO();
-        RoomOpenAiChatMsgDO roomOpenAiChatMsgDO = (RoomOpenAiChatMsgDO) chatMessageStorage.getAnswerMessageDO();
-        roomOpenAiChatMsgVO.setId(roomOpenAiChatMsgDO.getId());
+        RoomOpenAiChatMsgDO answerMessage = (RoomOpenAiChatMsgDO) chatMessageStorage.getAnswerMessageDO();
+        roomOpenAiChatMsgVO.setId(answerMessage.getId());
         roomOpenAiChatMsgVO.setContent(chatMessageStorage.getReceivedMessage());
         roomOpenAiChatMsgVO.setMessageType(MessageTypeEnum.ANSWER);
-        roomOpenAiChatMsgVO.setCreateTime(roomOpenAiChatMsgDO.getCreateTime());
+        roomOpenAiChatMsgVO.setCreateTime(answerMessage.getCreateTime());
         return roomOpenAiChatMsgVO;
     }
 

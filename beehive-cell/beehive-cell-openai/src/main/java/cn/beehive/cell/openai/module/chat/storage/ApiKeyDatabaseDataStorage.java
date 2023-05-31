@@ -1,8 +1,8 @@
 package cn.beehive.cell.openai.module.chat.storage;
 
 import cn.beehive.base.domain.entity.RoomOpenAiChatMsgDO;
-import cn.beehive.base.enums.ChatMessageStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
+import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
 import cn.beehive.cell.openai.service.RoomOpenAiChatMsgService;
 import cn.hutool.core.util.StrUtil;
 import com.unfbx.chatgpt.utils.TikTokensUtil;
@@ -26,25 +26,15 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
     public void onFirstMessage(RoomOpenAiChatMessageStorage chatMessageStorage) {
         RoomOpenAiChatMsgDO questionMessage = (RoomOpenAiChatMsgDO) chatMessageStorage.getQuestionMessageDO();
         RoomOpenAiChatMsgDO answerMessage = new RoomOpenAiChatMsgDO();
-        answerMessage.setUserId(questionMessage.getUserId());
-        answerMessage.setRoomId(questionMessage.getRoomId());
-        answerMessage.setIp(questionMessage.getIp());
-        answerMessage.setParentQuestionMessageId(questionMessage.getId());
-        answerMessage.setMessageType(MessageTypeEnum.ANSWER);
-        answerMessage.setModelName(questionMessage.getModelName());
-        answerMessage.setApiKey(questionMessage.getApiKey());
-        answerMessage.setContent(chatMessageStorage.getReceivedMessage());
-        answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
-        answerMessage.setPromptTokens(questionMessage.getPromptTokens());
-        answerMessage.setStatus(ChatMessageStatusEnum.PART_SUCCESS);
+        answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.PART_SUCCESS);
         // 保存回答消息
-        roomOpenAiChatMsgService.save(answerMessage);
+        saveAnswerMessage(answerMessage, questionMessage, chatMessageStorage);
 
         // 设置回答消息
         chatMessageStorage.setAnswerMessageDO(answerMessage);
 
         // 更新问题消息状态为部分成功
-        questionMessage.setStatus(ChatMessageStatusEnum.PART_SUCCESS);
+        questionMessage.setStatus(RoomOpenAiChatMsgStatusEnum.PART_SUCCESS);
         roomOpenAiChatMsgService.updateById(questionMessage);
     }
 
@@ -54,8 +44,8 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
         RoomOpenAiChatMsgDO answerMessage = (RoomOpenAiChatMsgDO) chatMessageStorage.getAnswerMessageDO();
 
         // 成功状态
-        questionMessage.setStatus(ChatMessageStatusEnum.COMPLETE_SUCCESS);
-        answerMessage.setStatus(ChatMessageStatusEnum.COMPLETE_SUCCESS);
+        questionMessage.setStatus(RoomOpenAiChatMsgStatusEnum.COMPLETE_SUCCESS);
+        answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.COMPLETE_SUCCESS);
 
         // 原始响应数据
         answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
@@ -72,11 +62,11 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
     @Override
     void onErrorMessage(RoomOpenAiChatMessageStorage chatMessageStorage) {
         // 消息流条数大于 0 表示部分成功
-        ChatMessageStatusEnum chatMessageStatusEnum = chatMessageStorage.getCurrentStreamMessageCount() > 0 ? ChatMessageStatusEnum.PART_SUCCESS : ChatMessageStatusEnum.ERROR;
+        RoomOpenAiChatMsgStatusEnum roomOpenAiChatMsgStatusEnum = chatMessageStorage.getCurrentStreamMessageCount() > 0 ? RoomOpenAiChatMsgStatusEnum.PART_SUCCESS : RoomOpenAiChatMsgStatusEnum.ERROR;
 
         // 填充问题消息记录
         RoomOpenAiChatMsgDO questionMessage = (RoomOpenAiChatMsgDO) chatMessageStorage.getQuestionMessageDO();
-        questionMessage.setStatus(chatMessageStatusEnum);
+        questionMessage.setStatus(roomOpenAiChatMsgStatusEnum);
         // 错误响应数据
         questionMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
 
@@ -84,10 +74,10 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
         populateMessageUsageToken(chatMessageStorage);
 
         // 还没收到回复就断了，跳过回答消息记录更新
-        if (chatMessageStatusEnum != ChatMessageStatusEnum.ERROR) {
+        if (roomOpenAiChatMsgStatusEnum != RoomOpenAiChatMsgStatusEnum.ERROR) {
             // 填充问题消息记录
             RoomOpenAiChatMsgDO answerMessage = (RoomOpenAiChatMsgDO) chatMessageStorage.getAnswerMessageDO();
-            answerMessage.setStatus(chatMessageStatusEnum);
+            answerMessage.setStatus(roomOpenAiChatMsgStatusEnum);
             // 原始响应数据
             answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
             // 错误响应数据
@@ -95,10 +85,37 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
             answerMessage.setContent(chatMessageStorage.getReceivedMessage());
             // 更新错误的回答消息记录
             roomOpenAiChatMsgService.updateById(answerMessage);
+        } else {
+            // 保存回答消息
+            RoomOpenAiChatMsgDO answerMessage = new RoomOpenAiChatMsgDO();
+            answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.ERROR);
+            answerMessage.setContent("系统异常，请稍后再试");
+            saveAnswerMessage(answerMessage, questionMessage, chatMessageStorage);
         }
 
         // 更新错误的问题消息记录
         roomOpenAiChatMsgService.updateById(questionMessage);
+    }
+
+    /**
+     * 保存回答消息
+     *
+     * @param answerMessage      回答消息
+     * @param questionMessage    问题消息
+     * @param chatMessageStorage 消息存储
+     */
+    private void saveAnswerMessage(RoomOpenAiChatMsgDO answerMessage, RoomOpenAiChatMsgDO questionMessage, RoomOpenAiChatMessageStorage chatMessageStorage) {
+        answerMessage.setUserId(questionMessage.getUserId());
+        answerMessage.setRoomId(questionMessage.getRoomId());
+        answerMessage.setIp(questionMessage.getIp());
+        answerMessage.setParentQuestionMessageId(questionMessage.getId());
+        answerMessage.setMessageType(MessageTypeEnum.ANSWER);
+        answerMessage.setModelName(questionMessage.getModelName());
+        answerMessage.setApiKey(questionMessage.getApiKey());
+        answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
+        answerMessage.setPromptTokens(questionMessage.getPromptTokens());
+        // 保存回答消息
+        roomOpenAiChatMsgService.save(answerMessage);
     }
 
     /**
