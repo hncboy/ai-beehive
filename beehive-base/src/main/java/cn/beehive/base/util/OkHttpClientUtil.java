@@ -1,11 +1,9 @@
 package cn.beehive.base.util;
 
-import cn.beehive.base.enums.ApiTypeEnum;
+import cn.beehive.base.config.ProxyConfig;
+import cn.hutool.extra.spring.SpringUtil;
 import okhttp3.OkHttpClient;
 
-import java.net.Proxy;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,40 +13,44 @@ import java.util.concurrent.TimeUnit;
  */
 public class OkHttpClientUtil {
 
-    private static final Map<ApiTypeEnum, OkHttpClient> INSTANCE_MAP = new ConcurrentHashMap<>();
+    private static final Integer CONNECT_TIMEOUT = 60;
+    private static final Integer READ_TIMEOUT = 60;
+    private static final Integer WRITE_TIMEOUT = 60;
+
+    private static final OkHttpClient INSTANCE = new OkHttpClient.Builder()
+            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).build();
+    private static OkHttpClient PROXY_INSTANCE = null;
 
     private OkHttpClientUtil() {
         // private constructor to prevent instantiation from outside
     }
 
     /**
-     * 获取一个单例 OkHttpClient 实例
+     * 获取 OkHttpClient 实例
      *
-     * @param apiTypeEnum    Api 类型
-     * @param connectTimeout 连接超时时间（毫秒）
-     * @param readTimeout    读取超时时间（毫秒）
-     * @param writeTimeout   写入超时时间（毫秒）
-     * @param proxy          代理
      * @return OkHttpClient 实例
      */
-    public static OkHttpClient getInstance(ApiTypeEnum apiTypeEnum, int connectTimeout, int readTimeout, int writeTimeout, Proxy proxy) {
-        OkHttpClient instance = INSTANCE_MAP.get(apiTypeEnum);
-        if (instance == null) {
-            synchronized (OkHttpClientUtil.class) {
-                instance = INSTANCE_MAP.get(apiTypeEnum);
-                if (instance == null) {
-                    OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                            .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
-                            .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
-                            .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS);
-                    if (proxy != null) {
-                        builder.proxy(proxy);
-                    }
-                    instance = builder.build();
-                    INSTANCE_MAP.put(apiTypeEnum, instance);
-                }
-            }
+    public static OkHttpClient getInstance() {
+        return INSTANCE;
+    }
+
+    /**
+     * 获取代理 OkHttpClient 实例
+     *
+     * @return OkHttpClient 实例
+     */
+    public static synchronized OkHttpClient getProxyInstance() {
+        if (PROXY_INSTANCE == null) {
+            OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS);
+            ProxyConfig proxyConfig = SpringUtil.getBean(ProxyConfig.class);
+            builder.proxy(proxyConfig.getProxy());
+            PROXY_INSTANCE = builder.build();
         }
-        return instance;
+        return PROXY_INSTANCE;
     }
 }

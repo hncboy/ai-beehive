@@ -19,5 +19,7 @@ public interface ICellConfigCodeEnum {
      *
      * @param dataWrapper 配置参数值
      */
-    void firstValidate(DataWrapper dataWrapper);
+    default void firstValidate(DataWrapper dataWrapper) {
+
+    }
 }

@@ -4,6 +4,7 @@ import cn.beehive.base.domain.entity.RoomBingDO;
 import cn.beehive.base.domain.entity.RoomBingMsgDO;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.util.ObjectMapperUtil;
+import cn.beehive.base.util.ResponseBodyEmitterUtil;
 import cn.beehive.cell.bing.domain.bo.BingApiSendMessageResultBO;
 import cn.beehive.cell.bing.domain.bo.BingApiSendThrottlingResultBO;
 import cn.beehive.cell.bing.domain.bo.BingApiSendType1ResultBO;
@@ -55,7 +56,7 @@ public class BingApiResponseTypeMessageHandler {
             RoomBingStreamMsgVO roomBingStreamMsgVO = new RoomBingStreamMsgVO();
             roomBingStreamMsgVO.setContent(responseText);
             // 发送消息
-            BingRoomHandler.sendEmitterMessage(emitter, roomBingStreamMsgVO);
+            ResponseBodyEmitterUtil.send(emitter, roomBingStreamMsgVO);
         }
     }
 
@@ -121,7 +122,7 @@ public class BingApiResponseTypeMessageHandler {
             roomBingMsgService.save(answerMessage);
 
             // 发送消息
-            BingRoomHandler.sendEmitterMessage(emitter, roomBingStreamMsgVO);
+            ResponseBodyEmitterUtil.send(emitter, roomBingStreamMsgVO);
 
             // 成功
             return false;

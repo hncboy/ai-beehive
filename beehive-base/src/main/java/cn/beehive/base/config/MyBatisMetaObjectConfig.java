@@ -5,6 +5,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author hncboy
@@ -16,8 +17,18 @@ public class MyBatisMetaObjectConfig implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.setFieldValByName("createTime", new Date(), metaObject);
-        this.setFieldValByName("updateTime", new Date(), metaObject);
+        Object createTime = getFieldValByName("createTime", metaObject);
+        if (Objects.isNull(createTime)) {
+            this.setFieldValByName("createTime", new Date(), metaObject);
+        }
+        Object updateTime = getFieldValByName("updateTime", metaObject);
+        if (Objects.isNull(updateTime)) {
+            this.setFieldValByName("updateTime", new Date(), metaObject);
+        }
+        Object ip = getFieldValByName("ip", metaObject);
+        if (Objects.isNull(ip)) {
+            this.setFieldValByName("ip", new Date(), metaObject);
+        }
     }
 
     @Override

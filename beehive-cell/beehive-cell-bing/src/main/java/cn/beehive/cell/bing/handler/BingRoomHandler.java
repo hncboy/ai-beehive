@@ -2,7 +2,6 @@ package cn.beehive.cell.bing.handler;
 
 import cn.beehive.base.domain.entity.RoomBingDO;
 import cn.beehive.base.exception.ServiceException;
-import cn.beehive.base.handler.response.R;
 import cn.beehive.base.util.ForestRequestUtil;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
@@ -18,11 +17,8 @@ import com.dtflys.forest.http.ForestResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,36 +81,22 @@ public class BingRoomHandler {
      */
     public static String buildBingChatRequest(RoomBingDO roomBingDO, RoomBingMsgSendRequest roomBingMsgSendRequest) {
 
-            // 先替换字符串
-            String sendStr = CHAT_REQUEST_JSON_STR
-                    .replace("$conversationId", roomBingDO.getConversationId())
-                    .replace("$conversationSignature", roomBingDO.getConversationSignature())
-                    .replace("$clientId", roomBingDO.getClientId())
-                    .replace("$prompt", roomBingMsgSendRequest.getContent());
+        // 先替换字符串
+        String sendStr = CHAT_REQUEST_JSON_STR
+                .replace("$conversationId", roomBingDO.getConversationId())
+                .replace("$conversationSignature", roomBingDO.getConversationSignature())
+                .replace("$clientId", roomBingDO.getClientId())
+                .replace("$prompt", roomBingMsgSendRequest.getContent());
         // 转换到 JsonNode
         JsonNode jsonNode = ObjectMapperUtil.readTree(sendStr);
         // 获取 "arguments" 数组的第一个元素，转换为 ObjectNode
         ObjectNode objectNode = (ObjectNode) jsonNode.get("arguments").get(0);
 
         // TODO 根据不同的模式构建不同的参数 NewBing 官网进不去了，无法调试，均衡模式可以用，其他模式参数需要获取
-        objectNode.set("optionsSets",  ObjectMapperUtil.readTree(OPTIONS_JSON_MAP.get(roomBingDO.getMode())));
+        objectNode.set("optionsSets", ObjectMapperUtil.readTree(OPTIONS_JSON_MAP.get(roomBingDO.getMode())));
 
         // 替换 isStartOfSession，第一条消息为 true，其他为 false；如果第一条消息为 false 会报错，如果其他为 true，则会一直重复第一条的回答
         objectNode.put("isStartOfSession", roomBingDO.getNumUserMessagesInConversation() == 0);
         return ObjectMapperUtil.toJson(jsonNode);
-    }
-
-    /**
-     * 发送 emitter 消息
-     *
-     * @param emitter 响应流
-     * @param object  消息
-     */
-    public static void sendEmitterMessage(ResponseBodyEmitter emitter, Object object) {
-        try {
-            emitter.send(R.data(object));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

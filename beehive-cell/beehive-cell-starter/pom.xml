@@ -24,5 +24,10 @@
             <artifactId>beehive-cell-midjourney</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.beehive</groupId>
+            <artifactId>beehive-cell-openai</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

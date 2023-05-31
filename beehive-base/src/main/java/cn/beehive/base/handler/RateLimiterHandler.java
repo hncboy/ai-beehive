@@ -49,7 +49,6 @@ public class RateLimiterHandler {
      */
     public static final Deque<LocalDateTime> GLOBAL_REQUEST_TIMESTAMP_QUEUE = new ConcurrentLinkedDeque<>();
 
-
     /**
      * 存储每个 IP 的请求时间队列
      */

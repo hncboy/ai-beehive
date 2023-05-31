@@ -1,5 +1,7 @@
 package cn.beehive.cell.base.hander.strategy;
 
+import cn.beehive.base.exception.ServiceException;
+
 import java.math.BigDecimal;
 
 /**
@@ -7,13 +9,7 @@ import java.math.BigDecimal;
  * @date 2023/5/29
  * 数据包装
  */
-public class DataWrapper {
-
-    private final Object data;
-
-    public DataWrapper(Object data) {
-        this.data = data;
-    }
+public record DataWrapper(Object data) {
 
     /**
      * 将 data 转为 String
@@ -27,7 +23,7 @@ public class DataWrapper {
         if (data instanceof String) {
             return new BigDecimal(String.valueOf(data));
         }
-        throw new UnsupportedOperationException("Cannot convert data to BigDecimal.");
+        throw new ServiceException("Cannot convert data to BigDecimal.");
     }
 
     /**
@@ -42,7 +38,7 @@ public class DataWrapper {
         if (data instanceof String) {
             return Integer.parseInt((String) data);
         }
-        throw new UnsupportedOperationException("Cannot convert data to int.");
+        throw new ServiceException("Cannot convert data to int.");
     }
 
     /**
@@ -57,7 +53,7 @@ public class DataWrapper {
         if (data instanceof String) {
             return Boolean.parseBoolean((String) data);
         }
-        throw new UnsupportedOperationException("Cannot convert data to boolean.");
+        throw new ServiceException("Cannot convert data to boolean.");
     }
 
     /**
@@ -67,5 +63,23 @@ public class DataWrapper {
      */
     public String asString() {
         return String.valueOf(data);
+    }
+
+    /**
+     * 判断 data 是否为 null
+     *
+     * @return boolean
+     */
+    public boolean isNull() {
+        return data == null;
+    }
+
+    /**
+     * 判断 data 是否不为 null
+     *
+     * @return boolean
+     */
+    public boolean nonNull() {
+        return !isNull();
     }
 }

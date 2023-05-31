@@ -7,6 +7,7 @@ import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomBingMsgMapper;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
+import cn.beehive.base.util.ResponseBodyEmitterUtil;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import cn.beehive.cell.bing.domain.vo.RoomBingMsgVO;
@@ -165,7 +166,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
                             }
                         } else {
                             log.warn("NewBing 房间：{}，尝试重新建立话题失败，重试次数已用完", bingRoomBO.getRoomBingDO().getRoomId());
-                            BingRoomHandler.sendEmitterMessage(emitter, "发送对话失败，请稍后重试。");
+                            ResponseBodyEmitterUtil.send(emitter, "发送对话失败，请稍后重试。");
                             emitter.complete();
                         }
                     }
@@ -180,7 +181,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
             @Override
             public void onError(Exception e) {
                 log.error("NewBing 房间：{}，WebSocket 连接发生错误", bingRoomBO.getRoomBingDO().getRoomId(), e);
-                BingRoomHandler.sendEmitterMessage(emitter, "发送对话异常，请稍后重试。");
+                ResponseBodyEmitterUtil.send(emitter, "发送对话异常，请稍后重试。");
                 emitter.complete();
             }
         };

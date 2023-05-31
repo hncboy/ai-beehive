@@ -21,9 +21,24 @@ import java.util.stream.Stream;
 public enum CellCodeEnum {
 
     /**
-     * OPENAI_CHAT
+     * OpenAi 对话 Web GPT 3.5
      */
-    OPENAI_CHAT("openai_chat"),
+    OPENAI_CHAT_WEB_3_5("openai_chat_web_3_5"),
+
+    /**
+     * OpenAi 对话 Web GPT 4
+     */
+    OPENAI_CHAT_WEB_4("openai_chat_web_4"),
+
+    /**
+     * OpenAi 对话 Api GPT3.5
+     */
+    OPENAI_CHAT_3_5("openai_chat_api_3_5"),
+
+    /**
+     * OpenAi 对话 Api GPT4
+     */
+    OPENAI_CHAT_4("openai_chat_api_4"),
 
     /**
      * NEW_BING

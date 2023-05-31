@@ -58,6 +58,14 @@ public class RoomConfigParamHandler {
         CellConfigStrategy cellConfigStrategy = SpringUtil.getBean(CellConfigFactory.class).getCellConfigStrategy(cellCode);
         Map<String, ICellConfigCodeEnum> cellConfigCodeMap = cellConfigStrategy.getCellConfigCodeMap();
 
+        // 校验配置是否齐全，是否都在对应枚举内
+        List<String> cellConfigCodes = cellConfigDOList.stream().map(CellConfigDO::getCode).toList();
+        for (String code : cellConfigCodeMap.keySet()) {
+            if (!cellConfigCodes.contains(code)) {
+                throw new ServiceException(StrUtil.format("该图纸存在配置项[{}]未配置，请联系管理员", code));
+            }
+        }
+
         // 遍历 Cell 配置项
         for (CellConfigDO cellConfigDO : cellConfigDOList) {
             // 跳过用户不能修改的
