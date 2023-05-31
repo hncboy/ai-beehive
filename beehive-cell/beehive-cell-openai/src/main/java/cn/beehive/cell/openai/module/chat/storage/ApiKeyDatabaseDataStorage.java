@@ -7,7 +7,6 @@ import cn.beehive.cell.openai.service.RoomOpenAiChatMsgService;
 import cn.hutool.core.util.StrUtil;
 import com.unfbx.chatgpt.utils.TikTokensUtil;
 import jakarta.annotation.Resource;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

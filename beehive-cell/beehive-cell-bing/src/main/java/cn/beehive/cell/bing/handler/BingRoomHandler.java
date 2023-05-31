@@ -92,7 +92,7 @@ public class BingRoomHandler {
         // 获取 "arguments" 数组的第一个元素，转换为 ObjectNode
         ObjectNode objectNode = (ObjectNode) jsonNode.get("arguments").get(0);
 
-        // TODO 根据不同的模式构建不同的参数 NewBing 官网进不去了，无法调试，均衡模式可以用，其他模式参数需要获取
+        // TODO 不同模式没生效，不清楚怎么改
         objectNode.set("optionsSets", ObjectMapperUtil.readTree(OPTIONS_JSON_MAP.get(roomBingDO.getMode())));
 
         // 替换 isStartOfSession，第一条消息为 true，其他为 false；如果第一条消息为 false 会报错，如果其他为 true，则会一直重复第一条的回答

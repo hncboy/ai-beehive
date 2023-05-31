@@ -1,10 +1,9 @@
 package cn.beehive.cell.openai.module.chat.accesstoken;
 
-import cn.hutool.http.ContentType;
-import cn.hutool.http.Header;
-import cn.beehive.base.enums.ApiTypeEnum;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.base.util.OkHttpClientUtil;
+import cn.hutool.http.ContentType;
+import cn.hutool.http.Header;
 import lombok.Builder;
 import okhttp3.Headers;
 import okhttp3.MediaType;

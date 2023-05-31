@@ -3,7 +3,6 @@ package cn.beehive.cell.openai.handler.cell;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.cell.base.hander.strategy.AbstractCellConfigStrategy;
 import cn.beehive.cell.base.hander.strategy.ICellConfigCodeEnum;
-import cn.beehive.cell.openai.enums.OpenAiChatCellConfigCodeEnum;
 import cn.beehive.cell.openai.enums.OpenAiChatWebCellConfigCodeEnum;
 import org.springframework.stereotype.Component;
 

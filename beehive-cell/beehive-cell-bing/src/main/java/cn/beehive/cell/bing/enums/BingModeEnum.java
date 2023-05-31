@@ -19,17 +19,17 @@ public enum BingModeEnum {
     /**
      * 均衡模式
      */
-    BALANCE("harmonyv3", 200),
+    BALANCE("balance", 200),
 
     /**
      * 准确模式
      */
-    PRECISE("h3precise", 4000),
+    PRECISE("precise", 4000),
 
     /**
      * 创造模式
      */
-    CREATIVE("h3imaginative", 4000);
+    CREATIVE("creative", 4000);
 
     @Getter
     private final String name;
