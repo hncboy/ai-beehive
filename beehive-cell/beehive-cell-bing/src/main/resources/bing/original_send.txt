@@ -1,0 +1,154 @@
+平衡模式
+{
+	"arguments": [{
+		"source": "cib",
+		"optionsSets": ["nlu_direct_response_filter", "deepleo", "disable_emoji_spoken_text", "responsible_ai_policy_235", "enablemm", "galileo", "oaimxcnk512", "rweasgv2", "dv3sugg", "autosave", "saharagenconv5"],
+		"allowedMessageTypes": ["ActionRequest", "Chat", "Context", "InternalSearchQuery", "InternalSearchResult", "Disengaged", "InternalLoaderMessage", "Progress", "RenderCardRequest", "AdsQuery", "SemanticSerp", "GenerateContentQuery", "SearchQuery"],
+		"sliceIds": ["winmuid2tf", "0522chtsprs0", "522docxfmt", "st14", "anssuptkmr2", "contansperf", "adssqovr-cf", "winstmsg2tf", "sydconfigoptt", "norespwcf", "530psthos0", "0524txt2", "418dhlths0", "512sprtic1s0", "524mxc512", "529rwea", "515oscfing2s0"],
+		"verbosity": "verbose",
+		"traceId": "6476c31661224f599fb09a30505c5571",
+		"isStartOfSession": true,
+		"message": {
+			"locale": "zh-CN",
+			"market": "zh-CN",
+			"region": "JP",
+			"location": "lat:47.639557;long:-122.128159;re=1000m;",
+			"locationHints": [{
+				"country": "Japan",
+				"state": "Tokyo",
+				"city": "Shibuya-Ku",
+				"zipcode": "150-0001",
+				"timezoneoffset": 9,
+				"countryConfidence": 8,
+				"cityConfidence": 5,
+				"Center": {
+					"Latitude": 35.6692,
+					"Longitude": 139.7079
+				},
+				"RegionType": 2,
+				"SourceType": 1
+			}],
+			"timestamp": "2023-05-31T11:46:31+08:00",
+			"author": "user",
+			"inputMethod": "Keyboard",
+			"text": "你是谁",
+			"messageType": "Chat",
+			"requestId": "9951c05b-542c-61b4-1e94-ee8ddcb48733",
+			"messageId": "9951c05b-542c-61b4-1e94-ee8ddcb48733"
+		},
+		"tone": "Balanced",
+		"requestId": "9951c05b-542c-61b4-1e94-ee8ddcb48733",
+		"conversationSignature": "FfOIeapQtHwiuGcGTGd0G4UrsDsmVJjvqBjoZzcRaug=",
+		"participant": {
+			"id": "985154382934072"
+		},
+		"conversationId": "51D|BingProd|16332F75156B37B2080E4832AF3AD2FD84C85BB504254F6336110D708C540F53"
+	}],
+	"invocationId": "0",
+	"target": "chat",
+	"type": 4
+}
+
+创造模式
+{
+	"arguments": [{
+		"source": "cib",
+		"optionsSets": ["nlu_direct_response_filter", "deepleo", "disable_emoji_spoken_text", "responsible_ai_policy_235", "enablemm", "h3imaginative", "oaimxcnk512", "rweasgv2", "dv3sugg", "autosave", "gencontentv3"],
+		"allowedMessageTypes": ["ActionRequest", "Chat", "Context", "InternalSearchQuery", "InternalSearchResult", "Disengaged", "InternalLoaderMessage", "Progress", "RenderCardRequest", "AdsQuery", "SemanticSerp", "GenerateContentQuery", "SearchQuery"],
+		"sliceIds": ["winmuid2tf", "0522chtsprs0", "522docxfmt", "st14", "contansperf", "adssqovr-cf", "winstmsg2tf", "sydconfigoptt", "norespwcf", "530psthos0", "0524txt2", "418dhlths0", "512sprtic1s0", "524mxc512", "529rwea", "515oscfing2s0"],
+		"verbosity": "verbose",
+		"traceId": "647767b30e124531adeb05e4af14debd",
+		"isStartOfSession": true,
+		"message": {
+			"locale": "zh-CN",
+			"market": "zh-CN",
+			"region": "JP",
+			"location": "lat:47.639557;long:-122.128159;re=1000m;",
+			"locationHints": [{
+				"country": "Japan",
+				"state": "Tokyo",
+				"city": "Shibuya-Ku",
+				"zipcode": "150-0001",
+				"timezoneoffset": 9,
+				"countryConfidence": 8,
+				"cityConfidence": 5,
+				"Center": {
+					"Latitude": 35.6692,
+					"Longitude": 139.7079
+				},
+				"RegionType": 2,
+				"SourceType": 1
+			}],
+			"timestamp": "2023-05-31T23:28:54+08:00",
+			"author": "user",
+			"inputMethod": "Keyboard",
+			"text": "你是谁",
+			"messageType": "Chat",
+			"requestId": "19d4aef4-be4f-d380-7aee-525a873296e8",
+			"messageId": "19d4aef4-be4f-d380-7aee-525a873296e8"
+		},
+		"tone": "Creative",
+		"requestId": "19d4aef4-be4f-d380-7aee-525a873296e8",
+		"conversationSignature": "HUDdbRw1+PSPy/U5VNpR/a77HborX4BIINBQ49u7EuQ=",
+		"participant": {
+			"id": "985154382934072"
+		},
+		"spokenTextMode": "None",
+		"conversationId": "51D|BingProd|411FA6636BC434926021FA6C4E5D2B0A153A25FA958449F754BEF348CAAAE605"
+	}],
+	"invocationId": "0",
+	"target": "chat",
+	"type": 4
+}
+
+精确模式
+{
+	"arguments": [{
+		"source": "cib",
+		"optionsSets": ["nlu_direct_response_filter", "deepleo", "disable_emoji_spoken_text", "responsible_ai_policy_235", "enablemm", "h3precise", "oaimxcnk512", "rweasgv2", "dv3sugg", "autosave", "clgalileo", "gencontentv3"],
+		"allowedMessageTypes": ["ActionRequest", "Chat", "Context", "InternalSearchQuery", "InternalSearchResult", "Disengaged", "InternalLoaderMessage", "Progress", "RenderCardRequest", "AdsQuery", "SemanticSerp", "GenerateContentQuery", "SearchQuery"],
+		"sliceIds": ["winmuid2tf", "0522chtsprs0", "522docxfmt", "st14", "contansperf", "adssqovr-cf", "winstmsg2tf", "sydconfigoptt", "norespwcf", "530psthos0", "0524txt2", "418dhlths0", "512sprtic1s0", "524mxc512", "529rwea", "515oscfing2s0"],
+		"verbosity": "verbose",
+		"traceId": "647767b30e124531adeb05e4af14debd",
+		"isStartOfSession": false,
+		"message": {
+			"locale": "zh-CN",
+			"market": "zh-CN",
+			"region": "JP",
+			"location": "lat:47.639557;long:-122.128159;re=1000m;",
+			"locationHints": [{
+				"country": "Japan",
+				"state": "Tokyo",
+				"city": "Shibuya-Ku",
+				"zipcode": "150-0001",
+				"timezoneoffset": 9,
+				"countryConfidence": 8,
+				"cityConfidence": 5,
+				"Center": {
+					"Latitude": 35.6692,
+					"Longitude": 139.7079
+				},
+				"RegionType": 2,
+				"SourceType": 1
+			}],
+			"timestamp": "2023-05-31T23:28:54+08:00",
+			"author": "user",
+			"inputMethod": "Keyboard",
+			"text": "你好",
+			"messageType": "Chat",
+			"requestId": "8294fbc1-edd5-35f8-c1f8-419ec220861b",
+			"messageId": "8294fbc1-edd5-35f8-c1f8-419ec220861b"
+		},
+		"tone": "Precise",
+		"requestId": "8294fbc1-edd5-35f8-c1f8-419ec220861b",
+		"conversationSignature": "VIWpJZYFVfhAmp8nfOH2yXW7wqHMUOqwk58dWl0uqkc=",
+		"participant": {
+			"id": "985154382934072"
+		},
+		"spokenTextMode": "None",
+		"conversationId": "51D|BingProd|D5D3770051734A4172D467B68D94A34593F484ADAF072D20E7A5A00EC1B564CF"
+	}],
+	"invocationId": "2",
+	"target": "chat",
+	"type": 4
+}

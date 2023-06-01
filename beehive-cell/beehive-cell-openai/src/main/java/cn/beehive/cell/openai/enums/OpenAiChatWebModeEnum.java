@@ -1,6 +1,5 @@
 package cn.beehive.cell.openai.enums;
 
-import cn.beehive.base.enums.ConversationModelEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -42,7 +41,7 @@ public enum OpenAiChatWebModeEnum {
     /**
      * name 作为 key，封装为 Map
      */
-    public static final Map<String, ConversationModelEnum> NAME_MAP = Stream
-            .of(ConversationModelEnum.values())
-            .collect(Collectors.toMap(ConversationModelEnum::getName, Function.identity()));
+    public static final Map<String, OpenAiChatWebModeEnum> NAME_MAP = Stream
+            .of(OpenAiChatWebModeEnum.values())
+            .collect(Collectors.toMap(OpenAiChatWebModeEnum::getName, Function.identity()));
 }

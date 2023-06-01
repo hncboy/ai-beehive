@@ -1,4 +1,4 @@
-package cn.beehive.base.enums;
+package cn.beehive.cell.openai.enums;
 
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 @AllArgsConstructor
 @Getter
-public enum ApiKeyTokenLimiterEnum {
+public enum OpenAiChatModelTokenLimiterEnum {
 
     /**
      * GPT3.5 Token 限制文档
@@ -51,7 +51,7 @@ public enum ApiKeyTokenLimiterEnum {
      * @return 限制的 Token 数量
      */
     public static int getTokenLimitByOuterJarModelName(String outerJarModelName) {
-        for (ApiKeyTokenLimiterEnum modelItem : ApiKeyTokenLimiterEnum.values()) {
+        for (OpenAiChatModelTokenLimiterEnum modelItem : OpenAiChatModelTokenLimiterEnum.values()) {
             if (Objects.equals(modelItem.model.getName(), outerJarModelName)) {
                 return modelItem.tokenLimit;
             }

@@ -1,12 +1,10 @@
 package cn.beehive.cell.base.service.impl;
 
-import cn.beehive.base.domain.entity.CellDO;
 import cn.beehive.base.domain.entity.RoomConfigParamDO;
 import cn.beehive.base.domain.entity.RoomDO;
 import cn.beehive.base.mapper.RoomMapper;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.PageUtil;
-import cn.beehive.base.util.WebUtil;
 import cn.beehive.cell.base.domain.query.RoomPageQuery;
 import cn.beehive.cell.base.domain.request.RoomCreateRequest;
 import cn.beehive.cell.base.domain.request.RoomEditRequest;

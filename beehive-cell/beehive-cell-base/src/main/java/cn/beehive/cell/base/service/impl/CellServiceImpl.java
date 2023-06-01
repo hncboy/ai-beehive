@@ -2,7 +2,6 @@ package cn.beehive.cell.base.service.impl;
 
 import cn.beehive.base.domain.entity.CellDO;
 import cn.beehive.base.domain.entity.CellPermissionDO;
-import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.enums.CellPermissionTypeEnum;
 import cn.beehive.base.enums.CellStatusEnum;
 import cn.beehive.base.mapper.CellMapper;

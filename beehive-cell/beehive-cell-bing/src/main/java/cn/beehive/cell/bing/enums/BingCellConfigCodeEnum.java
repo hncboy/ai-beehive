@@ -30,4 +30,6 @@ public enum BingCellConfigCodeEnum implements ICellConfigCodeEnum {
             throw new ServiceException(StrUtil.format("NewBing 模式 {} 参数错误", mode));
         }
     }
+
+    // TODO 看下有无 cookie 有什么区别，如果需要的话，可以加个 cookie 配置项
 }

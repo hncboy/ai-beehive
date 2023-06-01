@@ -1,7 +1,7 @@
 package cn.beehive.cell.openai.module.chat.emitter;
 
 import cn.beehive.base.domain.entity.RoomOpenAiChatMsgDO;
-import cn.beehive.base.enums.ApiKeyTokenLimiterEnum;
+import cn.beehive.cell.openai.enums.OpenAiChatModelTokenLimiterEnum;
 import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.handler.response.R;
@@ -135,7 +135,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
         // 最终的 maxTokens
         int finalMaxTokens;
         // 本次对话剩余的 maxTokens 最大值 = 模型的最大上限 - 本次 prompt 消耗的 tokens - 1
-        int currentRemainMaxTokens = ApiKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(questionMessage.getModelName()) - questionMessage.getPromptTokens() - 1;
+        int currentRemainMaxTokens = OpenAiChatModelTokenLimiterEnum.getTokenLimitByOuterJarModelName(questionMessage.getModelName()) - questionMessage.getPromptTokens() - 1;
         // 获取 maxTokens
         DataWrapper maxTokensDataWrapper = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.MAX_TOKENS);
         // 如果 maxTokens 为空或者大于当前剩余的 maxTokens
@@ -171,20 +171,20 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
     private boolean exceedModelTokenLimit(RoomOpenAiChatMsgDO questionMessage, String modelName, ResponseBodyEmitter emitter) {
         Integer promptTokens = questionMessage.getPromptTokens();
         // 当前模型最大 tokens
-        int maxTokens = ApiKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(modelName);
+        int maxTokens = OpenAiChatModelTokenLimiterEnum.getTokenLimitByOuterJarModelName(modelName);
 
         boolean isExcelledModelTokenLimit = false;
 
         String msg = null;
         // 判断 token 数量是否超过限制
-        if (ApiKeyTokenLimiterEnum.exceedsLimit(modelName, promptTokens)) {
+        if (OpenAiChatModelTokenLimiterEnum.exceedsLimit(modelName, promptTokens)) {
             isExcelledModelTokenLimit = true;
 
             // 获取当前 prompt 消耗的 tokens
             int currentPromptTokens = TikTokensUtil.tokens(modelName, questionMessage.getContent());
             // 判断历史上下文是否超过限制
             int remainingTokens = promptTokens - currentPromptTokens;
-            if (ApiKeyTokenLimiterEnum.exceedsLimit(modelName, remainingTokens)) {
+            if (OpenAiChatModelTokenLimiterEnum.exceedsLimit(modelName, remainingTokens)) {
                 msg = "当前上下文字数已经达到上限，请减少上下文关联的条数";
             } else {
                 msg = StrUtil.format("当前上下文 Token 数量：{}，超过上限：{}，请减少字数发送或减少上下文关联的条数", promptTokens, maxTokens);

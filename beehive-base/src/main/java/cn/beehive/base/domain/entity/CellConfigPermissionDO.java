@@ -13,12 +13,13 @@ import java.util.Date;
 /**
  * @author hncboy
  * @date 2023/6/1
- * cell 权限表实体类
- * 对于 cell 来说必须拥有权限
+ * cell 配置项权限表实体类
+ * 对于 cell config 来说，这里的权限是扩展
+ * cell config 里的字段本身就携带部分权限
  */
 @Data
-@TableName(value = "bh_cell_permission")
-public class CellPermissionDO {
+@TableName(value = "bh_cell_config_permission")
+public class CellConfigPermissionDO {
 
     /**
      * 主键
@@ -37,9 +38,9 @@ public class CellPermissionDO {
     private String cellCode;
 
     /**
-     * 权限类型
+     * cell config code
      */
-    private CellPermissionTypeEnum type;
+    private String cellConfigCode;
 
     /**
      * 创建时间

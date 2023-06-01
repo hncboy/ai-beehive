@@ -52,6 +52,8 @@ public class CellConfigDO {
 
     /**
      * 是否必填，false 否 true 是
+     * <p>
+     * 有些参数值系统未提供必须由用户自己提供
      */
     private Boolean isRequired;
 
@@ -61,19 +63,27 @@ public class CellConfigDO {
     private Boolean isUserVisible;
 
     /**
-     * 有些配置用户可修改但是看不到默认值
      * 用户是否可见 value，false 否 true 是
+     * <p>
+     * 有些配置用户可修改但是看不到默认值
+     * 前提：isUserVisible=true
+     * 比如 OpenAi 的 ApiKey，用户可以使用系统提供的但是看不到默认值
      */
     private Boolean isUserValueVisible;
 
     /**
-     * 有些配置用户可见但是不能修改
      * 用户是否可修改，false 否 true 是
+     * <p>
+     * 前提：isUserVisible=true
+     * 有些配置用户可见但是不能修改
      */
     private Boolean isUserModifiable;
 
     /**
      * 用户创建房间后是否可修改，false 否 true 是
+     * <p>
+     * 有些参数创建好之后不允许修改，否则对话会出问题
+     * 比如官方 ChatGPT 网页版逆向的模型，同一个房间的模型必须一致
      */
     private Boolean isUserLiveModifiable;
 
