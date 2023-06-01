@@ -58,12 +58,22 @@ public class CellConfigDO {
     private Boolean isRequired;
 
     /**
+     * 是否有默认值，false 否 true 是
+     */
+    private Boolean isHaveDefaultValue;
+
+    /**
+     * 用户是否可以使用默认值，false 否 true 是
+     */
+    private Boolean isUserCanUseDefaultValue;
+
+    /**
      * 用户是否可见，false 否 true 是
      */
     private Boolean isUserVisible;
 
     /**
-     * 用户是否可见 value，false 否 true 是
+     * 用户是否可见默认值，false 否 true 是
      * <p>
      * 有些配置用户可修改但是看不到默认值
      * 前提：isUserVisible=true

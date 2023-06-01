@@ -1,5 +1,6 @@
 package cn.beehive.base.config;
 
+import cn.beehive.base.util.WebUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,7 @@ public class MyBatisMetaObjectConfig implements MetaObjectHandler {
         }
         Object ip = getFieldValByName("ip", metaObject);
         if (Objects.isNull(ip)) {
-            this.setFieldValByName("ip", new Date(), metaObject);
+            this.setFieldValByName("ip", WebUtil.getIp(), metaObject);
         }
     }
 

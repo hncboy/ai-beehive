@@ -2,8 +2,8 @@ package cn.beehive.cell.openai.enums;
 
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.util.ThrowExceptionUtil;
-import cn.beehive.cell.base.hander.strategy.DataWrapper;
-import cn.beehive.cell.base.hander.strategy.ICellConfigCodeEnum;
+import cn.beehive.cell.core.hander.strategy.DataWrapper;
+import cn.beehive.cell.core.hander.strategy.ICellConfigCodeEnum;
 
 import java.math.BigDecimal;
 
@@ -185,5 +185,5 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
                 throw new ServiceException("OpenAi 上下文关联时间范围小时为 [1, 72]");
             }
         }
-    }
+    },
 }

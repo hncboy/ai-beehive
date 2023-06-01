@@ -1,7 +1,7 @@
 package cn.beehive.cell.midjourney.handler;
 
-import cn.beehive.cell.base.hander.strategy.DataWrapper;
-import cn.beehive.cell.base.hander.strategy.ICellConfigCodeEnum;
+import cn.beehive.cell.core.hander.strategy.DataWrapper;
+import cn.beehive.cell.core.hander.strategy.ICellConfigCodeEnum;
 
 /**
  * @author hncboy

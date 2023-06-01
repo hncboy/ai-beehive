@@ -1,8 +1,8 @@
 package cn.beehive.cell.bing.enums;
 
 import cn.beehive.base.exception.ServiceException;
-import cn.beehive.cell.base.hander.strategy.DataWrapper;
-import cn.beehive.cell.base.hander.strategy.ICellConfigCodeEnum;
+import cn.beehive.cell.core.hander.strategy.DataWrapper;
+import cn.beehive.cell.core.hander.strategy.ICellConfigCodeEnum;
 import cn.hutool.core.util.StrUtil;
 
 /**

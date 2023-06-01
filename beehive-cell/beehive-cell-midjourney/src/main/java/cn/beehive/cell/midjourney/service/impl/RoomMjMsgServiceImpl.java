@@ -11,7 +11,7 @@ import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomMjMsgMapper;
 import cn.beehive.base.util.FileUtil;
 import cn.beehive.base.util.FrontUserUtil;
-import cn.beehive.cell.base.hander.RoomHandler;
+import cn.beehive.cell.core.hander.RoomHandler;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;

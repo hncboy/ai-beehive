@@ -3,7 +3,7 @@ package cn.beehive.cell.openai.service;
 import cn.beehive.base.domain.entity.RoomOpenAiChatWebMsgDO;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.handler.mp.IBeehiveService;
-import cn.beehive.cell.base.hander.strategy.DataWrapper;
+import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiChatSendRequest;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiChatMsgVO;
 import cn.beehive.cell.openai.enums.OpenAiChatWebCellConfigCodeEnum;

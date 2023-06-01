@@ -1,6 +1,6 @@
 package cn.beehive.cell.openai.module.chat.emitter;
 
-import cn.beehive.cell.base.hander.strategy.CellConfigStrategy;
+import cn.beehive.cell.core.hander.strategy.CellConfigStrategy;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiChatSendRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 

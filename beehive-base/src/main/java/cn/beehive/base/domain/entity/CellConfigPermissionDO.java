@@ -1,6 +1,7 @@
 package cn.beehive.base.domain.entity;
 
-import cn.beehive.base.enums.CellPermissionTypeEnum;
+import cn.beehive.base.enums.CellCodeEnum;
+import cn.beehive.base.enums.CellConfigPermissionTypeEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -34,13 +35,19 @@ public class CellConfigPermissionDO {
 
     /**
      * cell code
+     * 不允许为 0，因为 0 代表所有 cell
      */
-    private String cellCode;
+    private CellCodeEnum cellCode;
 
     /**
      * cell config code
      */
     private String cellConfigCode;
+
+    /**
+     * 权限类型
+     */
+    private CellConfigPermissionTypeEnum type;
 
     /**
      * 创建时间

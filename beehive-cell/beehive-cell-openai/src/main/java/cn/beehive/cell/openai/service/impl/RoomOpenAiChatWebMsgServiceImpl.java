@@ -9,7 +9,7 @@ import cn.beehive.base.mapper.RoomOpenAiChatWebMsgMapper;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.base.util.WebUtil;
-import cn.beehive.cell.base.hander.strategy.DataWrapper;
+import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiChatSendRequest;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiChatMsgVO;
 import cn.beehive.cell.openai.enums.OpenAiChatWebCellConfigCodeEnum;

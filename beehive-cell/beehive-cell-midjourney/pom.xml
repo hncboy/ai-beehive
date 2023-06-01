@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>cn.beehive</groupId>
-            <artifactId>beehive-cell-base</artifactId>
+            <artifactId>beehive-cell-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

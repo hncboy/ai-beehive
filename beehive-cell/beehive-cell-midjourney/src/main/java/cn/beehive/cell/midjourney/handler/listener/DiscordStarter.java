@@ -2,7 +2,7 @@ package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.SysParamKeyEnum;
-import cn.beehive.cell.base.hander.strategy.ICellConfigCodeEnum;
+import cn.beehive.cell.core.hander.strategy.ICellConfigCodeEnum;
 import cn.beehive.cell.midjourney.config.MidjourneyConfig;
 import cn.beehive.cell.midjourney.handler.MidjourneyCellConfigStrategy;
 import cn.hutool.core.util.BooleanUtil;
