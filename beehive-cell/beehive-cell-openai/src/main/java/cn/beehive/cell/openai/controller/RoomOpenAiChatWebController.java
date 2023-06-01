@@ -3,7 +3,6 @@ package cn.beehive.cell.openai.controller;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.handler.response.R;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiChatMsgVO;
-import cn.beehive.cell.openai.service.RoomOpenAiChatMsgService;
 import cn.beehive.cell.openai.service.RoomOpenAiChatWebMsgService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

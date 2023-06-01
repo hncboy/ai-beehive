@@ -48,6 +48,7 @@ public class RoomDO {
     /**
      * ip
      */
+    @TableField(fill = FieldFill.INSERT)
     private String ip;
 
     /**

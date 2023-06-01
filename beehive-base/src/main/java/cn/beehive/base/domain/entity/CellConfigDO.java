@@ -26,11 +26,6 @@ public class CellConfigDO {
     private Integer id;
 
     /**
-     * cell id
-     */
-    private Integer cellId;
-
-    /**
      * cell code
      */
     private String cellCode;

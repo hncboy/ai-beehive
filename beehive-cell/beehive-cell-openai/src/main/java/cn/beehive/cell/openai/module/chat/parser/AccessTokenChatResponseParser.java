@@ -1,14 +1,13 @@
 package cn.beehive.cell.openai.module.chat.parser;
 
-import cn.beehive.base.domain.entity.RoomOpenAiChatMsgDO;
 import cn.beehive.base.domain.entity.RoomOpenAiChatWebMsgDO;
 import cn.beehive.base.enums.MessageTypeEnum;
+import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiChatMsgVO;
 import cn.beehive.cell.openai.module.chat.accesstoken.ChatWebConversationResponse;
 import cn.beehive.cell.openai.module.chat.storage.RoomOpenAiChatMessageStorage;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
-import cn.beehive.base.util.ObjectMapperUtil;
 import com.unfbx.chatgpt.entity.chat.Message;
 import org.springframework.stereotype.Component;
 

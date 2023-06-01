@@ -10,8 +10,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 /**
  * @author hncboy
  * @date 2023-3-25

@@ -24,6 +24,7 @@ public class CellHandler {
      * @return cell
      */
     public static CellDO checkCellPublishExist(CellCodeEnum cellCode) {
+        // TODO 缓存
         CellDO cellDO = SpringUtil.getBean(CellService.class)
                 .getOne(new LambdaQueryWrapper<CellDO>().eq(CellDO::getCode, cellCode));
         if (Objects.isNull(cellDO)) {

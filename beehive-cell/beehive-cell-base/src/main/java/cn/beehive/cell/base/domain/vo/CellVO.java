@@ -31,6 +31,12 @@ public class CellVO {
     @Schema(title = "状态")
     private CellStatusEnum status;
 
+    @Schema(title = "是否能使用，false 否 true 是")
+    private Boolean isCanUse;
+
+    @Schema(title = "排序，值大的排前面")
+    private Integer sort;
+
     @Schema(title = "创建时间")
     private Date createTime;
 }

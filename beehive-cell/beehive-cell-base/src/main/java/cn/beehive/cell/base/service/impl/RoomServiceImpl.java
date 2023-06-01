@@ -12,6 +12,7 @@ import cn.beehive.cell.base.domain.request.RoomCreateRequest;
 import cn.beehive.cell.base.domain.request.RoomEditRequest;
 import cn.beehive.cell.base.domain.vo.RoomListVO;
 import cn.beehive.cell.base.hander.CellHandler;
+import cn.beehive.cell.base.hander.CellPermissionHandler;
 import cn.beehive.cell.base.hander.RoomConfigParamHandler;
 import cn.beehive.cell.base.hander.RoomHandler;
 import cn.beehive.cell.base.hander.converter.RoomConverter;
@@ -58,7 +59,11 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, RoomDO> implements 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public RoomListVO createRoom(RoomCreateRequest roomCreateRequest) {
-        CellDO cellDO = CellHandler.checkCellPublishExist(roomCreateRequest.getCellCode());
+        // 校验 Cell 是否发布
+        CellHandler.checkCellPublishExist(roomCreateRequest.getCellCode());
+
+        // 校验 Cell 是否有使用权限
+        CellPermissionHandler.checkCanUse(roomCreateRequest.getCellCode());
 
         // 校验房间配置参数
         List<RoomConfigParamDO> roomConfigParamDOList = RoomConfigParamHandler.checkRoomConfigParamRequest(roomCreateRequest.getCellCode(), roomCreateRequest.getRoomConfigParams(), false);
@@ -69,8 +74,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, RoomDO> implements 
         roomDO.setColor(roomCreateRequest.getRoomInfo().getColor());
         roomDO.setName(roomCreateRequest.getRoomInfo().getName());
         roomDO.setPinTime(0L);
-        roomDO.setIp(WebUtil.getIp());
-        roomDO.setCellCode(cellDO.getCode());
+        roomDO.setCellCode(roomCreateRequest.getCellCode());
         roomDO.setIsDeleted(false);
         save(roomDO);
 

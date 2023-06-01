@@ -1,29 +1,31 @@
 package cn.beehive.base.domain.entity;
 
+import cn.beehive.base.enums.CellCodeEnum;
+import cn.beehive.base.enums.CellPermissionTypeEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.beehive.base.enums.ApiTypeEnum;
 import lombok.Data;
 
 import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023-3-25
- * 聊天室表实体类
+ * @date 2023/6/1
+ * cell 权限表实体类
  */
 @Data
-@TableName("chat_room")
-public class ChatRoomDO {
+@TableName(value = "bh_cell_permission")
+public class CellPermissionDO {
+
 
     /**
      * 主键
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+    private Integer id;
 
     /**
      * 用户 id
@@ -31,38 +33,14 @@ public class ChatRoomDO {
     private Integer userId;
 
     /**
-     * 对话 id
-     * 唯一
+     * cell code
      */
-    private String conversationId;
+    private String cellCode;
 
     /**
-     * ip
+     * 权限类型
      */
-    private String ip;
-
-    /**
-     * 第一条消息主键
-     * 唯一
-     */
-    private Long firstChatMessageId;
-
-    /**
-     * 第一条消息 id
-     * 唯一
-     */
-    private String firstMessageId;
-
-    /**
-     * 对话标题
-     */
-    private String title;
-
-    /**
-     * API 类型
-     * 不同类型的对话不能一起存储
-     */
-    private ApiTypeEnum apiType;
+    private CellPermissionTypeEnum type;
 
     /**
      * 创建时间
