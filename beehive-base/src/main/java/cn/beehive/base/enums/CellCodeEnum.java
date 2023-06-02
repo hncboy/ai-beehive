@@ -33,12 +33,17 @@ public enum CellCodeEnum {
     /**
      * OpenAi 对话 Api GPT3.5
      */
-    OPENAI_CHAT_3_5("openai_chat_api_3_5"),
+    OPENAI_CHAT_API_3_5("openai_chat_api_3_5"),
 
     /**
      * OpenAi 对话 Api GPT4
      */
-    OPENAI_CHAT_4("openai_chat_api_4"),
+    OPENAI_CHAT_API_4("openai_chat_api_4"),
+
+    /**
+     * OpenAi 图像
+     */
+    OPENAI_IMAGE("openai_image"),
 
     /**
      * NEW_BING

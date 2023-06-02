@@ -1,6 +1,6 @@
 package cn.beehive.base.domain.entity;
 
-import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
+import cn.beehive.base.enums.MessageStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -13,12 +13,12 @@ import java.util.Date;
 
 /**
  * @author hncboy
- * @date 2023/5/31
- * OpenAi 对话房间消息表
+ * @date 2023/6/3
+ * OpenAi 图像房间消息表
  */
 @Data
-@TableName("bh_room_openai_chat_msg")
-public class RoomOpenAiChatMsgDO {
+@TableName("bh_room_openai_image_msg")
+public class RoomOpenAiImageMsgDO {
 
     /**
      * 主键
@@ -47,13 +47,9 @@ public class RoomOpenAiChatMsgDO {
     private MessageTypeEnum messageType;
 
     /**
-     * 模型名称
-     */
-    private String modelName;
-
-    /**
      * ip
      */
+    @TableField(fill = FieldFill.INSERT)
     private String ip;
 
     /**
@@ -62,10 +58,24 @@ public class RoomOpenAiChatMsgDO {
     private String apiKey;
 
     /**
-     * 消息内容
-     * 包含上下文的对话这里只会显示出用户发送的
+     * 输入内容
      */
-    private String content;
+    private String prompt;
+
+    /**
+     * 尺寸大小
+     */
+    private String size;
+
+    /**
+     * openai 图像 url
+     */
+    private String openaiImageUrl;
+
+    /**
+     * 图像名称
+     */
+    private String imageName;
 
     /**
      * 消息的原始数据
@@ -80,24 +90,9 @@ public class RoomOpenAiChatMsgDO {
     private String responseErrorData;
 
     /**
-     * 输入消息的 tokens
+     * 消息状态枚举
      */
-    private Integer promptTokens;
-
-    /**
-     * 输出消息的 tokens
-     */
-    private Integer completionTokens;
-
-    /**
-     * 累计 Tokens
-     */
-    private Integer totalTokens;
-
-    /**
-     * 消息状态
-     */
-    private RoomOpenAiChatMsgStatusEnum status;
+    private MessageStatusEnum status;
 
     /**
      * 房间配置参数

@@ -1,9 +1,12 @@
 package cn.beehive.cell.core.hander.strategy;
 
+import cn.beehive.base.domain.entity.RoomDO;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.exception.ServiceException;
+import cn.beehive.cell.core.hander.RoomHandler;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +31,37 @@ public class CellConfigFactory {
     /**
      * 获取 cell 配置项策略
      *
+     * @param roomId              房间 id
+     * @param limitedCellCodeEnum 限制的 cell code
+     * @return cell 配置项策略
+     */
+    public CellConfigStrategy getCellConfigStrategy(Long roomId, CellCodeEnum limitedCellCodeEnum) {
+        return getCellConfigStrategy(roomId, Collections.singletonList(limitedCellCodeEnum));
+    }
+
+
+    /**
+     * 获取 cell 配置项策略
+     *
+     * @param roomId               房间 id
+     * @param limitedCellCodeEnums 限制的 cell code 列表
+     * @return cell 配置项策略
+     */
+    public CellConfigStrategy getCellConfigStrategy(Long roomId, List<CellCodeEnum> limitedCellCodeEnums) {
+        // 校验房间是否存在
+        RoomDO roomDO = RoomHandler.checkRoomExist(roomId, limitedCellCodeEnums);
+        return getCellConfigStrategy(roomDO.getCellCode());
+    }
+
+    /**
+     * 获取 cell 配置项策略
+     *
      * @param cellCode cell code
      * @return cell 配置项策略
      */
     public CellConfigStrategy getCellConfigStrategy(CellCodeEnum cellCode) {
         return Optional
                 .ofNullable(strategies.get(cellCode))
-                .orElseThrow(() -> new ServiceException("Invalid cell code: " + cellCode));
+                .orElseThrow(() -> new ServiceException("无效的 cell code: " + cellCode));
     }
 }

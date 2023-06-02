@@ -85,7 +85,7 @@ public class RoomOpenAiChatWebMsgDO {
     private String responseErrorData;
 
     /**
-     * 聊天信息状态
+     * 消息状态
      */
     private RoomOpenAiChatMsgStatusEnum status;
 

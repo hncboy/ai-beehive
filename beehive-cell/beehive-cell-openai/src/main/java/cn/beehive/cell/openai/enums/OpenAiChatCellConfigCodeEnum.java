@@ -127,6 +127,7 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
             ThrowExceptionUtil.isTrue(dataWrapper.isNull()).throwMessage("ApiKey 不能为空");
 
             // TODO 判断是否合法
+            // TODO 使用自己的 open baseUrl 无法使用系统默认的 apiKey，防止 apiKey 被泄露
         }
     },
 

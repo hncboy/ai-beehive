@@ -101,7 +101,6 @@ public class RoomConfigParamHandler {
 
             // 使用用户自己传的值，校验值是否合法
             cellConfigStrategy.validate(cellConfigCodeMap.get(cellConfigPermissionBO.getCode()), new DataWrapper(roomConfigParamRequest.getValue()));
-
             RoomConfigParamDO roomConfigParamDO = new RoomConfigParamDO();
             roomConfigParamDO.setUserId(FrontUserUtil.getUserId());
             roomConfigParamDO.setRoomId(null);

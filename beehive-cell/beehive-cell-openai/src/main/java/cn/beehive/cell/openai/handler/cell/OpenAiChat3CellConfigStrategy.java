@@ -16,7 +16,7 @@ public class OpenAiChat3CellConfigStrategy extends AbstractCellConfigStrategy {
 
     @Override
     public CellCodeEnum getCellCode() {
-        return CellCodeEnum.OPENAI_CHAT_3_5;
+        return CellCodeEnum.OPENAI_CHAT_API_3_5;
     }
 
     @Override

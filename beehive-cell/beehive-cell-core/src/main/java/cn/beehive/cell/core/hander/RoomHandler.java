@@ -47,25 +47,25 @@ public class RoomHandler {
     /**
      * 校验房间是否存在并且属于指定的 cell code
      *
-     * @param roomId       房间 id
-     * @param cellCodeEnum 房间 cell Code
+     * @param roomId              房间 id
+     * @param limitedCellCodeEnum 限制的房间 cell Code
      * @return 房间信息
      */
-    public static RoomDO checkRoomExist(Long roomId, CellCodeEnum cellCodeEnum) {
-        return checkRoomExist(roomId, Collections.singletonList(cellCodeEnum));
+    public static RoomDO checkRoomExist(Long roomId, CellCodeEnum limitedCellCodeEnum) {
+        return checkRoomExist(roomId, Collections.singletonList(limitedCellCodeEnum));
     }
 
     /**
      * 校验房间是否存在并且属于指定的 cell code
      *
-     * @param roomId        房间 id
-     * @param cellCodeEnums 房间 cell Code 列表
+     * @param roomId               房间 id
+     * @param limitedCellCodeEnums 限制的房间 cell Code 列表
      * @return 房间信息
      */
-    public static RoomDO checkRoomExist(Long roomId, List<CellCodeEnum> cellCodeEnums) {
+    public static RoomDO checkRoomExist(Long roomId, List<CellCodeEnum> limitedCellCodeEnums) {
         RoomDO roomDO = checkRoomExist(roomId);
         // 校验房间 cell code
-        if (!cellCodeEnums.contains(roomDO.getCellCode())) {
+        if (!limitedCellCodeEnums.contains(roomDO.getCellCode())) {
             throw new ServiceException("房间不存在");
         }
         return roomDO;

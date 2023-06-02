@@ -3,24 +3,24 @@ package cn.beehive.cell.openai.handler.cell;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.cell.core.hander.strategy.AbstractCellConfigStrategy;
 import cn.beehive.cell.core.hander.strategy.ICellConfigCodeEnum;
-import cn.beehive.cell.openai.enums.OpenAiChatCellConfigCodeEnum;
+import cn.beehive.cell.openai.enums.OpenAiImageCellConfigCodeEnum;
 import org.springframework.stereotype.Component;
 
 /**
  * @author hncboy
- * @date 2023/5/31
- * OpenAi 对话 GPT-4 配置项策略
+ * @date 2023/6/3
+ * OpenAi 图像配置项策略
  */
 @Component
-public class OpenAiChat4CellConfigStrategy extends AbstractCellConfigStrategy {
+public class OpenAiImageCellConfigStrategy extends AbstractCellConfigStrategy {
 
     @Override
     public CellCodeEnum getCellCode() {
-        return CellCodeEnum.OPENAI_CHAT_API_4;
+        return CellCodeEnum.OPENAI_IMAGE;
     }
 
     @Override
     public Class<? extends ICellConfigCodeEnum> getCellConfigCodeEnumClazz() {
-        return OpenAiChatCellConfigCodeEnum.class;
+        return OpenAiImageCellConfigCodeEnum.class;
     }
 }
