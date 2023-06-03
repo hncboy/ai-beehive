@@ -37,7 +37,7 @@ public class RoomConfigParamHandler {
      */
     public static List<RoomConfigParamDO> checkRoomConfigParamRequest(CellCodeEnum cellCode, List<RoomConfigParamRequest> roomConfigParamRequests, boolean isEditRoom) {
         // 判断房间配置项参数 code 是否重复
-        long roomConfigParamRequestDistinctCount = roomConfigParamRequests.stream().map(RoomConfigParamRequest::getCode).distinct().count();
+        long roomConfigParamRequestDistinctCount = roomConfigParamRequests.stream().map(RoomConfigParamRequest::getCellConfigCode).distinct().count();
         if (roomConfigParamRequestDistinctCount != roomConfigParamRequests.size()) {
             throw new ServiceException("房间配置项参数 code 重复");
         }
@@ -45,7 +45,7 @@ public class RoomConfigParamHandler {
         // 校验一个个配置项
         // 将房间配置项参数请求转为 Map
         Map<String, RoomConfigParamRequest> roomConfigParamRequestMap = roomConfigParamRequests.stream()
-                .collect(Collectors.toMap(RoomConfigParamRequest::getCode, Function.identity()));
+                .collect(Collectors.toMap(RoomConfigParamRequest::getCellConfigCode, Function.identity()));
         List<RoomConfigParamDO> roomConfigParamDOList = new ArrayList<>();
 
         // 获取 Cell 配置项权限列表
@@ -56,7 +56,7 @@ public class RoomConfigParamHandler {
         Map<String, ICellConfigCodeEnum> cellConfigCodeMap = cellConfigStrategy.getCellConfigCodeMap();
 
         // 校验配置是否齐全，是否都在对应枚举内，防止数据库未补充完整所有配置项
-        List<String> cellConfigCodes = cellConfigPermissionBOList.stream().map(CellConfigPermissionBO::getCode).toList();
+        List<String> cellConfigCodes = cellConfigPermissionBOList.stream().map(CellConfigPermissionBO::getCellConfigCode).toList();
         for (String code : cellConfigCodeMap.keySet()) {
             if (!cellConfigCodes.contains(code)) {
                 throw new ServiceException(StrUtil.format("该图纸存在配置项[{}]未配置，请联系管理员配置", code));
@@ -81,9 +81,9 @@ public class RoomConfigParamHandler {
             }
 
             // 获取用户传的该配置项参数
-            RoomConfigParamRequest roomConfigParamRequest = roomConfigParamRequestMap.get(cellConfigPermissionBO.getCode());
+            RoomConfigParamRequest roomConfigParamRequest = roomConfigParamRequestMap.get(cellConfigPermissionBO.getCellConfigCode());
             // 如果用户没有传该配置项参数 或 传了配置项但是使用默认值
-            if (Objects.isNull(roomConfigParamRequest) || roomConfigParamRequest.getIsDefaultValue()) {
+            if (Objects.isNull(roomConfigParamRequest) || roomConfigParamRequest.getIsUseDefaultValue()) {
                 // 如果是必填项并且无默认值，则抛出异常
                 if (cellConfigPermissionBO.getIsRequired()) {
                     // 如果无默认值
@@ -100,11 +100,11 @@ public class RoomConfigParamHandler {
             }
 
             // 使用用户自己传的值，校验值是否合法
-            cellConfigStrategy.validate(cellConfigCodeMap.get(cellConfigPermissionBO.getCode()), new DataWrapper(roomConfigParamRequest.getValue()));
+            cellConfigStrategy.validate(cellConfigCodeMap.get(cellConfigPermissionBO.getCellConfigCode()), new DataWrapper(roomConfigParamRequest.getValue()));
             RoomConfigParamDO roomConfigParamDO = new RoomConfigParamDO();
             roomConfigParamDO.setUserId(FrontUserUtil.getUserId());
             roomConfigParamDO.setRoomId(null);
-            roomConfigParamDO.setCellConfigCode(cellConfigPermissionBO.getCode());
+            roomConfigParamDO.setCellConfigCode(cellConfigPermissionBO.getCellConfigCode());
             roomConfigParamDO.setValue(roomConfigParamRequest.getValue());
             roomConfigParamDO.setIsDeleted(false);
             roomConfigParamDOList.add(roomConfigParamDO);

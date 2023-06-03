@@ -52,7 +52,7 @@ public class CellConfigPermissionHandler {
         // 过滤出无法使用默认值的配置项
         List<String> cannotUserDefaultValueCellConfigCodes = cellConfigPermissionBOList.stream()
                 .filter(bo -> !bo.getIsUserCanUseDefaultValue())
-                .map(CellConfigPermissionBO::getCode)
+                .map(CellConfigPermissionBO::getCellConfigCode)
                 .collect(Collectors.toList());
         if (cannotUserDefaultValueCellConfigCodes.isEmpty()) {
             return;
@@ -77,7 +77,7 @@ public class CellConfigPermissionHandler {
 
         // 如果包含指定的 cellConfigCode，则表示该 cellConfig 可以使用默认值
         for (CellConfigPermissionBO cellConfigPermissionBO : cellConfigPermissionBOList) {
-            if (cellConfigPermissionDOList.stream().anyMatch(permission -> permission.getCellConfigCode().equals(cellConfigPermissionBO.getCode()))) {
+            if (cellConfigPermissionDOList.stream().anyMatch(permission -> permission.getCellConfigCode().equals(cellConfigPermissionBO.getCellConfigCode()))) {
                 cellConfigPermissionBO.setIsUserCanUseDefaultValue(true);
             }
         }

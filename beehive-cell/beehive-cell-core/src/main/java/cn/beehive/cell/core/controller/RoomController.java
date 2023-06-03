@@ -3,7 +3,7 @@ package cn.beehive.cell.core.controller;
 import cn.beehive.base.handler.response.R;
 import cn.beehive.cell.core.domain.query.RoomPageQuery;
 import cn.beehive.cell.core.domain.request.RoomCreateRequest;
-import cn.beehive.cell.core.domain.request.RoomEditRequest;
+import cn.beehive.cell.core.domain.request.RoomInfoEditRequest;
 import cn.beehive.cell.core.domain.vo.RoomListVO;
 import cn.beehive.cell.core.service.RoomService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -51,10 +51,10 @@ public class RoomController {
         return R.data(roomService.pinRoom(roomId));
     }
 
-    @Operation(summary = "编辑房间")
+    @Operation(summary = "编辑房间信息")
     @PostMapping("/edit")
-    public R<RoomListVO> editRoom(@RequestBody @Validated RoomEditRequest roomEditRequest) {
-        return R.data(roomService.editRoom(roomEditRequest));
+    public R<RoomListVO> editRoom(@RequestBody @Validated RoomInfoEditRequest roomInfoEditRequest) {
+        return R.data(roomService.editRoom(roomInfoEditRequest));
     }
 
     @Operation(summary = "删除房间")

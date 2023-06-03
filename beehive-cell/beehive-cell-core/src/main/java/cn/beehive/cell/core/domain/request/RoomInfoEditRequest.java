@@ -12,8 +12,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Schema(title = "编辑房间请求参数")
-public class RoomEditRequest extends RoomInfoRequest {
+@Schema(title = "编辑房间信息请求参数")
+public class RoomInfoEditRequest extends RoomInfoRequest {
 
     @NotNull(message = "房间 id 不能为空")
     @Schema(title = "房间 id")

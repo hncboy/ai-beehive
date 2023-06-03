@@ -15,12 +15,12 @@ public class RoomConfigParamRequest {
 
     @NotNull(message = "配置项 code 不能为空")
     @Schema(title = "配置项 code")
-    private String code;
+    private String cellConfigCode;
 
-    @Schema(title = "配置项值")
+    @Schema(title = "配置项值，可以为空")
     private String value;
 
     @NotNull(message = "是否使用默认值不能为空")
     @Schema(title = "是否使用默认值")
-    private Boolean isDefaultValue;
+    private Boolean isUseDefaultValue;
 }

@@ -16,14 +16,19 @@ public class CellConfigPermissionBO {
     private String name;
 
     /**
-     * code
+     * 配置项编码
      */
-    private String code;
+    private String cellConfigCode;
 
     /**
      * 默认值
      */
     private String defaultValue;
+
+    /**
+     * 示例值
+     */
+    private String exampleValue;
 
     /**
      * 是否必填，false 否 true 是
@@ -59,4 +64,9 @@ public class CellConfigPermissionBO {
      * 用户创建房间后是否可修改，false 否 true 是
      */
     private Boolean isUserLiveModifiable;
+
+    /**
+     * 介绍
+     */
+    private String introduce;
 }

@@ -3,6 +3,7 @@ package cn.beehive.cell.core.domain.request;
 import cn.beehive.base.enums.CellCodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;

@@ -3,8 +3,6 @@ package cn.beehive.cell.core.domain.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @author hncboy
  * @date 2023/5/29
@@ -14,17 +12,11 @@ import java.util.Date;
 @Schema(title = "Cell 配置项展示对象")
 public class CellConfigVO {
 
-    @Schema(title = "主键")
-    private Integer id;
-
-    @Schema(title = "cellId")
-    private Integer cellId;
-
     @Schema(title = "名称")
     private String name;
 
-    @Schema(title = "唯一编码，cell 中唯一")
-    private String code;
+    @Schema(title = "配置项编码")
+    private String cellConfigCode;
 
     @Schema(title = "默认值")
     private String defaultValue;
@@ -35,8 +27,14 @@ public class CellConfigVO {
     @Schema(title = "是否必填，false 否 true 是")
     private Boolean isRequired;
 
-    @Schema(title = "用户是否可见，false 否 true 是")
-    private Boolean isUserVisible;
+    @Schema(title = "是否有默认值，false 否 true 是")
+    private Boolean isHaveDefaultValue;
+
+    @Schema(title = "用户是否可以使用默认值，false 否 true 是")
+    private Boolean isUserCanUseDefaultValue;
+
+    @Schema(title = "用户是否可见默认值，false 否 true 是")
+    private Boolean isUserValueVisible;
 
     @Schema(title = "用户是否可修改，false 否 true 是")
     private Boolean isUserModifiable;
@@ -46,7 +44,4 @@ public class CellConfigVO {
 
     @Schema(title = "介绍")
     private String introduce;
-
-    @Schema(title = "创建时间")
-    private Date createTime;
 }

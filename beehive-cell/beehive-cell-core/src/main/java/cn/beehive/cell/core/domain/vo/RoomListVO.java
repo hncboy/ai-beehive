@@ -16,7 +16,7 @@ import java.util.Date;
 public class RoomListVO {
 
     @Schema(title = "房间 id")
-    private Long id;
+    private Long roomId;
 
     @Schema(title = "颜色，十六进制")
     private String color;

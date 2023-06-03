@@ -43,6 +43,7 @@ public interface RoomConverter {
      */
     @AfterMapping
     default void afterEntityToListVO(RoomDO roomDO, @MappingTarget RoomListVO roomListVO) {
+        roomListVO.setRoomId(roomDO.getId());
         roomListVO.setIsPinned(roomDO.getPinTime() > 0);
     }
 }

@@ -7,7 +7,7 @@ import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.PageUtil;
 import cn.beehive.cell.core.domain.query.RoomPageQuery;
 import cn.beehive.cell.core.domain.request.RoomCreateRequest;
-import cn.beehive.cell.core.domain.request.RoomEditRequest;
+import cn.beehive.cell.core.domain.request.RoomInfoEditRequest;
 import cn.beehive.cell.core.domain.vo.RoomListVO;
 import cn.beehive.cell.core.hander.CellHandler;
 import cn.beehive.cell.core.hander.CellPermissionHandler;
@@ -92,10 +92,10 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, RoomDO> implements 
     }
 
     @Override
-    public RoomListVO editRoom(RoomEditRequest roomEditRequest) {
-        RoomDO roomDO = RoomHandler.checkRoomExist(roomEditRequest.getRoomId());
-        roomDO.setName(roomEditRequest.getName());
-        roomDO.setColor(roomEditRequest.getColor());
+    public RoomListVO editRoom(RoomInfoEditRequest roomInfoEditRequest) {
+        RoomDO roomDO = RoomHandler.checkRoomExist(roomInfoEditRequest.getRoomId());
+        roomDO.setName(roomInfoEditRequest.getName());
+        roomDO.setColor(roomInfoEditRequest.getColor());
         updateById(roomDO);
         return RoomConverter.INSTANCE.entityToListVO(roomDO);
     }
