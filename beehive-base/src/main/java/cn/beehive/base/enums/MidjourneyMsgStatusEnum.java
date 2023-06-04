@@ -10,7 +10,7 @@ import lombok.Getter;
  * Midjourney 消息状态枚举
  */
 @AllArgsConstructor
-public enum MjMsgStatusEnum {
+public enum MidjourneyMsgStatusEnum {
 
     /**
      * 系统排队上限

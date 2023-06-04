@@ -1,9 +1,9 @@
 package cn.beehive.cell.midjourney.handler.scheduler;
 
-import cn.beehive.base.domain.entity.RoomMjMsgDO;
-import cn.beehive.base.enums.MjMsgStatusEnum;
-import cn.beehive.cell.midjourney.handler.MjTaskQueueHandler;
-import cn.beehive.cell.midjourney.service.RoomMjMsgService;
+import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
+import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
+import cn.beehive.cell.midjourney.handler.MidjourneyTaskQueueHandler;
+import cn.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -28,12 +28,12 @@ import java.util.List;
 public class MidjourneyScheduler {
 
     @Resource
-    private MjTaskQueueHandler mjTaskQueueHandler;
+    private MidjourneyTaskQueueHandler midjourneyTaskQueueHandler;
 
     @Resource
-    private RoomMjMsgService roomMjMsgService;
+    private RoomMidjourneyMsgService roomMidjourneyMsgService;
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void handlerTask() {
         log.info("Midjourney 定时任务开始");
 
@@ -41,7 +41,7 @@ public class MidjourneyScheduler {
          * 因为意外可能导致 Redis 中进行中的任务为空，任务都堆积在队列中
          * 任务一直排队，通过定时任务定时拉取避免这种情况
          */
-        mjTaskQueueHandler.checkAndPullTask();
+        midjourneyTaskQueueHandler.checkAndPullTask();
 
         // 清理过期的任务
         clearHistoryTask();
@@ -62,24 +62,24 @@ public class MidjourneyScheduler {
      * 情况 2：收到消息但是程序更新失败，此时算 bug，发现要及时修复
      */
     private void clearHistoryTaskScene2() {
-        List<RoomMjMsgDO> roomMessages = roomMjMsgService.list(new LambdaQueryWrapper<RoomMjMsgDO>()
-                .eq(RoomMjMsgDO::getStatus, MjMsgStatusEnum.MJ_IN_PROGRESS)
-                // 30 分钟前的消息
-                .lt(RoomMjMsgDO::getDiscordStartTime, LocalDateTime.now().minusMinutes(30)));
-        for (RoomMjMsgDO roomMjMsg : roomMessages) {
-            boolean update = roomMjMsgService.update(new RoomMjMsgDO(), new LambdaUpdateWrapper<RoomMjMsgDO>()
-                    .set(RoomMjMsgDO::getStatus, MjMsgStatusEnum.SYS_FINISH_MJ_IN_PROGRESS_FAILURE)
-                    .set(RoomMjMsgDO::getResponseContent, "系统异常，Midjourney 消息未全部接收到")
-                    .set(RoomMjMsgDO::getFailureReason, StrUtil.format("系统异常，Midjourney 消息未全部接收到，由 {} 定时任务处理", DateUtil.now()))
-                    .eq(RoomMjMsgDO::getStatus, MjMsgStatusEnum.MJ_IN_PROGRESS)
+        List<RoomMidjourneyMsgDO> roomMessages = roomMidjourneyMsgService.list(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
+                .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_IN_PROGRESS)
+                // 10 分钟前的消息
+                .lt(RoomMidjourneyMsgDO::getDiscordStartTime, LocalDateTime.now().minusMinutes(10)));
+        for (RoomMidjourneyMsgDO roomMjMsg : roomMessages) {
+            boolean update = roomMidjourneyMsgService.update(new RoomMidjourneyMsgDO(), new LambdaUpdateWrapper<RoomMidjourneyMsgDO>()
+                    .set(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.SYS_FINISH_MJ_IN_PROGRESS_FAILURE)
+                    .set(RoomMidjourneyMsgDO::getResponseContent, "系统异常，Midjourney 消息未全部接收到")
+                    .set(RoomMidjourneyMsgDO::getFailureReason, StrUtil.format("系统异常，Midjourney 消息未全部接收到，由 {} 定时任务处理", DateUtil.now()))
+                    .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_IN_PROGRESS)
                     // 防止已经被更新过
-                    .eq(RoomMjMsgDO::getUpdateTime, roomMjMsg.getUpdateTime())
-                    .eq(RoomMjMsgDO::getId, roomMjMsg.getId()));
+                    .eq(RoomMidjourneyMsgDO::getUpdateTime, roomMjMsg.getUpdateTime())
+                    .eq(RoomMidjourneyMsgDO::getId, roomMjMsg.getId()));
             log.info("Midjourney 定时任务，清理过期的任务，更新状态为 SYS_FINISH_MJ_IN_PROGRESS_FAILURE，消息 id：{}，更新结果：{}", roomMjMsg.getId(), update);
 
             if (update) {
                 // 更新成功的话结束这个执行任务
-                mjTaskQueueHandler.finishExecuteTask(roomMjMsg.getId());
+                midjourneyTaskQueueHandler.finishExecuteTask(roomMjMsg.getId());
             }
         }
     }
@@ -94,24 +94,24 @@ public class MidjourneyScheduler {
      * 情况 5：重复执行 upscale 操作，discord 会报错，此时不会有回调（主要）
      */
     private void clearHistoryTaskScene1() {
-        List<RoomMjMsgDO> roomMessages = roomMjMsgService.list(new LambdaQueryWrapper<RoomMjMsgDO>()
-                .eq(RoomMjMsgDO::getStatus, MjMsgStatusEnum.MJ_WAIT_RECEIVED)
+        List<RoomMidjourneyMsgDO> roomMessages = roomMidjourneyMsgService.list(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
+                .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_WAIT_RECEIVED)
                 // 10 分钟前的消息
-                .lt(RoomMjMsgDO::getCreateTime, LocalDateTime.now().minusMinutes(10)));
-        for (RoomMjMsgDO roomMjMsg : roomMessages) {
-            boolean update = roomMjMsgService.update(new RoomMjMsgDO(), new LambdaUpdateWrapper<RoomMjMsgDO>()
-                    .set(RoomMjMsgDO::getStatus, MjMsgStatusEnum.SYS_WAIT_MJ_RECEIVED_FAILURE)
-                    .set(RoomMjMsgDO::getResponseContent, "系统异常，未接收到 Midjourney 初始化消息")
-                    .set(RoomMjMsgDO::getFailureReason, StrUtil.format("系统异常，未接收到 Midjourney 初始化消息，由 {} 定时任务处理", DateUtil.now()))
-                    .eq(RoomMjMsgDO::getStatus, MjMsgStatusEnum.MJ_WAIT_RECEIVED)
+                .lt(RoomMidjourneyMsgDO::getCreateTime, LocalDateTime.now().minusMinutes(10)));
+        for (RoomMidjourneyMsgDO roomMjMsg : roomMessages) {
+            boolean update = roomMidjourneyMsgService.update(new RoomMidjourneyMsgDO(), new LambdaUpdateWrapper<RoomMidjourneyMsgDO>()
+                    .set(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.SYS_WAIT_MJ_RECEIVED_FAILURE)
+                    .set(RoomMidjourneyMsgDO::getResponseContent, "系统异常，未接收到 Midjourney 初始化消息")
+                    .set(RoomMidjourneyMsgDO::getFailureReason, StrUtil.format("系统异常，未接收到 Midjourney 初始化消息，由 {} 定时任务处理", DateUtil.now()))
+                    .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_WAIT_RECEIVED)
                     // 防止已经被更新过
-                    .eq(RoomMjMsgDO::getUpdateTime, roomMjMsg.getUpdateTime())
-                    .eq(RoomMjMsgDO::getId, roomMjMsg.getId()));
+                    .eq(RoomMidjourneyMsgDO::getUpdateTime, roomMjMsg.getUpdateTime())
+                    .eq(RoomMidjourneyMsgDO::getId, roomMjMsg.getId()));
             log.info("Midjourney 定时任务，清理过期的任务，更新状态为 SYS_WAIT_MJ_RECEIVED_FAILURE，消息 id：{}，更新结果：{}", roomMjMsg.getId(), update);
 
             if (update) {
                 // 更新成功的话结束这个执行任务
-                mjTaskQueueHandler.finishExecuteTask(roomMjMsg.getId());
+                midjourneyTaskQueueHandler.finishExecuteTask(roomMjMsg.getId());
             }
         }
     }

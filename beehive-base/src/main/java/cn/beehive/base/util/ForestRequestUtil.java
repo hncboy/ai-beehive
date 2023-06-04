@@ -1,8 +1,7 @@
 package cn.beehive.base.util;
 
-import cn.beehive.base.cache.SysParamCache;
-import cn.beehive.base.enums.SysParamKeyEnum;
-import cn.hutool.core.util.BooleanUtil;
+import cn.beehive.base.config.ProxyConfig;
+import cn.hutool.extra.spring.SpringUtil;
 import com.dtflys.forest.http.ForestProxy;
 import com.dtflys.forest.http.ForestRequest;
 
@@ -19,8 +18,10 @@ public class ForestRequestUtil {
      * @param forestRequest 请求
      */
     public static void buildProxy(ForestRequest<?> forestRequest) {
-        if (BooleanUtil.toBoolean(SysParamCache.getValue(SysParamKeyEnum.ENABLE_PROXY))) {
-            forestRequest.proxy(new ForestProxy(SysParamCache.getValue(SysParamKeyEnum.HTTP_PROXY_HOST), Integer.parseInt(SysParamCache.getValue(SysParamKeyEnum.HTTP_PROXY_PORT))));
+        ProxyConfig proxyConfig = SpringUtil.getBean(ProxyConfig.class);
+        if (!proxyConfig.getEnabled())  {
+            return;
         }
+        forestRequest.proxy(new ForestProxy(proxyConfig.getHttpHost(), proxyConfig.getHttpPort()));
     }
 }

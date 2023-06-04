@@ -9,7 +9,6 @@ import cn.beehive.cell.core.domain.query.RoomPageQuery;
 import cn.beehive.cell.core.domain.request.RoomCreateRequest;
 import cn.beehive.cell.core.domain.request.RoomInfoEditRequest;
 import cn.beehive.cell.core.domain.vo.RoomListVO;
-import cn.beehive.cell.core.hander.CellHandler;
 import cn.beehive.cell.core.hander.CellPermissionHandler;
 import cn.beehive.cell.core.hander.RoomConfigParamHandler;
 import cn.beehive.cell.core.hander.RoomHandler;

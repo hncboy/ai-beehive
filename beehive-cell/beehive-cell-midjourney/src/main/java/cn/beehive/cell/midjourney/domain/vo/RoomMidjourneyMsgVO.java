@@ -2,7 +2,7 @@ package cn.beehive.cell.midjourney.domain.vo;
 
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
-import cn.beehive.base.enums.MjMsgStatusEnum;
+import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -11,11 +11,11 @@ import java.util.Date;
 /**
  * @author hncboy
  * @date 2023/5/18
- * MJ 房间消息
+ * Midjourney 房间消息
  */
 @Data
-@Schema(title = "MJ 房间消息")
-public class RoomMjMsgVO {
+@Schema(title = "Midjourney 房间消息")
+public class RoomMidjourneyMsgVO {
 
     /**
      * 主键
@@ -67,7 +67,7 @@ public class RoomMjMsgVO {
     /**
      * 状态
      */
-    private MjMsgStatusEnum status;
+    private MidjourneyMsgStatusEnum status;
 
     /**
      * discord 开始时间
@@ -80,9 +80,19 @@ public class RoomMjMsgVO {
     private Date discordFinishTime;
 
     /**
+     * discord 图片地址
+     */
+    private String discordImageUrl;
+
+    /**
      * 图片地址
      */
     private String imageUrl;
+
+    /**
+     * 排队中的队列长度
+     */
+    private Integer waitQueueLength;
 
     /**
      * 创建时间

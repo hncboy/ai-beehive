@@ -1,9 +1,9 @@
 package cn.beehive.cell.midjourney.handler.listener;
 
-import cn.beehive.base.domain.entity.RoomMjMsgDO;
+import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
-import cn.beehive.base.enums.MjMsgStatusEnum;
+import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
 import cn.beehive.cell.midjourney.domain.bo.MjDiscordMessageBO;
 import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import cn.beehive.cell.midjourney.util.MjRoomMessageUtil;
@@ -41,52 +41,52 @@ public class UVDiscordMessageHandler extends DiscordMessageHandler {
         if (Objects.isNull(parentRoomMjMsgId)) {
             return;
         }
-        RoomMjMsgDO parentRoomMjMsgDO = roomMjMsgService.getById(parentRoomMjMsgId);
-        if (Objects.isNull(parentRoomMjMsgDO)) {
+        RoomMidjourneyMsgDO parentRoomMidjourneyMsgDO = roomMidjourneyMsgService.getById(parentRoomMjMsgId);
+        if (Objects.isNull(parentRoomMidjourneyMsgDO)) {
             return;
         }
 
         // 如果是 upscale 消息
         if (messageBO.getAction() == MjMsgActionEnum.UPSCALE) {
             // 找对应的 upscale 消息
-            RoomMjMsgDO upscaleRoomMjMsgDO = roomMjMsgService.getOne(new LambdaQueryWrapper<RoomMjMsgDO>()
+            RoomMidjourneyMsgDO upscaleRoomMidjourneyMsgDO = roomMidjourneyMsgService.getOne(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
                     // 只会有等待接收状态，在 onMessageUpdate 因为区分不出是 u 几，所以不做处理
-                    .eq(RoomMjMsgDO::getStatus, MjMsgStatusEnum.MJ_WAIT_RECEIVED)
-                    .eq(RoomMjMsgDO::getAction, MjMsgActionEnum.UPSCALE)
-                    .eq(RoomMjMsgDO::getType, MessageTypeEnum.ANSWER)
-                    .eq(RoomMjMsgDO::getUvIndex, messageBO.getIndex())
+                    .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_WAIT_RECEIVED)
+                    .eq(RoomMidjourneyMsgDO::getAction, MjMsgActionEnum.UPSCALE)
+                    .eq(RoomMidjourneyMsgDO::getType, MessageTypeEnum.ANSWER)
+                    .eq(RoomMidjourneyMsgDO::getUvIndex, messageBO.getIndex())
                     // 找子消息
-                    .eq(RoomMjMsgDO::getUvParentId, parentRoomMjMsgId));
-            if (Objects.isNull(upscaleRoomMjMsgDO)) {
+                    .eq(RoomMidjourneyMsgDO::getUvParentId, parentRoomMjMsgId));
+            if (Objects.isNull(upscaleRoomMidjourneyMsgDO)) {
                 return;
             }
 
             // 更新 upscale 消息
-            finishImageTask(upscaleRoomMjMsgDO, message);
-            roomMjMsgService.updateById(upscaleRoomMjMsgDO);
+            finishImageTask(upscaleRoomMidjourneyMsgDO, message);
+            roomMidjourneyMsgService.updateById(upscaleRoomMidjourneyMsgDO);
 
             // 更新父消息
-            parentRoomMjMsgDO.setUUseBit(MjRoomMessageUtil.setUpscaleUse(parentRoomMjMsgDO.getUUseBit(), upscaleRoomMjMsgDO.getUvIndex(), MjMsgActionEnum.UPSCALE));
-            roomMjMsgService.updateById(parentRoomMjMsgDO);
+            parentRoomMidjourneyMsgDO.setUUseBit(MjRoomMessageUtil.setUpscaleUse(parentRoomMidjourneyMsgDO.getUUseBit(), upscaleRoomMidjourneyMsgDO.getUvIndex(), MjMsgActionEnum.UPSCALE));
+            roomMidjourneyMsgService.updateById(parentRoomMidjourneyMsgDO);
         }
 
         // 如果是 variation 消息
         if (messageBO.getAction() == MjMsgActionEnum.VARIATION) {
             // 找对应的 variation 消息，这里不知道 v 几，理论上只会有一条
-            RoomMjMsgDO variationRoomMjMsgDO = roomMjMsgService.getOne(new LambdaQueryWrapper<RoomMjMsgDO>()
+            RoomMidjourneyMsgDO variationRoomMidjourneyMsgDO = roomMidjourneyMsgService.getOne(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
                     // 只会有等待接收状态
-                    .eq(RoomMjMsgDO::getStatus, MjMsgStatusEnum.MJ_WAIT_RECEIVED)
-                    .eq(RoomMjMsgDO::getAction, MjMsgActionEnum.VARIATION)
-                    .eq(RoomMjMsgDO::getType, MessageTypeEnum.ANSWER)
+                    .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_WAIT_RECEIVED)
+                    .eq(RoomMidjourneyMsgDO::getAction, MjMsgActionEnum.VARIATION)
+                    .eq(RoomMidjourneyMsgDO::getType, MessageTypeEnum.ANSWER)
                     // 找子消息
-                    .eq(RoomMjMsgDO::getUvParentId, parentRoomMjMsgId));
-            if (Objects.isNull(variationRoomMjMsgDO)) {
+                    .eq(RoomMidjourneyMsgDO::getUvParentId, parentRoomMjMsgId));
+            if (Objects.isNull(variationRoomMidjourneyMsgDO)) {
                 return;
             }
 
             // 更新 variation 消息
-            finishImageTask(variationRoomMjMsgDO, message);
-            roomMjMsgService.updateById(variationRoomMjMsgDO);
+            finishImageTask(variationRoomMidjourneyMsgDO, message);
+            roomMidjourneyMsgService.updateById(variationRoomMidjourneyMsgDO);
             // 不更新父消息
         }
     }

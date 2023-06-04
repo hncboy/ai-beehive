@@ -1,11 +1,11 @@
 package cn.beehive.cell.midjourney.handler.listener;
 
-import cn.beehive.base.domain.entity.RoomMjMsgDO;
-import cn.beehive.base.enums.MjMsgStatusEnum;
+import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
+import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
 import cn.beehive.base.util.FileUtil;
 import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
-import cn.beehive.cell.midjourney.handler.MjTaskQueueHandler;
-import cn.beehive.cell.midjourney.service.RoomMjMsgService;
+import cn.beehive.cell.midjourney.handler.MidjourneyTaskQueueHandler;
+import cn.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
 import cn.hutool.core.collection.CollectionUtil;
 import jakarta.annotation.Resource;
 import net.dv8tion.jda.api.entities.Message;
@@ -20,10 +20,10 @@ import java.util.Date;
 public abstract class DiscordMessageHandler {
 
     @Resource
-    protected RoomMjMsgService roomMjMsgService;
+    protected RoomMidjourneyMsgService roomMidjourneyMsgService;
 
     @Resource
-    protected MjTaskQueueHandler mjTaskQueueHandler;
+    protected MidjourneyTaskQueueHandler midjourneyTaskQueueHandler;
 
     @Resource
     protected MidjourneyProperties midjourneyProperties;
@@ -58,24 +58,24 @@ public abstract class DiscordMessageHandler {
     /**
      * 完成图片任务
      *
-     * @param roomMjMsgDO 房间消息
+     * @param roomMidjourneyMsgDO 房间消息
      * @param message     discord 消息
      */
-    public void finishImageTask(RoomMjMsgDO roomMjMsgDO, Message message) {
-        roomMjMsgDO.setDiscordMessageId(message.getId());
-        roomMjMsgDO.setDiscordFinishTime(new Date());
+    public void finishImageTask(RoomMidjourneyMsgDO roomMidjourneyMsgDO, Message message) {
+        roomMidjourneyMsgDO.setDiscordMessageId(message.getId());
+        roomMidjourneyMsgDO.setDiscordFinishTime(new Date());
         if (CollectionUtil.isEmpty(message.getAttachments())) {
             // MJ 返回空图片
-            roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_FAILURE);
+            roomMidjourneyMsgDO.setStatus(MidjourneyMsgStatusEnum.MJ_FAILURE);
         } else {
-            roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_SUCCESS);
+            roomMidjourneyMsgDO.setStatus(MidjourneyMsgStatusEnum.MJ_SUCCESS);
             // 获取图片
-            roomMjMsgDO.setDiscordImageUrl(message.getAttachments().get(0).getUrl());
+            roomMidjourneyMsgDO.setDiscordImageUrl(message.getAttachments().get(0).getUrl());
             // 下载图片
-            roomMjMsgDO.setImageName(downloadImage(roomMjMsgDO.getDiscordImageUrl(), roomMjMsgDO.getId()));
+            roomMidjourneyMsgDO.setImageName(downloadImage(roomMidjourneyMsgDO.getDiscordImageUrl(), roomMidjourneyMsgDO.getId()));
         }
 
         // 结束执行中任务
-        mjTaskQueueHandler.finishExecuteTask(roomMjMsgDO.getId());
+        midjourneyTaskQueueHandler.finishExecuteTask(roomMidjourneyMsgDO.getId());
     }
 }

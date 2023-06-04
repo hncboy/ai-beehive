@@ -2,7 +2,7 @@ package cn.beehive.base.domain.entity;
 
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
-import cn.beehive.base.enums.MjMsgStatusEnum;
+import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -18,8 +18,8 @@ import java.util.Date;
  * Midjourney 房间消息表实体类
  */
 @Data
-@TableName("bh_room_mj_msg")
-public class RoomMjMsgDO {
+@TableName("bh_room_midjourney_msg")
+public class RoomMidjourneyMsgDO {
 
     /**
      * 主键
@@ -87,7 +87,7 @@ public class RoomMjMsgDO {
     /**
      * 状态
      */
-    private MjMsgStatusEnum status;
+    private MidjourneyMsgStatusEnum status;
 
     /**
      * discord 开始时间

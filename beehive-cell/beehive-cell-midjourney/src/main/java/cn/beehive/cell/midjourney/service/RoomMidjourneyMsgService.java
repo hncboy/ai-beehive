@@ -1,12 +1,12 @@
 package cn.beehive.cell.midjourney.service;
 
-import cn.beehive.base.domain.entity.RoomMjMsgDO;
+import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.handler.mp.IBeehiveService;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
-import cn.beehive.cell.midjourney.domain.vo.RoomMjMsgVO;
+import cn.beehive.cell.midjourney.domain.vo.RoomMidjourneyMsgVO;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2023/5/18
  * Midjourney 房间消息业务接口
  */
-public interface RoomMjMsgService extends IBeehiveService<RoomMjMsgDO> {
+public interface RoomMidjourneyMsgService extends IBeehiveService<RoomMidjourneyMsgDO> {
 
     /**
      * 查询消息列表
@@ -23,7 +23,7 @@ public interface RoomMjMsgService extends IBeehiveService<RoomMjMsgDO> {
      * @param cursorQuery 请求参数
      * @return 消息列表
      */
-    List<RoomMjMsgVO> list(RoomMsgCursorQuery cursorQuery);
+    List<RoomMidjourneyMsgVO> list(RoomMsgCursorQuery cursorQuery);
 
     /**
      * 根据描述创建图像

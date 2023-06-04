@@ -17,7 +17,7 @@ public interface DiscordService {
      * @param prompt prompt
      * @return 调用结果
      */
-    ForestResponse<?> imagine(String prompt);
+    Pair<Boolean, String> imagine(String prompt);
 
     /**
      * upscale
@@ -27,7 +27,7 @@ public interface DiscordService {
      * @param discordMessageHash Discord 消息 hash
      * @return 调用结果
      */
-    ForestResponse<?> upscale(String discordMessageId, int index, String discordMessageHash);
+    Pair<Boolean, String> upscale(String discordMessageId, int index, String discordMessageHash);
 
     /**
      * variation
@@ -38,7 +38,7 @@ public interface DiscordService {
      * @param discordMessageHash Discord 消息 hash
      * @return 调用结果
      */
-    ForestResponse<?> variation(String discordMessageId, int index, String discordMessageHash);
+    Pair<Boolean, String> variation(String discordMessageId, int index, String discordMessageHash);
 
     /**
      * 上传图片
@@ -55,5 +55,5 @@ public interface DiscordService {
      * @param uploadFileName 上传的文件名
      * @return 调用结果
      */
-    ForestResponse<?> describe(String uploadFileName);
+    Pair<Boolean, String> describe(String uploadFileName);
 }

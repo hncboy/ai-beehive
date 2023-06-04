@@ -1,6 +1,6 @@
 package cn.beehive.base.mapper;
 
-import cn.beehive.base.domain.entity.RoomMjMsgDO;
+import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import cn.beehive.base.handler.mp.BeehiveBaseMapper;
 
 /**
@@ -8,5 +8,5 @@ import cn.beehive.base.handler.mp.BeehiveBaseMapper;
  * @date 2023/5/18
  * Midjourney 房间消息数据访问层
  */
-public interface RoomMjMsgMapper extends BeehiveBaseMapper<RoomMjMsgDO> {
+public interface RoomMidjourneyMsgMapper extends BeehiveBaseMapper<RoomMidjourneyMsgDO> {
 }

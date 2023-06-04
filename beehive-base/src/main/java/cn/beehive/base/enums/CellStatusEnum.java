@@ -16,30 +16,33 @@ public enum CellStatusEnum {
     /**
      * 隐藏
      */
-    HIDDEN(0),
+    HIDDEN(0, "hidden"),
 
     /**
      * 开发中
      */
-    CODING(1),
+    CODING(1, "coding"),
 
     /**
      * 修复中
      */
-    FIXING(2),
+    FIXING(2, "fixing"),
 
     /**
      * 已发布
      */
-    PUBLISHED(3),
+    PUBLISHED(3, "published"),
 
     /**
      * 已关闭
      */
-    CLOSED(4);
+    CLOSED(4, "closed");
+
+    @Getter
+    @EnumValue
+    private final Integer code;
 
     @Getter
     @JsonValue
-    @EnumValue
-    private final Integer code;
+    private final String desc;
 }

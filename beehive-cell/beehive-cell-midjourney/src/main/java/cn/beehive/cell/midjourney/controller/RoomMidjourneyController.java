@@ -5,8 +5,8 @@ import cn.beehive.base.handler.response.R;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
-import cn.beehive.cell.midjourney.domain.vo.RoomMjMsgVO;
-import cn.beehive.cell.midjourney.service.RoomMjMsgService;
+import cn.beehive.cell.midjourney.domain.vo.RoomMidjourneyMsgVO;
+import cn.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -31,39 +31,39 @@ import java.util.List;
 @RestController
 public class RoomMidjourneyController {
 
-    private final RoomMjMsgService roomMjMsgService;
+    private final RoomMidjourneyMsgService roomMidjourneyMsgService;
 
     @Operation(summary = "消息列表")
     @GetMapping("/list")
-    public R<List<RoomMjMsgVO>> list(@Validated RoomMsgCursorQuery cursorQuery) {
-        return R.data(roomMjMsgService.list(cursorQuery));
+    public R<List<RoomMidjourneyMsgVO>> list(@Validated RoomMsgCursorQuery cursorQuery) {
+        return R.data(roomMidjourneyMsgService.list(cursorQuery));
     }
 
     @Operation(summary = "imagine")
     @PostMapping("/imagine")
     public R<Boolean> imagine(@Validated @RequestBody MjImagineRequest imagineRequest) {
-        roomMjMsgService.imagine(imagineRequest);
+        roomMidjourneyMsgService.imagine(imagineRequest);
         return R.data(true);
     }
 
     @Operation(summary = "upscale")
     @PostMapping("/upscale")
     public R<Boolean> upscale(@Validated @RequestBody MjConvertRequest convertRequest) {
-        roomMjMsgService.upscale(convertRequest);
+        roomMidjourneyMsgService.upscale(convertRequest);
         return R.data(true);
     }
 
     @Operation(summary = "variation")
     @PostMapping("/variation")
     public R<Boolean> variation(@Validated @RequestBody MjConvertRequest convertRequest) {
-        roomMjMsgService.variation(convertRequest);
+        roomMidjourneyMsgService.variation(convertRequest);
         return R.data(true);
     }
 
     @Operation(summary = "describe")
     @PostMapping("/describe")
     public R<Boolean> describe(@Validated @ModelAttribute MjDescribeRequest describeRequest) {
-        roomMjMsgService.describe(describeRequest);
+        roomMidjourneyMsgService.describe(describeRequest);
         return R.data(true);
     }
 }

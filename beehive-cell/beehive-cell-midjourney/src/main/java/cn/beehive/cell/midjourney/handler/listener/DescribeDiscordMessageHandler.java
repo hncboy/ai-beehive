@@ -1,10 +1,11 @@
 package cn.beehive.cell.midjourney.handler.listener;
 
-import cn.beehive.base.domain.entity.RoomMjMsgDO;
-import cn.beehive.base.enums.MjMsgStatusEnum;
+import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
+import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
 import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.springframework.stereotype.Component;
@@ -53,27 +54,29 @@ public class DescribeDiscordMessageHandler extends DiscordMessageHandler {
         }
 
         // 找对应的房间消息记录
-        RoomMjMsgDO roomMjMsgDO = roomMjMsgService.getById(mjMsgId.replace("describe_", ""));
-        if (Objects.isNull(roomMjMsgDO)) {
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(mjMsgId.replace("describe_", ""));
+        if (Objects.isNull(roomMidjourneyMsgDO)) {
             return;
         }
 
         // 返回的提示语
         String prompt = messageEmbed.getDescription();
 
-        roomMjMsgDO.setDiscordMessageId(message.getId());
-        roomMjMsgDO.setDiscordFinishTime(new Date());
+        roomMidjourneyMsgDO.setDiscordMessageId(message.getId());
+        roomMidjourneyMsgDO.setDiscordFinishTime(new Date());
         if (StrUtil.isBlank(prompt)) {
             // MJ 返回提示语为空，不知道什么情况会出现
-            roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_FAILURE);
+            roomMidjourneyMsgDO.setStatus(MidjourneyMsgStatusEnum.MJ_FAILURE);
         } else {
-            roomMjMsgDO.setResponseContent(MjDiscordMessageUtil.replacePrompt(prompt));
-            roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_SUCCESS);
-            roomMjMsgDO.setDiscordImageUrl(discordImageUrl);
+            roomMidjourneyMsgDO.setResponseContent(MjDiscordMessageUtil.replacePrompt(prompt));
+            roomMidjourneyMsgDO.setStatus(MidjourneyMsgStatusEnum.MJ_SUCCESS);
+            roomMidjourneyMsgDO.setDiscordImageUrl(discordImageUrl);
         }
 
         // 结束执行中任务
-        mjTaskQueueHandler.finishExecuteTask(roomMjMsgDO.getId());
-        roomMjMsgService.updateById(roomMjMsgDO);
+        midjourneyTaskQueueHandler.finishExecuteTask(roomMidjourneyMsgDO.getId());
+        roomMidjourneyMsgService.update(roomMidjourneyMsgDO, new LambdaUpdateWrapper<RoomMidjourneyMsgDO>()
+                .eq(RoomMidjourneyMsgDO::getId, roomMidjourneyMsgDO.getId())
+                .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_WAIT_RECEIVED));
     }
 }

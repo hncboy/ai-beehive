@@ -1,7 +1,7 @@
 package cn.beehive.cell.midjourney.handler.listener;
 
-import cn.beehive.base.domain.entity.RoomMjMsgDO;
-import cn.beehive.base.enums.MjMsgStatusEnum;
+import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
+import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
 import cn.beehive.cell.midjourney.domain.bo.MjDiscordMessageBO;
 import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import net.dv8tion.jda.api.entities.Message;
@@ -39,25 +39,25 @@ public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
         if (Objects.isNull(roomMjMsgId)) {
             return;
         }
-        RoomMjMsgDO roomMjMsgDO = roomMjMsgService.getById(roomMjMsgId);
-        if (Objects.isNull(roomMjMsgDO)) {
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(roomMjMsgId);
+        if (Objects.isNull(roomMidjourneyMsgDO)) {
             return;
         }
 
 
         // 开始处理，不考虑消息乱序和丢失的情况
         if ("Waiting to start".equals(messageBO.getStatus())) {
-            roomMjMsgDO.setDiscordStartTime(new Date());
-            roomMjMsgDO.setStatus(MjMsgStatusEnum.MJ_IN_PROGRESS);
-            roomMjMsgDO.setDiscordMessageId(message.getId());
+            roomMidjourneyMsgDO.setDiscordStartTime(new Date());
+            roomMidjourneyMsgDO.setStatus(MidjourneyMsgStatusEnum.MJ_IN_PROGRESS);
+            roomMidjourneyMsgDO.setDiscordMessageId(message.getId());
         }
         // 处理成功
         else {
-            finishImageTask(roomMjMsgDO, message);
+            finishImageTask(roomMidjourneyMsgDO, message);
         }
 
-        roomMjMsgDO.setResponseContent(message.getContentRaw());
-        roomMjMsgService.updateById(roomMjMsgDO);
+        roomMidjourneyMsgDO.setResponseContent(message.getContentRaw());
+        roomMidjourneyMsgService.updateById(roomMidjourneyMsgDO);
     }
 
     @Override
@@ -72,16 +72,16 @@ public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
         if (Objects.isNull(roomMjMsgId)) {
             return;
         }
-        RoomMjMsgDO roomMjMsgDO = roomMjMsgService.getById(roomMjMsgId);
-        if (Objects.isNull(roomMjMsgDO)) {
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(roomMjMsgId);
+        if (Objects.isNull(roomMidjourneyMsgDO)) {
             return;
         }
 
-        roomMjMsgDO.setDiscordMessageId(message.getId());
-        roomMjMsgDO.setResponseContent(message.getContentRaw());
-        roomMjMsgDO.setDiscordImageUrl(message.getAttachments().get(0).getUrl());
+        roomMidjourneyMsgDO.setDiscordMessageId(message.getId());
+        roomMidjourneyMsgDO.setResponseContent(message.getContentRaw());
+        roomMidjourneyMsgDO.setDiscordImageUrl(message.getAttachments().get(0).getUrl());
         // 下载图片
-        roomMjMsgDO.setImageName(downloadImage(roomMjMsgDO.getDiscordImageUrl(), roomMjMsgDO.getId()));
-        roomMjMsgService.updateById(roomMjMsgDO);
+        roomMidjourneyMsgDO.setImageName(downloadImage(roomMidjourneyMsgDO.getDiscordImageUrl(), roomMidjourneyMsgDO.getId()));
+        roomMidjourneyMsgService.updateById(roomMidjourneyMsgDO);
     }
 }
