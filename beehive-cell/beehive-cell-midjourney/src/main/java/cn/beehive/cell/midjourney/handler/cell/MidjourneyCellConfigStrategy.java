@@ -1,4 +1,4 @@
-package cn.beehive.cell.midjourney.handler;
+package cn.beehive.cell.midjourney.handler.cell;
 
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.cell.core.hander.strategy.AbstractCellConfigStrategy;

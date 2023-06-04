@@ -1,6 +1,6 @@
 package cn.beehive.cell.midjourney.handler.listener;
 
-import cn.beehive.cell.midjourney.config.MidjourneyConfig;
+import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import java.util.Objects;
 public class DiscordMessageListener extends ListenerAdapter {
 
     @Resource
-    private MidjourneyConfig midjourneyConfig;
+    private MidjourneyProperties midjourneyProperties;
 
     @Resource
     private ImagineDiscordMessageHandler imagineDiscordMessageHandler;
@@ -43,7 +43,7 @@ public class DiscordMessageListener extends ListenerAdapter {
      */
     private boolean isIgnoreMessage(Message message, String eventName) {
         // 频道不一样忽略
-        if (ObjectUtil.notEqual(midjourneyConfig.getChannelId(), message.getChannel().getId())) {
+        if (ObjectUtil.notEqual(midjourneyProperties.getChannelId(), message.getChannel().getId())) {
             return true;
         }
 
@@ -51,7 +51,7 @@ public class DiscordMessageListener extends ListenerAdapter {
         log.info("Midjounery Discord {} - {}: {}", eventName, authorName, message.getContentRaw());
 
         // 消息指定机器人的消息忽略
-        return ObjectUtil.notEqual(midjourneyConfig.getMjBotName(), authorName);
+        return ObjectUtil.notEqual(midjourneyProperties.getMjBotName(), authorName);
     }
 
     @Override

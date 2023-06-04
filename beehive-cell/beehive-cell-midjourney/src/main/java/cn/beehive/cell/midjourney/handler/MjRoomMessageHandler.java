@@ -1,13 +1,16 @@
 package cn.beehive.cell.midjourney.handler;
 
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
+import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MjMsgStatusEnum;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.util.FrontUserUtil;
-import cn.beehive.cell.midjourney.config.MidjourneyConfig;
+import cn.beehive.cell.core.hander.CellPermissionHandler;
+import cn.beehive.cell.core.hander.RoomHandler;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
+import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.beehive.cell.midjourney.service.RoomMjMsgService;
 import cn.beehive.cell.midjourney.util.MjRoomMessageUtil;
 import cn.hutool.core.text.CharSequenceUtil;
@@ -24,6 +27,19 @@ import java.util.Objects;
  * Midjourney 房间消息处理器
  */
 public class MjRoomMessageHandler {
+
+    /**
+     * 检查是否可以操作
+     * @param roomId 房间 id
+     */
+    public static void checkCanOperate(Long roomId) {
+        // 校验 Cell 是否有使用权限
+        CellPermissionHandler.checkCanUse(CellCodeEnum.MIDJOURNEY);
+        // 检查房间是否存在
+        RoomHandler.checkRoomExist(roomId, CellCodeEnum.MIDJOURNEY);
+        // 检查是否有正在处理的任务
+        MjRoomMessageHandler.checkExistProcessingTask();
+    }
 
     /**
      * 检查是否存在正在处理的任务
@@ -46,11 +62,11 @@ public class MjRoomMessageHandler {
      *
      * @param parentRoomMjMsgDO 父消息
      * @param convertRequest    转换请求
-     * @param midjourneyConfig  Midjourney 配置
+     * @param midjourneyProperties  Midjourney 配置
      */
-    public static void checkCanUpscale(RoomMjMsgDO parentRoomMjMsgDO, MjConvertRequest convertRequest, MidjourneyConfig midjourneyConfig) {
+    public static void checkCanUpscale(RoomMjMsgDO parentRoomMjMsgDO, MjConvertRequest convertRequest, MidjourneyProperties midjourneyProperties) {
         // 检查是否可以进行 upscale
-        checkCanUpscaleAndVariation(parentRoomMjMsgDO, midjourneyConfig);
+        checkCanUpscaleAndVariation(parentRoomMjMsgDO, midjourneyProperties);
         // 判断是否已经 u 转换过
         boolean isUse = MjRoomMessageUtil.isUpscaleUse(parentRoomMjMsgDO.getUUseBit(), convertRequest.getIndex(), MjMsgActionEnum.UPSCALE);
         if (isUse) {
@@ -97,20 +113,20 @@ public class MjRoomMessageHandler {
      * 检查是否可以进行 variation
      *
      * @param parentRoomMjMsgDO 父消息
-     * @param midjourneyConfig  Midjourney 配置
+     * @param midjourneyProperties  Midjourney 配置
      */
-    public static void checkCanVariation(RoomMjMsgDO parentRoomMjMsgDO, MidjourneyConfig midjourneyConfig) {
+    public static void checkCanVariation(RoomMjMsgDO parentRoomMjMsgDO, MidjourneyProperties midjourneyProperties) {
         // 检查是否可以进行 upscale
-        checkCanUpscaleAndVariation(parentRoomMjMsgDO, midjourneyConfig);
+        checkCanUpscaleAndVariation(parentRoomMjMsgDO, midjourneyProperties);
     }
 
     /**
      * 检查是否可以进行 upscale 和 variation
      *
      * @param parentRoomMjMsgDO 父消息
-     * @param midjourneyConfig  Midjourney 配置
+     * @param midjourneyProperties  Midjourney 配置
      */
-    private static void checkCanUpscaleAndVariation(RoomMjMsgDO parentRoomMjMsgDO, MidjourneyConfig midjourneyConfig) {
+    private static void checkCanUpscaleAndVariation(RoomMjMsgDO parentRoomMjMsgDO, MidjourneyProperties midjourneyProperties) {
         if (Objects.isNull(parentRoomMjMsgDO)) {
             throw new ServiceException("消息不存在");
         }
@@ -120,7 +136,7 @@ public class MjRoomMessageHandler {
                 || parentRoomMjMsgDO.getStatus() != MjMsgStatusEnum.MJ_SUCCESS) {
             throw new ServiceException("该图片无法进行操作，原图未创建成功");
         }
-        if (ObjectUtil.notEqual(parentRoomMjMsgDO.getDiscordChannelId(), midjourneyConfig.getChannelId())) {
+        if (ObjectUtil.notEqual(parentRoomMjMsgDO.getDiscordChannelId(), midjourneyProperties.getChannelId())) {
             throw new ServiceException("由于 Discord 频道切换，该图无法进行转换操作，请重新生成");
         }
     }

@@ -33,7 +33,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class RoomOpenAiChatMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAiChatMsgMapper, RoomOpenAiChatMsgDO> implements RoomOpenAiChatMsgService {
+public class  RoomOpenAiChatMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAiChatMsgMapper, RoomOpenAiChatMsgDO> implements RoomOpenAiChatMsgService {
 
     @Resource
     private CellConfigFactory cellConfigFactory;

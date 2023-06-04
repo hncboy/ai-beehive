@@ -31,13 +31,11 @@ public class CellHandler {
     /**
      * 校验 cell 是否存在并可发布并返回
      *
-     * @param cellCode cell code
+     * @param cellCodeEnum cell code
      * @return cell
      */
-    public static CellDO checkCellPublishExist(CellCodeEnum cellCode) {
-        // TODO 缓存
-        CellDO cellDO = SpringUtil.getBean(CellService.class)
-                .getOne(new LambdaQueryWrapper<CellDO>().eq(CellDO::getCode, cellCode));
+    public static CellDO checkCellPublishExist(CellCodeEnum cellCodeEnum) {
+        CellDO cellDO = getCell(cellCodeEnum);
         if (Objects.isNull(cellDO)) {
             throw new ServiceException("图纸不存在");
         }
@@ -45,5 +43,17 @@ public class CellHandler {
             throw new ServiceException("该图纸未发布");
         }
         return cellDO;
+    }
+
+    /**
+     * 根据 cell code 获取 cell
+     *
+     * @param cellCodeEnum cell code
+     * @return cell
+     */
+    public static CellDO getCell(CellCodeEnum cellCodeEnum) {
+        // TODO 缓存
+        return SpringUtil.getBean(CellService.class)
+                .getOne(new LambdaQueryWrapper<CellDO>().eq(CellDO::getCode, cellCodeEnum));
     }
 }

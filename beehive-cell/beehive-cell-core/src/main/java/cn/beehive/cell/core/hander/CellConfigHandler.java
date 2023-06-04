@@ -1,7 +1,16 @@
 package cn.beehive.cell.core.hander;
 
 import cn.beehive.base.domain.entity.CellConfigDO;
+import cn.beehive.base.enums.CellCodeEnum;
+import cn.beehive.cell.core.service.CellConfigService;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author hncboy
@@ -9,6 +18,20 @@ import cn.hutool.core.util.StrUtil;
  * Cell 配置项处理器
  */
 public class CellConfigHandler {
+
+    /**
+     * 获取配置项 Map
+     *
+     * @param cellCodeEnum cellCodeEnum
+     * @return 配置项 Map
+     */
+    public static Map<String, CellConfigDO> getCellConfigMap(CellCodeEnum cellCodeEnum) {
+        // TODO 缓存
+        CellConfigService cellConfigService = SpringUtil.getBean(CellConfigService.class);
+        List<CellConfigDO> cellConfigDOList = cellConfigService.list(new LambdaQueryWrapper<CellConfigDO>().eq(CellConfigDO::getCellCode, cellCodeEnum));
+        // 转为 Map
+        return cellConfigDOList.stream().collect(Collectors.toMap(CellConfigDO::getCode, Function.identity()));
+    }
 
     /**
      * 校验配置项是否配置合理

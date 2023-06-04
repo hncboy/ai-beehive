@@ -4,7 +4,7 @@ import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MjMsgStatusEnum;
 import cn.beehive.base.util.RedisUtil;
-import cn.beehive.cell.midjourney.config.MidjourneyConfig;
+import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.beehive.cell.midjourney.service.DiscordService;
 import cn.beehive.cell.midjourney.service.RoomMjMsgService;
 import cn.hutool.extra.spring.SpringUtil;
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class MjTaskQueueHandler {
 
     @Resource
-    private MidjourneyConfig midjourneyConfig;
+    private MidjourneyProperties midjourneyProperties;
 
     private static final String PREFIX = "cell:mj:";
 
@@ -64,7 +64,7 @@ public class MjTaskQueueHandler {
         // 获取等待队列长度
         Long currentWaitQueueLength = RedisUtil.lLen(WAIT_QUEUE_KEY);
         // 等待队列已满
-        if (currentWaitQueueLength >= midjourneyConfig.getMaxWaitQueueSize()) {
+        if (currentWaitQueueLength >= midjourneyProperties.getMaxWaitQueueSize()) {
             return MjMsgStatusEnum.SYS_MAX_QUEUE;
         }
 
@@ -72,7 +72,7 @@ public class MjTaskQueueHandler {
         int executeTaskCount = getExecuteTaskCount();
 
         // 队列中有任务 或者 执行任务的数量大于最大执行任务数量 就得排队
-        if (currentWaitQueueLength > 0 || executeTaskCount >= midjourneyConfig.getMaxExecuteQueueSize()) {
+        if (currentWaitQueueLength > 0 || executeTaskCount >= midjourneyProperties.getMaxExecuteQueueSize()) {
             log.info("Midjourney 进入等待队列消息：{}", mjMsgId);
 
             // 插入队列首部
@@ -108,7 +108,7 @@ public class MjTaskQueueHandler {
         }
 
         // 拉取新任务
-        pullTaskFromWaitQueue(midjourneyConfig.getMaxExecuteQueueSize() - executeTaskCount);
+        pullTaskFromWaitQueue(midjourneyProperties.getMaxExecuteQueueSize() - executeTaskCount);
     }
 
     /**
@@ -120,12 +120,12 @@ public class MjTaskQueueHandler {
         int executeTaskCount = getExecuteTaskCount();
 
         // 执行任务的数量大于最大执行任务数量则返回
-        if (executeTaskCount >= midjourneyConfig.getMaxExecuteQueueSize()) {
+        if (executeTaskCount >= midjourneyProperties.getMaxExecuteQueueSize()) {
             return;
         }
 
         // 拉取新任务
-        pullTaskFromWaitQueue(midjourneyConfig.getMaxExecuteQueueSize() - executeTaskCount);
+        pullTaskFromWaitQueue(midjourneyProperties.getMaxExecuteQueueSize() - executeTaskCount);
     }
 
     /**

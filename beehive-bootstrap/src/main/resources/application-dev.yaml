@@ -22,38 +22,6 @@ mybatis-plus:
     # 关闭 banner
     banner: false
 
-chat:
-  # OpenAI API Key - https://platform.openai.com/account/api-keys
-  openai_api_key: ${CHAT_OPENAI_API_KEY:}
-  # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
-  openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN:}
-  # OpenAI API Base URL - https://api.openai.com/，要加/后缀
-  openai_api_base_url: ${CHAT_OPENAI_API_BASE_URL:https://api.openai.com/}
-  # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
-  openai_api_model: ${CHAT_OPENAI_API_MODEL:}
-  # 反向代理地址 AccessToken 时使用
-  api_reverse_proxy: ${CHAT_API_REVERSE_PROXY:}
-  # 超时毫秒
-  timeout_ms: ${CHAT_TIMEOUT_MS:100000}
-  # HTTP 代理
-  http_proxy_host: ${CHAT_HTTP_PROXY_HOST:127.0.0.1}
-  # HTTP 代理
-  http_proxy_port: ${CHAT_HTTP_PROXY_PORT:}
-  # 管理端账号
-  admin_account: ${CHAT_ADMIN_ACCOUNT:admin}
-  # 管理端密码
-  admin_password: ${CHAT_ADMIN_PASSWORD:admin}
-  # 全局时间内最大请求次数
-  maxRequest: ${CHAT_MAX_REQUEST:}
-  # 全局最大请求时间间隔（秒）
-  maxRequestSecond: ${CHAT_MAX_REQUEST_SECOND:}
-  # ip 时间内最大请求次数
-  ipMaxRequest: ${CHAT_IP_MAX_REQUEST:}
-  # ip 最大请求时间间隔（秒）
-  ipMaxRequestSecond: ${CHAT_IP_MAX_REQUEST_SECOND:}
-  # 限制上下文对话的数量
-  limitQuestionContextCount: ${CHAT_LIMIT_QUESTION_CONTEXT_COUNT:}
-
 # 邮箱验证相关
 email:
   # SMTP服务器地址
@@ -97,3 +65,9 @@ forest:
 logging:
   level:
     root: info
+
+# 代理配置
+proxy:
+  enabled: false
+  http-host: 127.0.0.1
+  http-port: 6666

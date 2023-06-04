@@ -5,8 +5,6 @@ import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.mapper.RoomBingMapper;
 import cn.beehive.base.util.FrontUserUtil;
-import cn.beehive.cell.core.hander.RoomHandler;
-import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.bing.domain.bo.BingApiCreateConversationResultBO;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
@@ -15,6 +13,9 @@ import cn.beehive.cell.bing.enums.BingModeEnum;
 import cn.beehive.cell.bing.handler.BingCellConfigStrategy;
 import cn.beehive.cell.bing.handler.BingRoomHandler;
 import cn.beehive.cell.bing.service.RoomBingService;
+import cn.beehive.cell.core.hander.CellPermissionHandler;
+import cn.beehive.cell.core.hander.RoomHandler;
+import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -39,6 +40,8 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
 
     @Override
     public BingRoomBO getRoom(Long roomId, RoomBingMsgSendRequest sendRequest) {
+        // 校验 Cell 是否有使用权限
+        CellPermissionHandler.checkCanUse(CellCodeEnum.NEW_BING);
         // 校验房间是否存在
         RoomHandler.checkRoomExist(roomId, CellCodeEnum.NEW_BING);
 

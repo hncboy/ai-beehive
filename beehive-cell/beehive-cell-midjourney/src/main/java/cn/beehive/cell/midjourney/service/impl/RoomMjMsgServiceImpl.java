@@ -11,8 +11,9 @@ import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomMjMsgMapper;
 import cn.beehive.base.util.FileUtil;
 import cn.beehive.base.util.FrontUserUtil;
+import cn.beehive.cell.core.hander.CellPermissionHandler;
 import cn.beehive.cell.core.hander.RoomHandler;
-import cn.beehive.cell.midjourney.config.MidjourneyConfig;
+import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
@@ -47,7 +48,7 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
     private DiscordService discordService;
 
     @Resource
-    private MidjourneyConfig midjourneyConfig;
+    private MidjourneyProperties midjourneyProperties;
 
     @Resource
     private MjTaskQueueHandler mjTaskQueueHandler;
@@ -62,10 +63,8 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
 
     @Override
     public void imagine(MjImagineRequest imagineRequest) {
-        // 检查房间是否存在
-        RoomHandler.checkRoomExist(imagineRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
-        // 检查是否有正在处理的任务
-        MjRoomMessageHandler.checkExistProcessingTask();
+        // 检查是否可以操作
+        MjRoomMessageHandler.checkCanOperate(imagineRequest.getRoomId());
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
         // 生成问题的消息 id
@@ -84,7 +83,7 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
         questionMessage.setFinalPrompt("[".concat(String.valueOf(answerMessageId)).concat("] ").concat(questionMessage.getPrompt()));
         questionMessage.setAction(MjMsgActionEnum.IMAGINE);
         questionMessage.setStatus(MjMsgStatusEnum.SYS_SUCCESS);
-        questionMessage.setDiscordChannelId(midjourneyConfig.getChannelId());
+        questionMessage.setDiscordChannelId(midjourneyProperties.getChannelId());
         questionMessage.setIsDeleted(false);
         save(questionMessage);
 
@@ -112,13 +111,13 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
         answerMessage.setType(MessageTypeEnum.ANSWER);
         answerMessage.setAction(MjMsgActionEnum.IMAGINE);
         answerMessage.setStatus(answerStatus);
-        answerMessage.setDiscordChannelId(midjourneyConfig.getChannelId());
+        answerMessage.setDiscordChannelId(midjourneyProperties.getChannelId());
         answerMessage.setUUseBit(0);
         answerMessage.setIsDeleted(false);
 
         // 达到队列上限
         if (answerStatus == MjMsgStatusEnum.SYS_MAX_QUEUE) {
-            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyConfig.getMaxWaitQueueSize()));
+            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyProperties.getMaxWaitQueueSize()));
         }
         save(answerMessage);
 
@@ -140,16 +139,15 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
 
     @Override
     public void upscale(MjConvertRequest convertRequest) {
-        // 检查房间是否存在
-        RoomHandler.checkRoomExist(convertRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
-        // 检查是否有正在处理的任务
-        MjRoomMessageHandler.checkExistProcessingTask();
+        // 检查是否可以操作
+        MjRoomMessageHandler.checkCanOperate(convertRequest.getRoomId());
+
         // 获取原消息
         RoomMjMsgDO parentRoomMjMsgDO = getOne(new LambdaQueryWrapper<RoomMjMsgDO>().eq(RoomMjMsgDO::getId, convertRequest.getMsgId())
                 .eq(RoomMjMsgDO::getRoomId, convertRequest.getRoomId())
                 .eq(RoomMjMsgDO::getUserId, FrontUserUtil.getUserId()));
         // 检查是否可以 upscale
-        MjRoomMessageHandler.checkCanUpscale(parentRoomMjMsgDO, convertRequest, midjourneyConfig);
+        MjRoomMessageHandler.checkCanUpscale(parentRoomMjMsgDO, convertRequest, midjourneyProperties);
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
         // 生成问题的消息 id
@@ -194,7 +192,7 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
 
         // 达到队列上限
         if (answerStatus == MjMsgStatusEnum.SYS_MAX_QUEUE) {
-            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyConfig.getMaxWaitQueueSize()));
+            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyProperties.getMaxWaitQueueSize()));
         }
         save(answerMessage);
 
@@ -216,16 +214,15 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
 
     @Override
     public void variation(MjConvertRequest convertRequest) {
-        // 检查房间是否存在
-        RoomHandler.checkRoomExist(convertRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
-        // 检查是否有正在处理的任务
-        MjRoomMessageHandler.checkExistProcessingTask();
+        // 检查是否可以操作
+        MjRoomMessageHandler.checkCanOperate(convertRequest.getRoomId());
+
         // 获取原消息
         RoomMjMsgDO parentRoomMjMsgDO = getOne(new LambdaQueryWrapper<RoomMjMsgDO>().eq(RoomMjMsgDO::getId, convertRequest.getMsgId())
                 .eq(RoomMjMsgDO::getRoomId, convertRequest.getRoomId())
                 .eq(RoomMjMsgDO::getUserId, FrontUserUtil.getUserId()));
         // 检查是否可以 variation
-        MjRoomMessageHandler.checkCanVariation(parentRoomMjMsgDO, midjourneyConfig);
+        MjRoomMessageHandler.checkCanVariation(parentRoomMjMsgDO, midjourneyProperties);
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
         // 生成问题的消息 id
@@ -269,7 +266,7 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
 
         // 达到队列上限
         if (answerStatus == MjMsgStatusEnum.SYS_MAX_QUEUE) {
-            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyConfig.getMaxWaitQueueSize()));
+            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyProperties.getMaxWaitQueueSize()));
         }
         save(answerMessage);
 
@@ -291,8 +288,8 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
 
     @Override
     public void describe(MjDescribeRequest describeRequest) {
-        // 检查房间是否存在
-        RoomHandler.checkRoomExist(describeRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
+        // 检查是否可以操作
+        MjRoomMessageHandler.checkCanOperate(describeRequest.getRoomId());
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
         // 生成问题的消息 id
@@ -304,13 +301,13 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
         // 新文件名：describe_ + 消息 id + 后缀
         String newFileName = "describe_" + answerMessageId + StrPool.DOT + FileUtil.getFileExtension(multipartFile.getOriginalFilename());
         // 保存文件
-        FileUtil.downloadFromMultipartFile(multipartFile, midjourneyConfig.getImageLocation(), newFileName);
+        FileUtil.downloadFromMultipartFile(multipartFile, midjourneyProperties.getImageLocation(), newFileName);
 
         // TODO 异常也当作消息记录
 
         // 判断文件大小
-        if (multipartFile.getSize() > midjourneyConfig.getMaxFileSize()) {
-            throw new ServiceException(StrUtil.format("文件大小超过限制，不能超过 {}MB", midjourneyConfig.getMaxFileSize() / 1024 / 1024));
+        if (multipartFile.getSize() > midjourneyProperties.getMaxFileSize()) {
+            throw new ServiceException(StrUtil.format("文件大小超过限制，不能超过 {}MB", midjourneyProperties.getMaxFileSize() / 1024 / 1024));
         }
 
         // 判断文件后缀是否符合
@@ -340,7 +337,7 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
         questionMessage.setDiscordImageUrl(discordUploadFileName);
         questionMessage.setAction(MjMsgActionEnum.DESCRIBE);
         questionMessage.setStatus(MjMsgStatusEnum.SYS_SUCCESS);
-        questionMessage.setDiscordChannelId(midjourneyConfig.getChannelId());
+        questionMessage.setDiscordChannelId(midjourneyProperties.getChannelId());
         questionMessage.setIsDeleted(false);
         save(questionMessage);
 
@@ -358,13 +355,13 @@ public class RoomMjMsgServiceImpl extends BeehiveServiceImpl<RoomMjMsgMapper, Ro
         answerMessage.setAction(MjMsgActionEnum.DESCRIBE);
         answerMessage.setStatus(answerStatus);
         answerMessage.setDiscordStartTime(new Date());
-        answerMessage.setDiscordChannelId(midjourneyConfig.getChannelId());
+        answerMessage.setDiscordChannelId(midjourneyProperties.getChannelId());
         answerMessage.setUUseBit(0);
         answerMessage.setIsDeleted(false);
 
         // 达到队列上限
         if (answerStatus == MjMsgStatusEnum.SYS_MAX_QUEUE) {
-            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyConfig.getMaxWaitQueueSize()));
+            answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyProperties.getMaxWaitQueueSize()));
         }
         save(answerMessage);
 

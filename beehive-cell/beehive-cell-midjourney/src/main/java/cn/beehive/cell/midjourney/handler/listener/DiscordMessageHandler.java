@@ -3,7 +3,7 @@ package cn.beehive.cell.midjourney.handler.listener;
 import cn.beehive.base.domain.entity.RoomMjMsgDO;
 import cn.beehive.base.enums.MjMsgStatusEnum;
 import cn.beehive.base.util.FileUtil;
-import cn.beehive.cell.midjourney.config.MidjourneyConfig;
+import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.beehive.cell.midjourney.handler.MjTaskQueueHandler;
 import cn.beehive.cell.midjourney.service.RoomMjMsgService;
 import cn.hutool.core.collection.CollectionUtil;
@@ -26,7 +26,7 @@ public abstract class DiscordMessageHandler {
     protected MjTaskQueueHandler mjTaskQueueHandler;
 
     @Resource
-    protected MidjourneyConfig midjourneyConfig;
+    protected MidjourneyProperties midjourneyProperties;
 
     /**
      * 接收到新消息
@@ -51,7 +51,7 @@ public abstract class DiscordMessageHandler {
      */
     public String downloadImage(String discordImageUrl, Long roomMjMsgId) {
         String fileName = roomMjMsgId + ".png";
-        FileUtil.downloadFromUrl(discordImageUrl, midjourneyConfig.getImageLocation() + fileName);
+        FileUtil.downloadFromUrl(discordImageUrl, midjourneyProperties.getImageLocation() + fileName);
         return fileName;
     }
 

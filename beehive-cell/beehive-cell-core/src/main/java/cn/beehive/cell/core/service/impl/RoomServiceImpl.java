@@ -57,9 +57,6 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, RoomDO> implements 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public RoomListVO createRoom(RoomCreateRequest roomCreateRequest) {
-        // 校验 Cell 是否发布
-        CellHandler.checkCellPublishExist(roomCreateRequest.getCellCode());
-
         // 校验 Cell 是否有使用权限
         CellPermissionHandler.checkCanUse(roomCreateRequest.getCellCode());
 

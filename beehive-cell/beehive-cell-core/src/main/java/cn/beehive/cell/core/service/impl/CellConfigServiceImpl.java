@@ -25,7 +25,6 @@ public class CellConfigServiceImpl extends ServiceImpl<CellConfigMapper, CellCon
     @Override
     public List<CellConfigVO> listCellConfig(String cellCode) {
         CellCodeEnum cellCodeEnum = CellHandler.parseCellCodeStr(cellCode);
-        CellHandler.checkCellPublishExist(cellCodeEnum);
         CellPermissionHandler.checkCanUse(cellCodeEnum);
         List<CellConfigDO> entities = list(new LambdaQueryWrapper<CellConfigDO>()
                 .eq(CellConfigDO::getCellCode, cellCodeEnum)

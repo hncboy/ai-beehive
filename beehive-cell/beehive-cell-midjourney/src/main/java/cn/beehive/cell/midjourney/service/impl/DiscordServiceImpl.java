@@ -2,7 +2,7 @@ package cn.beehive.cell.midjourney.service.impl;
 
 import cn.beehive.base.util.ForestRequestUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
-import cn.beehive.cell.midjourney.config.MidjourneyConfig;
+import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.beehive.cell.midjourney.service.DiscordService;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.lang.Pair;
@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class DiscordServiceImpl implements DiscordService {
 
     @Resource
-    private MidjourneyConfig midjourneyConfig;
+    private MidjourneyProperties midjourneyProperties;
 
     @Resource
     private ObjectMapper objectMapper;
@@ -48,32 +48,32 @@ public class DiscordServiceImpl implements DiscordService {
     @Override
     public ForestResponse<?> imagine(String prompt) {
         String requestBodyStr = imagineParamsJson
-                .replace("$guild_id", midjourneyConfig.getGuildId())
-                .replace("$channel_id", midjourneyConfig.getChannelId())
+                .replace("$guild_id", midjourneyProperties.getGuildId())
+                .replace("$channel_id", midjourneyProperties.getChannelId())
                 .replace("$prompt", prompt);
-        return executeRequest(midjourneyConfig.getDiscordApiUrl(), requestBodyStr);
+        return executeRequest(midjourneyProperties.getDiscordApiUrl(), requestBodyStr);
     }
 
     @Override
     public ForestResponse<?> upscale(String discordMessageId, int index, String discordMessageHash) {
         String requestBodyStr = upscaleParamsJson
-                .replace("$guild_id", midjourneyConfig.getGuildId())
-                .replace("$channel_id", midjourneyConfig.getChannelId())
+                .replace("$guild_id", midjourneyProperties.getGuildId())
+                .replace("$channel_id", midjourneyProperties.getChannelId())
                 .replace("$message_id", discordMessageId)
                 .replace("$index", String.valueOf(index))
                 .replace("$message_hash", discordMessageHash);
-        return executeRequest(midjourneyConfig.getDiscordApiUrl(), requestBodyStr);
+        return executeRequest(midjourneyProperties.getDiscordApiUrl(), requestBodyStr);
     }
 
     @Override
     public ForestResponse<?> variation(String discordMessageId, int index, String discordMessageHash) {
         String requestBodyStr = variationParamsJson
-                .replace("$guild_id", midjourneyConfig.getGuildId())
-                .replace("$channel_id", midjourneyConfig.getChannelId())
+                .replace("$guild_id", midjourneyProperties.getGuildId())
+                .replace("$channel_id", midjourneyProperties.getChannelId())
                 .replace("$message_id", discordMessageId)
                 .replace("$index", String.valueOf(index))
                 .replace("$message_hash", discordMessageHash);
-        return executeRequest(midjourneyConfig.getDiscordApiUrl(), requestBodyStr);
+        return executeRequest(midjourneyProperties.getDiscordApiUrl(), requestBodyStr);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class DiscordServiceImpl implements DiscordService {
                             .put("file_size", multipartFile.getSize())
                             .put("id", "0")));
             // 预请求要上传的图片
-            ForestResponse<?> forestResponse = executeRequest(midjourneyConfig.getDiscordUploadUrl(), ObjectMapperUtil.toJson(reuqestJsonNode));
+            ForestResponse<?> forestResponse = executeRequest(midjourneyProperties.getDiscordUploadUrl(), ObjectMapperUtil.toJson(reuqestJsonNode));
             if (forestResponse.isError()) {
                 log.error("Midjourney describe 预处理图片失败，文件名：{}，响应消息： {}", fileName, forestResponse.getContent());
                 return new Pair<>(false, "上传图片失败，请稍后重试");
@@ -107,7 +107,7 @@ public class DiscordServiceImpl implements DiscordService {
             ForestRequest<?> forestRequest = Forest.put(uploadUrl)
                     .setContentType(multipartFile.getContentType())
                     .addBody(multipartFile.getBytes())
-                    .setUserAgent(midjourneyConfig.getUserAgent())
+                    .setUserAgent(midjourneyProperties.getUserAgent())
                     .addHeader(Header.CONTENT_LENGTH.name(), multipartFile.getSize());
             ForestRequestUtil.buildProxy(forestRequest);
             forestResponse = forestRequest.execute(ForestResponse.class);
@@ -128,11 +128,11 @@ public class DiscordServiceImpl implements DiscordService {
         // 拆分文件名
         String fileName = CharSequenceUtil.subAfter(uploadFileName, "/", true);
         String requestBodyStr = describeParamsJson
-                .replace("$guild_id", midjourneyConfig.getGuildId())
-                .replace("$channel_id", midjourneyConfig.getChannelId())
+                .replace("$guild_id", midjourneyProperties.getGuildId())
+                .replace("$channel_id", midjourneyProperties.getChannelId())
                 .replace("$file_name", fileName)
                 .replace("$final_file_name", uploadFileName);
-        return executeRequest(midjourneyConfig.getDiscordApiUrl(), requestBodyStr);
+        return executeRequest(midjourneyProperties.getDiscordApiUrl(), requestBodyStr);
     }
 
     /**
@@ -146,8 +146,8 @@ public class DiscordServiceImpl implements DiscordService {
         // 构建请求
         ForestRequest<?> forestRequest = Forest.post(discordUrl)
                 .contentTypeJson()
-                .addHeader(Header.AUTHORIZATION.name(), midjourneyConfig.getUserToken())
-                .setUserAgent(midjourneyConfig.getUserAgent())
+                .addHeader(Header.AUTHORIZATION.name(), midjourneyProperties.getUserToken())
+                .setUserAgent(midjourneyProperties.getUserAgent())
                 .addBody(requestBodyStr);
 
         ForestRequestUtil.buildProxy(forestRequest);
