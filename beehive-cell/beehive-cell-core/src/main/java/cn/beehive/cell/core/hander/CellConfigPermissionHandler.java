@@ -33,13 +33,33 @@ public class CellConfigPermissionHandler {
     public static List<CellConfigPermissionBO> listCellConfigPermission(CellCodeEnum cellCode) {
         // 获取 Cell 配置项列表
         List<CellConfigDO> cellConfigDOList = SpringUtil.getBean(CellConfigService.class)
-                .list(new LambdaQueryWrapper<CellConfigDO>().eq(CellConfigDO::getCellCode, cellCode));
+                .list(new LambdaQueryWrapper<CellConfigDO>()
+                        // 查询可见的。
+                        .eq(CellConfigDO::getIsUserVisible, true)
+                        .eq(CellConfigDO::getCellCode, cellCode));
         List<CellConfigPermissionBO> cellConfigPermissionBOList = CellConfigConverter.INSTANCE.entityToPermissionBO(cellConfigDOList);
 
         // 填充是否可以使用默认值
         populateIsCanUseDefaultValue(cellCode, cellConfigPermissionBOList);
 
+        // 填充是否展示的字段
+        populateIsShowField(cellConfigPermissionBOList);
+
         return cellConfigPermissionBOList;
+    }
+
+    /**
+     * 填充是否展示的字段
+     *
+     * @param cellConfigPermissionBOList cell 配置项权限业务列表
+     */
+    private static void populateIsShowField(List<CellConfigPermissionBO> cellConfigPermissionBOList) {
+        for (CellConfigPermissionBO cellConfigPermissionBO : cellConfigPermissionBOList) {
+            // 如果不可见 或 无法使用默认值，直接设置为 null
+            if (!cellConfigPermissionBO.getIsUserValueVisible() || !cellConfigPermissionBO.getIsUserCanUseDefaultValue()) {
+                cellConfigPermissionBO.setDefaultValue(null);
+            }
+        }
     }
 
     /**

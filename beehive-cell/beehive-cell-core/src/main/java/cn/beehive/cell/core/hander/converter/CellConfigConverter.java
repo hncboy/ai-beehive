@@ -21,12 +21,12 @@ public interface CellConfigConverter {
     CellConfigConverter INSTANCE = Mappers.getMapper(CellConfigConverter.class);
 
     /**
-     * List<CellConfigDO> 转 List<CellConfigVO>
+     * List<CellConfigPermissionBO> 转 List<CellConfigVO>
      *
-     * @param cellConfigDOList List<CellConfigDO>
+     * @param cellConfigPermissionBOList List<CellConfigPermissionBO>
      * @return List<CellConfigVO>
      */
-    List<CellConfigVO> entityToVO(List<CellConfigDO> cellConfigDOList);
+    List<CellConfigVO> permissionBOToVO(List<CellConfigPermissionBO> cellConfigPermissionBOList);
 
     /**
      * List<CellConfigDO> 转 List<CellConfigPermissionBO>
@@ -45,19 +45,5 @@ public interface CellConfigConverter {
     @AfterMapping
     default void afterEntityToPermissionBO(CellConfigDO cellConfigDO, @MappingTarget CellConfigPermissionBO cellConfigPermissionBO) {
         cellConfigPermissionBO.setCellConfigCode(cellConfigDO.getCode());
-    }
-
-    /**
-     * entityToVO 后置处理
-     *
-     * @param cellConfigDO CellConfigDO
-     * @param cellConfigVO CellConfigVO
-     */
-    @AfterMapping
-    default void afterEntityToVO(CellConfigDO cellConfigDO, @MappingTarget CellConfigVO cellConfigVO) {
-        cellConfigVO.setCellConfigCode(cellConfigDO.getCode());
-        if (!cellConfigDO.getIsUserValueVisible() || !cellConfigDO.getIsUserCanUseDefaultValue()) {
-            cellConfigVO.setDefaultValue(null);
-        }
     }
 }

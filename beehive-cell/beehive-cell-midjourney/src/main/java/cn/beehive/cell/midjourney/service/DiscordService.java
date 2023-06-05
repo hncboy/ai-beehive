@@ -1,7 +1,6 @@
 package cn.beehive.cell.midjourney.service;
 
 import cn.hutool.core.lang.Pair;
-import com.dtflys.forest.http.ForestResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
