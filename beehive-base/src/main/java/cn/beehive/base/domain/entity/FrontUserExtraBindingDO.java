@@ -16,7 +16,7 @@ import java.util.Date;
  *
  * @author CoDeleven
  */
-@TableName(value = "front_user_extra_binding")
+@TableName("bh_front_user_extra_binding")
 @Data
 public class FrontUserExtraBindingDO {
 

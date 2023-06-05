@@ -17,7 +17,7 @@ import java.util.Date;
  * 敏感词表实体类
  */
 @Data
-@TableName("sensitive_word")
+@TableName("bh_sensitive_word")
 public class SensitiveWordDO {
 
     /**

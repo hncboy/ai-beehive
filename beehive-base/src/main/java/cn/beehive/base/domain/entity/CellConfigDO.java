@@ -15,7 +15,7 @@ import java.util.Date;
  * @date 2023/5/25
  * cell 配置项表实体类
  */
-@TableName(value = "bh_cell_config")
+@TableName("bh_cell_config")
 @Data
 public class CellConfigDO {
 

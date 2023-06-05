@@ -19,7 +19,7 @@ import java.util.Date;
  * cell config 里的字段本身就携带部分权限
  */
 @Data
-@TableName(value = "bh_cell_config_permission")
+@TableName("bh_cell_config_permission")
 public class CellConfigPermissionDO {
 
     /**

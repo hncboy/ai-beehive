@@ -17,7 +17,7 @@ import java.util.Date;
  * 对于 cell 来说必须拥有权限
  */
 @Data
-@TableName(value = "bh_cell_permission")
+@TableName("bh_cell_permission")
 public class CellPermissionDO {
 
     /**

@@ -16,7 +16,7 @@ import java.util.Date;
  * 房间配置项参数表实体类
  */
 @Data
-@TableName(value = "bh_room_config_param")
+@TableName("bh_room_config_param")
 public class RoomConfigParamDO {
 
     /**

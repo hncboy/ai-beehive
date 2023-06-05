@@ -16,7 +16,7 @@ import lombok.Data;
  * 用于审计日志
  * @author CoDeleven
  */
-@TableName(value = "sys_email_send_log")
+@TableName("bh_sys_email_send_log")
 @Data
 public class SysEmailSendLogDO {
 

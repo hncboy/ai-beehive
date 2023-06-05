@@ -15,7 +15,7 @@ import java.util.Date;
  *
  * @author CoDeleven
  */
-@TableName(value = "sys_front_user_login_log")
+@TableName("bh_sys_front_user_login_log")
 @Data
 public class SysFrontUserLoginLogDO {
 

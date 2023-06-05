@@ -20,7 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName(value = "front_user_extra_email")
+@TableName("bh_front_user_extra_email")
 @Data
 public class FrontUserExtraEmailDO {
 

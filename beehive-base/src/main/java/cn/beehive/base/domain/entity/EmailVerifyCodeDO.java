@@ -16,7 +16,7 @@ import java.util.Date;
  *
  * @author CoDeleven
  */
-@TableName(value = "email_verify_code")
+@TableName("bh_email_verify_code")
 @Data
 public class EmailVerifyCodeDO {
 

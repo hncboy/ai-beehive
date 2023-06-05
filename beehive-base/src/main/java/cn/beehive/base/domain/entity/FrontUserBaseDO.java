@@ -20,7 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName(value = "front_user_base")
+@TableName("bh_front_user_base")
 @Data
 public class FrontUserBaseDO {
 

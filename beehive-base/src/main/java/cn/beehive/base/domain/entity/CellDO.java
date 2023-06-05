@@ -17,7 +17,7 @@ import java.util.Date;
  * cell 表实体类
  */
 @Data
-@TableName(value = "bh_cell")
+@TableName("bh_cell")
 public class CellDO {
 
     /**
