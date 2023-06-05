@@ -1,4 +1,4 @@
-package cn.beehive.base.config;
+package cn.beehive.base.resource.aip;
 
 import cn.beehive.base.cache.SysParamCache;
 import com.baidu.aip.contentcensor.AipContentCensor;
@@ -48,13 +48,13 @@ public class BaiduAipConfig implements InitializingBean {
         paramKeys.add(BaiduAipConstant.SECRET_KEY);
         Map<String, String> sysParamMap = SysParamCache.multiGet(paramKeys);
 
-        log.info("百度 AI 配置初始化");
-
         // 项目启动时初始化，如果要修改配置，需要重启项目
         this.appId = sysParamMap.get(BaiduAipConstant.APP_ID);
         this.apiKey = sysParamMap.get(BaiduAipConstant.APP_KEY);
         this.secretKey = sysParamMap.get(BaiduAipConstant.SECRET_KEY);
         this.aipContentCensor = new AipContentCensor(appId, apiKey, secretKey);
+
+        log.info("百度 AI 配置初始化：{}", this);
     }
 
     /**

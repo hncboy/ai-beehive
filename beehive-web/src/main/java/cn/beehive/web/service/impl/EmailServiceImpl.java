@@ -1,19 +1,18 @@
 package cn.beehive.web.service.impl;
 
-import cn.hutool.extra.mail.MailAccount;
-import cn.hutool.extra.mail.MailUtil;
-import cn.beehive.base.config.EmailConfig;
+import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.EmailBizTypeEnum;
+import cn.beehive.base.resource.email.EmailConfig;
 import cn.beehive.web.service.EmailService;
 import cn.beehive.web.service.SysEmailSendLogService;
+import cn.hutool.extra.mail.MailUtil;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateSpec;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-
-import java.nio.charset.StandardCharsets;
+import org.thymeleaf.templatemode.TemplateMode;
 
 /**
  * 邮箱注册类型策略实现类
@@ -24,50 +23,32 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    private final EmailConfig emailConfig;
+    /**
+     * 邮箱注册模板内容 sysParamKey
+     */
+    private static final String REGISTER_EMAIL_TEMPLATE_CONTENT_SYS_PARAM_KEY = "email-registerTemplateContent";
 
-    private final MailAccount mailAccount;
+    /**
+     * 邮箱注册模板主题 sysParamKey
+     */
+    private static final String REGISTER_EMAIL_TEMPLATE_SUBJECT_SYS_PARAM_KEY = "email-registerTemplateSubject";
 
-    private final SysEmailSendLogService emailLogService;
+    @Resource
+    private EmailConfig emailConfig;
 
-    private final TemplateSpec templateSpec;
-    private final SpringTemplateEngine templateEngine;
-
-    public EmailServiceImpl(EmailConfig emailConfig, SysEmailSendLogService emailLogService) {
-        this.templateEngine = new SpringTemplateEngine();
-        // 获取邮件模板
-        this.templateEngine.setTemplateResolver(new ClassLoaderTemplateResolver());
-        this.templateSpec = new TemplateSpec("templates/register_verify_email.html", StandardCharsets.UTF_8.name());
-        this.emailConfig = emailConfig;
-        this.emailLogService = emailLogService;
-
-        mailAccount = new MailAccount();
-        mailAccount.setHost(emailConfig.getHost());
-        mailAccount.setPort(Integer.parseInt(emailConfig.getPort()));
-        mailAccount.setFrom(emailConfig.getFrom());
-        mailAccount.setUser(emailConfig.getUser());
-        mailAccount.setAuth(emailConfig.getAuth());
-        mailAccount.setDebug(true);
-        mailAccount.setSslEnable(true);
-        mailAccount.setPass(emailConfig.getPass());
-        log.info("初始化邮箱账号完毕，配置信息为：{} ", emailConfig);
-    }
+    @Resource
+    private SysEmailSendLogService emailLogService;
 
     @Override
     public void sendForVerifyCode(String targetEmail, String verifyCode) {
-        // 设置模板中需要填充的变量
-        Context context = new Context();
-        context.setVariable("verificationUrl", emailConfig.getVerificationRedirectUrl().concat(verifyCode));
-        // 进行渲染
-        String renderedTemplate = templateEngine.process(templateSpec, context);
-
         // 记录日志
+        String sendContent = getSendContent(verifyCode);
         try {
-            String sendMsgId = this.sendMessage(targetEmail, renderedTemplate);
-            emailLogService.createSuccessLogBySysLog(sendMsgId, mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, renderedTemplate);
+            String sendMsgId = sendMessage(targetEmail, sendContent);
+            emailLogService.createSuccessLogBySysLog(sendMsgId, emailConfig.getMailAccount().getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, sendContent);
         } catch (Exception e) {
             // FIXME 发送失败前端仍然显示成功
-            emailLogService.createFailedLogBySysLog("", mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, renderedTemplate, e.getMessage());
+            emailLogService.createFailedLogBySysLog("", emailConfig.getMailAccount().getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, sendContent, e.getMessage());
         }
     }
 
@@ -78,7 +59,27 @@ public class EmailServiceImpl implements EmailService {
      * @param content     内容
      * @return 响应
      */
-    protected String sendMessage(String targetEmail, String content) {
-        return MailUtil.send(mailAccount, targetEmail, "【StarGPT】账号注册", content, true);
+    private String sendMessage(String targetEmail, String content) {
+        return MailUtil.send(emailConfig.getMailAccount(), targetEmail, SysParamCache.get(REGISTER_EMAIL_TEMPLATE_SUBJECT_SYS_PARAM_KEY), content, true);
+    }
+
+    /**
+     * 获取发送内容
+     *
+     * @param verifyCode 验证码
+     * @return 发送内容
+     */
+    private String getSendContent(String verifyCode) {
+        // 设置模板中需要填充的变量
+        Context context = new Context();
+        context.setVariable("verificationUrl", emailConfig.getVerificationRedirectUrl().concat(verifyCode));
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+
+        // 获取邮件模板
+        String htmlTemplate = SysParamCache.get(REGISTER_EMAIL_TEMPLATE_CONTENT_SYS_PARAM_KEY);
+        // 设置模板模式
+        TemplateSpec templateSpec = new TemplateSpec(htmlTemplate, TemplateMode.HTML);
+        // 进行渲染
+        return templateEngine.process(templateSpec, context);
     }
 }

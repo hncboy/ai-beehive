@@ -22,30 +22,11 @@ mybatis-plus:
     # 关闭 banner
     banner: false
 
-# 邮箱验证相关
-email:
-  # SMTP服务器地址
-  host: ${EMAIL_HOST:xxxxxx}
-  # 服务器一般默认 25 端口
-  port: ${EMAIL_PORT:25}
-  # 发件人前缀
-  from: ${EMAIL_FROM:xxxxxx}
-  # 用户名
-  user: ${EMAIL_USER:xxxxxx}
-  # 如果要授权码，这里就是传授权码
-  pass: ${EMAIL_PASS:}
-  # 是否需要授权，决定是否要设置授权码
-  auth: ${EMAIL_AUTH:true}
-  # 邮箱验证码有效期（单位，分钟）
-  verifyCodeExpireMinutes: ${EMAIL_CODE_EXPIRE_MINUTES:15}
-  # 邮箱验证，跳转地址路径
-  verificationRedirectUrl: ${EMAIL_VERIFY_REDIRECT_URL:http://localhost:1002/#/emailValidation?type=email&verifyCode=}
-
 sa-token:
-  # 前端用户登录，用于加密 JWT
-  jwt-secret-key: ${JWT_SECRET:StarGPT}
+  # 用于加密 JWT
+  jwt-secret-key: ${JWT_SECRET:ai-beehive}
   # JWT 有效期
-  timeout: ${LOGIN_TIMEOUT_SECONDS:86400}
+  timeout: ${JWT_TOKEN_TIMEOUT:86400}
   token-name: satoken
   # 关闭 banner
   is-print: false

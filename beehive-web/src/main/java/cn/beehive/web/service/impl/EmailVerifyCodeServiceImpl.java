@@ -5,7 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.beehive.base.config.EmailConfig;
+import cn.beehive.base.resource.email.EmailConfig;
 import cn.beehive.base.domain.entity.EmailVerifyCodeDO;
 import cn.beehive.base.enums.EmailBizTypeEnum;
 import cn.beehive.base.mapper.EmailVerifyCodeMapper;

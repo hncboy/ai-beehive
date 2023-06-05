@@ -1,7 +1,6 @@
 package cn.beehive.base.resource.aip;
 
 import cn.beehive.base.cache.SysParamCache;
-import cn.beehive.base.config.BaiduAipConfig;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Pair;
