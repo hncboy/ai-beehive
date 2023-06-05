@@ -53,7 +53,7 @@ public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParamDO>
         save(sysParamDO);
 
         // 保存缓存
-        SysParamCache.setValue(request.getParamKey(), request.getParamValue());
+        SysParamCache.setHashValue(request.getParamKey(), request.getParamValue());
 
         return sysParamDO.getId();
     }
@@ -72,15 +72,15 @@ public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParamDO>
         updateById(sysParamDO);
 
         // 先删除再保存
-        SysParamCache.deleteKey(request.getParamKey());
-        SysParamCache.setValue(request.getParamKey(), request.getParamValue());
+        SysParamCache.deleteHashKey(request.getParamKey());
+        SysParamCache.setHashValue(request.getParamKey(), request.getParamValue());
     }
 
     @Override
     public void remove(Integer id) {
         SysParamDO sysParamDO = checkExist(id);
         removeById(id);
-        SysParamCache.deleteKey(sysParamDO.getParamKey());
+        SysParamCache.deleteHashKey(sysParamDO.getParamKey());
     }
 
     /**

@@ -3,6 +3,9 @@ package cn.beehive.base.util;
 import cn.hutool.extra.spring.SpringUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -106,7 +109,7 @@ public class RedisUtil {
         return STRING_REDIS_TEMPLATE.expire(key, timeout, unit);
     }
 
-    /** ------------------------list相关操作---------------------------- */
+    /** ------------------------ List 相关操作---------------------------- */
 
     /**
      * 存储在 list 头部
@@ -137,6 +140,84 @@ public class RedisUtil {
      */
     public static Long lLen(String key) {
         return STRING_REDIS_TEMPLATE.opsForList().size(key);
+    }
+
+    /** ------------------------ Hash 相关操作---------------------------- */
+
+    /**
+     * 获取存储在哈希表中指定字段的值
+     *
+     * @param key   key
+     * @param field field
+     * @return result
+     */
+    public static Object hGet(String key, String field) {
+        return STRING_REDIS_TEMPLATE.opsForHash().get(key, field);
+    }
+
+    /**
+     * 批量获取 hashKey 对应的 value
+     *
+     * @param key      key
+     * @param hashKeys hashKeys
+     * @return List
+     */
+    public static List<Object> hMultiGet(String key, Collection<Object> hashKeys) {
+        return STRING_REDIS_TEMPLATE.opsForHash().multiGet(key, hashKeys);
+    }
+
+    /**
+     * 获取对应 key 的所有键值对
+     *
+     * @param key key
+     * @return value
+     */
+    public static Map<Object, Object> hEntries(String key) {
+        return STRING_REDIS_TEMPLATE.opsForHash().entries(key);
+    }
+
+    /**
+     * 插入指定的 hashKey 和 hashValue
+     *
+     * @param key       key
+     * @param hashKey   hashKey
+     * @param hashValue hashValue
+     */
+    public static void hPut(String key, String hashKey, String hashValue) {
+        STRING_REDIS_TEMPLATE.opsForHash().put(key, hashKey, hashValue);
+    }
+
+    /**
+     * 批处理插入指定的 hashKey 和 hashValue
+     *
+     * @param key     key
+     * @param hashMap hashMap
+     */
+    public static void hPut(String key, Map<String, String> hashMap) {
+        STRING_REDIS_TEMPLATE.opsForHash().putAll(key, hashMap);
+    }
+
+    /**
+     * 仅当 hashKey 不存在时才设置
+     *
+     * @param key     key
+     * @param hashKey hashKey
+     * @param value   value
+     * @return result
+     */
+    public static Boolean hPutIfAbsent(String key, String hashKey, String value) {
+        return STRING_REDIS_TEMPLATE.opsForHash().putIfAbsent(key, hashKey, value);
+    }
+
+    /**
+     * 删除一个或多个哈希表字段
+     *
+     * @param key      key
+     * @param hashKeys hashKeys
+     * @return result
+     */
+    public static Long hDelete(String key, Object... hashKeys) {
+        return STRING_REDIS_TEMPLATE.opsForHash().delete(key, hashKeys);
     }
 }
 

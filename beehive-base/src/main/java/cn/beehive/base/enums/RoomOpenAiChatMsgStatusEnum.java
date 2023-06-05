@@ -41,8 +41,13 @@ public enum RoomOpenAiChatMsgStatusEnum {
      * 发送问题
      * 问题 Token 超过指定模型上限
      */
-    EXCEPTION_TOKEN_EXCEED_LIMIT(4)
-    ;
+    EXCEPTION_TOKEN_EXCEED_LIMIT(4),
+
+    /**
+     * 发送问题
+     * 内容审核不通过
+     */
+    CONTENT_CHECK_FAILURE(5);
 
     @Getter
     @EnumValue

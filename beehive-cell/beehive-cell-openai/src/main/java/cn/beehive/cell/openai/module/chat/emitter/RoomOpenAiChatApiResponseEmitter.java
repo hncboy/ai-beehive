@@ -1,19 +1,18 @@
 package cn.beehive.cell.openai.module.chat.emitter;
 
 import cn.beehive.base.domain.entity.RoomOpenAiChatMsgDO;
-import cn.beehive.cell.openai.enums.OpenAiChatModelTokenLimiterEnum;
-import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
+import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
 import cn.beehive.base.handler.response.R;
-import cn.beehive.base.util.FrontUserUtil;
+import cn.beehive.base.resource.aip.BaiduAipHandler;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.base.util.OkHttpClientUtil;
 import cn.beehive.base.util.ResponseBodyEmitterUtil;
-import cn.beehive.base.util.WebUtil;
 import cn.beehive.cell.core.hander.strategy.CellConfigStrategy;
 import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiChatSendRequest;
 import cn.beehive.cell.openai.enums.OpenAiChatCellConfigCodeEnum;
+import cn.beehive.cell.openai.enums.OpenAiChatModelTokenLimiterEnum;
 import cn.beehive.cell.openai.module.chat.listener.ConsoleStreamListener;
 import cn.beehive.cell.openai.module.chat.listener.ParsedEventSourceListener;
 import cn.beehive.cell.openai.module.chat.listener.ResponseBodyEmitterStreamListener;
@@ -21,9 +20,9 @@ import cn.beehive.cell.openai.module.chat.parser.ChatCompletionResponseParser;
 import cn.beehive.cell.openai.module.chat.storage.ApiKeyDatabaseDataStorage;
 import cn.beehive.cell.openai.service.RoomOpenAiChatMsgService;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.unfbx.chatgpt.OpenAiStreamClient;
 import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import com.unfbx.chatgpt.entity.chat.Message;
@@ -58,12 +57,15 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
     @Resource
     private RoomOpenAiChatMsgService roomOpenAiChatMsgService;
 
+    @Resource
+    private BaiduAipHandler baiduAipHandler;
+
     @Override
     public void requestToResponseEmitter(RoomOpenAiChatSendRequest sendRequest, ResponseBodyEmitter emitter, CellConfigStrategy cellConfigStrategy) {
         // 获取房间配置参数
         Map<OpenAiChatCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap = cellConfigStrategy.getRoomConfigParamAsMap(sendRequest.getRoomId());
         // 初始化问题消息
-        RoomOpenAiChatMsgDO questionMessage = initQuestionMessage(sendRequest, roomConfigParamAsMap);
+        RoomOpenAiChatMsgDO questionMessage = roomOpenAiChatMsgService.initQuestionMessage(sendRequest, roomConfigParamAsMap);
 
         // 构建上下文消息
         LinkedList<Message> contentMessages = buildContextMessage(questionMessage, roomConfigParamAsMap);
@@ -76,9 +78,13 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
 
         // 检查 tokenCount 是否超出当前模型的 Token 数量限制
         boolean isExcelledModelTokenLimit = exceedModelTokenLimit(questionMessage, questionMessage.getModelName(), emitter);
+
+        // 审核 Prompt
+        boolean isCheckPromptPass = checkPromptPass(questionMessage, emitter);
+
         // 保存问题消息
         roomOpenAiChatMsgService.save(questionMessage);
-        if (isExcelledModelTokenLimit) {
+        if (isExcelledModelTokenLimit || !isCheckPromptPass) {
             return;
         }
 
@@ -99,29 +105,6 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
                 .build();
         openAiStreamClient.streamChatCompletion(chatCompletion, parsedEventSourceListener);
     }
-
-    /**
-     * 初始化问题消息
-     *
-     * @param sendRequest          发送的消息
-     * @param roomConfigParamAsMap 房间配置参数
-     * @return 问题消息
-     */
-    public RoomOpenAiChatMsgDO initQuestionMessage(RoomOpenAiChatSendRequest sendRequest, Map<OpenAiChatCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap) {
-        RoomOpenAiChatMsgDO questionMessage = new RoomOpenAiChatMsgDO();
-        questionMessage.setId(IdWorker.getId());
-        questionMessage.setUserId(FrontUserUtil.getUserId());
-        questionMessage.setRoomId(sendRequest.getRoomId());
-        questionMessage.setIp(WebUtil.getIp());
-        questionMessage.setMessageType(MessageTypeEnum.QUESTION);
-        questionMessage.setModelName(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.MODEL).asString());
-        questionMessage.setApiKey(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.API_KEY).asString());
-        questionMessage.setRoomConfigParamJson(ObjectMapperUtil.toJson(roomConfigParamAsMap));
-        questionMessage.setContent(sendRequest.getContent());
-        questionMessage.setStatus(RoomOpenAiChatMsgStatusEnum.INIT);
-        return questionMessage;
-    }
-
 
     /**
      * 构建聊天对话请求参数
@@ -208,6 +191,28 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
         ResponseBodyEmitterUtil.sendWithComplete(emitter, R.fail(msg));
 
         return true;
+    }
+
+    /**
+     * 审核 prompt
+     *
+     * @param questionMessage 问题消息
+     * @param emitter         ResponseBodyEmitter
+     */
+    private boolean checkPromptPass(RoomOpenAiChatMsgDO questionMessage, ResponseBodyEmitter emitter) {
+        Pair<Boolean, String> checkTextPassPair = baiduAipHandler.isCheckTextPass(String.valueOf(questionMessage.getId()), questionMessage.getContent());
+        if (checkTextPassPair.getKey()) {
+            return true;
+        }
+
+        // 审核失败状态
+        questionMessage.setStatus(RoomOpenAiChatMsgStatusEnum.CONTENT_CHECK_FAILURE);
+        questionMessage.setResponseErrorData(checkTextPassPair.getValue());
+
+        // 发送错误消息
+        ResponseBodyEmitterUtil.sendWithComplete(emitter, R.fail("当前消息内容不符合规范，请修改后重新发送"));
+
+        return false;
     }
 
     /**

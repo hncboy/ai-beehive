@@ -34,7 +34,7 @@ public class CellConfigPermissionHandler {
         // 获取 Cell 配置项列表
         List<CellConfigDO> cellConfigDOList = SpringUtil.getBean(CellConfigService.class)
                 .list(new LambdaQueryWrapper<CellConfigDO>()
-                        // 查询可见的。
+                        // 查询可见的
                         .eq(CellConfigDO::getIsUserVisible, true)
                         .eq(CellConfigDO::getCellCode, cellCode));
         List<CellConfigPermissionBO> cellConfigPermissionBOList = CellConfigConverter.INSTANCE.entityToPermissionBO(cellConfigDOList);

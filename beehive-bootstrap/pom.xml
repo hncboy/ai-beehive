@@ -11,6 +11,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>cn.beehive</groupId>
             <artifactId>beehive-web</artifactId>
             <version>${project.version}</version>

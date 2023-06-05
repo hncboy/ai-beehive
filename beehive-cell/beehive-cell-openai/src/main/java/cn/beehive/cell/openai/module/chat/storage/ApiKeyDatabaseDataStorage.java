@@ -26,6 +26,7 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
     public void onFirstMessage(RoomOpenAiChatMessageStorage chatMessageStorage) {
         RoomOpenAiChatMsgDO questionMessage = (RoomOpenAiChatMsgDO) chatMessageStorage.getQuestionMessageDO();
         RoomOpenAiChatMsgDO answerMessage = new RoomOpenAiChatMsgDO();
+        answerMessage.setContent(chatMessageStorage.getReceivedMessage());
         answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.PART_SUCCESS);
         // 保存回答消息
         saveAnswerMessage(answerMessage, questionMessage, chatMessageStorage);

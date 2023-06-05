@@ -4,19 +4,25 @@ import cn.beehive.base.domain.entity.RoomDO;
 import cn.beehive.base.domain.entity.RoomOpenAiChatMsgDO;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.enums.CellCodeEnum;
+import cn.beehive.base.enums.MessageTypeEnum;
+import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
 import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomOpenAiChatMsgMapper;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
+import cn.beehive.base.util.WebUtil;
 import cn.beehive.cell.core.hander.RoomHandler;
 import cn.beehive.cell.core.hander.strategy.CellConfigFactory;
+import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiChatSendRequest;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiChatMsgVO;
+import cn.beehive.cell.openai.enums.OpenAiChatCellConfigCodeEnum;
 import cn.beehive.cell.openai.handler.converter.RoomOpenAiChatMsgConverter;
 import cn.beehive.cell.openai.module.chat.emitter.RoomOpenAiChatResponseEmitter;
 import cn.beehive.cell.openai.module.chat.emitter.RoomOpenAiChatResponseEmitterDispatcher;
 import cn.beehive.cell.openai.service.RoomOpenAiChatMsgService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,10 +39,26 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class  RoomOpenAiChatMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAiChatMsgMapper, RoomOpenAiChatMsgDO> implements RoomOpenAiChatMsgService {
+public class RoomOpenAiChatMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAiChatMsgMapper, RoomOpenAiChatMsgDO> implements RoomOpenAiChatMsgService {
 
     @Resource
     private CellConfigFactory cellConfigFactory;
+
+    @Override
+    public RoomOpenAiChatMsgDO initQuestionMessage(RoomOpenAiChatSendRequest sendRequest, Map<OpenAiChatCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap) {
+        RoomOpenAiChatMsgDO questionMessage = new RoomOpenAiChatMsgDO();
+        questionMessage.setId(IdWorker.getId());
+        questionMessage.setUserId(FrontUserUtil.getUserId());
+        questionMessage.setRoomId(sendRequest.getRoomId());
+        questionMessage.setIp(WebUtil.getIp());
+        questionMessage.setMessageType(MessageTypeEnum.QUESTION);
+        questionMessage.setModelName(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.MODEL).asString());
+        questionMessage.setApiKey(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.API_KEY).asString());
+        questionMessage.setRoomConfigParamJson(ObjectMapperUtil.toJson(roomConfigParamAsMap));
+        questionMessage.setContent(sendRequest.getContent());
+        questionMessage.setStatus(RoomOpenAiChatMsgStatusEnum.INIT);
+        return questionMessage;
+    }
 
     @Override
     public List<RoomOpenAiChatMsgVO> list(RoomMsgCursorQuery cursorQuery) {

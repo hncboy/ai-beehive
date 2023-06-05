@@ -8,4 +8,17 @@
         <version>${revision}</version>
     </parent>
     <artifactId>beehive-base</artifactId>
+
+    <properties>
+        <baidu-api-sdk.version>4.16.16</baidu-api-sdk.version>
+    </properties>
+
+    <dependencies>
+        <!-- 百度内容审核 -->
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>${baidu-api-sdk.version}</version>
+        </dependency>
+    </dependencies>
 </project>

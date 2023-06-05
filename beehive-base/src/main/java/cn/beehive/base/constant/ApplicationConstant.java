@@ -26,13 +26,4 @@ public interface ApplicationConstant {
      * 用户登录-JWT 携带参数名称：extraUserId
      */
     String FRONT_JWT_EXTRA_USER_ID = "extraUserId";
-
-    /**
-     * CellConfig在生成系统默认值时的系统用户ID
-     */
-    Integer ROOM_PARAM_SYSTEM_USER_ID = 0;
-    /**
-     * CellConfig在生成系统默认Room时的房间ID
-     */
-    Integer ROOM_PARAM_ROOM_ID = 0;
 }
