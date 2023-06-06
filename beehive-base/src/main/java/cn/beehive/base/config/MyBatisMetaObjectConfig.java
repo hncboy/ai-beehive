@@ -16,24 +16,29 @@ import java.util.Objects;
 @Configuration
 public class MyBatisMetaObjectConfig implements MetaObjectHandler {
 
+    private static final String CREATE_TIME = "createTime";
+    private static final String UPDATE_TIME = "updateTime";
+    private static final String IP = "ip";
+
     @Override
     public void insertFill(MetaObject metaObject) {
-        Object createTime = getFieldValByName("createTime", metaObject);
-        if (Objects.isNull(createTime)) {
-            this.setFieldValByName("createTime", new Date(), metaObject);
+        if (metaObject.hasGetter(CREATE_TIME) && Objects.isNull(getFieldValByName(CREATE_TIME, metaObject))) {
+            this.setFieldValByName(CREATE_TIME, new Date(), metaObject);
         }
-        Object updateTime = getFieldValByName("updateTime", metaObject);
-        if (Objects.isNull(updateTime)) {
-            this.setFieldValByName("updateTime", new Date(), metaObject);
+
+        if (metaObject.hasGetter(UPDATE_TIME) && Objects.isNull(getFieldValByName(UPDATE_TIME, metaObject))) {
+            this.setFieldValByName(UPDATE_TIME, new Date(), metaObject);
         }
-        Object ip = getFieldValByName("ip", metaObject);
-        if (Objects.isNull(ip)) {
-            this.setFieldValByName("ip", WebUtil.getIp(), metaObject);
+
+        if (metaObject.hasGetter(IP) && Objects.isNull(getFieldValByName(IP, metaObject))) {
+            this.setFieldValByName(IP, WebUtil.getIp(), metaObject);
         }
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("updateTime", new Date(), metaObject);
+        if (metaObject.hasGetter(UPDATE_TIME) && Objects.isNull(getFieldValByName(UPDATE_TIME, metaObject))) {
+            this.setFieldValByName(UPDATE_TIME, new Date(), metaObject);
+        }
     }
 }

@@ -20,11 +20,14 @@ public class ResponseBodyEmitterUtil {
      */
     public static void send(ResponseBodyEmitter emitter, Object object) {
         try {
+            String content;
             if (object instanceof R) {
-                emitter.send(object);
+                content = ObjectMapperUtil.toJson(object);
             } else {
-                emitter.send(R.data(object));
+                content = ObjectMapperUtil.toJson(R.data(object));
             }
+            // 消息末尾加上换行符
+            emitter.send(content + "\n");
         } catch (Exception e) {
             throw new ServiceException(StrUtil.format("消息发送异常，异常信息：{}", e.getMessage()));
         }

@@ -37,6 +37,9 @@ public class CellVO {
     @Schema(title = "排序，值大的排前面")
     private Integer sort;
 
+    @Schema(title = "介绍")
+    private String introduce;
+
     @Schema(title = "创建时间")
     private Date createTime;
 }

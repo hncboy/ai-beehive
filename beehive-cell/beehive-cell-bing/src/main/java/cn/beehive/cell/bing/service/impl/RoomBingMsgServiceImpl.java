@@ -8,6 +8,7 @@ import cn.beehive.base.mapper.RoomBingMsgMapper;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.base.util.ResponseBodyEmitterUtil;
+import cn.beehive.base.util.WebUtil;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import cn.beehive.cell.bing.domain.vo.RoomBingMsgVO;
@@ -74,13 +75,14 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
 
         // 保存问题消息
         RoomBingMsgDO questionMessage = RoomBingMsgConverter.INSTANCE.bingRoomBOToEntity(bingRoomBO);
+        questionMessage.setIp(WebUtil.getIp());
         questionMessage.setType(MessageTypeEnum.QUESTION);
         questionMessage.setContent(sendRequest.getContent());
         save(questionMessage);
 
         try {
             // 建立 WebSocket 连接并发送消息
-            buildWebSocketAndSendMessage(questionMessage.getId(), bingRoomBO, sendRequest, emitter, MAX_FAILURE_RETRIES);
+            buildWebSocketAndSendMessage(questionMessage, bingRoomBO, sendRequest, emitter, MAX_FAILURE_RETRIES);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -91,14 +93,14 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
     /**
      * 建立 WebSocket 连接并发送消息
      *
-     * @param questionMessageId      问题消息 ID
+     * @param questionMessage      问题消息
      * @param bingRoomBO             房间业务信息
      * @param roomBingMsgSendRequest 发送消息请求
      * @param responseBodyEmitter    响应
      * @param retries                重试次数
      * @throws Exception 异常
      */
-    private void buildWebSocketAndSendMessage(Long questionMessageId, BingRoomBO bingRoomBO, RoomBingMsgSendRequest roomBingMsgSendRequest,
+    private void buildWebSocketAndSendMessage(RoomBingMsgDO questionMessage, BingRoomBO bingRoomBO, RoomBingMsgSendRequest roomBingMsgSendRequest,
                                               ResponseBodyEmitter responseBodyEmitter, int retries) throws Exception {
         // 连接地址
         URI uri = new URI("wss://sydney.bing.com/sydney/ChatHub");
@@ -147,7 +149,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
 
                     if (type == 2) {
                         // 处理 type2 消息并返回是否开启新话题
-                        boolean isNewTopic = bingApiResponseTypeMessageHandler.handleType2(questionMessageId, bingRoomBO, message, emitter);
+                        boolean isNewTopic = bingApiResponseTypeMessageHandler.handleType2(questionMessage, bingRoomBO, message, emitter);
                         // 不管结果咋样都先关闭当前连接
                         close();
                         // 不需要开启新话题，直接结束
@@ -161,7 +163,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
                             log.debug("NewBing 房间：{}，尝试第 {} 次重新建立话题", bingRoomBO.getRoomBingDO().getRoomId(), MAX_FAILURE_RETRIES - retries + 1);
                             // 刷新房间重新建立连接
                             try {
-                                buildWebSocketAndSendMessage(questionMessageId, bingRoomBO, roomBingMsgSendRequest, responseBodyEmitter, retries - 1);
+                                buildWebSocketAndSendMessage(questionMessage, bingRoomBO, roomBingMsgSendRequest, responseBodyEmitter, retries - 1);
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }

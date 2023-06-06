@@ -30,6 +30,8 @@ public class FrontUserBaseDO {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
+    // TODO 黑名单禁止登录
+
     /**
      * 昵称
      */

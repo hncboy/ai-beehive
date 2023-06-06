@@ -41,6 +41,11 @@ public class RoomBingMsgDO {
     private Integer userId;
 
     /**
+     * ip
+     */
+    private String ip;
+
+    /**
      * 消息类型
      */
     private MessageTypeEnum type;

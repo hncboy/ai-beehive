@@ -40,6 +40,9 @@ public class FrontUserController {
         return R.success("验证成功");
     }
 
+    /**
+     * TODO 限制注册的邮箱后缀
+     */
     @Operation(summary = "邮箱注册")
     @PostMapping("/register/email")
     public R<Void> registerFrontUser(@Validated @RequestBody RegisterFrontUserForEmailRequest request) {
@@ -59,6 +62,9 @@ public class FrontUserController {
         return R.data(frontUserService.generateCaptcha());
     }
 
+    /**
+     * TODO 限制登录的邮箱后缀
+     */
     @Operation(summary = "邮箱登录")
     @PostMapping("/login/email")
     public R<LoginInfoVO> login(@RequestBody LoginFrontUserByEmailRequest request) {

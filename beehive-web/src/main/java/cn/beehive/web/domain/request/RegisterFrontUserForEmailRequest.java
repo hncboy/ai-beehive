@@ -28,9 +28,6 @@ public class RegisterFrontUserForEmailRequest {
     @Schema(title = "用户ID，可以为邮箱，可以为手机号")
     private String identity;
 
-    /**
-     * TODO 正则校验
-     */
     @Schema(title = "密码")
     @NotNull(message = "密码不能为空")
     private String password;

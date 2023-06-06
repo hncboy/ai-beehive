@@ -64,13 +64,13 @@ public class BingApiResponseTypeMessageHandler {
      * 处理 type=2 消息
      * 响应结果，包含正常和异常结束
      *
-     * @param questionMessageId 问题消息 id
-     * @param bingRoomBO        房间业务信息
-     * @param receiveMessage    消息
-     * @param emitter           响应流
+     * @param questionMessage 问题消息
+     * @param bingRoomBO      房间业务信息
+     * @param receiveMessage  消息
+     * @param emitter         响应流
      * @return 是否需要开启新话题
      */
-    public boolean handleType2(Long questionMessageId, BingRoomBO bingRoomBO, String receiveMessage, ResponseBodyEmitter emitter) {
+    public boolean handleType2(RoomBingMsgDO questionMessage, BingRoomBO bingRoomBO, String receiveMessage, ResponseBodyEmitter emitter) {
         BingApiSendType2ResultBO resultBO = ObjectMapperUtil.fromJson(receiveMessage, BingApiSendType2ResultBO.class);
         String resultValue = resultBO.getItem().getResult().getValue();
 
@@ -115,7 +115,8 @@ public class BingApiResponseTypeMessageHandler {
 
             // 增加回答消息
             RoomBingMsgDO answerMessage = RoomBingMsgConverter.INSTANCE.bingRoomBOToEntity(bingRoomBO);
-            answerMessage.setParentMessageId(questionMessageId);
+            answerMessage.setParentMessageId(questionMessage.getId());
+            answerMessage.setIp(questionMessage.getIp());
             answerMessage.setType(MessageTypeEnum.ANSWER);
             answerMessage.setContent(botMessage.getText());
             answerMessage.setSuggestResponses(Optional.ofNullable(roomBingStreamMsgVO.getSuggests()).orElse(Collections.emptyList()).toString());
