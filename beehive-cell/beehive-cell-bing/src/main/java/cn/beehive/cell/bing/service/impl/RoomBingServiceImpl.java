@@ -13,7 +13,6 @@ import cn.beehive.cell.bing.enums.BingModeEnum;
 import cn.beehive.cell.bing.handler.BingCellConfigStrategy;
 import cn.beehive.cell.bing.handler.BingRoomHandler;
 import cn.beehive.cell.bing.service.RoomBingService;
-import cn.beehive.cell.core.hander.CellPermissionHandler;
 import cn.beehive.cell.core.hander.RoomHandler;
 import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.hutool.core.util.ObjectUtil;
@@ -40,10 +39,8 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
 
     @Override
     public BingRoomBO getRoom(Long roomId, RoomBingMsgSendRequest sendRequest) {
-        // 校验 Cell 是否有使用权限
-        CellPermissionHandler.checkCanUse(CellCodeEnum.NEW_BING);
-        // 校验房间是否存在
-        RoomHandler.checkRoomExist(roomId, CellCodeEnum.NEW_BING);
+        // 校验房间是否存在 TODO 抛异常 emitter 会返回 json 格式
+        RoomHandler.checkRoomExistAndCellCanUse(roomId, CellCodeEnum.NEW_BING);
 
         // 获取房间配置参数
         Map<BingCellConfigCodeEnum, DataWrapper> roomConfigParamMap = bingCellConfigStrategy.getRoomConfigParamAsMap(roomId);

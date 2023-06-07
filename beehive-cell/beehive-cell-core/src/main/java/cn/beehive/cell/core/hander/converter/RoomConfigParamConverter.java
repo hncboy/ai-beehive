@@ -4,6 +4,7 @@ import cn.beehive.base.domain.entity.RoomConfigParamDO;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.cell.core.domain.bo.CellConfigPermissionBO;
 import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
+import cn.beehive.cell.core.domain.vo.CellConfigVO;
 import cn.beehive.cell.core.domain.vo.RoomConfigParamVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -19,12 +20,12 @@ public interface RoomConfigParamConverter {
     RoomConfigParamConverter INSTANCE = Mappers.getMapper(RoomConfigParamConverter.class);
 
     /**
-     * CellConfigPermissionBO 转 RoomConfigParamVO
+     * CellConfigVO 转 RoomConfigParamVO
      *
-     * @param cellConfigPermissionBO CellConfigPermissionBO
+     * @param cellConfigVO CellConfigVO
      * @return RoomConfigParamVO
      */
-    RoomConfigParamVO cellConfigPermissionBOToVO(CellConfigPermissionBO cellConfigPermissionBO);
+    RoomConfigParamVO cellConfigVOToVO(CellConfigVO cellConfigVO);
 
     /**
      * CellConfigPermissionBO 转 RoomConfigParamBO

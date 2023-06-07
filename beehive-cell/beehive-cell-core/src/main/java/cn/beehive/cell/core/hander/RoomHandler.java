@@ -4,9 +4,8 @@ import cn.beehive.base.domain.entity.RoomDO;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.util.FrontUserUtil;
-import cn.beehive.cell.core.service.RoomService;
+import cn.beehive.cell.core.cache.RoomCache;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.extra.spring.SpringUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,8 +25,8 @@ public class RoomHandler {
      * @return 房间信息
      */
     public static RoomDO checkRoomExist(Long roomId) {
-        RoomService roomService = SpringUtil.getBean(RoomService.class);
-        RoomDO roomDO = roomService.getById(roomId);
+        // 从缓存获取房间信息
+        RoomDO roomDO = RoomCache.getRoom(roomId);
         if (Objects.isNull(roomDO)) {
             throw new ServiceException("房间不存在");
         }
@@ -38,21 +37,31 @@ public class RoomHandler {
         if (roomDO.getIsDeleted()) {
             throw new ServiceException("房间已删除");
         }
-
-        // 校验图纸是否存在并可发布
-        CellHandler.checkCellPublishExist(roomDO.getCellCode());
         return roomDO;
     }
 
     /**
-     * 校验房间是否存在并且属于指定的 cell code
+     * 校验房间是否存在并且 cell 可使用
+     *
+     * @param roomId 房间 id
+     * @return 房间信息
+     */
+    public static RoomDO checkRoomExistAndCellCanUse(Long roomId) {
+        RoomDO roomDO = checkRoomExist(roomId);
+        CellPermissionHandler.checkCanUse(roomDO.getCellCode());
+        return roomDO;
+    }
+
+    /**
+     * 校验房间是否存在并且图纸可使用
+     * 并且房间图纸编码为 limitedCellCodeEnum
      *
      * @param roomId              房间 id
      * @param limitedCellCodeEnum 限制的房间 cell Code
      * @return 房间信息
      */
-    public static RoomDO checkRoomExist(Long roomId, CellCodeEnum limitedCellCodeEnum) {
-        return checkRoomExist(roomId, Collections.singletonList(limitedCellCodeEnum));
+    public static RoomDO checkRoomExistAndCellCanUse(Long roomId, CellCodeEnum limitedCellCodeEnum) {
+        return checkRoomExistAndCellCanUse(roomId, Collections.singletonList(limitedCellCodeEnum));
     }
 
     /**
@@ -62,12 +71,13 @@ public class RoomHandler {
      * @param limitedCellCodeEnums 限制的房间 cell Code 列表
      * @return 房间信息
      */
-    public static RoomDO checkRoomExist(Long roomId, List<CellCodeEnum> limitedCellCodeEnums) {
+    public static RoomDO checkRoomExistAndCellCanUse(Long roomId, List<CellCodeEnum> limitedCellCodeEnums) {
         RoomDO roomDO = checkRoomExist(roomId);
         // 校验房间 cell code
         if (!limitedCellCodeEnums.contains(roomDO.getCellCode())) {
             throw new ServiceException("房间不存在");
         }
+        CellPermissionHandler.checkCanUse(roomDO.getCellCode());
         return roomDO;
     }
 }

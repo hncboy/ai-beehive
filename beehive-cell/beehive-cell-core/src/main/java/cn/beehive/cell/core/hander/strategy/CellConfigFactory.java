@@ -48,8 +48,7 @@ public class CellConfigFactory {
      * @return cell 配置项策略
      */
     public CellConfigStrategy getCellConfigStrategy(Long roomId, List<CellCodeEnum> limitedCellCodeEnums) {
-        // 校验房间是否存在
-        RoomDO roomDO = RoomHandler.checkRoomExist(roomId, limitedCellCodeEnums);
+        RoomDO roomDO = RoomHandler.checkRoomExistAndCellCanUse(roomId, limitedCellCodeEnums);
         return getCellConfigStrategy(roomDO.getCellCode());
     }
 

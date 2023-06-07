@@ -5,11 +5,11 @@ import cn.beehive.base.domain.entity.CellConfigPermissionDO;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.enums.CellConfigPermissionTypeEnum;
 import cn.beehive.base.util.FrontUserUtil;
+import cn.beehive.cell.core.cache.CellConfigCache;
 import cn.beehive.cell.core.constant.CellPermissionConstant;
 import cn.beehive.cell.core.domain.bo.CellConfigPermissionBO;
 import cn.beehive.cell.core.hander.converter.CellConfigConverter;
 import cn.beehive.cell.core.service.CellConfigPermissionService;
-import cn.beehive.cell.core.service.CellConfigService;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
@@ -24,39 +24,34 @@ import java.util.stream.Collectors;
 public class CellConfigPermissionHandler {
 
     /**
-     * 根据 cellCode 获取配置项权限业务
-     * TODO 从缓存中获取
+     * 根据 cellCodeEnum 获取配置项权限业务
      *
-     * @param cellCode cellCode
+     * @param cellCodeEnum cellCodeEnum
      * @return cell 配置项权限业务
      */
-    public static List<CellConfigPermissionBO> listCellConfigPermission(CellCodeEnum cellCode) {
+    public static List<CellConfigPermissionBO> listCellConfigPermission(CellCodeEnum cellCodeEnum) {
         // 获取 Cell 配置项列表
-        List<CellConfigDO> cellConfigDOList = SpringUtil.getBean(CellConfigService.class)
-                .list(new LambdaQueryWrapper<CellConfigDO>()
-                        // 查询可见的
-                        .eq(CellConfigDO::getIsUserVisible, true)
-                        .eq(CellConfigDO::getCellCode, cellCode));
+        List<CellConfigDO> cellConfigDOList = CellConfigCache.listCellConfig(cellCodeEnum);
         List<CellConfigPermissionBO> cellConfigPermissionBOList = CellConfigConverter.INSTANCE.entityToPermissionBO(cellConfigDOList);
 
         // 填充是否可以使用默认值
-        populateIsCanUseDefaultValue(cellCode, cellConfigPermissionBOList);
-
-        // 填充是否展示的字段
-        populateIsShowField(cellConfigPermissionBOList);
+        populateIsCanUseDefaultValue(cellCodeEnum, cellConfigPermissionBOList);
 
         return cellConfigPermissionBOList;
     }
 
     /**
-     * 填充是否展示的字段
+     * 填充默认值信息，防止泄露
      *
      * @param cellConfigPermissionBOList cell 配置项权限业务列表
      */
-    private static void populateIsShowField(List<CellConfigPermissionBO> cellConfigPermissionBOList) {
+    public static void populateDefaultValue(List<CellConfigPermissionBO> cellConfigPermissionBOList) {
         for (CellConfigPermissionBO cellConfigPermissionBO : cellConfigPermissionBOList) {
+            // 可能存在用户用了自己的值，但是该配置被设置为不可见
             // 如果不可见 或 无法使用默认值，直接设置为 null
-            if (!cellConfigPermissionBO.getIsUserValueVisible() || !cellConfigPermissionBO.getIsUserCanUseDefaultValue()) {
+            if (!cellConfigPermissionBO.getIsUserVisible()
+                    || !cellConfigPermissionBO.getIsUserValueVisible()
+                    || !cellConfigPermissionBO.getIsUserCanUseDefaultValue()) {
                 cellConfigPermissionBO.setDefaultValue(null);
             }
         }
@@ -64,7 +59,7 @@ public class CellConfigPermissionHandler {
 
     /**
      * 填充是否可以使用默认值
-     *
+     * TODO 取缓存
      * @param cellCode                   cellCode
      * @param cellConfigPermissionBOList cell 配置项权限业务列表
      */

@@ -3,11 +3,10 @@ package cn.beehive.cell.midjourney.handler;
 import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
-import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
+import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.util.FrontUserUtil;
-import cn.beehive.cell.core.hander.CellPermissionHandler;
 import cn.beehive.cell.core.hander.RoomHandler;
 import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
@@ -33,10 +32,8 @@ public class MidjourneyRoomMsgHandler {
      * @param roomId 房间 id
      */
     public static void checkCanOperate(Long roomId) {
-        // 校验 Cell 是否有使用权限
-        CellPermissionHandler.checkCanUse(CellCodeEnum.MIDJOURNEY);
         // 检查房间是否存在
-        RoomHandler.checkRoomExist(roomId, CellCodeEnum.MIDJOURNEY);
+        RoomHandler.checkRoomExistAndCellCanUse(roomId, CellCodeEnum.MIDJOURNEY);
         // 检查是否有正在处理的任务
         MidjourneyRoomMsgHandler.checkExistProcessingTask();
     }

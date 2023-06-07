@@ -203,10 +203,8 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
 
     @Override
     public void describe(MjDescribeRequest describeRequest) {
-        // 校验 Cell 是否有使用权限
-        CellPermissionHandler.checkCanUse(CellCodeEnum.MIDJOURNEY);
         // 检查房间是否存在
-        RoomHandler.checkRoomExist(describeRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
+        RoomHandler.checkRoomExistAndCellCanUse(describeRequest.getRoomId(), CellCodeEnum.MIDJOURNEY);
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
         // 生成问题的消息 id

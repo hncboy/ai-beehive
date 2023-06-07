@@ -35,19 +35,19 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
         }
 
         @Override
-        public void compositeValidate(Map<ICellConfigCodeEnum, RoomConfigParamBO> roomConfigParamBOMap, CellCodeEnum cellCode) {
+        public void compositeValidate(Map<ICellConfigCodeEnum, RoomConfigParamBO> roomConfigParamMap, CellCodeEnum cellCode) {
             // 如果填了自己的模型，就不能用系统的默认 apiKey，因为只有两种模型，apiKey 都是对应的，也防止盗刷其他模型
 
-            String modelName = roomConfigParamBOMap.get(MODEL).getValue();
-            Boolean isUseDefaultValue = roomConfigParamBOMap.get(API_KEY).getIsUseDefaultValue();
+            String modelName = roomConfigParamMap.get(MODEL).getValue();
+            Boolean isUseDefaultValue = roomConfigParamMap.get(API_KEY).getIsUseDefaultValue();
 
             // 如果当前是 GPT-3.5 图纸但是用的是 GPT-3.5 Turbo 模型，就必须用自己的 apiKey
-            if (cellCode == CellCodeEnum.OPENAI_CHAT_API_3_5 && ObjectUtil.notEqual(OpenAiChatApiModelEnum.GPT_3_5_TURBO, modelName)) {
+            if (cellCode == CellCodeEnum.OPENAI_CHAT_API_3_5 && ObjectUtil.notEqual(OpenAiChatApiModelEnum.GPT_3_5_TURBO.getName(), modelName)) {
                 ThrowExceptionUtil.isTrue(isUseDefaultValue).throwMessage("切换模型只支持使用自己的 apiKey");
             }
 
             // GPT-4 同理
-            if (cellCode == CellCodeEnum.OPENAI_CHAT_API_4 && ObjectUtil.notEqual(OpenAiChatApiModelEnum.GPT_4, modelName)) {
+            if (cellCode == CellCodeEnum.OPENAI_CHAT_API_4 && ObjectUtil.notEqual(OpenAiChatApiModelEnum.GPT_4.getName(), modelName)) {
                 ThrowExceptionUtil.isTrue(isUseDefaultValue).throwMessage("切换模型只支持使用自己的 apiKey");
             }
         }

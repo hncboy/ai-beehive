@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author hncboy
@@ -25,11 +26,21 @@ public class CellConfigServiceImpl extends ServiceImpl<CellConfigMapper, CellCon
 
     @Override
     public List<CellConfigVO> listCellConfig(String cellCodeStr) {
+        // 解析 cellCodeStr 为枚举
         CellCodeEnum cellCodeEnum = CellHandler.parseCellCodeStr(cellCodeStr);
         // 校验是否有使用权限
         CellPermissionHandler.checkCanUse(cellCodeEnum);
         // 根据配置项查询配置项权限参数列表
         List<CellConfigPermissionBO> cellConfigPermissionBOList = CellConfigPermissionHandler.listCellConfigPermission(cellCodeEnum);
+
+        // 过滤不可见的配置项
+        cellConfigPermissionBOList = cellConfigPermissionBOList.stream()
+                .filter(CellConfigPermissionBO::getIsUserVisible)
+                .collect(Collectors.toList());
+
+        // 填充默认值信息，防止泄露
+        CellConfigPermissionHandler.populateDefaultValue(cellConfigPermissionBOList);
+
         return CellConfigConverter.INSTANCE.permissionBOToVO(cellConfigPermissionBOList);
     }
 }
