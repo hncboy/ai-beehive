@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @author hncboy
  * @date 2023/6/2
- * Cell 配置项权限业务参数
+ * Cell 配置项权限业务对象
  */
 @Data
 public class CellConfigPermissionBO {

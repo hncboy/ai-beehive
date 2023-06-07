@@ -11,8 +11,8 @@ import cn.beehive.base.util.ResponseBodyEmitterUtil;
 import cn.beehive.cell.core.hander.strategy.CellConfigStrategy;
 import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiChatSendRequest;
+import cn.beehive.cell.openai.enums.OpenAiChatApiModelEnum;
 import cn.beehive.cell.openai.enums.OpenAiChatCellConfigCodeEnum;
-import cn.beehive.cell.openai.enums.OpenAiChatModelTokenLimiterEnum;
 import cn.beehive.cell.openai.module.chat.listener.ConsoleStreamListener;
 import cn.beehive.cell.openai.module.chat.listener.ParsedEventSourceListener;
 import cn.beehive.cell.openai.module.chat.listener.ResponseBodyEmitterStreamListener;
@@ -77,7 +77,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
         questionMessage.setOriginalData(ObjectMapperUtil.toJson(chatCompletion));
 
         // 检查 tokenCount 是否超出当前模型的 Token 数量限制
-        boolean isExcelledModelTokenLimit = exceedModelTokenLimit(questionMessage, questionMessage.getModelName(), emitter);
+        boolean isExcelledModelTokenLimit = exceedModelTokenLimit(questionMessage, emitter);
 
         // 审核 Prompt
         boolean isCheckPromptPass = checkPromptPass(questionMessage, emitter);
@@ -118,7 +118,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
         // 最终的 maxTokens
         int finalMaxTokens;
         // 本次对话剩余的 maxTokens 最大值 = 模型的最大上限 - 本次 prompt 消耗的 tokens - 1
-        int currentRemainMaxTokens = OpenAiChatModelTokenLimiterEnum.getTokenLimitByOuterJarModelName(questionMessage.getModelName()) - questionMessage.getPromptTokens() - 1;
+        int currentRemainMaxTokens = OpenAiChatApiModelEnum.maxTokens(questionMessage.getModelName()) - questionMessage.getPromptTokens() - 1;
         // 获取 maxTokens
         DataWrapper maxTokensDataWrapper = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.MAX_TOKENS);
         // 如果 maxTokens 为空或者大于当前剩余的 maxTokens
@@ -148,26 +148,26 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
      * 检查上下文消息的 Token 数是否超出模型限制
      *
      * @param questionMessage 问题消息
-     * @param modelName       当前使用的模型名称
      * @param emitter         ResponseBodyEmitter
      */
-    private boolean exceedModelTokenLimit(RoomOpenAiChatMsgDO questionMessage, String modelName, ResponseBodyEmitter emitter) {
+    private boolean exceedModelTokenLimit(RoomOpenAiChatMsgDO questionMessage, ResponseBodyEmitter emitter) {
+        String modelName = questionMessage.getModelName();
         Integer promptTokens = questionMessage.getPromptTokens();
         // 当前模型最大 tokens
-        int maxTokens = OpenAiChatModelTokenLimiterEnum.getTokenLimitByOuterJarModelName(modelName);
+        int maxTokens = OpenAiChatApiModelEnum.maxTokens(questionMessage.getModelName());
 
         boolean isExcelledModelTokenLimit = false;
 
         String msg = null;
         // 判断 token 数量是否超过限制
-        if (OpenAiChatModelTokenLimiterEnum.exceedsLimit(modelName, promptTokens)) {
+        if (OpenAiChatApiModelEnum.maxTokens(modelName) <= promptTokens) {
             isExcelledModelTokenLimit = true;
 
             // 获取当前 prompt 消耗的 tokens
             int currentPromptTokens = TikTokensUtil.tokens(modelName, questionMessage.getContent());
             // 判断历史上下文是否超过限制
             int remainingTokens = promptTokens - currentPromptTokens;
-            if (OpenAiChatModelTokenLimiterEnum.exceedsLimit(modelName, remainingTokens)) {
+            if (OpenAiChatApiModelEnum.maxTokens(modelName) <= remainingTokens) {
                 msg = "当前上下文字数已经达到上限，请减少上下文关联的条数";
             } else {
                 msg = StrUtil.format("当前上下文 Token 数量：{}，超过上限：{}，请减少字数发送或减少上下文关联的条数", promptTokens, maxTokens);
@@ -246,7 +246,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
         }
 
         // 上下文关联时间
-        DataWrapper relatedTimeHourDataWrapper = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.CONTEXT_RELATED_TIME_HOUR);
+        int relatedTimeHour = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.CONTEXT_RELATED_TIME_HOUR).asInt();
 
         // 查询上下文消息
         List<RoomOpenAiChatMsgDO> historyMessages = roomOpenAiChatMsgService.list(new LambdaQueryWrapper<RoomOpenAiChatMsgDO>()
@@ -257,7 +257,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
                 // 查询消息为成功的
                 .eq(RoomOpenAiChatMsgDO::getStatus, RoomOpenAiChatMsgStatusEnum.COMPLETE_SUCCESS)
                 // 上下文的时间范围
-                .gt(relatedTimeHourDataWrapper.nonNull(), RoomOpenAiChatMsgDO::getCreateTime, DateUtil.offsetHour(new Date(), -relatedTimeHourDataWrapper.asInt()))
+                .gt(relatedTimeHour > 0, RoomOpenAiChatMsgDO::getCreateTime, DateUtil.offsetHour(new Date(), -relatedTimeHour))
                 // 限制上下文条数
                 .last("limit " + contextCount)
                 // 按主键降序

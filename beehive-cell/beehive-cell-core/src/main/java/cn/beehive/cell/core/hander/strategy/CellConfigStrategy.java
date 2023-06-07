@@ -1,7 +1,9 @@
 package cn.beehive.cell.core.hander.strategy;
 
 import cn.beehive.base.enums.CellCodeEnum;
+import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,17 +43,17 @@ public interface CellConfigStrategy {
     <T extends ICellConfigCodeEnum> Map<T, DataWrapper> getRoomConfigParamAsMap(Long roomId);
 
     /**
-     * 校验房间配置项参数
+     * 单个校验房间配置项参数
      *
-     * @param roomConfigParamMap 房间配置项参数值
+     * @param cellConfigCodeEnum 配置项 code 枚举
+     * @param dataWrapper        房间配置项参数值
      */
-    void validate(Map<? extends ICellConfigCodeEnum, DataWrapper> roomConfigParamMap);
+    void singleValidate(ICellConfigCodeEnum cellConfigCodeEnum, DataWrapper dataWrapper);
 
     /**
-     * 校验房间配置项参数
+     * 复合校验房间配置项参数
      *
-     * @param cellConfigCodeEnum   房间配置项 code 枚举
-     * @param roomConfigParamValue 房间配置项参数值
+     * @param roomConfigParamBOList 房间配置项参数业务对象列表
      */
-    void validate(ICellConfigCodeEnum cellConfigCodeEnum, DataWrapper roomConfigParamValue);
+    void compositeValidate(List<RoomConfigParamBO> roomConfigParamBOList);
 }

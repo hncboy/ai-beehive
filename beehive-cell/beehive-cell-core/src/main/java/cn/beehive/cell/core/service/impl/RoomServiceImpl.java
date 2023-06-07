@@ -5,6 +5,7 @@ import cn.beehive.base.domain.entity.RoomDO;
 import cn.beehive.base.mapper.RoomMapper;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.PageUtil;
+import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
 import cn.beehive.cell.core.domain.query.RoomPageQuery;
 import cn.beehive.cell.core.domain.request.RoomCreateRequest;
 import cn.beehive.cell.core.domain.request.RoomInfoEditRequest;
@@ -12,6 +13,7 @@ import cn.beehive.cell.core.domain.vo.RoomListVO;
 import cn.beehive.cell.core.hander.CellPermissionHandler;
 import cn.beehive.cell.core.hander.RoomConfigParamHandler;
 import cn.beehive.cell.core.hander.RoomHandler;
+import cn.beehive.cell.core.hander.converter.RoomConfigParamConverter;
 import cn.beehive.cell.core.hander.converter.RoomConverter;
 import cn.beehive.cell.core.service.RoomConfigParamService;
 import cn.beehive.cell.core.service.RoomService;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author hncboy
@@ -59,8 +62,10 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, RoomDO> implements 
         // 校验 Cell 是否有使用权限
         CellPermissionHandler.checkCanUse(roomCreateRequest.getCellCode());
 
-        // 校验房间配置参数
-        List<RoomConfigParamDO> roomConfigParamDOList = RoomConfigParamHandler.checkRoomConfigParamRequest(roomCreateRequest.getCellCode(), roomCreateRequest.getRoomConfigParams(), false);
+        // 检查房间配置项参数请求
+        List<RoomConfigParamBO> roomConfigParamBOList = RoomConfigParamHandler.checkRoomConfigParamRequest(roomCreateRequest.getCellCode(), roomCreateRequest.getRoomConfigParams(), false)
+                // 过滤出用户自己填的
+                .stream().filter(bo -> !bo.getIsUseDefaultValue()).toList();
 
         // 保存房间
         RoomDO roomDO = new RoomDO();
@@ -73,7 +78,9 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, RoomDO> implements 
         save(roomDO);
 
         // 保存房间配置参数
-        roomConfigParamDOList.forEach(roomConfigParamDO -> roomConfigParamDO.setRoomId(roomDO.getId()));
+        List<RoomConfigParamDO> roomConfigParamDOList = roomConfigParamBOList.stream()
+                .map(roomConfigParamBO -> RoomConfigParamConverter.INSTANCE.boToEntity(roomConfigParamBO, roomDO.getId()))
+                .collect(Collectors.toList());
         roomConfigParamService.saveBatch(roomConfigParamDOList);
 
         return RoomConverter.INSTANCE.entityToListVO(roomDO);

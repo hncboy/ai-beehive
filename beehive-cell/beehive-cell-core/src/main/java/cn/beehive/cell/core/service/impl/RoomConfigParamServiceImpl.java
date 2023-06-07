@@ -4,6 +4,7 @@ import cn.beehive.base.domain.entity.RoomConfigParamDO;
 import cn.beehive.base.domain.entity.RoomDO;
 import cn.beehive.base.mapper.RoomConfigParamMapper;
 import cn.beehive.cell.core.domain.bo.CellConfigPermissionBO;
+import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
 import cn.beehive.cell.core.domain.request.RoomConfigParamEditRequest;
 import cn.beehive.cell.core.domain.vo.RoomConfigParamVO;
 import cn.beehive.cell.core.hander.CellConfigPermissionHandler;
@@ -66,8 +67,10 @@ public class RoomConfigParamServiceImpl extends ServiceImpl<RoomConfigParamMappe
     @Override
     public List<RoomConfigParamVO> edit(RoomConfigParamEditRequest request) {
         RoomDO roomDO = RoomHandler.checkRoomExist(request.getRoomId());
-        // 校验房间配置项参数请求
-        List<RoomConfigParamDO> waitSaveRoomConfigParamDOList = RoomConfigParamHandler.checkRoomConfigParamRequest(roomDO.getCellCode(), request.getRoomConfigParams(), true);
+        // 检查房间配置项参数请求
+        List<RoomConfigParamBO> waitSaveRoomConfigParamBOList = RoomConfigParamHandler.checkRoomConfigParamRequest(roomDO.getCellCode(), request.getRoomConfigParams(), true)
+                // 过滤出用户自己填的
+                .stream().filter(bo -> !bo.getIsUseDefaultValue()).toList();
 
         // 查询已存在的所有房间配置
         List<RoomConfigParamDO> existRoomConfigParamDOList = list(new LambdaQueryWrapper<RoomConfigParamDO>()
@@ -80,19 +83,18 @@ public class RoomConfigParamServiceImpl extends ServiceImpl<RoomConfigParamMappe
         List<RoomConfigParamDO> waitSaveOrUpdateRoomConfigParamDOList = new ArrayList<>();
 
         // 保存房间配置参数
-        for (RoomConfigParamDO roomConfigParamDO : waitSaveRoomConfigParamDOList) {
+        for (RoomConfigParamBO roomConfigParamBO : waitSaveRoomConfigParamBOList) {
             // 查询配置项
-            RoomConfigParamDO existRoomConfigParamDO = existRoomConfigParamMap.get(roomConfigParamDO.getCellConfigCode());
-            // 新增配置
+            RoomConfigParamDO existRoomConfigParamDO = existRoomConfigParamMap.get(roomConfigParamBO.getCellConfigCode());
+            // 原来为空就新增配置
             if (Objects.isNull(existRoomConfigParamDO)) {
-                roomConfigParamDO.setRoomId(roomDO.getId());
-                waitSaveOrUpdateRoomConfigParamDOList.add(roomConfigParamDO);
+                waitSaveOrUpdateRoomConfigParamDOList.add(RoomConfigParamConverter.INSTANCE.boToEntity(roomConfigParamBO, request.getRoomId()));
             } else {
                 // 更新已有的配置
-                existRoomConfigParamDO.setValue(roomConfigParamDO.getValue());
+                existRoomConfigParamDO.setValue(roomConfigParamBO.getValue());
                 waitSaveOrUpdateRoomConfigParamDOList.add(existRoomConfigParamDO);
                 // 在 Map 中移除指定配置项 code
-                existRoomConfigParamMap.remove(roomConfigParamDO.getCellConfigCode());
+                existRoomConfigParamMap.remove(roomConfigParamBO.getCellConfigCode());
             }
         }
 

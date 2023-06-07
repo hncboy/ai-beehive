@@ -23,7 +23,7 @@ public enum OpenAiImageCellConfigCodeEnum implements ICellConfigCodeEnum {
         }
 
         @Override
-        public void firstValidate(DataWrapper dataWrapper) {
+        public void singleValidate(DataWrapper dataWrapper) {
             ThrowExceptionUtil.isTrue(dataWrapper.isNull()).throwMessage("ApiKey 不能为空");
 
             // TODO 判断是否合法
@@ -41,7 +41,7 @@ public enum OpenAiImageCellConfigCodeEnum implements ICellConfigCodeEnum {
         }
 
         @Override
-        public void firstValidate(DataWrapper dataWrapper) {
+        public void singleValidate(DataWrapper dataWrapper) {
             ThrowExceptionUtil.isTrue(dataWrapper.isNull()).throwMessage("open_base_url 不能为空");
             // TODO 判断是否合法
         }
@@ -57,7 +57,7 @@ public enum OpenAiImageCellConfigCodeEnum implements ICellConfigCodeEnum {
         }
 
         @Override
-        public void firstValidate(DataWrapper dataWrapper) {
+        public void singleValidate(DataWrapper dataWrapper) {
             ThrowExceptionUtil.isTrue(dataWrapper.isNull()).throwMessage("尺寸不能为空");
             String string = dataWrapper.asString();
 

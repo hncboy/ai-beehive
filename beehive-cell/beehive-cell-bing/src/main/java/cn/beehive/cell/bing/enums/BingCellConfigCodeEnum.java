@@ -22,7 +22,7 @@ public enum BingCellConfigCodeEnum implements ICellConfigCodeEnum {
         }
 
         @Override
-        public void firstValidate(DataWrapper dataWrapper) {
+        public void singleValidate(DataWrapper dataWrapper) {
             String mode = dataWrapper.asString();
             if (BingModeEnum.NAME_MAP.containsKey(mode)) {
                 return;

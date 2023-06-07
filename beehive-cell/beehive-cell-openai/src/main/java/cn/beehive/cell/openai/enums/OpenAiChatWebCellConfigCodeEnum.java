@@ -21,7 +21,7 @@ public enum OpenAiChatWebCellConfigCodeEnum implements ICellConfigCodeEnum {
         }
 
         @Override
-        public void firstValidate(DataWrapper dataWrapper) {
+        public void singleValidate(DataWrapper dataWrapper) {
             if (OpenAiChatWebModeEnum.NAME_MAP.containsKey(dataWrapper.asString())) {
                 return;
             }
@@ -39,7 +39,7 @@ public enum OpenAiChatWebCellConfigCodeEnum implements ICellConfigCodeEnum {
         }
 
         @Override
-        public void firstValidate(DataWrapper dataWrapper) {
+        public void singleValidate(DataWrapper dataWrapper) {
             // TODO 可以校验 AccessToken 是否合法和有效
         }
     },
@@ -54,7 +54,7 @@ public enum OpenAiChatWebCellConfigCodeEnum implements ICellConfigCodeEnum {
         }
 
         @Override
-        public void firstValidate(DataWrapper dataWrapper) {
+        public void singleValidate(DataWrapper dataWrapper) {
             // TODO 简单校验是否满足 HTTP/HTTPS 地址格式
         }
     },

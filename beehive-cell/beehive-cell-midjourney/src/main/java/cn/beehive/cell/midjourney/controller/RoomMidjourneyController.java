@@ -42,6 +42,7 @@ public class RoomMidjourneyController {
     @Operation(summary = "imagine")
     @PostMapping("/imagine")
     public R<Boolean> imagine(@Validated @RequestBody MjImagineRequest imagineRequest) {
+        // TODO 文本审核
         roomMidjourneyMsgService.imagine(imagineRequest);
         return R.data(true);
     }
@@ -63,6 +64,7 @@ public class RoomMidjourneyController {
     @Operation(summary = "describe")
     @PostMapping("/describe")
     public R<Boolean> describe(@Validated @ModelAttribute MjDescribeRequest describeRequest) {
+        // TODO 图片审核
         roomMidjourneyMsgService.describe(describeRequest);
         return R.data(true);
     }

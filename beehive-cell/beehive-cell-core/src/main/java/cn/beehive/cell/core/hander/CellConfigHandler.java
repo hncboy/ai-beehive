@@ -2,6 +2,7 @@ package cn.beehive.cell.core.hander;
 
 import cn.beehive.base.domain.entity.CellConfigDO;
 import cn.beehive.base.enums.CellCodeEnum;
+import cn.beehive.cell.core.cache.CellConfigCache;
 import cn.beehive.cell.core.service.CellConfigService;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -26,10 +27,7 @@ public class CellConfigHandler {
      * @return 配置项 Map
      */
     public static Map<String, CellConfigDO> getCellConfigMap(CellCodeEnum cellCodeEnum) {
-        // TODO 缓存
-        CellConfigService cellConfigService = SpringUtil.getBean(CellConfigService.class);
-        List<CellConfigDO> cellConfigDOList = cellConfigService.list(new LambdaQueryWrapper<CellConfigDO>().eq(CellConfigDO::getCellCode, cellCodeEnum));
-        // 转为 Map
+        List<CellConfigDO> cellConfigDOList = CellConfigCache.listCellConfig(cellCodeEnum);
         return cellConfigDOList.stream().collect(Collectors.toMap(CellConfigDO::getCode, Function.identity()));
     }
 
