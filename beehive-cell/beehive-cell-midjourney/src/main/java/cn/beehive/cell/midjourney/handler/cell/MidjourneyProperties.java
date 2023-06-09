@@ -98,7 +98,6 @@ public class MidjourneyProperties implements InitializingBean {
         }
 
         // 因为 Discord 配置需要初始化，而且切换配置可能会导致一些操作失败，所以先从数据库取出配置初始化，不实时查询，不过有些参数有需要的也可以改成实时查询配置
-        // TODO 判断数据是否存在
         Map<String, CellConfigDO> cellConfigMap = CellConfigHandler.getCellConfigMap(CellCodeEnum.MIDJOURNEY);
         guildId = cellConfigMap.get(MidjourneyCellConfigCodeEnum.GUILD_ID.getCode()).getDefaultValue();
         channelId = cellConfigMap.get(MidjourneyCellConfigCodeEnum.CHANNEL_ID.getCode()).getDefaultValue();

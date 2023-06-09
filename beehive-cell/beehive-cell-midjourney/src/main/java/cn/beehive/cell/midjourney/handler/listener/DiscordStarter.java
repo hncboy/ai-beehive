@@ -55,7 +55,7 @@ public class DiscordStarter implements InitializingBean {
         if (!proxyConfig.getEnabled()) {
             return;
         }
-
+        // TODO 有时间可以尝试改成 userToken 试下效果
         // 解决报错：java.net.SocketTimeoutException: Connect timed out
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
         okhttpbuilder.proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyConfig.getHttpHost(), proxyConfig.getHttpPort())));

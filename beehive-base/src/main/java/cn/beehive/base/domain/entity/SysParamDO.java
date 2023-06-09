@@ -41,6 +41,11 @@ public class SysParamDO {
     private String paramValue;
 
     /**
+     * 备注
+     */
+    private String remark;
+
+    /**
      * 是否删除 0 否 NULL 是
      */
     @TableLogic(value = "0", delval = "NULL")

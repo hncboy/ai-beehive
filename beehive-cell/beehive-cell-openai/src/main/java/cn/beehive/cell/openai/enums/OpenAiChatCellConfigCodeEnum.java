@@ -7,6 +7,7 @@ import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
 import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.core.hander.strategy.ICellConfigCodeEnum;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.http.HttpUtil;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -148,7 +149,6 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
         @Override
         public void singleValidate(DataWrapper dataWrapper) {
             ThrowExceptionUtil.isTrue(dataWrapper.isNull()).throwMessage("ApiKey 不能为空");
-            // TODO 判断是否合法
         }
     },
 
@@ -164,7 +164,10 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
         @Override
         public void singleValidate(DataWrapper dataWrapper) {
             ThrowExceptionUtil.isTrue(dataWrapper.isNull()).throwMessage("代理地址不能为空");
-            // TODO 判断是否合法
+            String baseUrl = dataWrapper.asString();
+            if (!HttpUtil.isHttp(baseUrl) && !HttpUtil.isHttps(baseUrl)) {
+                throw new ServiceException("代理地址格式错误");
+            }
         }
 
         @Override
@@ -220,7 +223,7 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
     /**
      * 是否联网
      */
-    /*ENABLE_NETWORKING {
+    ENABLE_NETWORKING {
 
         @Override
         public String getCode() {
@@ -235,5 +238,5 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
             // 校验是否是 boolean 类型
             dataWrapper.asBoolean();
         }
-    }*/
+    }
 }
