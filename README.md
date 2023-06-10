@@ -32,12 +32,14 @@
 
 # 地址
 
-- 接口文档：http://localhost:3002/swagger-ui.html
+- 接口文档：http://127.0.0.1:3002/swagger-ui/index.html
 - 用户端：
   - https://front.stargpt.top/ (失效)
   - https://front1.stargpt.top/ (失效)
-  - https://front2.stargpt.top/
+  - https://front2.stargpt.top/ (失效)
   - https://front3.stargpt.top/
+  - https://front4.stargpt.top/
+  - https://front5.stargpt.top/
 
 # 功能
 
