@@ -96,7 +96,11 @@ public class RestExceptionTranslator {
             return R.fail(ResultCode.FAILURE, ResultCode.FAILURE.getMessage());
         }
         StringBuilder sb = new StringBuilder();
-        errors.forEach(error -> sb.append(error.getDefaultMessage()).append(StrPool.COMMA));
+        if (errors.size() == 1) {
+            errors.forEach(error -> sb.append(error.getDefaultMessage()));
+        } else {
+            errors.forEach(error -> sb.append(error.getDefaultMessage()).append(StrPool.COMMA));
+        }
         return R.fail(ResultCode.FAILURE, sb.toString());
     }
 

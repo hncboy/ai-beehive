@@ -22,6 +22,13 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractCellConfigStrategy implements CellConfigStrategy {
 
+    /**
+     * 获取 cell 配置项 code 枚举 Class
+     *
+     * @return cell 配置项 code 枚举 Class
+     */
+    public abstract Class<? extends ICellConfigCodeEnum> getCellConfigCodeEnumClazz();
+
     @SuppressWarnings("unchecked")
     @Override
     public <T extends ICellConfigCodeEnum> Map<String, T> getCellConfigCodeMap() {
@@ -29,21 +36,31 @@ public abstract class AbstractCellConfigStrategy implements CellConfigStrategy {
                 .collect(Collectors.toMap(ICellConfigCodeEnum::getCode, Function.identity()));
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends ICellConfigCodeEnum> Map<T, DataWrapper> getCellConfigMap() {
+        Map<String, ICellConfigCodeEnum> cellConfigCodeMap = getCellConfigCodeMap();
+        List<CellConfigDO> cellConfigDOList = CellConfigCache.listCellConfig(getCellCode());
+        // 将 cell 配置项列表转为 Map
+        return (Map<T, DataWrapper>) cellConfigDOList.stream()
+                .collect(Collectors.toMap(entity -> cellConfigCodeMap.get(entity.getCode()), entity -> new DataWrapper(entity.getDefaultValue())));
+    }
+
     @Override
     public <T extends ICellConfigCodeEnum> Map<T, DataWrapper> getRoomConfigParamAsMap(Long roomId) {
         // 获取房间配置项参数列表
         List<RoomConfigParamDO> roomConfigParams = SpringUtil.getBean(RoomConfigParamService.class).list(new LambdaQueryWrapper<RoomConfigParamDO>()
                 .eq(RoomConfigParamDO::getRoomId, roomId));
-        // 获取 cell 配置项列表
-        List<CellConfigDO> cellConfigDOList = CellConfigCache.listCellConfig(getCellCode());
-        // TODO 暂不考虑一些条件变更用户需要重新输入的情况，比如原先非必填，现在必填
-        // 将房间配置项列表转为 Map
-        Map<String, String> roomConfigParamMap = roomConfigParams.stream()
-                .collect(Collectors.toMap(RoomConfigParamDO::getCellConfigCode, RoomConfigParamDO::getValue));
 
-        // 将 cell 配置项列表转为 Map
-        Map<String, String> cellConfigMap = cellConfigDOList.stream()
-                .collect(Collectors.toMap(CellConfigDO::getCode, CellConfigDO::getDefaultValue));
+        // TODO 暂不考虑一些条件变更用户需要重新输入的情况，比如原先非必填，现在必填
+
+        // 获取 Cell 配置项 Map
+        Map<String, DataWrapper> cellConfigMap = getCellConfigMap().entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey().getCode(), Map.Entry::getValue));
+
+        // 将房间配置项列表转为 Map
+        Map<String, DataWrapper> roomConfigParamMap = roomConfigParams.stream()
+                .collect(Collectors.toMap(RoomConfigParamDO::getCellConfigCode, entity -> new DataWrapper(entity.getValue())));
 
         // 将房间配置项参数覆盖 cell 配置项
         cellConfigMap.putAll(roomConfigParamMap);
@@ -51,12 +68,12 @@ public abstract class AbstractCellConfigStrategy implements CellConfigStrategy {
         // 获取枚举常量数组，将其转为 code map
         Map<String, T> cellConfigCodeMap = getCellConfigCodeMap();
 
+
         // 遍历 cellConfigMap，将 key 转换为相应的枚举类型
         Map<T, DataWrapper> resultMap = new HashMap<>(cellConfigMap.size());
-        for (Map.Entry<String, String> entry : cellConfigMap.entrySet()) {
+        for (Map.Entry<String, DataWrapper> entry : cellConfigMap.entrySet()) {
             if (cellConfigCodeMap.containsKey(entry.getKey())) {
-                T cellConfigCode = cellConfigCodeMap.get(entry.getKey());
-                resultMap.put(cellConfigCode, new DataWrapper(entry.getValue()));
+                resultMap.put(cellConfigCodeMap.get(entry.getKey()), entry.getValue());
             }
         }
         return resultMap;

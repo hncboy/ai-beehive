@@ -4,26 +4,31 @@ import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
-import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
+import cn.beehive.base.enums.MjMsgActionEnum;
 import cn.beehive.base.exception.ServiceException;
+import cn.beehive.base.handler.SensitiveWordHandler;
 import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomMidjourneyMsgMapper;
+import cn.beehive.base.resource.aip.BaiduAipHandler;
 import cn.beehive.base.util.FileUtil;
 import cn.beehive.base.util.FrontUserUtil;
-import cn.beehive.cell.core.hander.CellPermissionHandler;
 import cn.beehive.cell.core.hander.RoomHandler;
+import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
 import cn.beehive.cell.midjourney.domain.vo.RoomMidjourneyMsgVO;
 import cn.beehive.cell.midjourney.handler.MidjourneyRoomMsgHandler;
 import cn.beehive.cell.midjourney.handler.MidjourneyTaskQueueHandler;
+import cn.beehive.cell.midjourney.handler.cell.MidjourneyCellConfigCodeEnum;
+import cn.beehive.cell.midjourney.handler.cell.MidjourneyCellConfigStrategy;
 import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.beehive.cell.midjourney.handler.converter.RoomMidjourneyMsgConverter;
 import cn.beehive.cell.midjourney.service.DiscordSendService;
 import cn.beehive.cell.midjourney.service.DiscordService;
 import cn.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
@@ -36,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hncboy
@@ -45,6 +51,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjourneyMsgMapper, RoomMidjourneyMsgDO> implements RoomMidjourneyMsgService {
+
+    @Resource
+    private MidjourneyCellConfigStrategy midjourneyCellConfigStrategy;
 
     @Resource
     private DiscordService discordService;
@@ -97,6 +106,12 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setFinalPrompt(questionMessage.getFinalPrompt());
         answerMessage.setAction(MjMsgActionEnum.IMAGINE);
         answerMessage.setUUseBit(0);
+
+        // 校验敏感词
+        boolean isCheckPromptPass = checkPromptContent(questionMessage, answerMessage);
+        if (!isCheckPromptPass) {
+            return;
+        }
 
         // 创建回答消息
         createAnswerMessage(answerMessage, () -> discordService.imagine(answerMessage.getFinalPrompt()));
@@ -272,6 +287,52 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
     }
 
     /**
+     * 校验 prompt 内容是否合规
+     *
+     * @param questionMessage 问题消息
+     * @param answerMessage   回答消息
+     * @return 是否合规
+     */
+    private boolean checkPromptContent(RoomMidjourneyMsgDO questionMessage, RoomMidjourneyMsgDO answerMessage) {
+        // 填充公共字段
+        answerMessage.setUserId(FrontUserUtil.getUserId());
+        answerMessage.setType(MessageTypeEnum.ANSWER);
+        answerMessage.setStatus(MidjourneyMsgStatusEnum.SYS_FAILURE);
+        answerMessage.setDiscordChannelId(null);
+        answerMessage.setIsDeleted(false);
+
+        // 获取所有配置项
+        Map<MidjourneyCellConfigCodeEnum, DataWrapper> cellConfigCodeMap = midjourneyCellConfigStrategy.getCellConfigMap();
+
+        // 检查本地敏感词校验是否启用
+        boolean enabled = cellConfigCodeMap.get(MidjourneyCellConfigCodeEnum.ENABLED_LOCAL_SENSITIVE_WORD).asBoolean();
+        if (enabled) {
+            List<String> sensitiveWords = SensitiveWordHandler.checkWord(questionMessage.getPrompt());
+            if (CollectionUtil.isNotEmpty(sensitiveWords)) {
+                answerMessage.setResponseContent(StrUtil.format("发送失败，包含敏感词{}", sensitiveWords));
+                answerMessage.setFailureReason("本地敏感词库：".concat(answerMessage.getResponseContent()));
+                save(answerMessage);
+                return false;
+            }
+        }
+
+        // 检查百度敏感词校验是否启用
+        enabled = cellConfigCodeMap.get(MidjourneyCellConfigCodeEnum.ENABLED_BAIDU_AIP).asBoolean();
+        if (enabled) {
+            Pair<Boolean, String> checkTextPassResultPair = BaiduAipHandler.isCheckTextPass(String.valueOf(answerMessage.getId()), questionMessage.getPrompt());
+            if (!checkTextPassResultPair.getKey()) {
+                // 填充公共字段
+                answerMessage.setResponseContent("存在不合规内容，请修改内容");
+                answerMessage.setFailureReason(checkTextPassResultPair.getValue());
+                save(answerMessage);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * 创建回答消息
      *
      * @param answerMessage      回答消息
@@ -283,7 +344,6 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setType(MessageTypeEnum.ANSWER);
         answerMessage.setDiscordChannelId(midjourneyProperties.getChannelId());
         answerMessage.setIsDeleted(false);
-
 
         // 创建任务并返回回答的状态
         MidjourneyMsgStatusEnum answerStatus = midjourneyTaskQueueHandler.pushNewTask(answerMessage.getId());

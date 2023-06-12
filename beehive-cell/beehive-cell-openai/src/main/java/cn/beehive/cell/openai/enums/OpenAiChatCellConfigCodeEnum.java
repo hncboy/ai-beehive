@@ -221,20 +221,32 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
     },
 
     /**
-     * 是否联网
+     * 是否启用本地敏感词
      */
-    ENABLE_NETWORKING {
-
+    ENABLED_LOCAL_SENSITIVE_WORD {
         @Override
         public String getCode() {
-            return "enable_networking";
+            return "enabled_local_sensitive_word";
         }
 
         @Override
         public void singleValidate(DataWrapper dataWrapper) {
-            if (dataWrapper.isNull()) {
-                throw new ServiceException("是否联网不能为空");
-            }
+            // 校验是否是 boolean 类型
+            dataWrapper.asBoolean();
+        }
+    },
+
+    /**
+     * 是否启用百度内容审核
+     */
+    ENABLED_BAIDU_AIP {
+        @Override
+        public String getCode() {
+            return "enabled_baidu_aip";
+        }
+
+        @Override
+        public void singleValidate(DataWrapper dataWrapper) {
             // 校验是否是 boolean 类型
             dataWrapper.asBoolean();
         }

@@ -42,7 +42,6 @@ public class RoomMidjourneyController {
     @Operation(summary = "imagine")
     @PostMapping("/imagine")
     public R<Boolean> imagine(@Validated @RequestBody MjImagineRequest imagineRequest) {
-        // TODO 文本审核
         roomMidjourneyMsgService.imagine(imagineRequest);
         return R.data(true);
     }

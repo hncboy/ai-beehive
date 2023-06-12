@@ -22,6 +22,12 @@ public class ChatLocalSensitiveWordErrorNode implements ChatErrorNode {
 
     @Override
     public Pair<Boolean, String> doHandle(RoomOpenAiChatMsgDO questionMessage, Map<OpenAiChatCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap) {
+        // 判断是否启用
+        boolean enabled = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.ENABLED_LOCAL_SENSITIVE_WORD).asBoolean();
+        if (!enabled) {
+            return new Pair<>(true, null);
+        }
+
         List<String> userMessageSensitiveWords = SensitiveWordHandler.checkWord(questionMessage.getContent());
         List<String> systemMessageSensitiveWords = SensitiveWordHandler.checkWord(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.SYSTEM_MESSAGE).asString());
         if (CollectionUtil.isEmpty(userMessageSensitiveWords) && CollectionUtil.isEmpty(systemMessageSensitiveWords)) {

@@ -16,7 +16,7 @@ import lombok.Data;
 @Valid
 public class RoomInfoRequest {
 
-    @Size(min = 1, max = 10, message = "房间名称不能超过 20 个字")
+    @Size(min = 1, max = 20, message = "房间名称不能超过 20 个字")
     @NotNull(message = "房间名称不能为空")
     @Schema(title = "房间名称")
     private String name;

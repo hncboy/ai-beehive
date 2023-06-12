@@ -1,5 +1,6 @@
 package cn.beehive.cell.core.hander.strategy;
 
+import cn.beehive.base.domain.entity.CellConfigDO;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
 
@@ -21,18 +22,18 @@ public interface CellConfigStrategy {
     CellCodeEnum getCellCode();
 
     /**
-     * 获取 cell 配置项 code 枚举 Class
-     *
-     * @return cell 配置项 code 枚举 Class
-     */
-    Class<? extends ICellConfigCodeEnum> getCellConfigCodeEnumClazz();
-
-    /**
      * 获取 cell 配置项 code 枚举 Map
      *
      * @return cell 配置项 code 枚举 Map
      */
     <T extends ICellConfigCodeEnum> Map<String, T> getCellConfigCodeMap();
+
+    /**
+     * 获取 cell 配置项列表
+     *
+     * @return 配置项列表
+     */
+    <T extends ICellConfigCodeEnum> Map<T, DataWrapper> getCellConfigMap();
 
     /**
      * 获取房间配置参数

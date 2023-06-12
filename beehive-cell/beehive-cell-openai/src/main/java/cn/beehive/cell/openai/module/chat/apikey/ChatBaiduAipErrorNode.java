@@ -6,7 +6,6 @@ import cn.beehive.base.resource.aip.BaiduAipHandler;
 import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.openai.enums.OpenAiChatCellConfigCodeEnum;
 import cn.hutool.core.lang.Pair;
-import cn.hutool.extra.spring.SpringUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -21,13 +20,16 @@ public class ChatBaiduAipErrorNode implements ChatErrorNode {
 
     @Override
     public Pair<Boolean, String> doHandle(RoomOpenAiChatMsgDO questionMessage, Map<OpenAiChatCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap) {
-        // 百度内容审核
-        BaiduAipHandler baiduAipHandler = SpringUtil.getBean(BaiduAipHandler.class);
+        // 判断是否启用
+        boolean enabled = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.ENABLED_BAIDU_AIP).asBoolean();
+        if (!enabled) {
+            return new Pair<>(true, null);
+        }
 
         // 获取系统消息
         String systemMessage = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.SYSTEM_MESSAGE).asString();
         // 拼接系统消息
-        Pair<Boolean, String> checkTextPassPair = baiduAipHandler.isCheckTextPass(String.valueOf(questionMessage.getId()), systemMessage.concat(questionMessage.getContent()));
+        Pair<Boolean, String> checkTextPassPair = BaiduAipHandler.isCheckTextPass(String.valueOf(questionMessage.getId()), systemMessage.concat(questionMessage.getContent()));
         if (checkTextPassPair.getKey()) {
             return new Pair<>(true, null);
         }

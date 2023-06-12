@@ -68,7 +68,7 @@ public class MidjourneyProperties implements InitializingBean {
     private Integer maxExecuteQueueSize = 2;
 
     /**
-     * 最大文件大小，用于 descibe 上传图片，单位字节
+     * 最大文件大小，用于 describe 上传图片，单位字节
      * 默认 6M
      */
     private Integer maxFileSize = 1024 * 1024 * 6;
@@ -92,6 +92,7 @@ public class MidjourneyProperties implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
+        // 发布 Midjourney 图纸重启才生效
         CellDO cellDO = CellHandler.getCell(CellCodeEnum.MIDJOURNEY);
         if (Objects.isNull(cellDO) || cellDO.getStatus() != CellStatusEnum.PUBLISHED) {
             return;
