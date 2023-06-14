@@ -2,6 +2,7 @@ package cn.beehive.cell.openai.controller;
 
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.handler.response.R;
+import cn.beehive.cell.core.annotation.CellConfigCheck;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiImageSendRequest;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiImageMsgVO;
 import cn.beehive.cell.openai.service.RoomOpenAiImageMsgService;
@@ -36,6 +37,7 @@ public class RoomOpenAiImageController {
         return R.data(roomOpenAiImageMsgService.list(cursorQuery));
     }
 
+    @CellConfigCheck(roomId = "#sendRequest.roomId")
     @Operation(summary = "发送消息")
     @PostMapping("/send")
     public R<RoomOpenAiImageMsgVO> send(@Validated @RequestBody RoomOpenAiImageSendRequest sendRequest) {

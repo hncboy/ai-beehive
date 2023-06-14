@@ -35,7 +35,7 @@ public class ChatTokenLimitErrorNode implements ChatErrorNode {
             isExcelledModelTokenLimit = true;
 
             // 获取当前 prompt 消耗的 tokens
-            int currentPromptTokens = TikTokensUtil.tokens(modelName, questionMessage.getContent());
+            int currentPromptTokens = TikTokensUtil.tokens(OpenAiChatApiModelEnum.NAME_MAP.get(modelName).getCalcTokenModelName(), questionMessage.getContent());
             // 判断历史上下文是否超过限制
             int remainingTokens = promptTokens - currentPromptTokens;
             if (OpenAiChatApiModelEnum.maxTokens(modelName) <= remainingTokens) {

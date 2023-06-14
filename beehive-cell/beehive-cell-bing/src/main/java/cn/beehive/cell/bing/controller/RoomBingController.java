@@ -5,6 +5,7 @@ import cn.beehive.base.handler.response.R;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import cn.beehive.cell.bing.domain.vo.RoomBingMsgVO;
 import cn.beehive.cell.bing.service.RoomBingMsgService;
+import cn.beehive.cell.core.annotation.CellConfigCheck;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,6 +40,7 @@ public class RoomBingController {
         return R.data(roomBingMsgService.list(cursorQuery));
     }
 
+    @CellConfigCheck(roomId = "#sendRequest.roomId")
     @Operation(summary = "发送消息")
     @PostMapping("/send")
     public ResponseBodyEmitter send(@Validated @RequestBody RoomBingMsgSendRequest sendRequest, HttpServletResponse response) {

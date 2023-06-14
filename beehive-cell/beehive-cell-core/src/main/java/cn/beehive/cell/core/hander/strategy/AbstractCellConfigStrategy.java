@@ -2,11 +2,13 @@ package cn.beehive.cell.core.hander.strategy;
 
 import cn.beehive.base.domain.entity.CellConfigDO;
 import cn.beehive.base.domain.entity.RoomConfigParamDO;
+import cn.beehive.base.exception.ServiceException;
 import cn.beehive.cell.core.cache.CellConfigCache;
+import cn.beehive.cell.core.cache.RoomConfigParamCache;
+import cn.beehive.cell.core.domain.bo.CellConfigPermissionBO;
 import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
-import cn.beehive.cell.core.service.RoomConfigParamService;
-import cn.hutool.extra.spring.SpringUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.beehive.cell.core.hander.CellConfigPermissionHandler;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,29 +51,39 @@ public abstract class AbstractCellConfigStrategy implements CellConfigStrategy {
     @Override
     public <T extends ICellConfigCodeEnum> Map<T, DataWrapper> getRoomConfigParamAsMap(Long roomId) {
         // 获取房间配置项参数列表
-        List<RoomConfigParamDO> roomConfigParams = SpringUtil.getBean(RoomConfigParamService.class).list(new LambdaQueryWrapper<RoomConfigParamDO>()
-                .eq(RoomConfigParamDO::getRoomId, roomId));
-
-        // TODO 暂不考虑一些条件变更用户需要重新输入的情况，比如原先非必填，现在必填
-
-        // 获取 Cell 配置项 Map
-        Map<String, DataWrapper> cellConfigMap = getCellConfigMap().entrySet().stream()
-                .collect(Collectors.toMap(entry -> entry.getKey().getCode(), Map.Entry::getValue));
+        List<RoomConfigParamDO> roomConfigParams = RoomConfigParamCache.getRoomConfigParam(roomId);
 
         // 将房间配置项列表转为 Map
         Map<String, DataWrapper> roomConfigParamMap = roomConfigParams.stream()
                 .collect(Collectors.toMap(RoomConfigParamDO::getCellConfigCode, entity -> new DataWrapper(entity.getValue())));
 
+        List<CellConfigPermissionBO> cellConfigPermissionBOList = CellConfigPermissionHandler.listCellConfigPermission(getCellCode());
+        for (CellConfigPermissionBO cellConfigPermissionBO : cellConfigPermissionBOList) {
+            // 用户自己填的就不判断 TODO 暂不考虑原先用户可以修改但是现在不能修改的情况
+            if (roomConfigParamMap.containsKey(cellConfigPermissionBO.getCellConfigCode())) {
+                continue;
+            }
+
+            // 存在情况：原本可以用系统的默认值或者非必填，现在需要用户填写
+            // 如果是必填项，但是用户没有填写，也没有默认值，抛出异常
+            if (cellConfigPermissionBO.getIsRequired() && !CellConfigPermissionHandler.isCanUseDefaultValue(cellConfigPermissionBO)) {
+                throw new ServiceException(StrUtil.format("房间配置项参数[{}]需要补充完整", cellConfigPermissionBO.getName()));
+            }
+        }
+
+        // 获取 Cell 配置项权限 Map
+        Map<String, DataWrapper> cellConfigPermissionBOMap = cellConfigPermissionBOList.stream()
+                .collect(Collectors.toMap(CellConfigPermissionBO::getCellConfigCode, bo -> new DataWrapper(bo.getDefaultValue())));
+
         // 将房间配置项参数覆盖 cell 配置项
-        cellConfigMap.putAll(roomConfigParamMap);
+        cellConfigPermissionBOMap.putAll(roomConfigParamMap);
 
         // 获取枚举常量数组，将其转为 code map
         Map<String, T> cellConfigCodeMap = getCellConfigCodeMap();
 
-
         // 遍历 cellConfigMap，将 key 转换为相应的枚举类型
-        Map<T, DataWrapper> resultMap = new HashMap<>(cellConfigMap.size());
-        for (Map.Entry<String, DataWrapper> entry : cellConfigMap.entrySet()) {
+        Map<T, DataWrapper> resultMap = new HashMap<>(cellConfigPermissionBOMap.size());
+        for (Map.Entry<String, DataWrapper> entry : cellConfigPermissionBOMap.entrySet()) {
             if (cellConfigCodeMap.containsKey(entry.getKey())) {
                 resultMap.put(cellConfigCodeMap.get(entry.getKey()), entry.getValue());
             }

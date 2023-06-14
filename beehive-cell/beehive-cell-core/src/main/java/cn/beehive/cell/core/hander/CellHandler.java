@@ -4,9 +4,7 @@ import cn.beehive.base.domain.entity.CellDO;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.base.enums.CellStatusEnum;
 import cn.beehive.base.exception.ServiceException;
-import cn.beehive.cell.core.service.CellService;
-import cn.hutool.extra.spring.SpringUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.beehive.cell.core.cache.CellCache;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -25,7 +23,7 @@ public class CellHandler {
      * @return cell code 枚举
      */
     public static CellCodeEnum parseCellCodeStr(String cellCodeStr) {
-        return Optional.ofNullable(CellCodeEnum.CODE_MAP.get(cellCodeStr)).orElseThrow(() -> new ServiceException("图纸不存在"));
+        return Optional.ofNullable(CellCodeEnum.CODE_MAP.get(cellCodeStr.toLowerCase())).orElseThrow(() -> new ServiceException("图纸不存在"));
     }
 
     /**
@@ -36,9 +34,6 @@ public class CellHandler {
      */
     public static CellDO checkCellPublishExist(CellCodeEnum cellCodeEnum) {
         CellDO cellDO = getCell(cellCodeEnum);
-        if (Objects.isNull(cellDO)) {
-            throw new ServiceException("图纸不存在");
-        }
         if (cellDO.getStatus() != CellStatusEnum.PUBLISHED) {
             throw new ServiceException("该图纸未发布");
         }
@@ -52,8 +47,10 @@ public class CellHandler {
      * @return cell
      */
     public static CellDO getCell(CellCodeEnum cellCodeEnum) {
-        // TODO 缓存
-        return SpringUtil.getBean(CellService.class)
-                .getOne(new LambdaQueryWrapper<CellDO>().eq(CellDO::getCode, cellCodeEnum));
+        CellDO cellDO = CellCache.getCell(cellCodeEnum);
+        if (Objects.isNull(cellDO)) {
+            throw new ServiceException("图纸不存在");
+        }
+        return cellDO;
     }
 }

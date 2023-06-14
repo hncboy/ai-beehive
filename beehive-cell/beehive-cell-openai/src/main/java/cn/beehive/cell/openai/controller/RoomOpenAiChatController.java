@@ -2,6 +2,7 @@ package cn.beehive.cell.openai.controller;
 
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.handler.response.R;
+import cn.beehive.cell.core.annotation.CellConfigCheck;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiChatSendRequest;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiChatMsgVO;
 import cn.beehive.cell.openai.service.RoomOpenAiChatMsgService;
@@ -39,6 +40,7 @@ public class RoomOpenAiChatController {
         return R.data(roomOpenAiChatMsgService.list(cursorQuery));
     }
 
+    @CellConfigCheck(roomId = "#sendRequest.roomId")
     @Operation(summary = "发送消息")
     @PostMapping("/send")
     public ResponseBodyEmitter send(@Validated @RequestBody RoomOpenAiChatSendRequest sendRequest, HttpServletResponse response) {

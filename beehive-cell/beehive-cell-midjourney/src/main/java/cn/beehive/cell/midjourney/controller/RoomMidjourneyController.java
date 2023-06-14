@@ -2,6 +2,7 @@ package cn.beehive.cell.midjourney.controller;
 
 import cn.beehive.base.domain.query.RoomMsgCursorQuery;
 import cn.beehive.base.handler.response.R;
+import cn.beehive.cell.core.annotation.CellConfigCheck;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
@@ -39,6 +40,7 @@ public class RoomMidjourneyController {
         return R.data(roomMidjourneyMsgService.list(cursorQuery));
     }
 
+    @CellConfigCheck(roomId = "#imagineRequest.roomId")
     @Operation(summary = "imagine")
     @PostMapping("/imagine")
     public R<Boolean> imagine(@Validated @RequestBody MjImagineRequest imagineRequest) {
@@ -46,6 +48,7 @@ public class RoomMidjourneyController {
         return R.data(true);
     }
 
+    @CellConfigCheck(roomId = "#convertRequest.roomId")
     @Operation(summary = "upscale")
     @PostMapping("/upscale")
     public R<Boolean> upscale(@Validated @RequestBody MjConvertRequest convertRequest) {
@@ -53,6 +56,7 @@ public class RoomMidjourneyController {
         return R.data(true);
     }
 
+    @CellConfigCheck(roomId = "#convertRequest.roomId")
     @Operation(summary = "variation")
     @PostMapping("/variation")
     public R<Boolean> variation(@Validated @RequestBody MjConvertRequest convertRequest) {
@@ -60,6 +64,7 @@ public class RoomMidjourneyController {
         return R.data(true);
     }
 
+    @CellConfigCheck(roomId = "#describeRequest.roomId")
     @Operation(summary = "describe")
     @PostMapping("/describe")
     public R<Boolean> describe(@Validated @ModelAttribute MjDescribeRequest describeRequest) {

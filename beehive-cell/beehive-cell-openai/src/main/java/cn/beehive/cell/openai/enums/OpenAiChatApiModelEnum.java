@@ -17,17 +17,21 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum OpenAiChatApiModelEnum {
 
-    //... 其他模型就不加了
-
     /**
      * GPT-3.5
      */
-    GPT_3_5_TURBO("gpt-3.5-turbo", 4096),
+    GPT_3_5_TURBO("gpt-3.5-turbo", 4096, OpenAiChatApiModelEnum.GPT_3_5),
+    GPT_3_5_TURBO_16K("gpt-3.5-turbo-16k", 16384, OpenAiChatApiModelEnum.GPT_3_5),
+    GPT_3_5_TURBO_0613("gpt-3.5-turbo-0613", 4096, OpenAiChatApiModelEnum.GPT_3_5),
+    GPT_3_5_TURBO_16k_0613("gpt-3.5-turbo-16k-0613", 16384, OpenAiChatApiModelEnum.GPT_3_5),
 
     /**
      * GPT-4
      */
-    GPT_4("gpt-4", 8192);
+    GPT_4("gpt-4", 8192, OpenAiChatApiModelEnum.GPT4),
+    GPT_4_0613("gpt-4-0613", 8192, OpenAiChatApiModelEnum.GPT4),
+    GPT_4_32K("gpt-4-32k", 32768, OpenAiChatApiModelEnum.GPT4),
+    GPT_4_32K_0613("gpt-4-32k-0613", 32768, OpenAiChatApiModelEnum.GPT4);
 
     /**
      * 模型名称
@@ -40,6 +44,15 @@ public enum OpenAiChatApiModelEnum {
      */
     @Getter
     private final Integer maxTokens;
+
+    /**
+     * 用于 token 计算的模型名称
+     */
+    @Getter
+    private final String calcTokenModelName;
+
+    private static final String GPT_3_5 = "gpt-3.5-turbo";
+    private static final String GPT4 = "gpt-4";
 
     /**
      * name 作为 key，封装为 Map

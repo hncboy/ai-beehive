@@ -24,6 +24,19 @@ import java.util.stream.Collectors;
 public class CellConfigPermissionHandler {
 
     /**
+     * 判断是否可以使用默认值
+     *
+     * @param cellConfigPermissionBO cell 配置项权限业务对象
+     * @return 是否可以使用默认值
+     */
+    public static boolean isCanUseDefaultValue(CellConfigPermissionBO cellConfigPermissionBO) {
+        if (!cellConfigPermissionBO.getIsHaveDefaultValue()) {
+            return false;
+        }
+        return cellConfigPermissionBO.getIsUserCanUseDefaultValue();
+    }
+
+    /**
      * 根据 cellCodeEnum 获取配置项权限业务
      *
      * @param cellCodeEnum cellCodeEnum
@@ -60,6 +73,7 @@ public class CellConfigPermissionHandler {
     /**
      * 填充是否可以使用默认值
      * TODO 取缓存
+     *
      * @param cellCode                   cellCode
      * @param cellConfigPermissionBOList cell 配置项权限业务列表
      */

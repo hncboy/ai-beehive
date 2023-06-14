@@ -6,7 +6,6 @@ import cn.beehive.base.util.ThrowExceptionUtil;
 import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
 import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.core.hander.strategy.ICellConfigCodeEnum;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 
 import java.math.BigDecimal;
@@ -32,24 +31,6 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
         public void singleValidate(DataWrapper dataWrapper) {
             if (!OpenAiChatApiModelEnum.NAME_MAP.containsKey(dataWrapper.asString())) {
                 throw new ServiceException("模型参数错误");
-            }
-        }
-
-        @Override
-        public void compositeValidate(Map<ICellConfigCodeEnum, RoomConfigParamBO> roomConfigParamMap, CellCodeEnum cellCode) {
-            // 如果填了自己的模型，就不能用系统的默认 apiKey，因为只有两种模型，apiKey 都是对应的，也防止盗刷其他模型
-
-            String modelName = roomConfigParamMap.get(MODEL).getValue();
-            Boolean isUseDefaultValue = roomConfigParamMap.get(API_KEY).getIsUseDefaultValue();
-
-            // 如果当前是 GPT-3.5 图纸但是用的是 GPT-3.5 Turbo 模型，就必须用自己的 apiKey
-            if (cellCode == CellCodeEnum.OPENAI_CHAT_API_3_5 && ObjectUtil.notEqual(OpenAiChatApiModelEnum.GPT_3_5_TURBO.getName(), modelName)) {
-                ThrowExceptionUtil.isTrue(isUseDefaultValue).throwMessage("切换模型只支持使用自己的 apiKey");
-            }
-
-            // GPT-4 同理
-            if (cellCode == CellCodeEnum.OPENAI_CHAT_API_4 && ObjectUtil.notEqual(OpenAiChatApiModelEnum.GPT_4.getName(), modelName)) {
-                ThrowExceptionUtil.isTrue(isUseDefaultValue).throwMessage("切换模型只支持使用自己的 apiKey");
             }
         }
     },
@@ -214,8 +195,8 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
                 return;
             }
             int hour = dataWrapper.asInt();
-            if (hour < 1 || hour > 72) {
-                throw new ServiceException("上下文关联时间范围小时为 [1, 72]");
+            if (hour < 0 || hour > 72) {
+                throw new ServiceException("上下文关联时间范围小时为 [0, 72]");
             }
         }
     },

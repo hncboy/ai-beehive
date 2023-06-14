@@ -11,6 +11,7 @@ import cn.beehive.base.util.WebUtil;
 import cn.beehive.cell.core.hander.strategy.CellConfigStrategy;
 import cn.beehive.cell.core.hander.strategy.DataWrapper;
 import cn.beehive.cell.openai.domain.request.RoomOpenAiChatSendRequest;
+import cn.beehive.cell.openai.enums.OpenAiChatApiModelEnum;
 import cn.beehive.cell.openai.enums.OpenAiChatCellConfigCodeEnum;
 import cn.beehive.cell.openai.module.chat.apikey.ChatBaiduAipErrorNode;
 import cn.beehive.cell.openai.module.chat.apikey.ChatCompletionBuildUtil;
@@ -69,7 +70,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
         // 构建上下文消息
         LinkedList<Message> contentMessages = ChatCompletionBuildUtil.buildContextMessage(questionMessage, roomConfigParamAsMap);
         // 获取上下文的 token 数量设置 promptTokens
-        questionMessage.setPromptTokens(TikTokensUtil.tokens(questionMessage.getModelName(), contentMessages));
+        questionMessage.setPromptTokens(TikTokensUtil.tokens(OpenAiChatApiModelEnum.NAME_MAP.get(questionMessage.getModelName()).getCalcTokenModelName(), contentMessages));
 
         // 构建聊天对话请求参数
         ChatCompletion chatCompletion = ChatCompletionBuildUtil.buildChatCompletion(questionMessage, roomConfigParamAsMap, contentMessages);

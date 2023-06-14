@@ -37,7 +37,7 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
         <aspectj.version>1.9.19</aspectj.version>
-        <hutool-all.version>5.8.15</hutool-all.version>
+        <hutool-all.version>5.8.19</hutool-all.version>
         <maven.plugin.version>3.11.0</maven.plugin.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <springdoc.version>2.1.0</springdoc.version>

@@ -3,6 +3,7 @@ package cn.beehive.cell.openai.module.chat.storage;
 import cn.beehive.base.domain.entity.RoomOpenAiChatMsgDO;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.enums.RoomOpenAiChatMsgStatusEnum;
+import cn.beehive.cell.openai.enums.OpenAiChatApiModelEnum;
 import cn.beehive.cell.openai.service.RoomOpenAiChatMsgService;
 import cn.hutool.core.util.StrUtil;
 import com.unfbx.chatgpt.utils.TikTokensUtil;
@@ -138,7 +139,7 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
         // 获取回答消耗的 tokens
         RoomOpenAiChatMsgDO answerMessage = (RoomOpenAiChatMsgDO) answerMessageObj;
         String answerContent = answerMessage.getContent();
-        int completionTokens = StrUtil.isEmpty(answerContent) ? 0 : TikTokensUtil.tokens(modelName, answerContent);
+        int completionTokens = StrUtil.isEmpty(answerContent) ? 0 : TikTokensUtil.tokens(OpenAiChatApiModelEnum.NAME_MAP.get(modelName).getCalcTokenModelName(), answerContent);
 
         // 填充使用情况
         int totalTokens = questionMessage.getPromptTokens() + completionTokens;

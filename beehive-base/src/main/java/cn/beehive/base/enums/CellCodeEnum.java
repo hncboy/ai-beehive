@@ -21,6 +21,11 @@ import java.util.stream.Stream;
 public enum CellCodeEnum {
 
     /**
+     * 空
+     */
+    NULL("null"),
+
+    /**
      * OpenAi 对话 Web GPT 3.5
      */
     OPENAI_CHAT_WEB_3_5("openai_chat_web_3_5"),

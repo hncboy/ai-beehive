@@ -1,6 +1,5 @@
 package cn.beehive.cell.core.hander.strategy;
 
-import cn.beehive.base.domain.entity.CellConfigDO;
 import cn.beehive.base.enums.CellCodeEnum;
 import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
 
