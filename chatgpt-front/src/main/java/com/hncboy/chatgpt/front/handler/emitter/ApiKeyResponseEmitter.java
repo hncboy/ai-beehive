@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
-import com.hncboy.chatgpt.base.enums.ApiKeyTokenLimiterEnum;
+import com.hncboy.chatgpt.base.enums.ApiKeyModelEnum;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageStatusEnum;
 import com.hncboy.chatgpt.base.enums.ChatMessageTypeEnum;
@@ -69,7 +69,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         }
 
         // 获取 包含上下文 的 token 数量
-        int totalTokenCount = TikTokensUtil.tokens(chatMessageDO.getModelName(), messages);
+        int totalTokenCount = TikTokensUtil.tokens(ApiKeyModelEnum.NAME_MAP.get(chatMessageDO.getModelName()).getCalcTokenModelName(), messages);
         // 设置 promptTokens
         chatMessageDO.setPromptTokens(totalTokenCount);
 
@@ -85,7 +85,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         // 构建聊天参数
         ChatCompletion chatCompletion = ChatCompletion.builder()
                 // 最大的 tokens = 模型的最大上线 - 本次 prompt 消耗的 tokens
-                .maxTokens(ApiKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(chatConfig.getOpenaiApiModel()) - totalTokenCount - 1)
+                .maxTokens(ApiKeyModelEnum.maxTokens(chatConfig.getOpenaiApiModel()) - totalTokenCount - 1)
                 .model(chatConfig.getOpenaiApiModel())
                 // [0, 2] 越低越精准
                 .temperature(0.8)
@@ -120,16 +120,16 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
      */
     private String exceedModelTokenLimit(ChatProcessRequest chatProcessRequest, String modelName, int tokenCount, ResponseBodyEmitter emitter) {
         // 当前模型最大 tokens
-        int maxTokens = ApiKeyTokenLimiterEnum.getTokenLimitByOuterJarModelName(modelName);
+        int maxTokens = ApiKeyModelEnum.maxTokens(modelName);
 
         String msg;
         // 判断 token 数量是否超过限制
-        if (ApiKeyTokenLimiterEnum.exceedsLimit(modelName, tokenCount)) {
+        if (tokenCount >= maxTokens) {
             // 获取当前 prompt 消耗的 tokens
-            int currentPromptTokens = TikTokensUtil.tokens(modelName, chatProcessRequest.getPrompt());
+            int currentPromptTokens = TikTokensUtil.tokens(ApiKeyModelEnum.NAME_MAP.get(modelName).getCalcTokenModelName(), chatProcessRequest.getPrompt());
             // 判断历史上下文是否超过限制
             int remainingTokens = tokenCount - currentPromptTokens;
-            if (ApiKeyTokenLimiterEnum.exceedsLimit(modelName, remainingTokens)) {
+            if (remainingTokens >= maxTokens) {
                 msg = "当前上下文字数已经达到上限，请关闭上下文或开启新的对话";
             } else {
                 msg = StrUtil.format("当前上下文 Token 数量：{}，超过上限：{}，请减少字数发送或关闭上下文或开启新的对话", tokenCount, maxTokens);

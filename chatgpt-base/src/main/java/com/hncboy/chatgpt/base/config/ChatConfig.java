@@ -2,9 +2,9 @@ package com.hncboy.chatgpt.base.config;
 
 import cn.hutool.core.lang.Opt;
 import cn.hutool.core.util.StrUtil;
+import com.hncboy.chatgpt.base.enums.ApiKeyModelEnum;
 import com.hncboy.chatgpt.base.enums.ApiTypeEnum;
 import com.hncboy.chatgpt.base.enums.ConversationModelEnum;
-import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,24 +24,28 @@ public class ChatConfig implements InitializingBean {
 
     /**
      * OpenAI API Key
+     *
      * @link <a href="https://beta.openai.com/docs/api-reference/authentication"/>
      */
     private String openaiApiKey;
 
     /**
      * Access Token
+     *
      * @link <a href="https://chat.openai.com/api/auth/session"/>
      */
     private String openaiAccessToken;
 
     /**
      * OpenAI API Base URL
+     *
      * @link <a href="https://api.openai.com"/>
      */
     private String openaiApiBaseUrl;
 
     /**
      * OpenAI API Model
+     *
      * @link <a href="https://beta.openai.com/docs/models"/>
      */
     private String openaiApiModel;
@@ -183,12 +187,11 @@ public class ChatConfig implements InitializingBean {
 
             // 校验 apiModel
             if (StrUtil.isBlank(openaiApiModel)) {
-                openaiApiModel = ChatCompletion.Model.GPT_3_5_TURBO.getName();
+                openaiApiModel = ApiKeyModelEnum.GPT_3_5_TURBO.getName();
                 return;
             }
-            ChatCompletion.Model[] models = ChatCompletion.Model.values();
-            for (ChatCompletion.Model model : models) {
-                if (model.getName().equals(openaiApiModel)) {
+            for (String modelName : ApiKeyModelEnum.NAME_MAP.keySet()) {
+                if (openaiApiModel.equals(modelName)) {
                     return;
                 }
             }

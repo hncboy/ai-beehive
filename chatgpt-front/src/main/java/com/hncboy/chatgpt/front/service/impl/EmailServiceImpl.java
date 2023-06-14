@@ -47,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
         mailAccount.setFrom(emailConfig.getFrom());
         mailAccount.setUser(emailConfig.getUser());
         mailAccount.setAuth(emailConfig.getAuth());
-        mailAccount.setDebug(true);
+        mailAccount.setDebug(false);
         mailAccount.setSslEnable(true);
         mailAccount.setPass(emailConfig.getPass());
         log.info("初始化邮箱账号完毕，配置信息为：{} ", emailConfig);

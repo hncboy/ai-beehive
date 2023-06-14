@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Size;
 @Schema(title = "消息处理请求")
 public class ChatProcessRequest {
 
-    @Size(min = 1, max = 2000, message = "问题字数范围[1, 2000]")
+    @Size(min = 1, max = 10000, message = "问题字数范围[1, 10000]")
     @Schema(title = "问题")
     private String prompt;
 

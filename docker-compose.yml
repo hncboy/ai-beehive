@@ -30,6 +30,11 @@ services:
       - CHAT_OPENAI_ACCESS_TOKEN=
       - CHAT_OPENAI_API_BASE_URL=https://api.openai.com/
       - CHAT_HTTP_PROXY_HOST:127.0.0.1
+      - EMAIL_HOST=smpt.qq.com
+      - EMAIL_PORT=465
+      - EMAIL_FROM=xxx@qq.com
+      - EMAIL_USER=xxx@qq.com
+      - EMAIL_PASS=xxx
     ports:
       - 3002:3002
     depends_on:

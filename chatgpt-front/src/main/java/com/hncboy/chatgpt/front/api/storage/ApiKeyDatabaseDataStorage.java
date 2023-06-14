@@ -2,6 +2,7 @@ package com.hncboy.chatgpt.front.api.storage;
 
 import cn.hutool.core.util.StrUtil;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
+import com.hncboy.chatgpt.base.enums.ApiKeyModelEnum;
 import com.unfbx.chatgpt.utils.TikTokensUtil;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +47,7 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
         // 获取回答消耗的 tokens
         ChatMessageDO answerChatMessageDO = chatMessageStorage.getAnswerChatMessageDO();
         String answerContent = answerChatMessageDO.getContent();
-        int completionTokens = StrUtil.isEmpty(answerContent) ? 0 : TikTokensUtil.tokens(modelName, answerContent);
+        int completionTokens = StrUtil.isEmpty(answerContent) ? 0 : TikTokensUtil.tokens(ApiKeyModelEnum.NAME_MAP.get(modelName).getCalcTokenModelName(), answerContent);
 
         // 填充使用情况
         int totalTokens = questionChatMessageDO.getPromptTokens() + completionTokens;
