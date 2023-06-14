@@ -18,7 +18,7 @@ chat:
   # OpenAI API Base URL - https://api.openai.com/，要加/后缀
   openai_api_base_url: ${CHAT_OPENAI_API_BASE_URL:https://api.openai.com/}
   # API Model - https://platform.openai.com/docs/models apiKey 和 AccessToken mode 不一样
-  openai_api_model: ${CHAT_OPENAI_API_MODEL:gpt-3.5-turbo-16k}
+  openai_api_model: ${CHAT_OPENAI_API_MODEL:}
   # 反向代理地址 AccessToken 时使用
   api_reverse_proxy: ${CHAT_API_REVERSE_PROXY:}
   # 超时毫秒
