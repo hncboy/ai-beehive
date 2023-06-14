@@ -5,7 +5,7 @@
 - ChatGPT 说文解字前端的 Java 后台
 - 前端-说文用户端开源代码 https://github.com/mjjh1717/chatgpt-shuowen
 - 前端-解字管理端开源代码 https://github.com/hncboy/chatgpt-jiezi
-- 2.0 升级版开发中
+- 2.0 升级版开发中，会接入 openai embeddings、Midjourney 等等
 
 # 注意
 
@@ -32,12 +32,14 @@
 
 # 地址
 
-- 接口文档：http://localhost:3002/swagger-ui.html
+- 接口文档：http://127.0.0.1:3002/swagger-ui/index.html
 - 用户端：
   - https://front.stargpt.top/ (失效)
   - https://front1.stargpt.top/ (失效)
-  - https://front2.stargpt.top/
+  - https://front2.stargpt.top/ (失效)
   - https://front3.stargpt.top/
+  - https://front4.stargpt.top/
+  - https://front5.stargpt.top/
 
 # 功能
 
@@ -196,15 +198,11 @@
 
 # 联系方式
 
-添加微信备注 Github ChatGPT 以及原因
+添加微信备注 Github ChatGPT 以及原因，微信群请在 [issue](https://github.com/hncboy/chatgpt-web-java/issues/77) 查看
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="text-align: center">
     <img style="max-width: 100%" src="pics/wechat.png" alt="微信" />
-  </div>
-    <div style="text-align: center">
-    <img style="max-width: 30%" src="pics/wechat_group.png" alt="微信群" />
-  </div>
 </div>
 
 
