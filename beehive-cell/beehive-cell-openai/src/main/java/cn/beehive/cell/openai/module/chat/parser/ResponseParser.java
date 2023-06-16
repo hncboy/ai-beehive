@@ -38,6 +38,14 @@ public interface ResponseParser<SUCCESS> {
     String parseNewMessage(String originalData);
 
     /**
+     * 解析错误消息
+     *
+     * @param originalResponseErrorMsg 原始错误消息
+     * @return 错误消息
+     */
+    String parseErrorMessage(String originalResponseErrorMsg);
+
+    /**
      * 解析回答消息
      *
      * @param chatMessageStorage 消息存储

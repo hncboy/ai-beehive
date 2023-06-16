@@ -25,7 +25,6 @@ public class CellPermissionHandler {
         // 校验是否发布
         CellHandler.checkCellPublishExist(cellCodeEnum);
 
-        // TODO 发送消息前应该也要校验图纸是否可用，并且图纸配置项是否正确要不要加个注解，搞复杂了
         // TODO 缓存
 
         // 判断是否有图纸使用权限

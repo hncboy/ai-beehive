@@ -91,8 +91,13 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
             // 保存回答消息
             RoomOpenAiChatMsgDO answerMessage = new RoomOpenAiChatMsgDO();
             answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.ERROR);
-            // TODO 解析异常类型填入指定内容
-            answerMessage.setContent("系统异常，请稍后再试");
+            answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
+            answerMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
+            answerMessage.setContent(chatMessageStorage.getParser().parseErrorMessage(answerMessage.getResponseErrorData()));
+
+            // 返回给前端的错误信息从这里取
+            chatMessageStorage.setAnswerMessageDO(answerMessage);
+            chatMessageStorage.setReceivedMessage(answerMessage.getContent());
             saveAnswerMessage(answerMessage, questionMessage, chatMessageStorage);
         }
 

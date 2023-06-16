@@ -6,19 +6,24 @@ import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiChatMsgVO;
 import cn.beehive.cell.openai.module.chat.storage.RoomOpenAiChatMessageStorage;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.unfbx.chatgpt.entity.chat.ChatChoice;
 import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
 import com.unfbx.chatgpt.entity.chat.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author hncboy
  * @date 2023-3-24
  * ApiKey 的 ChatCompletion 响应解析器
  */
+@Slf4j
 @Component
 public class ChatCompletionResponseParser implements ResponseParser<ChatCompletionResponse> {
 
@@ -53,6 +58,36 @@ public class ChatCompletionResponseParser implements ResponseParser<ChatCompleti
         roomOpenAiChatMsgVO.setMessageType(MessageTypeEnum.ANSWER);
         roomOpenAiChatMsgVO.setCreateTime(answerMessage.getCreateTime());
         return roomOpenAiChatMsgVO;
+    }
+
+    @Override
+    public String parseErrorMessage(String originalResponseErrorMsg) {
+        try {
+            // 首先得满足 json 格式，有些情况比如网页直接 502 非接口返回的就是 html，也有可能是网络故障
+            if (!JSONUtil.isTypeJSON(originalResponseErrorMsg)) {
+                return "网络故障，请稍后再试";
+            }
+
+            // 提取 code
+            JsonNode errorJsonNode = ObjectMapperUtil.readTree(originalResponseErrorMsg).get("error");
+            String code = errorJsonNode.get("code").asText();
+            String type = errorJsonNode.get("type").asText();
+
+            // 先通过 code，再通过 type
+            ChatCompletionErrorCodeEnum chatCompletionErrorCodeEnum = Optional.ofNullable(code)
+                    .map(ChatCompletionErrorCodeEnum.CODE_MAP::get)
+                    .orElseGet(() -> Optional.ofNullable(type)
+                            .map(ChatCompletionErrorCodeEnum.CODE_MAP::get)
+                            .orElse(null));
+
+            if (Objects.isNull(chatCompletionErrorCodeEnum)) {
+                return "未知编码错误，请稍后再试";
+            }
+            return chatCompletionErrorCodeEnum.getMessage();
+        } catch (Exception e) {
+            log.error("OpenAi ApiKey 解析错误信息失败，错误信息：{}", originalResponseErrorMsg, e);
+            return "未知解析错误，请稍后再试";
+        }
     }
 
     /**

@@ -55,6 +55,11 @@ public class AccessTokenChatResponseParser implements ResponseParser<ChatWebConv
     }
 
     @Override
+    public String parseErrorMessage(String originalResponseErrorMsg) {
+        return originalResponseErrorMsg;
+    }
+
+    @Override
     public RoomOpenAiChatMsgVO parseChatMessageVO(RoomOpenAiChatMessageStorage chatMessageStorage) {
         if (Objects.isNull(chatMessageStorage.getAnswerMessageDO())) {
             return null;
