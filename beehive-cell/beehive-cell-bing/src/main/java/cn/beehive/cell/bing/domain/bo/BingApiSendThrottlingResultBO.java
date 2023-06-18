@@ -12,6 +12,7 @@ public class BingApiSendThrottlingResultBO {
 
     /**
      * 用户最大提问次数
+     * TODO 有时候是 5，有时候是 10，20，但是一般都是 5，官方的 20 要怎么复现？
      */
     private Integer maxNumUserMessagesInConversation;
 

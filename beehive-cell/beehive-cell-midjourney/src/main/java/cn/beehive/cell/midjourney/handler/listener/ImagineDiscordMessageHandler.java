@@ -47,6 +47,7 @@ public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
 
         // 开始处理，不考虑消息乱序和丢失的情况
         if ("Waiting to start".equals(messageBO.getStatus())) {
+            // 队列排队再回调好像没有这个，还需确认一下
             roomMidjourneyMsgDO.setDiscordStartTime(new Date());
             roomMidjourneyMsgDO.setStatus(MidjourneyMsgStatusEnum.MJ_IN_PROGRESS);
             roomMidjourneyMsgDO.setDiscordMessageId(message.getId());

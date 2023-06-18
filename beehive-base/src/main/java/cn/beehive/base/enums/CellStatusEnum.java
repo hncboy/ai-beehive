@@ -36,7 +36,12 @@ public enum CellStatusEnum {
     /**
      * 已关闭
      */
-    CLOSED(4, "closed");
+    CLOSED(4, "closed"),
+
+    /**
+     * 等待开发
+     */
+    WAIT_CODING(5, "wait_coding");
 
     @Getter
     @EnumValue

@@ -119,7 +119,7 @@ public class BingApiResponseTypeMessageHandler {
             answerMessage.setIp(questionMessage.getIp());
             answerMessage.setType(MessageTypeEnum.ANSWER);
             answerMessage.setContent(botMessage.getText());
-            answerMessage.setSuggestResponses(Optional.ofNullable(roomBingStreamMsgVO.getSuggests()).orElse(Collections.emptyList()).toString());
+            answerMessage.setSuggestResponses(Optional.ofNullable(roomBingStreamMsgVO.getSuggests()).orElse(Collections.emptyList()));
             roomBingMsgService.save(answerMessage);
 
             // 发送消息

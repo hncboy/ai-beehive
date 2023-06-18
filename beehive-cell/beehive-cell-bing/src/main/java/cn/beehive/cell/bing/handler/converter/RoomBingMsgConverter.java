@@ -2,9 +2,13 @@ package cn.beehive.cell.bing.handler.converter;
 
 import cn.beehive.base.domain.entity.RoomBingDO;
 import cn.beehive.base.domain.entity.RoomBingMsgDO;
+import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.cell.bing.domain.bo.BingRoomBO;
 import cn.beehive.cell.bing.domain.vo.RoomBingMsgVO;
+import cn.hutool.json.JSONUtil;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -46,5 +50,11 @@ public interface RoomBingMsgConverter {
         roomBingMsgDO.setIsNewTopic(bingRoomBO.getIsNewTopic());
         roomBingMsgDO.setRefreshRoomReason(bingRoomBO.getRefreshRoomReason());
         return roomBingMsgDO;
+    }
+
+    @SuppressWarnings("unchecked")
+    @AfterMapping
+    default void afterEntityToVO(RoomBingMsgDO roomBingMsgDO, @MappingTarget RoomBingMsgVO roomBingMsgVO) {
+//        roomBingMsgVO.setSuggestResponses(ObjectMapperUtil.fromJson(suggestResponses, List.class));
     }
 }

@@ -39,7 +39,6 @@ public class RoomBingServiceImpl extends ServiceImpl<RoomBingMapper, RoomBingDO>
 
     @Override
     public BingRoomBO getRoom(Long roomId, RoomBingMsgSendRequest sendRequest) {
-        // 校验房间是否存在 TODO 抛异常 emitter 会返回 json 格式
         RoomHandler.checkRoomExistAndCellCanUse(roomId, CellCodeEnum.NEW_BING);
 
         // 获取房间配置参数

@@ -55,7 +55,6 @@ public class RoomOpenAiChatMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAiC
 
         // 获取房间信息
         Map<CellCodeEnum, RoomOpenAiChatResponseEmitter> responseEmitterMap = RoomOpenAiChatResponseEmitterDispatcher.RESPONSE_EMITTER_MAP;
-        // TODO 报错的话 emitter 怎么处理
         RoomDO roomDO = RoomHandler.checkRoomExistAndCellCanUse(sendRequest.getRoomId(), new ArrayList<>(responseEmitterMap.keySet()));
 
         // 转换为对应的响应处理器

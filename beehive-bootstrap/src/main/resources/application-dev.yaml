@@ -48,7 +48,7 @@ logging:
   level:
     root: info
 
-# 代理配置
+# 代理配置，IDEA 启动使用
 proxy:
   enabled: false
   http-host: 127.0.0.1

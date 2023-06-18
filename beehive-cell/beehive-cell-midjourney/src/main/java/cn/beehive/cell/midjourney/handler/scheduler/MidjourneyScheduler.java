@@ -89,9 +89,10 @@ public class MidjourneyScheduler {
      * 场景 A: 消息状态一直 MJ_WAIT_RECEIVED
      * 情况 1：网络情况，如 MJ 服务挂了或程序突然重启，导致没有收到回调消息
      * 情况 2：执行 imagine 指令，用户输入违禁词，调用成功无回调（主要）
-     * 情况 3：收到回调消息，但是程序更新失败，此时算 bug，发现要及时修复
-     * 情况 4：发送消息失败，没有回滚，此时算 bug，发现要及时修复
-     * 情况 5：重复执行 upscale 操作，discord 会报错，此时不会有回调（主要）
+     * 情况 3：执行 imagine 指令，用户输入但是并行已满，此时进入队列，调用成功无回调，只有轮到时才会产生回调（主要）
+     * 情况 4：收到回调消息，但是程序更新失败，此时算 bug，发现要及时修复
+     * 情况 5：发送消息失败，没有回滚，此时算 bug，发现要及时修复
+     * 情况 6：重复执行 upscale 操作，discord 会报错，此时不会有回调（主要）
      */
     private void clearHistoryTaskScene1() {
         List<RoomMidjourneyMsgDO> roomMessages = roomMidjourneyMsgService.list(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()

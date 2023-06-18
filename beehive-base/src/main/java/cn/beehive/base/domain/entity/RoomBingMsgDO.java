@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author hncboy
@@ -16,7 +19,7 @@ import java.util.Date;
  * NewBing 房间消息表实体类
  */
 @Data
-@TableName("bh_room_bing_msg")
+@TableName(value = "bh_room_bing_msg", autoResultMap = true)
 public class RoomBingMsgDO {
 
     /**
@@ -98,7 +101,8 @@ public class RoomBingMsgDO {
     /**
      * bing 推荐提问
      */
-    private String suggestResponses;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<String> suggestResponses;
 
     /**
      * 创建时间

@@ -107,8 +107,6 @@ public class CellConfigDO {
      */
     private String remark;
 
-    // TODO 前端组件定制，还没决定怎么弄要不要弄
-
     /**
      * 是否删除 0 否 NULL 是
      */
