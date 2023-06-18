@@ -2,6 +2,7 @@ package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
+import cn.beehive.cell.midjourney.constant.MidjourneyConstant;
 import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
@@ -23,7 +24,7 @@ import java.util.Objects;
  * Midjounery Discord 消息变更 - Midjourney Bot:
  */
 @Component
-public class DescribeDiscordMessageHandler extends DiscordMessageHandler {
+public class DescribeAbstractDiscordMessageHandler extends AbstractDiscordMessageHandler {
 
     @Override
     public void onMessageReceived(Message message) {
@@ -49,12 +50,12 @@ public class DescribeDiscordMessageHandler extends DiscordMessageHandler {
         int hashStartIndex = discordImageUrl.lastIndexOf("/");
         // 截取文件名，文件名就是房间消息 id
         String mjMsgId = CharSequenceUtil.subBefore(discordImageUrl.substring(hashStartIndex + 1), ".", true);
-        if (StrUtil.isBlank(mjMsgId) || !StrUtil.startWith(mjMsgId, "describe_")) {
+        if (StrUtil.isBlank(mjMsgId) || !StrUtil.startWith(mjMsgId, MidjourneyConstant.DESCRIBE_FILE_PREFIX)) {
             return;
         }
 
         // 找对应的房间消息记录
-        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(mjMsgId.replace("describe_", ""));
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(mjMsgId.replace(MidjourneyConstant.DESCRIBE_FILE_PREFIX, ""));
         if (Objects.isNull(roomMidjourneyMsgDO)) {
             return;
         }

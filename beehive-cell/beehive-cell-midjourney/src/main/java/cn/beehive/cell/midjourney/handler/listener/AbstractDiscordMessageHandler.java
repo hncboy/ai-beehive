@@ -15,9 +15,9 @@ import java.util.Date;
 /**
  * @author hncboy
  * @date 2023/5/18
- * 消息处理器
+ * 抽象消息处理器
  */
-public abstract class DiscordMessageHandler {
+public abstract class AbstractDiscordMessageHandler {
 
     @Resource
     protected RoomMidjourneyMsgService roomMidjourneyMsgService;

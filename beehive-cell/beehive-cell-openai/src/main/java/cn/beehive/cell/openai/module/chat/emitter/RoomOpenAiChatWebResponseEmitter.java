@@ -1,5 +1,6 @@
 package cn.beehive.cell.openai.module.chat.emitter;
 
+import cn.beehive.base.constant.AuthConstant;
 import cn.beehive.base.domain.entity.RoomOpenAiChatWebMsgDO;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.base.util.OkHttpClientUtil;
@@ -85,8 +86,8 @@ public class RoomOpenAiChatWebResponseEmitter implements RoomOpenAiChatResponseE
     public void streamChatCompletions(ChatWebConversationRequest conversationRequest, Map<OpenAiChatWebCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap, EventSourceListener eventSourceListener) {
         // 获取 AccessToken
         String accessToken = roomConfigParamAsMap.get(OpenAiChatWebCellConfigCodeEnum.ACCESS_TOKEN).asString();
-        if (!accessToken.startsWith("Bearer ")) {
-            accessToken = "Bearer ".concat(accessToken);
+        if (!accessToken.startsWith(AuthConstant.BEARER)) {
+            accessToken = AuthConstant.BEARER.concat(accessToken);
         }
 
         // 构建请求头

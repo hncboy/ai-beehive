@@ -41,6 +41,6 @@ public class CellConfigServiceImpl extends ServiceImpl<CellConfigMapper, CellCon
         // 填充默认值信息，防止泄露
         CellConfigPermissionHandler.populateDefaultValue(cellConfigPermissionBOList);
 
-        return CellConfigConverter.INSTANCE.permissionBOToVO(cellConfigPermissionBOList);
+        return CellConfigConverter.INSTANCE.permissionBoToVo(cellConfigPermissionBOList);
     }
 }

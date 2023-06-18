@@ -36,7 +36,6 @@ public class RestExceptionTranslator {
     @ExceptionHandler(NotLoginException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public R<Void> handleError(NotLoginException e) {
-        log.warn("鉴权拦截", e);
         // 判断场景值，定制化异常信息
         String message;
         if (e.getType().equals(NotLoginException.NOT_TOKEN)) {
@@ -48,6 +47,7 @@ public class RestExceptionTranslator {
         } else {
             message = "当前会话未登录";
         }
+        log.warn("鉴权拦截：{}", message);
         return R.fail(ResultCode.UN_AUTHORIZED, message);
     }
 

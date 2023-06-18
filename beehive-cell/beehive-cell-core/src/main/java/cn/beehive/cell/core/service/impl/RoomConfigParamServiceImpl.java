@@ -8,15 +8,12 @@ import cn.beehive.cell.core.domain.bo.RoomConfigParamBO;
 import cn.beehive.cell.core.domain.request.RoomConfigParamEditRequest;
 import cn.beehive.cell.core.domain.vo.CellConfigVO;
 import cn.beehive.cell.core.domain.vo.RoomConfigParamVO;
-import cn.beehive.cell.core.hander.CellHandler;
-import cn.beehive.cell.core.hander.CellPermissionHandler;
 import cn.beehive.cell.core.hander.RoomConfigParamHandler;
 import cn.beehive.cell.core.hander.RoomHandler;
 import cn.beehive.cell.core.hander.converter.RoomConfigParamConverter;
 import cn.beehive.cell.core.service.CellConfigService;
 import cn.beehive.cell.core.service.RoomConfigParamService;
 import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -54,7 +51,7 @@ public class RoomConfigParamServiceImpl extends ServiceImpl<RoomConfigParamMappe
         // 遍历所有配置项进行重新封装
         List<RoomConfigParamVO> roomConfigParamVOList = new ArrayList<>();
         for (CellConfigVO cellConfigVO : cellConfigVOList) {
-            RoomConfigParamVO roomConfigParamVO = RoomConfigParamConverter.INSTANCE.cellConfigVOToVO(cellConfigVO);
+            RoomConfigParamVO roomConfigParamVO = RoomConfigParamConverter.INSTANCE.cellConfigVoToVo(cellConfigVO);
 
             // 如果是用户自己填的
             if (roomConfigParamMap.containsKey(roomConfigParamVO.getCellConfigCode())) {

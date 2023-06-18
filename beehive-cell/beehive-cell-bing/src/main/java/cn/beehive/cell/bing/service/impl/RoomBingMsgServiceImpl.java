@@ -60,7 +60,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
         List<RoomBingMsgDO> roomBingMsgDOList = cursorList(cursorQuery, RoomBingMsgDO::getId, new LambdaQueryWrapper<RoomBingMsgDO>()
                 .eq(RoomBingMsgDO::getUserId, FrontUserUtil.getUserId())
                 .eq(RoomBingMsgDO::getRoomId, cursorQuery.getRoomId()));
-        return RoomBingMsgConverter.INSTANCE.entityToVO(roomBingMsgDOList);
+        return RoomBingMsgConverter.INSTANCE.entityToVo(roomBingMsgDOList);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
         BingRoomBO bingRoomBO = roomBingService.getRoom(sendRequest.getRoomId(), sendRequest);
 
         // 保存问题消息
-        RoomBingMsgDO questionMessage = RoomBingMsgConverter.INSTANCE.bingRoomBOToEntity(bingRoomBO);
+        RoomBingMsgDO questionMessage = RoomBingMsgConverter.INSTANCE.bingRoomBoToEntity(bingRoomBO);
         questionMessage.setIp(WebUtil.getIp());
         questionMessage.setType(MessageTypeEnum.QUESTION);
         questionMessage.setContent(sendRequest.getContent());

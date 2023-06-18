@@ -1,5 +1,6 @@
 package cn.beehive.cell.midjourney.handler.listener;
 
+import cn.beehive.cell.midjourney.constant.MidjourneyConstant;
 import cn.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
@@ -26,13 +27,13 @@ public class DiscordMessageListener extends ListenerAdapter {
     private MidjourneyProperties midjourneyProperties;
 
     @Resource
-    private ImagineDiscordMessageHandler imagineDiscordMessageHandler;
+    private ImagineAbstractDiscordMessageHandler imagineDiscordMessageHandler;
 
     @Resource
-    private UVDiscordMessageHandler uvMessageHandler;
+    private UpscaleAndVariationAbstractDiscordMessageHandler uvMessageHandler;
 
     @Resource
-    private DescribeDiscordMessageHandler describeMessageHandler;
+    private DescribeAbstractDiscordMessageHandler describeMessageHandler;
 
     /**
      * 是否忽略消息
@@ -57,13 +58,13 @@ public class DiscordMessageListener extends ListenerAdapter {
     @Override
     public void onMessageUpdate(MessageUpdateEvent event) {
         Message message = event.getMessage();
-        if (isIgnoreMessage(message, "消息变更")) {
+        if (isIgnoreMessage(message, MidjourneyConstant.DISCORD_MESSAGE_UPDATE_STR)) {
             return;
         }
 
-        if (Objects.nonNull(message.getInteraction()) && "describe".equals(message.getInteraction().getName())) {
+        if (Objects.nonNull(message.getInteraction()) && MidjourneyConstant.DESCRIBE.equals(message.getInteraction().getName())) {
             describeMessageHandler.onMessageUpdate(message);
-        } else if (Objects.nonNull(message.getInteraction()) && "imagine".equals(message.getInteraction().getName())) {
+        } else if (Objects.nonNull(message.getInteraction()) && MidjourneyConstant.IMAGINE.equals(message.getInteraction().getName())) {
             imagineDiscordMessageHandler.onMessageUpdate(message);
         } else {
             uvMessageHandler.onMessageUpdate(message);
@@ -73,7 +74,7 @@ public class DiscordMessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         Message message = event.getMessage();
-        if (isIgnoreMessage(message, "消息接收")) {
+        if (isIgnoreMessage(message, MidjourneyConstant.DISCORD_MESSAGE_RECEIVE_STR)) {
             return;
         }
 

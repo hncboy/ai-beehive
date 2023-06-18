@@ -5,6 +5,7 @@ import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.util.ForestRequestUtil;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
+import cn.beehive.cell.bing.constant.NewBingConstant;
 import cn.beehive.cell.bing.domain.bo.BingApiCreateConversationResultBO;
 import cn.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import cn.beehive.cell.bing.enums.BingModeEnum;
@@ -64,7 +65,7 @@ public class BingRoomHandler {
         }
 
         BingApiCreateConversationResultBO resultBO = ObjectMapperUtil.fromJson(forestResponse.getContent(), BingApiCreateConversationResultBO.class);
-        if (ObjectUtil.notEqual(resultBO.getResult().getValue(), "Success")) {
+        if (ObjectUtil.notEqual(resultBO.getResult().getValue(), NewBingConstant.RESPONSE_SUCCESS)) {
             // 有时候会报 {"result":{"value":"UnauthorizedRequest","message":"Sorry, you need to login first to access this service."}} 此时可以让用户多试几次
             log.warn("用户 {} 房间 {} 创建 NewBing 会话异常，响应结果：{}", FrontUserUtil.getUserId(), roomId, forestResponse.getContent());
             throw new ServiceException("创建 NewBing 会话异常，请稍后再试");

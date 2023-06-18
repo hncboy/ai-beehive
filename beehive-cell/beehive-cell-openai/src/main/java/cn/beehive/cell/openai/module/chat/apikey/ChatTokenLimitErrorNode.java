@@ -20,6 +20,11 @@ import java.util.Map;
 @Component
 public class ChatTokenLimitErrorNode implements ChatErrorNode {
 
+    /**
+     * 剩余最小的 Token 数量
+     */
+    public static final Integer REMAIN_MIN_TOKENS = 10;
+
     @Override
     public Pair<Boolean, String> doHandle(RoomOpenAiChatMsgDO questionMessage, Map<OpenAiChatCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap) {
         String modelName = questionMessage.getModelName();
@@ -45,7 +50,7 @@ public class ChatTokenLimitErrorNode implements ChatErrorNode {
             }
         }
         // 剩余的 token 太少也直返返回异常信息
-        else if (maxTokens - promptTokens <= 10) {
+        else if (maxTokens - promptTokens <= REMAIN_MIN_TOKENS) {
             isExcelledModelTokenLimit = true;
             msg = "当前上下文字数不足以连续对话，请减少上下文关联的条数";
         }

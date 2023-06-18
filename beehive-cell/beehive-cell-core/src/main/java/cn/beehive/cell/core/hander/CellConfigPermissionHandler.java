@@ -45,7 +45,7 @@ public class CellConfigPermissionHandler {
     public static List<CellConfigPermissionBO> listCellConfigPermission(CellCodeEnum cellCodeEnum) {
         // 获取 Cell 配置项列表
         List<CellConfigDO> cellConfigDOList = CellConfigCache.listCellConfig(cellCodeEnum);
-        List<CellConfigPermissionBO> cellConfigPermissionBOList = CellConfigConverter.INSTANCE.entityToPermissionBO(cellConfigDOList);
+        List<CellConfigPermissionBO> cellConfigPermissionBOList = CellConfigConverter.INSTANCE.entityToPermissionBo(cellConfigDOList);
 
         // 填充是否可以使用默认值
         populateIsCanUseDefaultValue(cellCodeEnum, cellConfigPermissionBOList);

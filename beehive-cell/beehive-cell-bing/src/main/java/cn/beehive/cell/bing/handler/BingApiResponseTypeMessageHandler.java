@@ -5,6 +5,7 @@ import cn.beehive.base.domain.entity.RoomBingMsgDO;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.base.util.ResponseBodyEmitterUtil;
+import cn.beehive.cell.bing.constant.NewBingConstant;
 import cn.beehive.cell.bing.domain.bo.BingApiSendMessageResultBO;
 import cn.beehive.cell.bing.domain.bo.BingApiSendThrottlingResultBO;
 import cn.beehive.cell.bing.domain.bo.BingApiSendType1ResultBO;
@@ -75,7 +76,7 @@ public class BingApiResponseTypeMessageHandler {
         String resultValue = resultBO.getItem().getResult().getValue();
 
         // 成功情况
-        if (Objects.equals(resultValue, "Success")) {
+        if (Objects.equals(resultValue, NewBingConstant.RESPONSE_SUCCESS)) {
             List<BingApiSendMessageResultBO> messages = resultBO.getItem().getMessages();
             // 过滤出机器人回复的那一条
             List<BingApiSendMessageResultBO> botMessages = messages.stream().filter(message -> Objects.equals(message.getAuthor(), "bot")).toList();
@@ -114,7 +115,7 @@ public class BingApiResponseTypeMessageHandler {
             roomBingService.updateById(roomBingDO);
 
             // 增加回答消息
-            RoomBingMsgDO answerMessage = RoomBingMsgConverter.INSTANCE.bingRoomBOToEntity(bingRoomBO);
+            RoomBingMsgDO answerMessage = RoomBingMsgConverter.INSTANCE.bingRoomBoToEntity(bingRoomBO);
             answerMessage.setParentMessageId(questionMessage.getId());
             answerMessage.setIp(questionMessage.getIp());
             answerMessage.setType(MessageTypeEnum.ANSWER);

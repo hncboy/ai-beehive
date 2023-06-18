@@ -93,7 +93,7 @@ public class RoomConfigParamHandler {
             RoomConfigParamRequest roomConfigParamRequest = roomConfigParamRequestMap.get(cellConfigPermissionBO.getCellConfigCode());
 
             // 转换为房间配置项参数业务对象
-            RoomConfigParamBO roomConfigParamBO = RoomConfigParamConverter.INSTANCE.cellConfigPermissionBOToBO(cellConfigPermissionBO);
+            RoomConfigParamBO roomConfigParamBO = RoomConfigParamConverter.INSTANCE.cellConfigPermissionBoToBo(cellConfigPermissionBO);
 
             // 是否跳过房间配置项
             if (isSkipRoomConfig(cellConfigPermissionBO, roomConfigParamRequest, isEditRoom)) {

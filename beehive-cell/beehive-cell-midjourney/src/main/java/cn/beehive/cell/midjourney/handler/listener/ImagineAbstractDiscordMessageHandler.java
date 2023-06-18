@@ -2,6 +2,7 @@ package cn.beehive.cell.midjourney.handler.listener;
 
 import cn.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import cn.beehive.base.enums.MidjourneyMsgStatusEnum;
+import cn.beehive.cell.midjourney.constant.MidjourneyConstant;
 import cn.beehive.cell.midjourney.domain.bo.MjDiscordMessageBO;
 import cn.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import net.dv8tion.jda.api.entities.Message;
@@ -25,7 +26,7 @@ import java.util.Objects;
  * 消息接收 - Midjourney Bot: **[6601101751104431] blue sky --v 5 --s 250** - <@1013002753796219000> (fast)
  */
 @Component
-public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
+public class ImagineAbstractDiscordMessageHandler extends AbstractDiscordMessageHandler {
 
     @Override
     public void onMessageReceived(Message message) {
@@ -46,7 +47,7 @@ public class ImagineDiscordMessageHandler extends DiscordMessageHandler {
 
 
         // 开始处理，不考虑消息乱序和丢失的情况
-        if ("Waiting to start".equals(messageBO.getStatus())) {
+        if (MidjourneyConstant.WAITING_TO_START.equals(messageBO.getStatus())) {
             // 队列排队再回调好像没有这个，还需确认一下
             roomMidjourneyMsgDO.setDiscordStartTime(new Date());
             roomMidjourneyMsgDO.setStatus(MidjourneyMsgStatusEnum.MJ_IN_PROGRESS);

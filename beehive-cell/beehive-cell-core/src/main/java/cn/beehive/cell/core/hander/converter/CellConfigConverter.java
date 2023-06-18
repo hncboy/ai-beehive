@@ -26,7 +26,7 @@ public interface CellConfigConverter {
      * @param cellConfigPermissionBOList List<CellConfigPermissionBO>
      * @return List<CellConfigVO>
      */
-    List<CellConfigVO> permissionBOToVO(List<CellConfigPermissionBO> cellConfigPermissionBOList);
+    List<CellConfigVO> permissionBoToVo(List<CellConfigPermissionBO> cellConfigPermissionBOList);
 
     /**
      * List<CellConfigDO> 转 List<CellConfigPermissionBO>
@@ -34,7 +34,7 @@ public interface CellConfigConverter {
      * @param cellConfigDOList List<CellConfigDO>
      * @return List<CellConfigPermissionBO>
      */
-    List<CellConfigPermissionBO> entityToPermissionBO(List<CellConfigDO> cellConfigDOList);
+    List<CellConfigPermissionBO> entityToPermissionBo(List<CellConfigDO> cellConfigDOList);
 
     /**
      * entityToPermissionBO 后置处理
@@ -43,7 +43,7 @@ public interface CellConfigConverter {
      * @param cellConfigPermissionBO CellConfigPermissionBO
      */
     @AfterMapping
-    default void afterEntityToPermissionBO(CellConfigDO cellConfigDO, @MappingTarget CellConfigPermissionBO cellConfigPermissionBO) {
+    default void afterEntityToPermissionBo(CellConfigDO cellConfigDO, @MappingTarget CellConfigPermissionBO cellConfigPermissionBO) {
         cellConfigPermissionBO.setCellConfigCode(cellConfigDO.getCode());
     }
 }

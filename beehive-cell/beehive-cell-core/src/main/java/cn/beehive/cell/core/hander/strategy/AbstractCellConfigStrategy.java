@@ -72,18 +72,18 @@ public abstract class AbstractCellConfigStrategy implements CellConfigStrategy {
         }
 
         // 获取 Cell 配置项权限 Map
-        Map<String, DataWrapper> cellConfigPermissionBOMap = cellConfigPermissionBOList.stream()
+        Map<String, DataWrapper> cellConfigPermissionBoMap = cellConfigPermissionBOList.stream()
                 .collect(Collectors.toMap(CellConfigPermissionBO::getCellConfigCode, bo -> new DataWrapper(bo.getDefaultValue())));
 
         // 将房间配置项参数覆盖 cell 配置项
-        cellConfigPermissionBOMap.putAll(roomConfigParamMap);
+        cellConfigPermissionBoMap.putAll(roomConfigParamMap);
 
         // 获取枚举常量数组，将其转为 code map
         Map<String, T> cellConfigCodeMap = getCellConfigCodeMap();
 
         // 遍历 cellConfigMap，将 key 转换为相应的枚举类型
-        Map<T, DataWrapper> resultMap = new HashMap<>(cellConfigPermissionBOMap.size());
-        for (Map.Entry<String, DataWrapper> entry : cellConfigPermissionBOMap.entrySet()) {
+        Map<T, DataWrapper> resultMap = new HashMap<>(cellConfigPermissionBoMap.size());
+        for (Map.Entry<String, DataWrapper> entry : cellConfigPermissionBoMap.entrySet()) {
             if (cellConfigCodeMap.containsKey(entry.getKey())) {
                 resultMap.put(cellConfigCodeMap.get(entry.getKey()), entry.getValue());
             }
@@ -101,25 +101,25 @@ public abstract class AbstractCellConfigStrategy implements CellConfigStrategy {
         Map<String, ICellConfigCodeEnum> cellConfigCodeMap = getCellConfigCodeMap();
 
         // 房间配置项
-        Map<ICellConfigCodeEnum, RoomConfigParamBO> roomConfigParamBOMap = roomConfigParamBOList.stream()
+        Map<ICellConfigCodeEnum, RoomConfigParamBO> roomConfigParamBoMap = roomConfigParamBOList.stream()
                 .collect(Collectors.toMap(bo -> cellConfigCodeMap.get(bo.getCellConfigCode()), Function.identity()));
 
         // 遍历所有配置项，先针对单个参数进行校验
-        for (Map.Entry<ICellConfigCodeEnum, RoomConfigParamBO> entry : roomConfigParamBOMap.entrySet()) {
+        for (Map.Entry<ICellConfigCodeEnum, RoomConfigParamBO> entry : roomConfigParamBoMap.entrySet()) {
             singleValidate(entry.getKey(), new DataWrapper(entry.getValue().getDefaultValue()));
         }
 
         // 针对用户填的配置项进行复合校验，这里就先不对所有配置项进行复合校验，需要的话要改动校验规则
-        for (Map.Entry<ICellConfigCodeEnum, RoomConfigParamBO> entry : roomConfigParamBOMap.entrySet()) {
+        for (Map.Entry<ICellConfigCodeEnum, RoomConfigParamBO> entry : roomConfigParamBoMap.entrySet()) {
             RoomConfigParamBO roomConfigParamBO = entry.getValue();
             ICellConfigCodeEnum cellConfigCodeEnum = entry.getKey();
 
             // 复合校验所有的参数
-            cellConfigCodeEnum.compositeValidate(roomConfigParamBOMap, getCellCode());
+            cellConfigCodeEnum.compositeValidate(roomConfigParamBoMap, getCellCode());
 
             // 找到不使用默认值的，复合校验自己的参数
             if (roomConfigParamBO.getCellConfigCode().equals(cellConfigCodeEnum.getCode()) && !roomConfigParamBO.getIsUseDefaultValue()) {
-                cellConfigCodeEnum.compositeValidateSelf(roomConfigParamBOMap, getCellCode());
+                cellConfigCodeEnum.compositeValidateSelf(roomConfigParamBoMap, getCellCode());
             }
         }
     }

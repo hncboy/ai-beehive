@@ -15,6 +15,7 @@ import cn.beehive.base.util.FileUtil;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.cell.core.hander.RoomHandler;
 import cn.beehive.cell.core.hander.strategy.DataWrapper;
+import cn.beehive.cell.midjourney.constant.MidjourneyConstant;
 import cn.beehive.cell.midjourney.domain.request.MjConvertRequest;
 import cn.beehive.cell.midjourney.domain.request.MjDescribeRequest;
 import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
@@ -228,8 +229,8 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         long answerMessageId = IdWorker.getId();
 
         MultipartFile multipartFile = describeRequest.getFile();
-        // 新文件名：describe_ + 消息 id + 后缀
-        String newFileName = "describe_" + answerMessageId + StrPool.DOT + FileUtil.getFileExtension(multipartFile.getOriginalFilename());
+        // 新文件名：前缀 + 消息 id + 后缀
+        String newFileName = MidjourneyConstant.DESCRIBE_FILE_PREFIX + answerMessageId + StrPool.DOT + FileUtil.getFileExtension(multipartFile.getOriginalFilename());
         // 保存文件
         FileUtil.downloadFromMultipartFile(multipartFile, midjourneyProperties.getImageLocation(), newFileName);
 
@@ -241,7 +242,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         }
 
         // 判断文件后缀是否符合
-        if (!StrUtil.equalsAnyIgnoreCase(multipartFile.getContentType(), "image/jpeg", "image/png")) {
+        if (!StrUtil.equalsAnyIgnoreCase(multipartFile.getContentType(), MidjourneyConstant.IMAGE_JPEG, MidjourneyConstant.IMAGE_PNG)) {
             log.warn("Midjourney 业务异常，用户 id：{}，房间 id：{}，describe 文件大小格式为 {} 错误", FrontUserUtil.getUserId(), describeRequest.getRoomId(), multipartFile.getContentType());
             throw new ServiceException("文件格式不符合要求，只能是 jpg 或 png 格式");
         }

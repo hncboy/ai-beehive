@@ -25,7 +25,7 @@ public interface RoomConfigParamConverter {
      * @param cellConfigVO CellConfigVO
      * @return RoomConfigParamVO
      */
-    RoomConfigParamVO cellConfigVOToVO(CellConfigVO cellConfigVO);
+    RoomConfigParamVO cellConfigVoToVo(CellConfigVO cellConfigVO);
 
     /**
      * CellConfigPermissionBO 转 RoomConfigParamBO
@@ -33,7 +33,7 @@ public interface RoomConfigParamConverter {
      * @param cellConfigPermissionBO CellConfigPermissionBO
      * @return RoomConfigParamBO
      */
-    RoomConfigParamBO cellConfigPermissionBOToBO(CellConfigPermissionBO cellConfigPermissionBO);
+    RoomConfigParamBO cellConfigPermissionBoToBo(CellConfigPermissionBO cellConfigPermissionBO);
 
     /**
      * RoomConfigParamBO 转 RoomConfigParamDO
