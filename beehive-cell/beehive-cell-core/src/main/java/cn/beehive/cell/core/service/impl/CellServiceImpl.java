@@ -7,6 +7,7 @@ import cn.beehive.base.enums.CellStatusEnum;
 import cn.beehive.base.mapper.CellMapper;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.cell.core.constant.CellPermissionConstant;
+import cn.beehive.cell.core.domain.vo.CellImageVO;
 import cn.beehive.cell.core.domain.vo.CellVO;
 import cn.beehive.cell.core.hander.converter.CellConverter;
 import cn.beehive.cell.core.service.CellPermissionService;
@@ -71,6 +72,13 @@ public class CellServiceImpl extends ServiceImpl<CellMapper, CellDO> implements 
                     cellVO.setIsCanUse(isCanUse(cellDO, cellCodePermissionMap));
                     return cellVO;
                 }).toList();
+    }
+
+    @Override
+    public List<CellImageVO> listCellImage() {
+        // 查询全部 cell 的两个字段
+        List<CellDO> cellDOList = list(new LambdaQueryWrapper<CellDO>().select(CellDO::getCode, CellDO::getImageUrl));
+        return CellConverter.INSTANCE.entityToImageVO(cellDOList);
     }
 
     /**

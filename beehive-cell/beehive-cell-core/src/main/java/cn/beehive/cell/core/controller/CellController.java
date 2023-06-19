@@ -1,6 +1,7 @@
 package cn.beehive.cell.core.controller;
 
 import cn.beehive.base.handler.response.R;
+import cn.beehive.cell.core.domain.vo.CellImageVO;
 import cn.beehive.cell.core.domain.vo.CellVO;
 import cn.beehive.cell.core.service.CellService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,5 +30,11 @@ public class CellController {
     @GetMapping("/list")
     public R<List<CellVO>> listCell() {
         return R.data(cellService.listCell());
+    }
+
+    @Operation(summary = "cell 封面列表")
+    @GetMapping("/list_image")
+    public R<List<CellImageVO>> listCellImage() {
+        return R.data(cellService.listCellImage());
     }
 }

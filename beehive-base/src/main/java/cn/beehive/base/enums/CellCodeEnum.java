@@ -58,17 +58,7 @@ public enum CellCodeEnum {
     /**
      * Midjourney
      */
-    MIDJOURNEY("Midjourney"),
-    CLAUDE("Claude"),
-    BARD("Bard"),
-    ALPACA("Alpaca"),
-    VICUNA("Vicuna"),
-    CHATGLM("ChatGLM"),
-    GRADIO("Gradio"),
-    BAIDU_WXYY("baidu_wxyy"),
-    STABLE_DIFFUSION("stablediffusion"),
-    OPENAI_EMBEDDINGS("openai_embeddings"),
-    AZURE("Azure");
+    MIDJOURNEY("Midjourney");
 
     @Getter
     @JsonValue

@@ -1,9 +1,12 @@
 package cn.beehive.cell.core.hander.converter;
 
 import cn.beehive.base.domain.entity.CellDO;
+import cn.beehive.cell.core.domain.vo.CellImageVO;
 import cn.beehive.cell.core.domain.vo.CellVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * @author Codeleven
@@ -22,4 +25,12 @@ public interface CellConverter {
      * @return CellVO
      */
     CellVO entityToVO(CellDO cellDO);
+
+    /**
+     * List<CellDO> 转 List<CellImageVO>
+     *
+     * @param cellDOList List<CellDO>
+     * @return List<CellImageVO>
+     */
+    List<CellImageVO> entityToImageVO(List<CellDO> cellDOList);
 }

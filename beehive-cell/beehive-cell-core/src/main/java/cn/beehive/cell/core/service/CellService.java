@@ -1,6 +1,7 @@
 package cn.beehive.cell.core.service;
 
 import cn.beehive.base.domain.entity.CellDO;
+import cn.beehive.cell.core.domain.vo.CellImageVO;
 import cn.beehive.cell.core.domain.vo.CellVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,4 +20,11 @@ public interface CellService extends IService<CellDO> {
      * @return cell 列表
      */
     List<CellVO> listCell();
+
+    /**
+     * cell 封面列表
+     *
+     * @return cell 封面列表
+     */
+    List<CellImageVO> listCellImage();
 }

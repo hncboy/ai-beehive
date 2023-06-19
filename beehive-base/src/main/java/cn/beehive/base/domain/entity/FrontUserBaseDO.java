@@ -53,6 +53,11 @@ public class FrontUserBaseDO {
     private String lastLoginIp;
 
     /**
+     * 备注
+     */
+    private String remark;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
