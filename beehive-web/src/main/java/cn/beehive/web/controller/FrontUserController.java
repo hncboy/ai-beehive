@@ -1,6 +1,7 @@
 package cn.beehive.web.controller;
 
 import cn.beehive.base.enums.FrontUserRegisterTypeEnum;
+import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.handler.response.R;
 import cn.beehive.web.domain.request.LoginFrontUserByEmailRequest;
 import cn.beehive.web.domain.request.RegisterFrontUserForEmailRequest;
@@ -40,14 +41,14 @@ public class FrontUserController {
         return R.success("验证成功");
     }
 
-    /**
-     * TODO 限制注册的邮箱后缀
-     */
     @Operation(summary = "邮箱注册")
     @PostMapping("/register/email")
-    public R<Void> registerFrontUser(@Validated @RequestBody RegisterFrontUserForEmailRequest request) {
-        frontUserService.register(request);
-        return R.success("注册成功");
+    public R<Boolean> registerFrontUser(@Validated @RequestBody RegisterFrontUserForEmailRequest request) {
+        if (frontUserService.register(request)) {
+            return R.data(true);
+        }
+        // 这里抛出异常防止 service 抛出回滚
+        throw new ServiceException("注册失败");
     }
 
     @Operation(summary = "用户信息")
@@ -62,9 +63,6 @@ public class FrontUserController {
         return R.data(frontUserService.generateCaptcha());
     }
 
-    /**
-     * TODO 限制登录的邮箱后缀
-     */
     @Operation(summary = "邮箱登录")
     @PostMapping("/login/email")
     public R<LoginInfoVO> login(@RequestBody LoginFrontUserByEmailRequest request) {

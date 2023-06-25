@@ -2,9 +2,11 @@ package cn.beehive.web.service.impl;
 
 import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.EmailBizTypeEnum;
-import cn.beehive.base.resource.email.EmailConfig;
+import cn.beehive.base.resource.email.EmailRegisterLoginConfig;
+import cn.beehive.base.util.EmailUtil;
 import cn.beehive.web.service.EmailService;
 import cn.beehive.web.service.SysEmailSendLogService;
+import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -28,51 +30,51 @@ public class EmailServiceImpl implements EmailService {
      */
     private static final String REGISTER_EMAIL_TEMPLATE_CONTENT_SYS_PARAM_KEY = "email-registerTemplateContent";
 
-    /**
-     * 邮箱注册模板主题 sysParamKey
-     */
-    private static final String REGISTER_EMAIL_TEMPLATE_SUBJECT_SYS_PARAM_KEY = "email-registerTemplateSubject";
-
-    @Resource
-    private EmailConfig emailConfig;
-
     @Resource
     private SysEmailSendLogService emailLogService;
 
     @Override
-    public void sendForVerifyCode(String targetEmail, String verifyCode) {
+    public Boolean sendForVerifyCode(String targetEmail, String verifyCode) {
         // 记录日志
-        String sendContent = getSendContent(verifyCode);
+        EmailRegisterLoginConfig emailRegisterLoginConfig = EmailUtil.getRegisterAccountConfig();
+        String sendContent = getSendContent(emailRegisterLoginConfig, verifyCode);
+        MailAccount mailAccount = EmailUtil.getMailAccount();
+
         try {
-            String sendMsgId = sendMessage(targetEmail, sendContent);
-            emailLogService.createSuccessLogBySysLog(sendMsgId, emailConfig.getMailAccount().getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, sendContent);
+            String sendMsgId = sendMessage(emailRegisterLoginConfig, mailAccount, targetEmail, sendContent);
+            emailLogService.createSuccessLogBySysLog(sendMsgId, mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, sendContent);
+            return true;
         } catch (Exception e) {
-            // FIXME 发送失败前端仍然显示成功
-            emailLogService.createFailedLogBySysLog("", emailConfig.getMailAccount().getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, sendContent, e.getMessage());
+            // 邮件发送失败
+            emailLogService.createFailedLogBySysLog("", mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, sendContent, e.getMessage());
+            return false;
         }
     }
 
     /**
      * 发送消息
      *
-     * @param targetEmail 目标邮件地址
-     * @param content     内容
+     * @param emailRegisterLoginConfig 邮箱注册登录配置
+     * @param mailAccount              MailAccount
+     * @param targetEmail              目标邮件地址
+     * @param content                  内容
      * @return 响应
      */
-    private String sendMessage(String targetEmail, String content) {
-        return MailUtil.send(emailConfig.getMailAccount(), targetEmail, SysParamCache.get(REGISTER_EMAIL_TEMPLATE_SUBJECT_SYS_PARAM_KEY), content, true);
+    private String sendMessage(EmailRegisterLoginConfig emailRegisterLoginConfig, MailAccount mailAccount, String targetEmail, String content) {
+        return MailUtil.send(mailAccount, targetEmail, emailRegisterLoginConfig.getRegisterTemplateSubject(), content, true);
     }
 
     /**
      * 获取发送内容
      *
-     * @param verifyCode 验证码
+     * @param emailRegisterLoginConfig 邮箱注册登录配置
+     * @param verifyCode               验证码
      * @return 发送内容
      */
-    private String getSendContent(String verifyCode) {
+    private String getSendContent(EmailRegisterLoginConfig emailRegisterLoginConfig, String verifyCode) {
         // 设置模板中需要填充的变量
         Context context = new Context();
-        context.setVariable("verificationUrl", emailConfig.getVerificationRedirectUrl().concat(verifyCode));
+        context.setVariable("verificationUrl", emailRegisterLoginConfig.getRegisterVerificationRedirectUrl().concat(verifyCode));
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 
         // 获取邮件模板

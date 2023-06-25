@@ -1,10 +1,5 @@
 package cn.beehive.web.service.strategy.user;
 
-import cn.dev33.satoken.stp.SaLoginModel;
-import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.util.BooleanUtil;
-import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.beehive.base.constant.ApplicationConstant;
 import cn.beehive.base.domain.entity.EmailVerifyCodeDO;
 import cn.beehive.base.domain.entity.FrontUserBaseDO;
@@ -13,15 +8,22 @@ import cn.beehive.base.domain.entity.FrontUserExtraEmailDO;
 import cn.beehive.base.enums.EmailBizTypeEnum;
 import cn.beehive.base.enums.FrontUserRegisterTypeEnum;
 import cn.beehive.base.exception.ServiceException;
+import cn.beehive.base.resource.email.EmailRegisterLoginConfig;
+import cn.beehive.base.util.EmailUtil;
+import cn.beehive.web.domain.request.RegisterFrontUserForEmailRequest;
+import cn.beehive.web.domain.vo.LoginInfoVO;
+import cn.beehive.web.domain.vo.UserInfoVO;
 import cn.beehive.web.service.EmailService;
 import cn.beehive.web.service.EmailVerifyCodeService;
 import cn.beehive.web.service.FrontUserBaseService;
 import cn.beehive.web.service.FrontUserExtraBindingService;
 import cn.beehive.web.service.FrontUserExtraEmailService;
 import cn.beehive.web.service.SysFrontUserLoginLogService;
-import cn.beehive.web.domain.request.RegisterFrontUserForEmailRequest;
-import cn.beehive.web.domain.vo.LoginInfoVO;
-import cn.beehive.web.domain.vo.UserInfoVO;
+import cn.dev33.satoken.stp.SaLoginModel;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.BooleanUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -86,8 +88,10 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void register(RegisterFrontUserForEmailRequest request) {
-        // 注册前会校验账号信息，到注册时能确保账号都是可以注册的
+    public Boolean register(RegisterFrontUserForEmailRequest request) {
+        // 校验邮箱注册权限
+        EmailRegisterLoginConfig emailRegisterAccountConfig = EmailUtil.getRegisterAccountConfig();
+        emailRegisterAccountConfig.checkRegisterPermission(request.getIdentity());
 
         // 查找邮箱账号是否存在
         FrontUserExtraEmailDO existsEmailDO = userExtraEmailService.getUnverifiedEmailAccount(request.getIdentity());
@@ -113,10 +117,8 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
         // 存储验证码记录
         EmailVerifyCodeDO emailVerifyCodeDO = emailVerifyCodeService.createVerifyCode(EmailBizTypeEnum.REGISTER_VERIFY, request.getIdentity());
 
-        // TODO 根据 ip 进行限流
-
         // 发送邮箱验证信息
-        emailService.sendForVerifyCode(request.getIdentity(), emailVerifyCodeDO.getVerifyCode());
+        return emailService.sendForVerifyCode(request.getIdentity(), emailVerifyCodeDO.getVerifyCode());
     }
 
     @Override
@@ -145,6 +147,10 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public LoginInfoVO login(String username, String password) {
+        // 校验邮箱登录权限
+        EmailRegisterLoginConfig emailRegisterAccountConfig = EmailUtil.getRegisterAccountConfig();
+        emailRegisterAccountConfig.checkLoginPermission(username);
+
         // 验证账号信息
         FrontUserExtraEmailDO emailDO = userExtraEmailService.getEmailAccount(username);
         if (Objects.isNull(emailDO) || BooleanUtil.isFalse(emailDO.getVerified())) {

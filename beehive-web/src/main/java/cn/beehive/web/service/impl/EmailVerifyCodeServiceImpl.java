@@ -1,5 +1,6 @@
 package cn.beehive.web.service.impl;
 
+import cn.beehive.base.util.EmailUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -25,9 +26,6 @@ import java.util.Date;
 @Service
 public class EmailVerifyCodeServiceImpl extends ServiceImpl<EmailVerifyCodeMapper, EmailVerifyCodeDO> implements EmailVerifyCodeService {
 
-    @Resource
-    private EmailConfig emailConfig;
-
     @Override
     public EmailVerifyCodeDO createVerifyCode(EmailBizTypeEnum emailBizTypeEnum, String identity) {
         EmailVerifyCodeDO verifyCode = new EmailVerifyCodeDO();
@@ -36,7 +34,8 @@ public class EmailVerifyCodeServiceImpl extends ServiceImpl<EmailVerifyCodeMappe
         verifyCode.setVerifyIp(WebUtil.getIp());
         verifyCode.setBizType(emailBizTypeEnum);
         verifyCode.setToEmailAddress(identity);
-        verifyCode.setExpireAt(DateUtil.offsetMinute(new Date(), emailConfig.getVerifyCodeExpireMinutes()));
+        // 目前只有注册验证码
+        verifyCode.setExpireAt(DateUtil.offsetMinute(new Date(), EmailUtil.getRegisterAccountConfig().getRegisterVerifyCodeExpireMinutes()));
         this.save(verifyCode);
         return verifyCode;
     }

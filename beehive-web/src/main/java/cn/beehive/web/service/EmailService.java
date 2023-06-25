@@ -12,6 +12,7 @@ public interface EmailService {
      *
      * @param targetEmail 目标邮箱
      * @param verifyCode  验证码
+     * @return 是否发送成功
      */
-    void sendForVerifyCode(String targetEmail, String verifyCode);
+    Boolean sendForVerifyCode(String targetEmail, String verifyCode);
 }

@@ -1,6 +1,7 @@
 package cn.beehive.base.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @author hncboy
@@ -10,20 +11,19 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum SysParamKeyEnum {
 
-    ;
+    /**
+     * 邮箱配置
+     */
+    EMAIL_CONFIG("email-config"),
+
+    /**
+     * 邮箱注册登录配置
+     */
+    EMAIL_REGISTER_LOGIN_CONFIG("email-registerLoginConfig");
 
     /**
      * paramKey
      */
+    @Getter
     private final String paramKey;
-
-    /**
-     * 获取 ParamKey
-     *
-     * @return ParamKey
-     */
-    public String getParamKey() {
-        // 转小写
-        return paramKey.toLowerCase();
-    }
 }

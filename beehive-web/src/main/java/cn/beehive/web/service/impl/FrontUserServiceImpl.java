@@ -23,9 +23,9 @@ import org.springframework.stereotype.Service;
 public class FrontUserServiceImpl implements FrontUserService {
 
     @Override
-    public void register(RegisterFrontUserForEmailRequest request) {
+    public Boolean register(RegisterFrontUserForEmailRequest request) {
         AbstractRegisterTypeStrategy registerStrategy = AbstractRegisterTypeStrategy.findStrategyByRegisterType(request.getRegisterType());
-        registerStrategy.register(request);
+        return registerStrategy.register(request);
     }
 
     @Override
@@ -48,11 +48,11 @@ public class FrontUserServiceImpl implements FrontUserService {
 
     @Override
     public RegisterCaptchaVO generateCaptcha() {
-        // 创建一个 图形验证码会话ID
+        // 创建一个 图形验证码会话 ID
         String picCodeSessionId = IdUtil.fastUUID();
-        // 根据图形验证码会话ID获取一个图形验证码。该方法会建立起 验证码会话ID 和 图形验证码的关系
+        // 根据图形验证码会话 ID 获取一个图形验证码。该方法会建立起 验证码会话 ID 和 图形验证码的关系
         String captchaBase64Image = SimpleCaptchaUtil.getBase64Captcha(picCodeSessionId);
-        // 将验证码会话ID加入到Cookie中
+        // 将验证码会话 ID 加入到 Cookie 中
         return RegisterCaptchaVO.builder()
                 .picCodeSessionId(picCodeSessionId)
                 .picCodeBase64(captchaBase64Image).build();

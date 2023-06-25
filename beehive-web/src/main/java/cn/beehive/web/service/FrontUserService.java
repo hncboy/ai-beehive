@@ -17,8 +17,9 @@ public interface FrontUserService {
      * 处理注册请求
      *
      * @param request 注册请求
+     * @return 是否成功
      */
-    void register(RegisterFrontUserForEmailRequest request);
+    Boolean register(RegisterFrontUserForEmailRequest request);
 
     /**
      * 验证码验证
