@@ -1,9 +1,10 @@
-package cn.beehive.base.util;
+package cn.beehive.base.resource.email;
 
 import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.SysParamKeyEnum;
 import cn.beehive.base.resource.email.EmailConfig;
 import cn.beehive.base.resource.email.EmailRegisterLoginConfig;
+import cn.beehive.base.util.ObjectMapperUtil;
 import cn.hutool.extra.mail.MailAccount;
 import lombok.experimental.UtilityClass;
 

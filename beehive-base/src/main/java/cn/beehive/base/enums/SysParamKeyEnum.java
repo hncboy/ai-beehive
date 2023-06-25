@@ -12,6 +12,11 @@ import lombok.Getter;
 public enum SysParamKeyEnum {
 
     /**
+     * 百度 AI 配置
+     */
+    BAIDU_AIP("baidu-aip"),
+
+    /**
      * 邮箱配置
      */
     EMAIL_CONFIG("email-config"),

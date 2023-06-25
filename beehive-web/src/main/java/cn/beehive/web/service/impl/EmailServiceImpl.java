@@ -3,7 +3,7 @@ package cn.beehive.web.service.impl;
 import cn.beehive.base.cache.SysParamCache;
 import cn.beehive.base.enums.EmailBizTypeEnum;
 import cn.beehive.base.resource.email.EmailRegisterLoginConfig;
-import cn.beehive.base.util.EmailUtil;
+import cn.beehive.base.resource.email.EmailUtil;
 import cn.beehive.web.service.EmailService;
 import cn.beehive.web.service.SysEmailSendLogService;
 import cn.hutool.extra.mail.MailAccount;

@@ -9,7 +9,7 @@ import cn.beehive.base.enums.EmailBizTypeEnum;
 import cn.beehive.base.enums.FrontUserRegisterTypeEnum;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.resource.email.EmailRegisterLoginConfig;
-import cn.beehive.base.util.EmailUtil;
+import cn.beehive.base.resource.email.EmailUtil;
 import cn.beehive.web.domain.request.RegisterFrontUserForEmailRequest;
 import cn.beehive.web.domain.vo.LoginInfoVO;
 import cn.beehive.web.domain.vo.UserInfoVO;
