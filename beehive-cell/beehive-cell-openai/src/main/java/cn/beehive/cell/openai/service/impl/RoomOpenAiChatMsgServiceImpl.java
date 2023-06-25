@@ -50,8 +50,8 @@ public class RoomOpenAiChatMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAiC
     public ResponseBodyEmitter send(RoomOpenAiChatSendRequest sendRequest) {
         // 超时时间设置 3 分钟
         ResponseBodyEmitter emitter = new ResponseBodyEmitter(3 * 60 * 1000L);
-        emitter.onCompletion(() -> log.debug("请求参数：{}，Front-end closed the emitter connection.", ObjectMapperUtil.toJson(sendRequest)));
-        emitter.onTimeout(() -> log.error("请求参数：{}，Back-end closed the emitter connection.", ObjectMapperUtil.toJson(sendRequest)));
+        emitter.onCompletion(() -> log.debug("OpenAi Chat 请求参数：{}，Front-end closed the emitter connection.", ObjectMapperUtil.toJson(sendRequest)));
+        emitter.onTimeout(() -> log.error("OpenAi Chat 请求参数：{}，Back-end closed the emitter connection.", ObjectMapperUtil.toJson(sendRequest)));
 
         // 获取房间信息
         Map<CellCodeEnum, RoomOpenAiChatResponseEmitter> responseEmitterMap = RoomOpenAiChatResponseEmitterDispatcher.RESPONSE_EMITTER_MAP;

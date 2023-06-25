@@ -31,6 +31,14 @@ public interface RoomMidjourneyMsgConverter {
     List<RoomMidjourneyMsgVO> entityToVO(List<RoomMidjourneyMsgDO> roomMidjourneyMsgDOList);
 
     /**
+     * RoomMidjourneyMsgDO 转 RoomMidjourneyMsgVO
+     *
+     * @param roomMidjourneyMsgDO RoomMidjourneyMsgDO
+     * @return RoomMidjourneyMsgVO
+     */
+    RoomMidjourneyMsgVO entityToVO(RoomMidjourneyMsgDO roomMidjourneyMsgDO);
+
+    /**
      * entityToVO 后置处理
      *
      * @param roomMidjourneyMsgDO roomMidjourneyMsgDO

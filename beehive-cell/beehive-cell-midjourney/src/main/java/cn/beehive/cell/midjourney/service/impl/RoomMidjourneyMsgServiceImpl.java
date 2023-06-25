@@ -74,6 +74,14 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
     }
 
     @Override
+    public RoomMidjourneyMsgVO detail(Long msgId) {
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = getOne(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
+                .eq(RoomMidjourneyMsgDO::getUserId, FrontUserUtil.getUserId())
+                .eq(RoomMidjourneyMsgDO::getId, msgId));
+        return RoomMidjourneyMsgConverter.INSTANCE.entityToVO(roomMidjourneyMsgDO);
+    }
+
+    @Override
     public void imagine(MjImagineRequest imagineRequest) {
         // 检查是否可以操作
         MidjourneyRoomMsgHandler.checkCanOperate(imagineRequest.getRoomId());

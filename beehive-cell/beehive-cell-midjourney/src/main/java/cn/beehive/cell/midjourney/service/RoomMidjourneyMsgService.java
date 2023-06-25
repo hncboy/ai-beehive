@@ -26,6 +26,14 @@ public interface RoomMidjourneyMsgService extends IBeehiveService<RoomMidjourney
     List<RoomMidjourneyMsgVO> list(RoomMsgCursorQuery cursorQuery);
 
     /**
+     * 查询消息详情
+     *
+     * @param msgId 消息 id
+     * @return 消息详情
+     */
+    RoomMidjourneyMsgVO detail(Long msgId);
+
+    /**
      * 根据描述创建图像
      *
      * @param imagineRequest 请求参数

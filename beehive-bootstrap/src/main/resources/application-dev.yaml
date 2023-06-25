@@ -6,8 +6,8 @@ spring:
     url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
   data:
     redis:
-      host: localhost
-      password: password
+      host: ${REDIS_HOST:localhost}
+      password: ${REDIS_PASSWORD:password}
       connect-timeout: 1000
   servlet:
     multipart:
@@ -46,9 +46,9 @@ forest:
 # 日志配置
 logging:
   level:
-    root: info
+    root: ${LOGGING_LEVEL_ROOT:info}
 
-# 代理配置，IDEA 启动使用
+# 代理配置
 proxy:
   enabled: false
   http-host: 127.0.0.1

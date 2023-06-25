@@ -9,6 +9,7 @@ import cn.beehive.cell.midjourney.domain.request.MjImagineRequest;
 import cn.beehive.cell.midjourney.domain.vo.RoomMidjourneyMsgVO;
 import cn.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -38,6 +40,12 @@ public class RoomMidjourneyController {
     @GetMapping("/list")
     public R<List<RoomMidjourneyMsgVO>> list(@Validated RoomMsgCursorQuery cursorQuery) {
         return R.data(roomMidjourneyMsgService.list(cursorQuery));
+    }
+
+    @Operation(summary = "消息详情")
+    @GetMapping("/detail")
+    public R<RoomMidjourneyMsgVO> detail(@RequestParam @Parameter(description = "消息 id") Long msgId) {
+        return R.data(roomMidjourneyMsgService.detail(msgId));
     }
 
     @CellConfigCheck(roomId = "#imagineRequest.roomId")
