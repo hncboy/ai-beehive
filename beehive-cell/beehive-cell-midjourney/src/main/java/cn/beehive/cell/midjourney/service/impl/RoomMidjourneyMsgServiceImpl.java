@@ -240,7 +240,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         // 新文件名：前缀 + 消息 id + 后缀
         String newFileName = MidjourneyConstant.DESCRIBE_FILE_PREFIX + answerMessageId + StrPool.DOT + FileUtil.getFileExtension(multipartFile.getOriginalFilename());
         // 保存文件
-        FileUtil.downloadFromMultipartFile(multipartFile, midjourneyProperties.getImageLocation(), newFileName);
+        FileUtil.downloadFromMultipartFile(multipartFile, newFileName);
 
         // 判断文件大小
         if (multipartFile.getSize() > midjourneyProperties.getMaxFileSize()) {

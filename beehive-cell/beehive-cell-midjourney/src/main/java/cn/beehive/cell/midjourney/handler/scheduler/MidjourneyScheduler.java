@@ -21,6 +21,7 @@ import java.util.List;
  * @author hncboy
  * @date 2023/5/20
  * Midjourney 定时任务
+ * 这里更新失效记录的时间范围可以手动调整，有些图片生成速度过慢
  */
 @Slf4j
 @Component
@@ -33,7 +34,7 @@ public class MidjourneyScheduler {
     @Resource
     private RoomMidjourneyMsgService roomMidjourneyMsgService;
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/3 * * * ?")
     public void handlerTask() {
         log.info("Midjourney 定时任务开始");
 

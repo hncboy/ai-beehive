@@ -71,16 +71,6 @@ public enum MidjourneyCellConfigCodeEnum implements ICellConfigCodeEnum {
     },
 
     /**
-     * 图片存储路径
-     */
-    IMAGE_LOCATION {
-        @Override
-        public String getCode() {
-            return "image_location";
-        }
-    },
-
-    /**
      * 等待队列最大长度
      */
     MAX_WAIT_QUEUE_SIZE {

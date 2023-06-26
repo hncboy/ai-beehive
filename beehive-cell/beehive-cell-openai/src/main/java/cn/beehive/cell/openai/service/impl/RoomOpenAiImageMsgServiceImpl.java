@@ -7,6 +7,7 @@ import cn.beehive.base.enums.MessageStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
 import cn.beehive.base.handler.mp.BeehiveServiceImpl;
 import cn.beehive.base.mapper.RoomOpenAiImageMsgMapper;
+import cn.beehive.base.util.FileUtil;
 import cn.beehive.base.util.FrontUserUtil;
 import cn.beehive.base.util.ObjectMapperUtil;
 import cn.beehive.base.util.OkHttpClientUtil;
@@ -20,6 +21,7 @@ import cn.beehive.cell.openai.handler.converter.RoomOpenAiImageMsgConverter;
 import cn.beehive.cell.openai.service.RoomOpenAiImageMsgService;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.unfbx.chatgpt.OpenAiClient;
 import com.unfbx.chatgpt.entity.images.Image;
 import com.unfbx.chatgpt.entity.images.ImageResponse;
@@ -89,6 +91,7 @@ public class RoomOpenAiImageMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAi
 
         // 构建回答消息
         RoomOpenAiImageMsgDO answerMessage = new RoomOpenAiImageMsgDO();
+        answerMessage.setId(IdWorker.getId());
         answerMessage.setUserId(questionMessage.getUserId());
         answerMessage.setRoomId(questionMessage.getRoomId());
         answerMessage.setParentQuestionMessageId(questionMessage.getId());
@@ -108,7 +111,11 @@ public class RoomOpenAiImageMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAi
             } else {
                 Item item = imageResponse.getData().get(0);
                 answerMessage.setOpenaiImageUrl(item.getUrl());
-                answerMessage.setImageName("TODO");
+                // 构建图片名称
+                String imageName = "openaiImage-".concat(String.valueOf(answerMessage.getId())).concat(".png");
+                // 下载图片
+                FileUtil.downloadFromUrl(answerMessage.getOpenaiImageUrl(), imageName);
+                answerMessage.setImageName(imageName);
                 answerMessage.setStatus(MessageStatusEnum.SUCCESS);
             }
         } catch (Exception e) {

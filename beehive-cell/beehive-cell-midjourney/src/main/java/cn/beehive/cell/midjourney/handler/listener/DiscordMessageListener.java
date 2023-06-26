@@ -27,13 +27,13 @@ public class DiscordMessageListener extends ListenerAdapter {
     private MidjourneyProperties midjourneyProperties;
 
     @Resource
-    private ImagineAbstractDiscordMessageHandler imagineDiscordMessageHandler;
+    private ImagineDiscordMessageHandler imagineDiscordMessageHandler;
 
     @Resource
-    private UpscaleAndVariationAbstractDiscordMessageHandler uvMessageHandler;
+    private UpscaleAndVariationDiscordMessageHandler uvMessageHandler;
 
     @Resource
-    private DescribeAbstractDiscordMessageHandler describeMessageHandler;
+    private DescribeDiscordMessageHandler describeMessageHandler;
 
     /**
      * 是否忽略消息

@@ -26,7 +26,7 @@ import java.util.Objects;
  * 消息接收 - Midjourney Bot: **[6601101751104431] blue sky --v 5 --s 250** - <@1013002753796219000> (fast)
  */
 @Component
-public class ImagineAbstractDiscordMessageHandler extends AbstractDiscordMessageHandler {
+public class ImagineDiscordMessageHandler extends AbstractDiscordMessageHandler {
 
     @Override
     public void onMessageReceived(Message message) {
@@ -34,17 +34,10 @@ public class ImagineAbstractDiscordMessageHandler extends AbstractDiscordMessage
         if (Objects.isNull(messageBO)) {
             return;
         }
-
-        // 提取房间消息 id
-        Long roomMjMsgId = MjDiscordMessageUtil.findMsgIdByFinalPrompt(messageBO.getPrompt());
-        if (Objects.isNull(roomMjMsgId)) {
-            return;
-        }
-        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(roomMjMsgId);
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = extractRoomMidjourneyMsgDO(message);
         if (Objects.isNull(roomMidjourneyMsgDO)) {
             return;
         }
-
 
         // 开始处理，不考虑消息乱序和丢失的情况
         if (MidjourneyConstant.WAITING_TO_START.equals(messageBO.getStatus())) {
@@ -64,17 +57,7 @@ public class ImagineAbstractDiscordMessageHandler extends AbstractDiscordMessage
 
     @Override
     public void onMessageUpdate(Message message) {
-        MjDiscordMessageBO messageBO = MjDiscordMessageUtil.matchImagineMessage(message);
-        if (Objects.isNull(messageBO)) {
-            return;
-        }
-
-        // 提取房间消息 id
-        Long roomMjMsgId = MjDiscordMessageUtil.findMsgIdByFinalPrompt(messageBO.getPrompt());
-        if (Objects.isNull(roomMjMsgId)) {
-            return;
-        }
-        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(roomMjMsgId);
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = extractRoomMidjourneyMsgDO(message);
         if (Objects.isNull(roomMidjourneyMsgDO)) {
             return;
         }
@@ -85,5 +68,23 @@ public class ImagineAbstractDiscordMessageHandler extends AbstractDiscordMessage
         // 下载图片
         roomMidjourneyMsgDO.setImageName(downloadImage(roomMidjourneyMsgDO.getDiscordImageUrl(), roomMidjourneyMsgDO.getId()));
         roomMidjourneyMsgService.updateById(roomMidjourneyMsgDO);
+    }
+
+    private RoomMidjourneyMsgDO extractRoomMidjourneyMsgDO(Message message) {
+        MjDiscordMessageBO messageBO = MjDiscordMessageUtil.matchImagineMessage(message);
+        if (Objects.isNull(messageBO)) {
+            return null;
+        }
+
+        // 提取房间消息 id
+        Long roomMjMsgId = MjDiscordMessageUtil.findMsgIdByFinalPrompt(messageBO.getPrompt());
+        if (Objects.isNull(roomMjMsgId)) {
+            return null;
+        }
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(roomMjMsgId);
+        if (Objects.isNull(roomMidjourneyMsgDO)) {
+            return null;
+        }
+        return roomMidjourneyMsgDO;
     }
 }

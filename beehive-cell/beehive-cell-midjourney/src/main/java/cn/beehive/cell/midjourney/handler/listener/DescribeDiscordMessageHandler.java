@@ -24,7 +24,7 @@ import java.util.Objects;
  * Midjounery Discord 消息变更 - Midjourney Bot:
  */
 @Component
-public class DescribeAbstractDiscordMessageHandler extends AbstractDiscordMessageHandler {
+public class DescribeDiscordMessageHandler extends AbstractDiscordMessageHandler {
 
     @Override
     public void onMessageReceived(Message message) {

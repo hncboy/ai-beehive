@@ -2,7 +2,9 @@ package cn.beehive.cell.openai.handler.converter;
 
 import cn.beehive.base.domain.entity.RoomOpenAiImageMsgDO;
 import cn.beehive.cell.openai.domain.vo.RoomOpenAiImageMsgVO;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -32,4 +34,9 @@ public interface RoomOpenAiImageMsgConverter {
      * @return RoomOpenAiImageMsgVO
      */
     RoomOpenAiImageMsgVO entityToVO(RoomOpenAiImageMsgDO roomOpenAiImageMsgDO);
+
+    @AfterMapping
+    default void afterEntityToVO(RoomOpenAiImageMsgDO roomOpenAiImageMsgDO, @MappingTarget RoomOpenAiImageMsgVO roomOpenAiImageMsgVO) {
+        roomOpenAiImageMsgVO.setImageUrl(roomOpenAiImageMsgDO.getImageName());
+    }
 }

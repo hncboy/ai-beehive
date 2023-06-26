@@ -27,7 +27,7 @@ import java.util.Objects;
  * Midjounery Discord 消息接收 - Midjourney Bot: **[1660639025269575682] star, boy --v 5 --s 750** - Variations by <@1013002753796219000> (fast)
  */
 @Component
-public class UpscaleAndVariationAbstractDiscordMessageHandler extends AbstractDiscordMessageHandler {
+public class UpscaleAndVariationDiscordMessageHandler extends AbstractDiscordMessageHandler {
 
     @Override
     public void onMessageReceived(Message message) {

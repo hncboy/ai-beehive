@@ -2,6 +2,8 @@ package cn.beehive.cell.openai.domain.vo;
 
 import cn.beehive.base.enums.MessageStatusEnum;
 import cn.beehive.base.enums.MessageTypeEnum;
+import cn.beehive.base.handler.serializer.FilePathPrefixSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -28,6 +30,7 @@ public class RoomOpenAiImageMsgVO {
     @Schema(title = "OpenAi 图像 url")
     private String openaiImageUrl;
 
+    @JsonSerialize(using = FilePathPrefixSerializer.class)
     @Schema(title = "图像 url")
     private String imageUrl;
 
