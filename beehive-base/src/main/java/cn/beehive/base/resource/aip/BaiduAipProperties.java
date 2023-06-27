@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @author hncboy
  * @date 2023/6/6
- * @see <href="https://console.bce.baidu.com/"/>
+ * @see <a href="https://console.bce.baidu.com/">控制台</a>。
  * 百度 AI 配置参数
  */
 @Data

@@ -47,7 +47,7 @@ public class SysFrontUserLoginLogServiceImpl extends ServiceImpl<SysFrontUserLog
         logDO.setLoginIp(WebUtil.getIp());
         this.save(logDO);
 
-        // 更新上次登录时间
+        // 更新登录信息
         frontUserBaseService.updateLastLoginIp(baseUserId);
     }
 }

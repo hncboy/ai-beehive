@@ -22,7 +22,7 @@ public class CellConfigCache {
      * @return cell 配置项列表
      */
     public static List<CellConfigDO> listCellConfig(CellCodeEnum cellCodeEnum) {
-        // TODO Redis 缓存
+        // TODO 缓存
         return SpringUtil.getBean(CellConfigService.class)
                 .list(new LambdaQueryWrapper<CellConfigDO>().eq(CellConfigDO::getCellCode, cellCodeEnum));
     }

@@ -76,7 +76,6 @@ public class RoomMidjourneyController {
     @Operation(summary = "describe")
     @PostMapping("/describe")
     public R<Boolean> describe(@Validated @ModelAttribute MjDescribeRequest describeRequest) {
-        // TODO 图片审核
         roomMidjourneyMsgService.describe(describeRequest);
         return R.data(true);
     }

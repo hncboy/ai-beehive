@@ -41,7 +41,7 @@
         <maven.plugin.version>3.11.0</maven.plugin.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <springdoc.version>2.1.0</springdoc.version>
-        <satoken.version>1.34.0</satoken.version>
+        <satoken.version>1.35.0.RC</satoken.version>
         <guava.version>31.1-jre</guava.version>
         <mysql.version>8.0.32</mysql.version>
         <chatgpt-sdk.version>1.0.11</chatgpt-sdk.version>
@@ -131,6 +131,11 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-jwt</artifactId>
+            <version>${satoken.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-jackson</artifactId>
             <version>${satoken.version}</version>
         </dependency>
         <!-- guava -->

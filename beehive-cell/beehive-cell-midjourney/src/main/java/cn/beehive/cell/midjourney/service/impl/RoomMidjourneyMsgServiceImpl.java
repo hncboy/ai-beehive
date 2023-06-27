@@ -255,6 +255,8 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
             throw new ServiceException("文件格式不符合要求，只能是 jpg 或 png 格式");
         }
 
+        // TODO 图片审核
+
         // 上传图片
         Pair<Boolean, String> uploadResponsePair = discordService.uploadImage(newFileName, multipartFile);
         if (!uploadResponsePair.getKey()) {

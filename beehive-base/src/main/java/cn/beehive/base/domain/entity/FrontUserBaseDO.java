@@ -1,5 +1,6 @@
 package cn.beehive.base.domain.entity;
 
+import cn.beehive.base.enums.FrontUserStatusEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -30,7 +31,10 @@ public class FrontUserBaseDO {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    // TODO 黑名单禁止登录
+    /**
+     * 状态
+     */
+    private FrontUserStatusEnum status;
 
     /**
      * 昵称

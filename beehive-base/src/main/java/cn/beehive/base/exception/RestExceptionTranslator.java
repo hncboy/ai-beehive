@@ -47,7 +47,7 @@ public class RestExceptionTranslator {
         } else {
             message = "当前会话未登录";
         }
-        log.warn("鉴权拦截：{}", message);
+        log.warn("鉴权拦截—{}", e.getMessage());
         return R.fail(ResultCode.UN_AUTHORIZED, message);
     }
 

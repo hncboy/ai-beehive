@@ -26,7 +26,7 @@ public class FrontUserUtil {
 
     /**
      * 获取用户信息
-     *
+     * 不用 JWT 直接查用户缓存也可以，JWT 扩展参数可以记录本次是从哪个端登录的
      * @return 用户信息
      */
     public JwtUserInfoBO getJwtUserInfo() {

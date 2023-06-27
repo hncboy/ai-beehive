@@ -7,6 +7,7 @@ import cn.beehive.base.domain.entity.FrontUserExtraBindingDO;
 import cn.beehive.base.domain.entity.FrontUserExtraEmailDO;
 import cn.beehive.base.enums.EmailBizTypeEnum;
 import cn.beehive.base.enums.FrontUserRegisterTypeEnum;
+import cn.beehive.base.enums.FrontUserStatusEnum;
 import cn.beehive.base.exception.ServiceException;
 import cn.beehive.base.resource.email.EmailRegisterLoginConfig;
 import cn.beehive.base.resource.email.EmailUtil;
@@ -22,6 +23,7 @@ import cn.beehive.web.service.SysFrontUserLoginLogService;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.BooleanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
@@ -125,22 +127,24 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
     public UserInfoVO getLoginUserInfo(Integer extraInfoId) {
         FrontUserExtraEmailDO extraEmailDO = userExtraEmailService.getById(extraInfoId);
 
-        // 根据注册类型+extraInfoId获取 当前邮箱绑定在了哪个用户上
+        // 根据注册类型 + extraInfoId 获取 当前邮箱绑定在了哪个用户上
         FrontUserExtraBindingDO bindingRelations = bindingService.findExtraBinding(FrontUserRegisterTypeEnum.EMAIL, extraInfoId);
         if (Objects.isNull(bindingRelations)) {
             throw new ServiceException(StrUtil.format("注册方式：{} 额外信息ID：{} 绑定关系不存在",
                     FrontUserRegisterTypeEnum.EMAIL.getDesc(), extraInfoId));
         }
         // 根据绑定关系查找基础用户信息
-        FrontUserBaseDO baseUser = baseUserService.findUserInfoById(bindingRelations.getBaseUserId());
-        if (Objects.isNull(baseUser)) {
+        FrontUserBaseDO frontUserBaseDO = baseUserService.findUserInfoById(bindingRelations.getBaseUserId());
+        if (Objects.isNull(frontUserBaseDO)) {
             throw new ServiceException(StrUtil.format("基础用户不存在：{}", bindingRelations.getBaseUserId()));
         }
+
         // 封装基础用户信息并返回
-        return UserInfoVO.builder().baseUserId(baseUser.getId())
-                .description(baseUser.getDescription())
-                .nickname(baseUser.getNickname())
+        return UserInfoVO.builder().baseUserId(frontUserBaseDO.getId())
+                .description(frontUserBaseDO.getDescription())
+                .nickname(frontUserBaseDO.getNickname())
                 .email(extraEmailDO.getUsername())
+                .status(frontUserBaseDO.getStatus())
                 .avatarUrl("").build();
     }
 
@@ -158,16 +162,17 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
         }
 
         // 二次加密，验证账号密码
-        String salt = emailDO.getSalt();
-        String afterEncryptedPassword = this.encryptRawPassword(password, salt);
-        if (!Objects.equals(afterEncryptedPassword, emailDO.getPassword())) {
+        String afterEncryptedPassword = encryptRawPassword(password, emailDO.getSalt());
+
+        // 密码不一致的情况
+        if (ObjectUtil.notEqual(afterEncryptedPassword, emailDO.getPassword())) {
             Integer baseUserId = 0;
             // 获取绑定的基础用户 id
             FrontUserExtraBindingDO userExtraBindingDO = bindingService.findExtraBinding(FrontUserRegisterTypeEnum.EMAIL, emailDO.getId());
             if (Objects.nonNull(userExtraBindingDO)) {
-                FrontUserBaseDO userBaseDO = baseUserService.findUserInfoById(userExtraBindingDO.getBaseUserId());
-                if (Objects.nonNull(userBaseDO)) {
-                    baseUserId = userBaseDO.getId();
+                FrontUserBaseDO frontUserBaseDO = baseUserService.findUserInfoById(userExtraBindingDO.getBaseUserId());
+                if (Objects.nonNull(frontUserBaseDO)) {
+                    baseUserId = frontUserBaseDO.getId();
                 }
             }
 
@@ -177,17 +182,24 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
         }
 
         // 获取登录用户信息
-        UserInfoVO userInfo = this.getLoginUserInfo(emailDO.getId());
+        UserInfoVO userInfoVO = getLoginUserInfo(emailDO.getId());
+
+        // 判断用户状态
+        if (userInfoVO.getStatus() == FrontUserStatusEnum.BLOCK) {
+            // 记录登录失败日志
+            loginLogService.loginFailed(FrontUserRegisterTypeEnum.EMAIL, emailDO.getId(), userInfoVO.getBaseUserId(), "用户被禁止登录");
+            throw new ServiceException("您已经被禁止登录，有问题请联系管理员");
+        }
 
         // 执行登录
-        StpUtil.login(userInfo.getBaseUserId(), SaLoginModel.create()
+        StpUtil.login(userInfoVO.getBaseUserId(), SaLoginModel.create()
                 .setExtra(FRONT_JWT_USERNAME, emailDO.getUsername())
                 .setExtra(ApplicationConstant.FRONT_JWT_REGISTER_TYPE_CODE, FrontUserRegisterTypeEnum.EMAIL.getCode())
                 .setExtra(FRONT_JWT_EXTRA_USER_ID, emailDO.getId()));
 
         // 记录登录日志
-        loginLogService.loginSuccess(FrontUserRegisterTypeEnum.EMAIL, emailDO.getId(), userInfo.getBaseUserId());
+        loginLogService.loginSuccess(FrontUserRegisterTypeEnum.EMAIL, emailDO.getId(), userInfoVO.getBaseUserId());
 
-        return LoginInfoVO.builder().token(StpUtil.getTokenValue()).baseUserId(userInfo.getBaseUserId()).build();
+        return LoginInfoVO.builder().token(StpUtil.getTokenValue()).baseUserId(userInfoVO.getBaseUserId()).build();
     }
 }

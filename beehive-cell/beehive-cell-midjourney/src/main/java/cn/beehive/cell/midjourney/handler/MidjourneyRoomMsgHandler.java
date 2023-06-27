@@ -100,7 +100,7 @@ public class MidjourneyRoomMsgHandler {
             // 理论上不会进入
             throw new ServiceException(StrUtil.format("该 U{} 操作已经成功，请勿重复操作", index));
         }
-        // TODO 这块需要处理下
+        // 失败过不重试，可能在 Discord 是已经成功的，减少出错
         if (convertStatus == MidjourneyMsgStatusEnum.MJ_FAILURE || convertStatus == MidjourneyMsgStatusEnum.SYS_WAIT_MJ_RECEIVED_FAILURE || convertStatus == MidjourneyMsgStatusEnum.SYS_SEND_MJ_REQUEST_FAILURE) {
             throw new ServiceException(StrUtil.format("该 U{} 操作曾经失败过，无法再次进行操作", index));
         }
