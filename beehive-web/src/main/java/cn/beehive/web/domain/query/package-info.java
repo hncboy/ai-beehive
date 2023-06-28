@@ -1,1 +1,0 @@
-package cn.beehive.web.domain.query;

@@ -1,1 +1,0 @@
-package cn.beehive.base.resource;

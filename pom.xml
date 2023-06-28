@@ -17,7 +17,7 @@
     </developers>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>cn.beehive</groupId>
+    <groupId>com.hncboy</groupId>
     <artifactId>ai-beehive</artifactId>
     <version>${revision}</version>
     <name>beehive</name>

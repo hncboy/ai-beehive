@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cn.beehive</groupId>
+        <groupId>com.hncboy</groupId>
         <artifactId>beehive-cell</artifactId>
         <version>${revision}</version>
     </parent>
@@ -10,22 +10,22 @@
 
     <dependencies>
         <dependency>
-            <groupId>cn.beehive</groupId>
+            <groupId>com.hncboy</groupId>
             <artifactId>beehive-cell-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cn.beehive</groupId>
+            <groupId>com.hncboy</groupId>
             <artifactId>beehive-cell-bing</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cn.beehive</groupId>
+            <groupId>com.hncboy</groupId>
             <artifactId>beehive-cell-midjourney</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cn.beehive</groupId>
+            <groupId>com.hncboy</groupId>
             <artifactId>beehive-cell-openai</artifactId>
             <version>${project.version}</version>
         </dependency>
