@@ -38,6 +38,11 @@ public class BingApiSendMessageResultBO {
      */
     private List<SuggestedResponse> suggestedResponses;
 
+    /**
+     * bot 回复的详细信息
+     */
+    private List<SourceAttribution> sourceAttributions;
+
     @Data
     public static class SuggestedResponse {
 
@@ -45,5 +50,19 @@ public class BingApiSendMessageResultBO {
          * 消息内容
          */
         private String text;
+    }
+
+    @Data
+    public static class SourceAttribution {
+
+        /**
+         * 更多的链接
+         */
+        private String seeMoreUrl;
+
+        /**
+         * 展示的名称
+         */
+        private String providerDisplayName;
     }
 }

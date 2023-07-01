@@ -60,6 +60,7 @@ public class BingRoomHandler {
         ForestRequestUtil.buildProxy(forestRequest);
         ForestResponse<?> forestResponse = forestRequest.execute(ForestResponse.class);
         if (forestResponse.isError()) {
+            // 国内访问会 403
             log.warn("用户 {} 房间 {} 创建 NewBing 会话失败，响应结果：{}", FrontUserUtil.getUserId(), roomId, forestResponse.getContent(), forestResponse.getException());
             throw new ServiceException("创建 NewBing 会话失败，请稍后再试");
         }

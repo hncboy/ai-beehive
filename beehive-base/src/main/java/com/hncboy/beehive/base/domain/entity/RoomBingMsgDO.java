@@ -11,6 +11,7 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author hncboy
@@ -102,6 +103,12 @@ public class RoomBingMsgDO {
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
     private List<String> suggestResponses;
+
+    /**
+     * bing 数据来源
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<Object> sourceAttributions;
 
     /**
      * 创建时间

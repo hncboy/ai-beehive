@@ -2,11 +2,14 @@ package com.hncboy.beehive.base.util;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
 
 /**
  * @author hncboy
@@ -51,6 +54,22 @@ public class ObjectMapperUtil {
             return OBJECT_MAPPER.readValue(json, clazz);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(StrUtil.format("{} Failed to convert JSON to object", json, e));
+        }
+    }
+
+    /**
+     * 将一个 JSON 字符串转换为 Java 对象
+     *
+     * @param json         待转换的 JSON 字符串
+     * @param typeReference 转换后的 Java 类型的参考
+     * @param <T>          Java 类型的泛型参数
+     * @return 转换后的 Java 对象
+     */
+    public static <T> T fromJson(String json, TypeReference<T> typeReference) {
+        try {
+            return OBJECT_MAPPER.readValue(json, typeReference);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert JSON to typeReference: " + json, e);
         }
     }
 

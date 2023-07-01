@@ -1,5 +1,7 @@
 package com.hncboy.beehive.cell.bing.handler;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.hncboy.beehive.base.domain.entity.RoomBingDO;
 import com.hncboy.beehive.base.domain.entity.RoomBingMsgDO;
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
@@ -15,7 +17,6 @@ import com.hncboy.beehive.cell.bing.domain.vo.RoomBingStreamMsgVO;
 import com.hncboy.beehive.cell.bing.handler.converter.RoomBingMsgConverter;
 import com.hncboy.beehive.cell.bing.service.RoomBingMsgService;
 import com.hncboy.beehive.cell.bing.service.RoomBingService;
-import cn.hutool.core.collection.CollectionUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -121,6 +122,8 @@ public class BingApiResponseTypeMessageHandler {
             answerMessage.setType(MessageTypeEnum.ANSWER);
             answerMessage.setContent(botMessage.getText());
             answerMessage.setSuggestResponses(Optional.ofNullable(roomBingStreamMsgVO.getSuggests()).orElse(Collections.emptyList()));
+            answerMessage.setSourceAttributions(ObjectMapperUtil.fromJson(ObjectMapperUtil.toJson(botMessage.getSourceAttributions()), new TypeReference<>() {
+            }));
             roomBingMsgService.save(answerMessage);
 
             // 发送消息
