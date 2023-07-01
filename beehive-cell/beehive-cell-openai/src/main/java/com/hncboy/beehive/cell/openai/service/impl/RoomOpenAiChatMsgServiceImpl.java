@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author hncboy
+ * @author hncboy·
  * @date 2023/5/31
- * OpenAi 对话房间消息服务层
+ * OpenAi 对话房间消息业务实现类
  */
 @Slf4j
 @Service

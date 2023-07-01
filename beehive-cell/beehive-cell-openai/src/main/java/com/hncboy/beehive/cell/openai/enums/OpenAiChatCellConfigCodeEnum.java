@@ -231,5 +231,23 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
             // 校验是否是 boolean 类型
             dataWrapper.asBoolean();
         }
+    },
+
+    /**
+     * KEY 使用策略
+     */
+    KEY_STRATEGY {
+
+        @Override
+        public String getCode() {
+            return "key_strategy";
+        }
+
+        @Override
+        public void singleValidate(DataWrapper dataWrapper) {
+            if (!OpenAiApiKeyStrategyEnum.CODE_MAP.containsKey(dataWrapper.asString())) {
+                throw new ServiceException("Key 策略参数错误");
+            }
+        }
     }
 }

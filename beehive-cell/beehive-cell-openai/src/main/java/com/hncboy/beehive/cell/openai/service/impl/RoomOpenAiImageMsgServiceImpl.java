@@ -38,7 +38,7 @@ import java.util.Objects;
 /**
  * @author hncboy
  * @date 2023/6/3
- * OpenAi 图像房间消息服务层实现类
+ * OpenAi 图像房间消息业务实现类
  */
 @Slf4j
 @Service

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author hncboy
  * @date 2023/5/31
- * OpenAi 对话房间消息服务层
+ * OpenAi 对话房间消息业务接口
  */
 public interface RoomOpenAiChatMsgService extends IBeehiveService<RoomOpenAiChatMsgDO> {
 

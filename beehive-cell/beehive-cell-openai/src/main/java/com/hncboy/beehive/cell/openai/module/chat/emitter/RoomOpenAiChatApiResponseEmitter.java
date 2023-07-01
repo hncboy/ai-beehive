@@ -23,6 +23,7 @@ import com.hncboy.beehive.cell.openai.module.chat.listener.ParsedEventSourceList
 import com.hncboy.beehive.cell.openai.module.chat.listener.ResponseBodyEmitterStreamListener;
 import com.hncboy.beehive.cell.openai.module.chat.parser.ChatCompletionResponseParser;
 import com.hncboy.beehive.cell.openai.module.chat.storage.ApiKeyDatabaseDataStorage;
+import com.hncboy.beehive.cell.openai.module.key.OpenAiApiKeyHandler;
 import com.hncboy.beehive.cell.openai.service.RoomOpenAiChatMsgService;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.extra.spring.SpringUtil;
@@ -106,11 +107,16 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
                 .setQuestionMessageDO(questionMessage)
                 .build();
 
+        String originalApiKey = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.API_KEY).asString();
+        String originalBaseUrl = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.OPENAI_BASE_URL).asString();
+        String keyStrategyEnumCode = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.KEY_STRATEGY).asString();
+        Pair<String, String> chatApiKeyInfoPair = OpenAiApiKeyHandler.getChatApiKeyInfo(originalApiKey, originalBaseUrl, keyStrategyEnumCode, questionMessage.getModelName());
+
         // 构建 OpenAiStreamClient
         OpenAiStreamClient openAiStreamClient = OpenAiStreamClient.builder()
                 .okHttpClient(OkHttpClientUtil.getInstance())
-                .apiKey(Collections.singletonList(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.API_KEY).asString()))
-                .apiHost(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.OPENAI_BASE_URL).asString())
+                .apiKey(Collections.singletonList(chatApiKeyInfoPair.getKey()))
+                .apiHost(chatApiKeyInfoPair.getValue())
                 .build();
         openAiStreamClient.streamChatCompletion(chatCompletion, parsedEventSourceListener);
     }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author hncboy
  * @date 2023/6/3
- * OpenAi 图像房间消息服务层
+ * OpenAi 图像房间消息业务接口
  */
 public interface RoomOpenAiImageMsgService extends IBeehiveService<RoomOpenAiImageMsgDO> {
 

@@ -67,7 +67,20 @@ public enum ChatCompletionErrorCodeEnum {
      *   }
      * }
      */
-    server_error("server_error", "该模型已经超过负载，请稍后再试");
+    server_error("server_error", "该模型已经超过负载，请稍后再试"),
+
+    /**
+     * 账单未处于活动状态
+     * {
+     *   "error": {
+     *         "message": "Your account is not active, please check your billing details on our website.",
+     *         "type": "billing_not_active",
+     *         "param": null,
+     *         "code": null
+     *     }
+     * }
+     */
+    BILLING_NOT_ACTIVE("billing_not_active", "账单未激活");
 
     @Getter
     private final String code;

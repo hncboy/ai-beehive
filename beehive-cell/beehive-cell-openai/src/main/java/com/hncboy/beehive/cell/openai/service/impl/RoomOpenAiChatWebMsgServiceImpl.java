@@ -27,7 +27,7 @@ import java.util.UUID;
 /**
  * @author hncboy
  * @date 2023/6/1
- * OpenAi 对话 Web 房间消息业务实现
+ * OpenAi 对话 Web 房间消息业务实现类
  */
 @Service
 public class RoomOpenAiChatWebMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAiChatWebMsgMapper, RoomOpenAiChatWebMsgDO> implements RoomOpenAiChatWebMsgService {

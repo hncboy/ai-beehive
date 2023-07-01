@@ -11,6 +11,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author hncboy
@@ -38,9 +39,9 @@ public class OpenAiApiKeyDO {
     private String baseUrl;
 
     /**
-     * 使用场景
+     * 使用场景列表
      */
-    private OpenAiApiKeyUseSceneEnum useScene;
+    private List<OpenAiApiKeyUseSceneEnum> useScenes;
 
     /**
      * 总共额度
@@ -51,6 +52,11 @@ public class OpenAiApiKeyDO {
      * 已使用额度
      */
     private BigDecimal usageBalance;
+
+    /**
+     * 剩余额度
+     */
+    private BigDecimal remainBalance;
 
     /**
      * 刷新余额时间
@@ -71,6 +77,11 @@ public class OpenAiApiKeyDO {
      * 备注
      */
     private String remark;
+
+    /**
+     * 版本
+     */
+    private Integer version;
 
     /**
      * 创建时间
