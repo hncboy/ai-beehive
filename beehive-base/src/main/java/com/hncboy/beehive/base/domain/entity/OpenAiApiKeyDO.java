@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.hncboy.beehive.base.enums.OpenAiApiKeyStatus;
+import com.hncboy.beehive.base.enums.OpenAiApiKeyStatusEnum;
 import com.hncboy.beehive.base.enums.OpenAiApiKeyUseSceneEnum;
 import lombok.Data;
 
@@ -44,19 +44,24 @@ public class OpenAiApiKeyDO {
     private List<OpenAiApiKeyUseSceneEnum> useScenes;
 
     /**
-     * 总共额度
+     * 总额度（美元）
      */
     private BigDecimal totalBalance;
 
     /**
-     * 已使用额度
+     * 已使用额度（美元）
      */
     private BigDecimal usageBalance;
 
     /**
-     * 剩余额度
+     * 剩余额度（美元）
      */
     private BigDecimal remainBalance;
+
+    /**
+     * 余额水位线（美元）
+     */
+    private BigDecimal balanceWaterLine;
 
     /**
      * 刷新余额时间
@@ -71,12 +76,17 @@ public class OpenAiApiKeyDO {
     /**
      * 状态
      */
-    private OpenAiApiKeyStatus status;
+    private OpenAiApiKeyStatusEnum status;
 
     /**
      * 备注
      */
     private String remark;
+
+    /**
+     * 更新理由
+     */
+    private String updateReason;
 
     /**
      * 版本

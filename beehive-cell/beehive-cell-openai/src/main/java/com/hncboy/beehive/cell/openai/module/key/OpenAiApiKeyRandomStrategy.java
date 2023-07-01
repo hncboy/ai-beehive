@@ -1,11 +1,10 @@
 package com.hncboy.beehive.cell.openai.module.key;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hncboy.beehive.base.domain.entity.OpenAiApiKeyDO;
-import com.hncboy.beehive.base.enums.OpenAiApiKeyStatus;
+import com.hncboy.beehive.base.enums.OpenAiApiKeyStatusEnum;
 import com.hncboy.beehive.base.enums.OpenAiApiKeyUseSceneEnum;
 import com.hncboy.beehive.base.exception.ServiceException;
 import com.hncboy.beehive.cell.openai.enums.OpenAiApiKeyStrategyEnum;
@@ -35,7 +34,7 @@ public class OpenAiApiKeyRandomStrategy implements OpenAiApiKeyStrategy {
     public OpenAiApiKeyDO getApiKeyInfo(OpenAiApiKeyUseSceneEnum useSceneEnum) {
         List<OpenAiApiKeyDO> openAiApiKeyDOList = openAiApiKeyService.list(new LambdaQueryWrapper<OpenAiApiKeyDO>()
                 // 查询启用的
-                .eq(OpenAiApiKeyDO::getStatus, OpenAiApiKeyStatus.ENABLE)
+                .eq(OpenAiApiKeyDO::getStatus, OpenAiApiKeyStatusEnum.ENABLE)
                 // 查询指定使用场景的
                 .like(OpenAiApiKeyDO::getUseScenes, useSceneEnum.getCode()));
         if (CollectionUtil.isEmpty(openAiApiKeyDOList)) {

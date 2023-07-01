@@ -1,7 +1,7 @@
 package com.hncboy.beehive.base.util;
 
-import com.hncboy.beehive.base.config.ProxyConfig;
 import cn.hutool.extra.spring.SpringUtil;
+import com.hncboy.beehive.base.config.ProxyConfig;
 import okhttp3.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
@@ -21,7 +21,7 @@ public class OkHttpClientUtil {
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).build();
-    private static OkHttpClient PROXY_INSTANCE = null;
+    private static volatile OkHttpClient PROXY_INSTANCE = null;
 
     private OkHttpClientUtil() {
         // private constructor to prevent instantiation from outside
@@ -37,19 +37,23 @@ public class OkHttpClientUtil {
     }
 
     /**
-     * 获取代理 OkHttpClient 实例
+     * DCL 获取代理 OkHttpClient 实例
      *
      * @return OkHttpClient 实例
      */
-    public static synchronized OkHttpClient getProxyInstance() {
+    public static OkHttpClient getProxyInstance() {
         if (PROXY_INSTANCE == null) {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS);
-            ProxyConfig proxyConfig = SpringUtil.getBean(ProxyConfig.class);
-            builder.proxy(proxyConfig.getProxy());
-            PROXY_INSTANCE = builder.build();
+            synchronized (OkHttpClientUtil.class) {
+                if (PROXY_INSTANCE == null) {
+                    OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                            .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+                            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS);
+                    ProxyConfig proxyConfig = SpringUtil.getBean(ProxyConfig.class);
+                    builder.proxy(proxyConfig.getProxy());
+                    PROXY_INSTANCE = builder.build();
+                }
+            }
         }
         return PROXY_INSTANCE;
     }

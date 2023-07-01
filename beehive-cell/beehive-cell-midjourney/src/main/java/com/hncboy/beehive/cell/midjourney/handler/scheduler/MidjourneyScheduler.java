@@ -65,8 +65,8 @@ public class MidjourneyScheduler {
     private void clearHistoryTaskScene2() {
         List<RoomMidjourneyMsgDO> roomMessages = roomMidjourneyMsgService.list(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
                 .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_IN_PROGRESS)
-                // 10 分钟前的消息
-                .lt(RoomMidjourneyMsgDO::getDiscordStartTime, LocalDateTime.now().minusMinutes(10)));
+                // 15 分钟前的消息
+                .lt(RoomMidjourneyMsgDO::getDiscordStartTime, LocalDateTime.now().minusMinutes(15)));
         for (RoomMidjourneyMsgDO roomMjMsg : roomMessages) {
             boolean update = roomMidjourneyMsgService.update(new RoomMidjourneyMsgDO(), new LambdaUpdateWrapper<RoomMidjourneyMsgDO>()
                     .set(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.SYS_FINISH_MJ_IN_PROGRESS_FAILURE)

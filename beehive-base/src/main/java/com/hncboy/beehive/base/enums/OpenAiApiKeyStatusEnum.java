@@ -7,10 +7,10 @@ import lombok.Getter;
 /**
  * @author hncboy
  * @date 2023/6/30
- * OpenAi ApiKey 状态
+ * OpenAi ApiKey 状态枚举
  */
 @AllArgsConstructor
-public enum OpenAiApiKeyStatus {
+public enum OpenAiApiKeyStatusEnum {
 
     /**
      * 启用

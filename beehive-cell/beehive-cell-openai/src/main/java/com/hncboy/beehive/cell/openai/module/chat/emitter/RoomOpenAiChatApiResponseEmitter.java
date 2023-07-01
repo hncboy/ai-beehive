@@ -114,7 +114,7 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
 
         // 构建 OpenAiStreamClient
         OpenAiStreamClient openAiStreamClient = OpenAiStreamClient.builder()
-                .okHttpClient(OkHttpClientUtil.getInstance())
+                .okHttpClient(OkHttpClientUtil.getProxyInstance())
                 .apiKey(Collections.singletonList(chatApiKeyInfoPair.getKey()))
                 .apiHost(chatApiKeyInfoPair.getValue())
                 .build();

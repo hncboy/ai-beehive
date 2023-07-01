@@ -44,7 +44,7 @@
         <satoken.version>1.35.0.RC</satoken.version>
         <guava.version>31.1-jre</guava.version>
         <mysql.version>8.0.32</mysql.version>
-        <chatgpt-sdk.version>1.0.11</chatgpt-sdk.version>
+        <chatgpt-sdk.version>1.0.14</chatgpt-sdk.version>
         <forest.version>1.5.31</forest.version>
         <lock4j-redisson.version>2.2.4</lock4j-redisson.version>
         <websocket.version>1.5.3</websocket.version>
