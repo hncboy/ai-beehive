@@ -35,9 +35,11 @@ public class OpenAiApiKeyScheduler {
     public void handler() {
         log.info("OpenAi ApiKey 检测定时任务开始");
 
-        // 查询所有启用的
+        // 查询启用的或停用需要刷新额度的
         List<OpenAiApiKeyDO> openAiApiKeyDOList = openAiApiKeyService.list(new LambdaQueryWrapper<OpenAiApiKeyDO>()
-                .eq(OpenAiApiKeyDO::getStatus, OpenAiApiKeyStatusEnum.ENABLE));
+                .eq(OpenAiApiKeyDO::getStatus, OpenAiApiKeyStatusEnum.ENABLE)
+                .or(wrapper -> wrapper.eq(OpenAiApiKeyDO::getStatus, OpenAiApiKeyStatusEnum.DISABLE)
+                        .eq(OpenAiApiKeyDO::getIsRefreshBalance, true)));
         for (OpenAiApiKeyDO openAiApiKeyDO : openAiApiKeyDOList) {
             try {
                 // 构建 OpenAiClient
@@ -56,9 +58,11 @@ public class OpenAiApiKeyScheduler {
                 // 剩余额度
                 BigDecimal remainBalance = totalBalance.subtract(totalUsage);
 
-                OpenAiApiKeyStatusEnum statusEnum = OpenAiApiKeyStatusEnum.ENABLE;
+                OpenAiApiKeyStatusEnum statusEnum = openAiApiKeyDO.getStatus();
                 String updateReason;
                 if (remainBalance.compareTo(BigDecimal.ZERO) <= 0) {
+                    // 小于等于 0 就不用刷新了
+                    openAiApiKeyDO.setIsRefreshBalance(false);
                     updateReason = "剩余额度小于等于 0，停用";
                     statusEnum = OpenAiApiKeyStatusEnum.DISABLE;
                 } else if (remainBalance.compareTo(openAiApiKeyDO.getBalanceWaterLine()) <= 0) {

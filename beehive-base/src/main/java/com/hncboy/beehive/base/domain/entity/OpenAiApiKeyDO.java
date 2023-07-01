@@ -79,6 +79,11 @@ public class OpenAiApiKeyDO {
     private OpenAiApiKeyStatusEnum status;
 
     /**
+     * 是否刷新余额
+     */
+    private Boolean isRefreshBalance;
+
+    /**
      * 备注
      */
     private String remark;
