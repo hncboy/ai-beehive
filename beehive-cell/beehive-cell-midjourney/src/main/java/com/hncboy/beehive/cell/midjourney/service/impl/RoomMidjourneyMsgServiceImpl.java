@@ -1,5 +1,11 @@
 package com.hncboy.beehive.cell.midjourney.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Pair;
+import cn.hutool.core.text.StrPool;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.hncboy.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import com.hncboy.beehive.base.domain.query.RoomMsgCursorQuery;
 import com.hncboy.beehive.base.enums.CellCodeEnum;
@@ -29,12 +35,6 @@ import com.hncboy.beehive.cell.midjourney.handler.converter.RoomMidjourneyMsgCon
 import com.hncboy.beehive.cell.midjourney.service.DiscordSendService;
 import com.hncboy.beehive.cell.midjourney.service.DiscordService;
 import com.hncboy.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.lang.Pair;
-import cn.hutool.core.text.StrPool;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,9 +58,6 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
 
     @Resource
     private DiscordService discordService;
-
-    @Resource
-    private MidjourneyProperties midjourneyProperties;
 
     @Resource
     private MidjourneyTaskQueueHandler midjourneyTaskQueueHandler;
@@ -91,6 +88,8 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         long questionMessageId = IdWorker.getId();
         // 生成回答消息的 id
         long answerMessageId = IdWorker.getId();
+
+        MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
 
         // 问题消息创建插入
         RoomMidjourneyMsgDO questionMessage = new RoomMidjourneyMsgDO();
@@ -123,7 +122,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         }
 
         // 创建回答消息
-        createAnswerMessage(answerMessage, () -> discordService.imagine(answerMessage.getFinalPrompt()));
+        createAnswerMessage(answerMessage, midjourneyProperties, () -> discordService.imagine(answerMessage.getFinalPrompt(), midjourneyProperties));
     }
 
     @Override
@@ -136,6 +135,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
                 .eq(RoomMidjourneyMsgDO::getRoomId, convertRequest.getRoomId())
                 .eq(RoomMidjourneyMsgDO::getUserId, FrontUserUtil.getUserId()));
         // 检查是否可以 upscale
+        MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
         MidjourneyRoomMsgHandler.checkCanUpscale(parentRoomMidjourneyMsgDO, convertRequest.getIndex(), midjourneyProperties);
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
@@ -173,7 +173,11 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setDiscordStartTime(new Date());
 
         // 创建回答消息
-        createAnswerMessage(answerMessage, () -> discordService.upscale(parentRoomMidjourneyMsgDO.getDiscordMessageId(), answerMessage.getUvIndex(), MidjourneyRoomMsgHandler.getDiscordMessageHash(parentRoomMidjourneyMsgDO.getDiscordImageUrl())));
+        createAnswerMessage(answerMessage, midjourneyProperties,
+                () -> discordService.upscale(parentRoomMidjourneyMsgDO.getDiscordMessageId(),
+                        answerMessage.getUvIndex(),
+                        MidjourneyRoomMsgHandler.getDiscordMessageHash(parentRoomMidjourneyMsgDO.getDiscordImageUrl()),
+                        midjourneyProperties));
     }
 
     @Override
@@ -186,6 +190,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
                 .eq(RoomMidjourneyMsgDO::getRoomId, convertRequest.getRoomId())
                 .eq(RoomMidjourneyMsgDO::getUserId, FrontUserUtil.getUserId()));
         // 检查是否可以 variation
+        MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
         MidjourneyRoomMsgHandler.checkCanVariation(parentRoomMidjourneyMsgDO, midjourneyProperties);
 
         // 这两个 id 按先后顺序生成，保证在表里的顺序也是有先后的
@@ -222,7 +227,11 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setDiscordStartTime(new Date());
 
         // 创建回答消息
-        createAnswerMessage(answerMessage, () -> discordService.variation(parentRoomMidjourneyMsgDO.getDiscordMessageId(), answerMessage.getUvIndex(), MidjourneyRoomMsgHandler.getDiscordMessageHash(parentRoomMidjourneyMsgDO.getDiscordImageUrl())));
+        createAnswerMessage(answerMessage, midjourneyProperties,
+                () -> discordService.variation(parentRoomMidjourneyMsgDO.getDiscordMessageId(),
+                        answerMessage.getUvIndex(),
+                        MidjourneyRoomMsgHandler.getDiscordMessageHash(parentRoomMidjourneyMsgDO.getDiscordImageUrl()),
+                        midjourneyProperties));
     }
 
     @Override
@@ -242,6 +251,8 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         // 保存文件
         FileUtil.downloadFromMultipartFile(multipartFile, newFileName);
 
+        MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
+
         // 判断文件大小
         if (multipartFile.getSize() > midjourneyProperties.getMaxFileSize()) {
             int maxMbFileSize = midjourneyProperties.getMaxFileSize() / 1024 / 1024;
@@ -258,7 +269,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         // TODO 图片审核
 
         // 上传图片
-        Pair<Boolean, String> uploadResponsePair = discordService.uploadImage(newFileName, multipartFile);
+        Pair<Boolean, String> uploadResponsePair = discordService.uploadImage(newFileName, multipartFile, midjourneyProperties);
         if (!uploadResponsePair.getKey()) {
             throw new ServiceException(uploadResponsePair.getValue());
         }
@@ -294,7 +305,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setUUseBit(0);
 
         // 创建回答消息
-        createAnswerMessage(answerMessage, () -> discordService.describe(answerMessage.getDiscordImageUrl()));
+        createAnswerMessage(answerMessage, midjourneyProperties, () -> discordService.describe(answerMessage.getDiscordImageUrl(), midjourneyProperties));
     }
 
     /**
@@ -346,10 +357,11 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
     /**
      * 创建回答消息
      *
-     * @param answerMessage      回答消息
-     * @param discordSendService discord 发送服务接口
+     * @param answerMessage        回答消息
+     * @param midjourneyProperties Midjourney 配置
+     * @param discordSendService   discord 发送服务接口
      */
-    private void createAnswerMessage(RoomMidjourneyMsgDO answerMessage, DiscordSendService discordSendService) {
+    private void createAnswerMessage(RoomMidjourneyMsgDO answerMessage, MidjourneyProperties midjourneyProperties, DiscordSendService discordSendService) {
         // 填充公共字段
         answerMessage.setUserId(FrontUserUtil.getUserId());
         answerMessage.setType(MessageTypeEnum.ANSWER);
@@ -357,7 +369,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setIsDeleted(false);
 
         // 创建任务并返回回答的状态
-        MidjourneyMsgStatusEnum answerStatus = midjourneyTaskQueueHandler.pushNewTask(answerMessage.getId());
+        MidjourneyMsgStatusEnum answerStatus = midjourneyTaskQueueHandler.pushNewTask(answerMessage.getId(), midjourneyProperties);
         // 达到队列上限
         if (answerStatus == MidjourneyMsgStatusEnum.SYS_MAX_QUEUE) {
             answerMessage.setResponseContent(StrUtil.format("当前排队任务为 {} 条，已经达到上限，请稍后再试", midjourneyProperties.getMaxWaitQueueSize()));

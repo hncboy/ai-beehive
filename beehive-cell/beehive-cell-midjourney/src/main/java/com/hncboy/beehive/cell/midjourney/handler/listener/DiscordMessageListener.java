@@ -24,9 +24,6 @@ import java.util.Objects;
 public class DiscordMessageListener extends ListenerAdapter {
 
     @Resource
-    private MidjourneyProperties midjourneyProperties;
-
-    @Resource
     private ImagineDiscordMessageHandler imagineDiscordMessageHandler;
 
     @Resource
@@ -43,6 +40,8 @@ public class DiscordMessageListener extends ListenerAdapter {
      * @return 是否忽略
      */
     private boolean isIgnoreMessage(Message message, String eventName) {
+        MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
+
         // 频道不一样忽略
         if (ObjectUtil.notEqual(midjourneyProperties.getChannelId(), message.getChannel().getId())) {
             return true;

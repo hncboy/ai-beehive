@@ -14,11 +14,8 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.Objects;
 
 /**
@@ -27,7 +24,6 @@ import java.util.Objects;
  * Discord 启动类
  */
 @Slf4j
-@DependsOn("midjourneyProperties")
 @Component("discordStarter")
 public class DiscordStarter implements InitializingBean {
 
@@ -37,15 +33,15 @@ public class DiscordStarter implements InitializingBean {
     @Resource
     private DiscordMessageListener discordMessageListener;
 
-    @Resource
-    private MidjourneyProperties midjourneyProperties;
-
     @Override
     public void afterPropertiesSet() {
         CellDO cellDO = CellHandler.getCell(CellCodeEnum.MIDJOURNEY);
         if (Objects.isNull(cellDO) || cellDO.getStatus() != CellStatusEnum.PUBLISHED) {
             return;
         }
+
+        // 因为 Discord 配置需要初始化，所以改了 BotToken 改了要重启
+        MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
 
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(midjourneyProperties.getBotToken(), GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT);
         builder.addEventListeners(this.discordMessageListener);
@@ -58,7 +54,7 @@ public class DiscordStarter implements InitializingBean {
         // TODO 有时间可以尝试改成 userToken 试下效果
         // 解决报错：java.net.SocketTimeoutException: Connect timed out
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        okhttpbuilder.proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyConfig.getHttpHost(), proxyConfig.getHttpPort())));
+        okhttpbuilder.proxy(proxyConfig.getProxy());
         builder.setHttpClientBuilder(okhttpbuilder);
 
         // 解决报错：com.neovisionaries.ws.client.WebSocketException: Failed to connect to 'gateway.discord.gg:443': Connect timed out

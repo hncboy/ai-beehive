@@ -7,8 +7,6 @@ import com.hncboy.beehive.base.enums.CellStatusEnum;
 import com.hncboy.beehive.cell.core.hander.CellConfigHandler;
 import com.hncboy.beehive.cell.core.hander.CellHandler;
 import lombok.Data;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Objects;
@@ -19,8 +17,36 @@ import java.util.Objects;
  * Midjounery 配置
  */
 @Data
-@Component("midjourneyProperties")
-public class MidjourneyProperties implements InitializingBean {
+public class MidjourneyProperties {
+
+    private MidjourneyProperties() {
+    }
+
+    /**
+     * 初始化
+     *
+     * @return Midjounery 配置
+     */
+    public static MidjourneyProperties init() {
+        MidjourneyProperties midjourneyProperties = new MidjourneyProperties();
+
+        // 发布 Midjourney 图纸重启才生效
+        CellDO cellDO = CellHandler.getCell(CellCodeEnum.MIDJOURNEY);
+        if (Objects.isNull(cellDO) || cellDO.getStatus() != CellStatusEnum.PUBLISHED) {
+            return midjourneyProperties;
+        }
+        Map<String, CellConfigDO> cellConfigMap = CellConfigHandler.getCellConfigMap(CellCodeEnum.MIDJOURNEY);
+        midjourneyProperties.setGuildId((cellConfigMap.get(MidjourneyCellConfigCodeEnum.GUILD_ID.getCode()).getDefaultValue()));
+        midjourneyProperties.setChannelId(cellConfigMap.get(MidjourneyCellConfigCodeEnum.CHANNEL_ID.getCode()).getDefaultValue());
+        midjourneyProperties.setUserToken(cellConfigMap.get(MidjourneyCellConfigCodeEnum.USER_TOKEN.getCode()).getDefaultValue());
+        midjourneyProperties.setBotToken(cellConfigMap.get(MidjourneyCellConfigCodeEnum.BOT_TOKEN.getCode()).getDefaultValue());
+        midjourneyProperties.setMjBotName(cellConfigMap.get(MidjourneyCellConfigCodeEnum.MJ_BOT_NAME.getCode()).getDefaultValue());
+        midjourneyProperties.setUserAgent(cellConfigMap.get(MidjourneyCellConfigCodeEnum.USER_AGENT.getCode()).getDefaultValue());
+        midjourneyProperties.setMaxWaitQueueSize(Integer.valueOf(cellConfigMap.get(MidjourneyCellConfigCodeEnum.MAX_WAIT_QUEUE_SIZE.getCode()).getDefaultValue()));
+        midjourneyProperties.setMaxExecuteQueueSize(Integer.valueOf(cellConfigMap.get(MidjourneyCellConfigCodeEnum.MAX_EXECUTE_QUEUE_SIZE.getCode()).getDefaultValue()));
+        midjourneyProperties.setMaxFileSize(Integer.valueOf(cellConfigMap.get(MidjourneyCellConfigCodeEnum.MAX_FILE_SIZE.getCode()).getDefaultValue()));
+        return midjourneyProperties;
+    }
 
     /**
      * 服务器 id
@@ -83,26 +109,5 @@ public class MidjourneyProperties implements InitializingBean {
      */
     public String getDiscordUploadUrl() {
         return "https://discord.com/api/v9/channels/" + channelId + "/attachments";
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        // 发布 Midjourney 图纸重启才生效
-        CellDO cellDO = CellHandler.getCell(CellCodeEnum.MIDJOURNEY);
-        if (Objects.isNull(cellDO) || cellDO.getStatus() != CellStatusEnum.PUBLISHED) {
-            return;
-        }
-
-        // 因为 Discord 配置需要初始化，而且切换配置可能会导致一些操作失败，所以先从数据库取出配置初始化，不实时查询，不过有些参数有需要的也可以改成实时查询配置
-        Map<String, CellConfigDO> cellConfigMap = CellConfigHandler.getCellConfigMap(CellCodeEnum.MIDJOURNEY);
-        guildId = cellConfigMap.get(MidjourneyCellConfigCodeEnum.GUILD_ID.getCode()).getDefaultValue();
-        channelId = cellConfigMap.get(MidjourneyCellConfigCodeEnum.CHANNEL_ID.getCode()).getDefaultValue();
-        userToken = cellConfigMap.get(MidjourneyCellConfigCodeEnum.USER_TOKEN.getCode()).getDefaultValue();
-        botToken = cellConfigMap.get(MidjourneyCellConfigCodeEnum.BOT_TOKEN.getCode()).getDefaultValue();
-        mjBotName = cellConfigMap.get(MidjourneyCellConfigCodeEnum.MJ_BOT_NAME.getCode()).getDefaultValue();
-        userAgent = cellConfigMap.get(MidjourneyCellConfigCodeEnum.USER_AGENT.getCode()).getDefaultValue();
-        maxWaitQueueSize = Integer.valueOf(cellConfigMap.get(MidjourneyCellConfigCodeEnum.MAX_EXECUTE_QUEUE_SIZE.getCode()).getDefaultValue());
-        maxExecuteQueueSize = Integer.valueOf(cellConfigMap.get(MidjourneyCellConfigCodeEnum.MAX_EXECUTE_QUEUE_SIZE.getCode()).getDefaultValue());
-        maxFileSize = Integer.valueOf(cellConfigMap.get(MidjourneyCellConfigCodeEnum.MAX_FILE_SIZE.getCode()).getDefaultValue());
     }
 }

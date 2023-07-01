@@ -1,5 +1,9 @@
 package com.hncboy.beehive.cell.midjourney.handler;
 
+import cn.hutool.core.lang.Pair;
+import cn.hutool.extra.spring.SpringUtil;
+import com.baomidou.lock.annotation.Lock4j;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.hncboy.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
@@ -7,11 +11,6 @@ import com.hncboy.beehive.base.util.RedisUtil;
 import com.hncboy.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
 import com.hncboy.beehive.cell.midjourney.service.DiscordService;
 import com.hncboy.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
-import cn.hutool.core.lang.Pair;
-import cn.hutool.extra.spring.SpringUtil;
-import com.baomidou.lock.annotation.Lock4j;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +25,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class MidjourneyTaskQueueHandler {
-
-    @Resource
-    private MidjourneyProperties midjourneyProperties;
 
     private static final String PREFIX = "cell:mj:";
 
@@ -57,12 +53,13 @@ public class MidjourneyTaskQueueHandler {
      * 插入新任务
      * 整个方法加锁，防止多个线程同时插入等待队列或执行中操作
      *
-     * @param midjourneyMsgId 消息 id
+     * @param midjourneyMsgId      消息 id
+     * @param midjourneyProperties Midjourney 配置
      * @return 消息状态 {@link MidjourneyMsgStatusEnum}
      * 返回值包含三种状态：SYS_MAX_QUEUE、SYS_QUEUING、MJ_WAIT_RECEIVED
      */
     @Lock4j(name = TASK_LOCK_KEY, expire = 60000, acquireTimeout = 3000)
-    public MidjourneyMsgStatusEnum pushNewTask(Long midjourneyMsgId) {
+    public MidjourneyMsgStatusEnum pushNewTask(Long midjourneyMsgId, MidjourneyProperties midjourneyProperties) {
         // 获取等待队列长度
         int currentWaitQueueLength = getWaitQueueLength();
         // 等待队列已满
@@ -110,7 +107,8 @@ public class MidjourneyTaskQueueHandler {
         }
 
         // 拉取新任务
-        pullTaskFromWaitQueue(midjourneyProperties.getMaxExecuteQueueSize() - executeTaskCount);
+        MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
+        pullTaskFromWaitQueue(midjourneyProperties, executeTaskCount);
     }
 
     /**
@@ -118,6 +116,8 @@ public class MidjourneyTaskQueueHandler {
      */
     @Lock4j(name = TASK_LOCK_KEY, expire = 60000, acquireTimeout = 3000)
     public void checkAndPullTask() {
+        MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
+
         // 获取执行中任务的数量
         int executeTaskCount = getExecuteTaskCount();
 
@@ -127,16 +127,19 @@ public class MidjourneyTaskQueueHandler {
         }
 
         // 拉取新任务
-        pullTaskFromWaitQueue(midjourneyProperties.getMaxExecuteQueueSize() - executeTaskCount);
+        pullTaskFromWaitQueue(midjourneyProperties, executeTaskCount);
     }
 
     /**
      * 从等待队列中拉取任务
      * 把能拉取的任务拉取出来，进入执行中
      *
-     * @param canPullCount 可以拉取的数量
+     * @param midjourneyProperties 可以拉取的数量
+     * @param executeTaskCount     执行中的任务数量
      */
-    private void pullTaskFromWaitQueue(int canPullCount) {
+    private void pullTaskFromWaitQueue(MidjourneyProperties midjourneyProperties, int executeTaskCount) {
+        // 可以拉取的数量
+        int canPullCount = midjourneyProperties.getMaxExecuteQueueSize() - executeTaskCount;
         for (int i = 0; i < canPullCount; i++) {
             // 从等待队列中获取任务
             String newMjMsgIdStr = RedisUtil.lLeftPop(WAIT_QUEUE_KEY);
@@ -159,17 +162,19 @@ public class MidjourneyTaskQueueHandler {
 
             DiscordService discordService = SpringUtil.getBean(DiscordService.class);
             switch (newAnswerMessage.getAction()) {
-                case IMAGINE -> resultPair = discordService.imagine(newAnswerMessage.getFinalPrompt());
-                case DESCRIBE -> resultPair = discordService.describe(newAnswerMessage.getDiscordImageUrl());
+                case IMAGINE -> resultPair = discordService.imagine(newAnswerMessage.getFinalPrompt(), midjourneyProperties);
+                case DESCRIBE -> resultPair = discordService.describe(newAnswerMessage.getDiscordImageUrl(), midjourneyProperties);
                 case VARIATION -> {
                     // 不考虑频道切换
                     RoomMidjourneyMsgDO parentRoomMidjourneyMsgDO = roomMidjourneyMsgService.getById(newAnswerMessage.getUvParentId());
-                    resultPair = discordService.variation(parentRoomMidjourneyMsgDO.getDiscordMessageId(), newAnswerMessage.getUvIndex(), MidjourneyRoomMsgHandler.getDiscordMessageHash(parentRoomMidjourneyMsgDO.getDiscordImageUrl()));
+                    resultPair = discordService.variation(parentRoomMidjourneyMsgDO.getDiscordMessageId(), newAnswerMessage.getUvIndex(),
+                            MidjourneyRoomMsgHandler.getDiscordMessageHash(parentRoomMidjourneyMsgDO.getDiscordImageUrl()), midjourneyProperties);
                 }
                 case UPSCALE -> {
                     // 不考虑频道切换
                     RoomMidjourneyMsgDO parentRoomMidjourneyMsgDO = roomMidjourneyMsgService.getById(newAnswerMessage.getUvParentId());
-                    resultPair = discordService.upscale(parentRoomMidjourneyMsgDO.getDiscordMessageId(), newAnswerMessage.getUvIndex(), MidjourneyRoomMsgHandler.getDiscordMessageHash(parentRoomMidjourneyMsgDO.getDiscordImageUrl()));
+                    resultPair = discordService.upscale(parentRoomMidjourneyMsgDO.getDiscordMessageId(), newAnswerMessage.getUvIndex(),
+                            MidjourneyRoomMsgHandler.getDiscordMessageHash(parentRoomMidjourneyMsgDO.getDiscordImageUrl()), midjourneyProperties);
                 }
             }
 
