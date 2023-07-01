@@ -83,5 +83,23 @@ public enum OpenAiImageCellConfigCodeEnum implements ICellConfigCodeEnum {
 
             throw new ServiceException("尺寸不合法");
         }
+    },
+
+    /**
+     * KEY 使用策略
+     */
+    KEY_STRATEGY {
+
+        @Override
+        public String getCode() {
+            return "key_strategy";
+        }
+
+        @Override
+        public void singleValidate(DataWrapper dataWrapper) {
+            if (!OpenAiApiKeyStrategyEnum.CODE_MAP.containsKey(dataWrapper.asString())) {
+                throw new ServiceException("Key 策略参数错误");
+            }
+        }
     }
 }

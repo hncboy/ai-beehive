@@ -65,6 +65,17 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
     public void requestToResponseEmitter(RoomOpenAiChatSendRequest sendRequest, ResponseBodyEmitter emitter, CellConfigStrategy cellConfigStrategy) {
         // 获取房间配置参数
         Map<OpenAiChatCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap = cellConfigStrategy.getRoomConfigParamAsMap(sendRequest.getRoomId());
+
+        // 获取 ApiKey 相关信息
+        Pair<String, String> chatApiKeyInfoPair = OpenAiApiKeyHandler.getChatApiKeyInfo(
+                roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.API_KEY).asString(),
+                roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.OPENAI_BASE_URL).asString(),
+                roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.KEY_STRATEGY).asString(),
+                roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.MODEL).asString());
+        // 覆盖原始值
+        roomConfigParamAsMap.put(OpenAiChatCellConfigCodeEnum.API_KEY, new DataWrapper(chatApiKeyInfoPair.getKey()));
+        roomConfigParamAsMap.put(OpenAiChatCellConfigCodeEnum.OPENAI_BASE_URL, new DataWrapper(chatApiKeyInfoPair.getValue()));
+
         // 初始化问题消息
         RoomOpenAiChatMsgDO questionMessage = initQuestionMessage(sendRequest, roomConfigParamAsMap);
 
@@ -107,16 +118,11 @@ public class RoomOpenAiChatApiResponseEmitter implements RoomOpenAiChatResponseE
                 .setQuestionMessageDO(questionMessage)
                 .build();
 
-        String originalApiKey = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.API_KEY).asString();
-        String originalBaseUrl = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.OPENAI_BASE_URL).asString();
-        String keyStrategyEnumCode = roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.KEY_STRATEGY).asString();
-        Pair<String, String> chatApiKeyInfoPair = OpenAiApiKeyHandler.getChatApiKeyInfo(originalApiKey, originalBaseUrl, keyStrategyEnumCode, questionMessage.getModelName());
-
         // 构建 OpenAiStreamClient
         OpenAiStreamClient openAiStreamClient = OpenAiStreamClient.builder()
-                .okHttpClient(OkHttpClientUtil.getProxyInstance())
-                .apiKey(Collections.singletonList(chatApiKeyInfoPair.getKey()))
-                .apiHost(chatApiKeyInfoPair.getValue())
+                .okHttpClient(OkHttpClientUtil.getInstance())
+                .apiKey(Collections.singletonList(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.API_KEY).asString()))
+                .apiHost(roomConfigParamAsMap.get(OpenAiChatCellConfigCodeEnum.OPENAI_BASE_URL).asString())
                 .build();
         openAiStreamClient.streamChatCompletion(chatCompletion, parsedEventSourceListener);
     }

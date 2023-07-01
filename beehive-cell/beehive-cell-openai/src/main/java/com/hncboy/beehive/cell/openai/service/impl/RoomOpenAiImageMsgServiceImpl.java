@@ -1,5 +1,9 @@
 package com.hncboy.beehive.cell.openai.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Pair;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.hncboy.beehive.base.domain.entity.RoomOpenAiImageMsgDO;
 import com.hncboy.beehive.base.domain.query.RoomMsgCursorQuery;
 import com.hncboy.beehive.base.enums.CellCodeEnum;
@@ -18,10 +22,8 @@ import com.hncboy.beehive.cell.openai.domain.request.RoomOpenAiImageSendRequest;
 import com.hncboy.beehive.cell.openai.domain.vo.RoomOpenAiImageMsgVO;
 import com.hncboy.beehive.cell.openai.enums.OpenAiImageCellConfigCodeEnum;
 import com.hncboy.beehive.cell.openai.handler.converter.RoomOpenAiImageMsgConverter;
+import com.hncboy.beehive.cell.openai.module.key.OpenAiApiKeyHandler;
 import com.hncboy.beehive.cell.openai.service.RoomOpenAiImageMsgService;
-import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.unfbx.chatgpt.OpenAiClient;
 import com.unfbx.chatgpt.entity.images.Image;
 import com.unfbx.chatgpt.entity.images.ImageResponse;
@@ -61,7 +63,13 @@ public class RoomOpenAiImageMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAi
         CellConfigStrategy cellConfigStrategy = cellConfigFactory.getCellConfigStrategy(sendRequest.getRoomId(), CellCodeEnum.OPENAI_IMAGE);
         Map<OpenAiImageCellConfigCodeEnum, DataWrapper> roomConfigParamAsMap = cellConfigStrategy.getRoomConfigParamAsMap(sendRequest.getRoomId());
 
-        String apiKey = roomConfigParamAsMap.get(OpenAiImageCellConfigCodeEnum.API_KEY).asString();
+        // 获取 ApiKey 相关信息
+        Pair<String, String> chatApiKeyInfoPair = OpenAiApiKeyHandler.getImageApiKeyInfo(
+                roomConfigParamAsMap.get(OpenAiImageCellConfigCodeEnum.API_KEY).asString(),
+                roomConfigParamAsMap.get(OpenAiImageCellConfigCodeEnum.OPENAI_BASE_URL).asString(),
+                roomConfigParamAsMap.get(OpenAiImageCellConfigCodeEnum.KEY_STRATEGY).asString());
+
+        String apiKey = chatApiKeyInfoPair.getKey();
 
         // 构建图像生成参数
         Image image = Image.builder()
@@ -86,7 +94,7 @@ public class RoomOpenAiImageMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAi
         OpenAiClient openAiClient = OpenAiClient.builder()
                 .apiKey(Collections.singletonList(apiKey))
                 .okHttpClient(OkHttpClientUtil.getInstance())
-                .apiHost(roomConfigParamAsMap.get(OpenAiImageCellConfigCodeEnum.OPENAI_BASE_URL).asString())
+                .apiHost(chatApiKeyInfoPair.getValue())
                 .build();
 
         // 构建回答消息
