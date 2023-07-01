@@ -112,18 +112,18 @@ public class RedisUtil {
     /** ------------------------ List 相关操作---------------------------- */
 
     /**
-     * 存储在 list 头部
+     * 存储在 list 尾部
      *
      * @param key   key
      * @param value value
      * @return list 长度
      */
-    public static Long lLeftPush(String key, String value) {
-        return STRING_REDIS_TEMPLATE.opsForList().leftPush(key, value);
+    public static Long lRightPush(String key, String value) {
+        return STRING_REDIS_TEMPLATE.opsForList().rightPush(key, value);
     }
 
     /**
-     * 移出并获取列表的第一个元素
+     * 从头部移出并获取列表的一个元素
      *
      * @param key key
      * @return 删除的元素

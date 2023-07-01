@@ -74,8 +74,8 @@ public class MidjourneyTaskQueueHandler {
         if (currentWaitQueueLength > 0 || executeTaskCount >= midjourneyProperties.getMaxExecuteQueueSize()) {
             log.info("Midjourney 进入等待队列消息：{}", midjourneyMsgId);
 
-            // 插入队列首部
-            RedisUtil.lLeftPush(WAIT_QUEUE_KEY, String.valueOf(midjourneyMsgId));
+            // 插入队列尾部
+            RedisUtil.lRightPush(WAIT_QUEUE_KEY, String.valueOf(midjourneyMsgId));
             // 队列过期时间重置为 1 小时
             RedisUtil.expire(WAIT_QUEUE_KEY, 1, TimeUnit.HOURS);
             return MidjourneyMsgStatusEnum.SYS_QUEUING;
@@ -101,7 +101,7 @@ public class MidjourneyTaskQueueHandler {
             // 如果执行任务数量大于 0，就减 1
             if (executeTaskCount > 0) {
                 executeTaskCount--;
-                // 执行任务数量 - 1
+                // 执行任务数量 - 1，30 分钟过期，保证所有任务正常执行完
                 RedisUtil.set(EXECUTE_TASK_COUNT_KEY, String.valueOf(executeTaskCount), 30, TimeUnit.MINUTES);
             }
         }
@@ -213,8 +213,8 @@ public class MidjourneyTaskQueueHandler {
 
         // 执行任务数量 + 1，过期时间 30 分钟，每次有新任务都会重置过期时间，保证 discord 响应失败时可以清除执行任务数量
         RedisUtil.set(EXECUTE_TASK_COUNT_KEY, String.valueOf(executeTaskCount + 1), 30, TimeUnit.MINUTES);
-        // 插入执行中任务 key，过期时间 5 分钟，正常情况没问题
-        RedisUtil.set(PREFIX_EXECUTE_TASK_KEY + midjourneyMsgId, String.valueOf(midjourneyMsgId), 5, TimeUnit.MINUTES);
+        // 插入执行中任务 key，过期时间 10 分钟，正常情况没问题
+        RedisUtil.set(PREFIX_EXECUTE_TASK_KEY + midjourneyMsgId, String.valueOf(midjourneyMsgId), 10, TimeUnit.MINUTES);
     }
 
     /**

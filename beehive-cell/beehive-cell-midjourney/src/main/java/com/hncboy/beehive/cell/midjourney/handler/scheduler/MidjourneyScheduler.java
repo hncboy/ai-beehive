@@ -11,6 +11,7 @@ import com.hncboy.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -33,18 +34,18 @@ public class MidjourneyScheduler {
     @Resource
     private RoomMidjourneyMsgService roomMidjourneyMsgService;
 
-//    @Scheduled(cron = "0 0/3 * * * ?")
+    @Scheduled(cron = "0 0/3 * * * ?")
     public void handlerTask() {
         log.info("Midjourney 定时任务开始");
+
+        // 首先清理过期的任务，可以腾出任务
+        clearHistoryTask();
 
         /*
          * 因为意外可能导致 Redis 中进行中的任务为空，任务都堆积在队列中
          * 任务一直排队，通过定时任务定时拉取避免这种情况
          */
         midjourneyTaskQueueHandler.checkAndPullTask();
-
-        // 清理过期的任务
-        clearHistoryTask();
     }
 
     /**
