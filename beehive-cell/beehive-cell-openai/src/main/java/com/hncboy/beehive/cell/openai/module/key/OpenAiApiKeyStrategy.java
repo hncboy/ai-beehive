@@ -1,6 +1,5 @@
 package com.hncboy.beehive.cell.openai.module.key;
 
-import cn.hutool.core.lang.Pair;
 import com.hncboy.beehive.base.domain.entity.OpenAiApiKeyDO;
 import com.hncboy.beehive.base.enums.OpenAiApiKeyUseSceneEnum;
 import com.hncboy.beehive.cell.openai.enums.OpenAiApiKeyStrategyEnum;

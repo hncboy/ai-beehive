@@ -1,17 +1,16 @@
 package com.hncboy.beehive.cell.midjourney.handler.scheduler;
 
-import com.hncboy.beehive.base.domain.entity.RoomMidjourneyMsgDO;
-import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
-import com.hncboy.beehive.cell.midjourney.handler.MidjourneyTaskQueueHandler;
-import com.hncboy.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.hncboy.beehive.base.domain.entity.RoomMidjourneyMsgDO;
+import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
+import com.hncboy.beehive.cell.midjourney.handler.MidjourneyTaskQueueHandler;
+import com.hncboy.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

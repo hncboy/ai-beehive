@@ -1,5 +1,12 @@
 package com.hncboy.beehive.cell.bing.handler;
 
+import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.dtflys.forest.Forest;
+import com.dtflys.forest.http.ForestRequest;
+import com.dtflys.forest.http.ForestResponse;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hncboy.beehive.base.domain.entity.RoomBingDO;
 import com.hncboy.beehive.base.exception.ServiceException;
 import com.hncboy.beehive.base.util.ForestRequestUtil;
@@ -9,14 +16,6 @@ import com.hncboy.beehive.cell.bing.constant.NewBingConstant;
 import com.hncboy.beehive.cell.bing.domain.bo.BingApiCreateConversationResultBO;
 import com.hncboy.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import com.hncboy.beehive.cell.bing.enums.BingModeEnum;
-import cn.hutool.core.io.resource.ResourceUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
-import com.dtflys.forest.Forest;
-import com.dtflys.forest.http.ForestRequest;
-import com.dtflys.forest.http.ForestResponse;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -36,18 +35,6 @@ public class BingRoomHandler {
         put(BingModeEnum.BALANCE.getName(), ResourceUtil.readUtf8Str("bing/options_balance.json"));
         put(BingModeEnum.PRECISE.getName(), ResourceUtil.readUtf8Str("bing/options_precise.json"));
     }};
-
-    /**
-     * 生成随机 IP
-     *
-     * @return IP
-     */
-    public static String generateRandomIp() {
-        int a = RandomUtil.randomInt(104, 108);
-        int b = RandomUtil.randomInt(256);
-        int c = RandomUtil.randomInt(256);
-        return "13." + a + "." + b + "." + c;
-    }
 
     /**
      * 创建 bing 对话

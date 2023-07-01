@@ -1,17 +1,16 @@
 package com.hncboy.beehive.base.domain.entity;
 
-import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author hncboy

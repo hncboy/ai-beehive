@@ -1,6 +1,5 @@
 package com.hncboy.beehive.cell.openai.enums;
 
-import com.dtflys.forest.annotation.Get;
 import com.hncboy.beehive.base.enums.OpenAiApiKeyUseSceneEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

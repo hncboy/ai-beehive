@@ -1,6 +1,5 @@
 package com.hncboy.beehive.cell.openai.enums;
 
-import com.hncboy.beehive.base.enums.FrontUserRegisterTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
