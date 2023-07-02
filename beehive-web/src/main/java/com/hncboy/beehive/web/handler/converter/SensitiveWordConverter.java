@@ -1,6 +1,6 @@
-package com.hncboy.beehive.admin.handler.converter;
+package com.hncboy.beehive.web.handler.converter;
 
-import com.hncboy.beehive.admin.domain.vo.SensitiveWordVO;
+import com.hncboy.beehive.web.domain.vo.SensitiveWordVO;
 import com.hncboy.beehive.base.domain.entity.SensitiveWordDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

@@ -1,6 +1,6 @@
-package com.hncboy.beehive.admin.handler.converter;
+package com.hncboy.beehive.web.handler.converter;
 
-import com.hncboy.beehive.admin.domain.vo.SysParamVO;
+import com.hncboy.beehive.web.domain.vo.SysParamVO;
 import com.hncboy.beehive.base.domain.entity.SysParamDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

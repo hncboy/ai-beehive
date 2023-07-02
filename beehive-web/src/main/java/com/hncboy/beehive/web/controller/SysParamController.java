@@ -1,9 +1,9 @@
-package com.hncboy.beehive.admin.controller;
+package com.hncboy.beehive.web.controller;
 
-import com.hncboy.beehive.admin.domain.query.SysParamPageQuery;
-import com.hncboy.beehive.admin.domain.request.SysParamRequest;
-import com.hncboy.beehive.admin.domain.vo.SysParamVO;
-import com.hncboy.beehive.admin.service.SysParamService;
+import com.hncboy.beehive.web.domain.query.SysParamPageQuery;
+import com.hncboy.beehive.web.domain.request.SysParamRequest;
+import com.hncboy.beehive.web.domain.vo.SysParamVO;
+import com.hncboy.beehive.web.service.SysParamService;
 import com.hncboy.beehive.base.annotation.ApiAdminRestController;
 import com.hncboy.beehive.base.handler.response.R;
 import com.baomidou.mybatisplus.core.metadata.IPage;

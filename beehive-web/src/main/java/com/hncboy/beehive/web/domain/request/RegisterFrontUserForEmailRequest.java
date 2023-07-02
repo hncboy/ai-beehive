@@ -1,7 +1,7 @@
 package com.hncboy.beehive.web.domain.request;
 
 import com.hncboy.beehive.base.enums.FrontUserRegisterTypeEnum;
-import com.hncboy.beehive.web.handler.validation.annotation.FrontUserRegisterAvailable;
+import com.hncboy.beehive.web.handler.validation.FrontUserRegisterAvailable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

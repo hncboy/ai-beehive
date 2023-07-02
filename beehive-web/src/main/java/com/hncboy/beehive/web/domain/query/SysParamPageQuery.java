@@ -1,4 +1,4 @@
-package com.hncboy.beehive.admin.domain.query;
+package com.hncboy.beehive.web.domain.query;
 
 import com.hncboy.beehive.base.domain.query.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;

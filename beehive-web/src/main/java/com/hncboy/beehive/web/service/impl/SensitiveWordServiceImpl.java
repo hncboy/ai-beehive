@@ -1,14 +1,14 @@
-package com.hncboy.beehive.admin.service.impl;
+package com.hncboy.beehive.web.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hncboy.beehive.admin.domain.query.SensitiveWordPageQuery;
-import com.hncboy.beehive.admin.domain.vo.SensitiveWordVO;
-import com.hncboy.beehive.admin.handler.converter.SensitiveWordConverter;
-import com.hncboy.beehive.admin.service.SensitiveWordService;
+import com.hncboy.beehive.web.domain.query.SensitiveWordPageQuery;
+import com.hncboy.beehive.web.domain.vo.SensitiveWordVO;
+import com.hncboy.beehive.web.handler.converter.SensitiveWordConverter;
+import com.hncboy.beehive.web.service.SensitiveWordService;
 import com.hncboy.beehive.base.domain.entity.SensitiveWordDO;
 import com.hncboy.beehive.base.mapper.SensitiveWordMapper;
 import com.hncboy.beehive.base.util.PageUtil;

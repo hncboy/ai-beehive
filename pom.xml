@@ -26,7 +26,6 @@
     <modules>
         <module>beehive-base</module>
         <module>beehive-web</module>
-        <module>beehive-admin</module>
         <module>beehive-bootstrap</module>
         <module>beehive-cell</module>
     </modules>

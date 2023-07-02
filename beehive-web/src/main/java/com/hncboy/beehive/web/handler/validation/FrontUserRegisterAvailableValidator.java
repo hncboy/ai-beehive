@@ -1,4 +1,4 @@
-package com.hncboy.beehive.web.handler.validation.impl;
+package com.hncboy.beehive.web.handler.validation;
 
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.PhoneUtil;
@@ -7,7 +7,6 @@ import com.hncboy.beehive.base.enums.FrontUserRegisterTypeEnum;
 import com.hncboy.beehive.base.util.SimpleCaptchaUtil;
 import com.hncboy.beehive.web.domain.request.RegisterFrontUserForEmailRequest;
 import com.hncboy.beehive.web.service.strategy.user.AbstractRegisterTypeStrategy;
-import com.hncboy.beehive.web.handler.validation.annotation.FrontUserRegisterAvailable;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;

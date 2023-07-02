@@ -1,9 +1,9 @@
-package com.hncboy.beehive.admin.service;
+package com.hncboy.beehive.web.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hncboy.beehive.admin.domain.query.SensitiveWordPageQuery;
-import com.hncboy.beehive.admin.domain.vo.SensitiveWordVO;
+import com.hncboy.beehive.web.domain.query.SensitiveWordPageQuery;
+import com.hncboy.beehive.web.domain.vo.SensitiveWordVO;
 import com.hncboy.beehive.base.domain.entity.SensitiveWordDO;
 
 /**

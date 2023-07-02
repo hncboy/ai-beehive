@@ -22,11 +22,6 @@
         </dependency>
         <dependency>
             <groupId>com.hncboy</groupId>
-            <artifactId>beehive-admin</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hncboy</groupId>
             <artifactId>beehive-base</artifactId>
             <version>${project.version}</version>
         </dependency>

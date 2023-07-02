@@ -1,9 +1,9 @@
-package com.hncboy.beehive.admin.controller;
+package com.hncboy.beehive.web.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.hncboy.beehive.admin.domain.query.SensitiveWordPageQuery;
-import com.hncboy.beehive.admin.domain.vo.SensitiveWordVO;
-import com.hncboy.beehive.admin.service.SensitiveWordService;
+import com.hncboy.beehive.web.domain.query.SensitiveWordPageQuery;
+import com.hncboy.beehive.web.domain.vo.SensitiveWordVO;
+import com.hncboy.beehive.web.service.SensitiveWordService;
 import com.hncboy.beehive.base.annotation.ApiAdminRestController;
 import com.hncboy.beehive.base.handler.response.R;
 import io.swagger.v3.oas.annotations.Operation;

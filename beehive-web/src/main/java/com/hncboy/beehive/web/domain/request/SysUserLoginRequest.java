@@ -1,4 +1,4 @@
-package com.hncboy.beehive.admin.domain.request;
+package com.hncboy.beehive.web.domain.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

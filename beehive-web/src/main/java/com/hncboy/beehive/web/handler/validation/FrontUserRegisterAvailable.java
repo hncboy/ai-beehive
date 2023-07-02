@@ -1,6 +1,6 @@
-package com.hncboy.beehive.web.handler.validation.annotation;
+package com.hncboy.beehive.web.handler.validation;
 
-import com.hncboy.beehive.web.handler.validation.impl.FrontUserRegisterAvailableValidator;
+import com.hncboy.beehive.web.handler.validation.FrontUserRegisterAvailableValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

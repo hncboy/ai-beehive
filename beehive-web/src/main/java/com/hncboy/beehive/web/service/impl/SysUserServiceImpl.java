@@ -1,7 +1,7 @@
-package com.hncboy.beehive.admin.service.impl;
+package com.hncboy.beehive.web.service.impl;
 
-import com.hncboy.beehive.admin.domain.request.SysUserLoginRequest;
-import com.hncboy.beehive.admin.service.SysUserService;
+import com.hncboy.beehive.web.domain.request.SysUserLoginRequest;
+import com.hncboy.beehive.web.service.SysUserService;
 import com.hncboy.beehive.base.cache.SysParamCache;
 import com.hncboy.beehive.base.exception.AuthException;
 import com.hncboy.beehive.base.util.StpAdminUtil;

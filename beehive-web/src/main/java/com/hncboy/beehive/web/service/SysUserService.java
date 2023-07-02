@@ -1,6 +1,6 @@
-package com.hncboy.beehive.admin.service;
+package com.hncboy.beehive.web.service;
 
-import com.hncboy.beehive.admin.domain.request.SysUserLoginRequest;
+import com.hncboy.beehive.web.domain.request.SysUserLoginRequest;
 
 /**
  * @author hncboy

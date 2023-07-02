@@ -1,7 +1,7 @@
-package com.hncboy.beehive.admin.controller;
+package com.hncboy.beehive.web.controller;
 
-import com.hncboy.beehive.admin.domain.request.SysUserLoginRequest;
-import com.hncboy.beehive.admin.service.SysUserService;
+import com.hncboy.beehive.web.domain.request.SysUserLoginRequest;
+import com.hncboy.beehive.web.service.SysUserService;
 import com.hncboy.beehive.base.annotation.ApiAdminRestController;
 import com.hncboy.beehive.base.handler.response.R;
 import io.swagger.v3.oas.annotations.Operation;

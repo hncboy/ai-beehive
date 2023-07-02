@@ -1,10 +1,10 @@
-package com.hncboy.beehive.admin.service.impl;
+package com.hncboy.beehive.web.service.impl;
 
-import com.hncboy.beehive.admin.domain.query.SysParamPageQuery;
-import com.hncboy.beehive.admin.domain.request.SysParamRequest;
-import com.hncboy.beehive.admin.domain.vo.SysParamVO;
-import com.hncboy.beehive.admin.handler.converter.SysParamConverter;
-import com.hncboy.beehive.admin.service.SysParamService;
+import com.hncboy.beehive.web.domain.query.SysParamPageQuery;
+import com.hncboy.beehive.web.domain.request.SysParamRequest;
+import com.hncboy.beehive.web.domain.vo.SysParamVO;
+import com.hncboy.beehive.web.handler.converter.SysParamConverter;
+import com.hncboy.beehive.web.service.SysParamService;
 import com.hncboy.beehive.base.cache.SysParamCache;
 import com.hncboy.beehive.base.domain.entity.SysParamDO;
 import com.hncboy.beehive.base.exception.ServiceException;
