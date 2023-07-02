@@ -31,7 +31,7 @@ public class OpenAiApiKeyScheduler {
     @Resource
     private OpenAiApiKeyService openAiApiKeyService;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void handler() {
         log.info("OpenAi ApiKey 检测定时任务开始");
 

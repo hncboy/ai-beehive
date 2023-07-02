@@ -38,6 +38,7 @@ public class MidjourneyScheduler {
     public void handlerTask() {
         log.info("Midjourney 定时任务开始");
 
+        // // TODO 清理 Redis 队列中不存在但是数据库处于排队中
         // 首先清理过期的任务，可以腾出任务
         clearHistoryTask();
 

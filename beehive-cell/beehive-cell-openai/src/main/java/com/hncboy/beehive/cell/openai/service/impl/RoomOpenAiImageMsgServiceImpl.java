@@ -93,7 +93,7 @@ public class RoomOpenAiImageMsgServiceImpl extends BeehiveServiceImpl<RoomOpenAi
         // 构建 OpenAiClient
         OpenAiClient openAiClient = OpenAiClient.builder()
                 .apiKey(Collections.singletonList(apiKey))
-                .okHttpClient(OkHttpClientUtil.getInstance())
+                .okHttpClient(OkHttpClientUtil.getProxyInstance())
                 .apiHost(chatApiKeyInfoPair.getValue())
                 .build();
 
