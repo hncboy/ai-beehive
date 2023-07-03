@@ -43,15 +43,16 @@ public class DiscordStarter implements InitializingBean {
         // 因为 Discord 配置需要初始化，所以改了 BotToken 改了要重启
         MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
 
+        // TODO 有时间可以尝试改成 userToken 试下效果
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(midjourneyProperties.getBotToken(), GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT);
         builder.addEventListeners(this.discordMessageListener);
         log.info("Midjourney 开始启动");
 
-        // 判断是否需要代理
+        // 判断是否需要代理，下面和代理相关
         if (!proxyConfig.getEnabled()) {
             return;
         }
-        // TODO 有时间可以尝试改成 userToken 试下效果
+
         // 解决报错：java.net.SocketTimeoutException: Connect timed out
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
         okhttpbuilder.proxy(proxyConfig.getProxy());

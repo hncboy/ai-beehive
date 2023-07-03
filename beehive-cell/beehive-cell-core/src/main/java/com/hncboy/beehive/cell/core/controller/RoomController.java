@@ -57,6 +57,12 @@ public class RoomController {
         return R.data(roomService.editRoom(roomInfoEditRequest));
     }
 
+    @Operation(summary = "获取房间信息")
+    @GetMapping("/detail")
+    public R<RoomListVO> getRoom(@RequestParam Long roomId) {
+        return R.data(roomService.getRoom(roomId));
+    }
+
     @Operation(summary = "删除房间")
     @DeleteMapping("/delete")
     public R<Boolean> deleteRoom(@RequestParam Long roomId) {

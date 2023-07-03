@@ -48,9 +48,18 @@ public interface RoomService extends IService<RoomDO> {
     RoomListVO editRoom(RoomInfoEditRequest roomInfoEditRequest);
 
     /**
+     * 获取房间信息
+     *
+     * @param roomId 房间 id
+     * @return 房间信息
+     */
+    RoomListVO getRoom(Long roomId);
+
+    /**
      * 删除房间
      *
      * @param roomId 房间 id
      */
+
     void deleteRoom(Long roomId);
 }

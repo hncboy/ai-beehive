@@ -1,5 +1,10 @@
 package com.hncboy.beehive.cell.core.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hncboy.beehive.base.domain.entity.RoomConfigParamDO;
 import com.hncboy.beehive.base.domain.entity.RoomDO;
 import com.hncboy.beehive.base.mapper.RoomMapper;
@@ -17,11 +22,6 @@ import com.hncboy.beehive.cell.core.hander.converter.RoomConfigParamConverter;
 import com.hncboy.beehive.cell.core.hander.converter.RoomConverter;
 import com.hncboy.beehive.cell.core.service.RoomConfigParamService;
 import com.hncboy.beehive.cell.core.service.RoomService;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,6 +101,11 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, RoomDO> implements 
         roomDO.setColor(roomInfoEditRequest.getColor());
         updateById(roomDO);
         return RoomConverter.INSTANCE.entityToListVO(roomDO);
+    }
+
+    @Override
+    public RoomListVO getRoom(Long roomId) {
+        return RoomConverter.INSTANCE.entityToListVO(RoomHandler.checkRoomExist(roomId));
     }
 
     @Override
