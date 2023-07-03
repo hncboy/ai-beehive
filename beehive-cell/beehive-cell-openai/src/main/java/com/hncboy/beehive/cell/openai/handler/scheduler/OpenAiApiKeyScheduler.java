@@ -1,9 +1,12 @@
 package com.hncboy.beehive.cell.openai.handler.scheduler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hncboy.beehive.base.domain.entity.OpenAiApiKeyDO;
 import com.hncboy.beehive.base.enums.OpenAiApiKeyStatusEnum;
+import com.hncboy.beehive.base.util.ObjectMapperUtil;
 import com.hncboy.beehive.base.util.OkHttpClientUtil;
 import com.hncboy.beehive.cell.openai.service.OpenAiApiKeyService;
 import com.unfbx.chatgpt.OpenAiClient;
@@ -69,7 +72,7 @@ public class OpenAiApiKeyScheduler {
                     updateReason = "剩余额度小于水位线，停用";
                     statusEnum = OpenAiApiKeyStatusEnum.DISABLE;
                 } else {
-                    updateReason = "刷新额度";
+                    updateReason = "刷新额度成功";
                 }
 
                 openAiApiKeyDO.setTotalBalance(totalBalance);
@@ -78,13 +81,18 @@ public class OpenAiApiKeyScheduler {
                 openAiApiKeyDO.setUpdateReason(updateReason);
                 openAiApiKeyDO.setRefreshBalanceTime(new Date());
                 openAiApiKeyDO.setStatus(statusEnum);
+                openAiApiKeyDO.setErrorInfo(StrUtil.EMPTY);
                 openAiApiKeyService.updateById(openAiApiKeyDO);
             } catch (Exception e) {
-                openAiApiKeyDO.setUpdateReason("刷新额度出现异常，置为失效；异常信息".concat(ExceptionUtil.stacktraceToString(e)));
+                log.warn("OpenAi ApiKey 刷新额度出现异常，ApiKey 信息：{}", ObjectMapperUtil.toJson(openAiApiKeyDO), e);
+                openAiApiKeyDO.setUpdateReason("刷新额度出现异常");
+                openAiApiKeyDO.setErrorInfo(ExceptionUtil.stacktraceToString(e));
                 openAiApiKeyDO.setRefreshBalanceTime(new Date());
-                openAiApiKeyDO.setStatus(OpenAiApiKeyStatusEnum.INVALID);
                 openAiApiKeyService.updateById(openAiApiKeyDO);
             }
+
+            // 不频繁请求
+            ThreadUtil.sleep(1000);
         }
     }
 }

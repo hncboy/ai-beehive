@@ -94,6 +94,11 @@ public class OpenAiApiKeyDO {
     private String updateReason;
 
     /**
+     * 错误信息
+     */
+    private String errorInfo;
+
+    /**
      * 版本
      */
     private Integer version;
