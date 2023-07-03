@@ -56,6 +56,13 @@ public class SensitiveWordHandler {
             });
 
     /**
+     * 清除敏感词树
+     */
+    public static void clearWordTree() {
+        CACHE.invalidateAll();
+    }
+
+    /**
      * 检查敏感词
      *
      * @return 敏感词列表
