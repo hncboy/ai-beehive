@@ -286,7 +286,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         questionMessage.setRoomId(describeRequest.getRoomId());
         questionMessage.setUserId(FrontUserUtil.getUserId());
         questionMessage.setType(MessageTypeEnum.QUESTION);
-        questionMessage.setImageName(newFileName);
+        questionMessage.setCompressedImageName(newFileName);
         questionMessage.setDiscordImageUrl(discordUploadFileName);
         questionMessage.setAction(MjMsgActionEnum.DESCRIBE);
         questionMessage.setStatus(MidjourneyMsgStatusEnum.SYS_SUCCESS);
@@ -298,7 +298,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         RoomMidjourneyMsgDO answerMessage = new RoomMidjourneyMsgDO();
         answerMessage.setId(answerMessageId);
         answerMessage.setRoomId(questionMessage.getRoomId());
-        answerMessage.setImageName(newFileName);
+        answerMessage.setCompressedImageName(newFileName);
         answerMessage.setDiscordImageUrl(discordUploadFileName);
         answerMessage.setAction(MjMsgActionEnum.DESCRIBE);
         answerMessage.setDiscordStartTime(new Date());

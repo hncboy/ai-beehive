@@ -58,9 +58,13 @@ public class RoomMidjourneyMsgVO {
     @Schema(title = "discord 图片地址")
     private String discordImageUrl;
 
-    @Schema(title = "图片地址")
+    @Schema(title = "压缩图片地址")
     @JsonSerialize(using = FilePathPrefixSerializer.class)
-    private String imageUrl;
+    private String compressedImageUrl;
+
+    @Schema(title = "原始图片地址")
+    @JsonSerialize(using = FilePathPrefixSerializer.class)
+    private String originalImageUrl;
 
     @Schema(title = "排队中的队列长度")
     private Integer waitQueueLength;

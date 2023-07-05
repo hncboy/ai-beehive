@@ -63,9 +63,14 @@ public class RoomMidjourneyMsgDO {
     private MjMsgActionEnum action;
 
     /**
-     * 图片名称
+     * 压缩图名称
      */
-    private String imageName;
+    private String compressedImageName;
+
+    /**
+     * 原图名称
+     */
+    private String originalImageName;
 
     /**
      * uv 指令的父消息 id

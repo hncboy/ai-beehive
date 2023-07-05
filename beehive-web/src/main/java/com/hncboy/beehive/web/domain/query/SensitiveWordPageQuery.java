@@ -3,10 +3,9 @@ package com.hncboy.beehive.web.domain.query;
 import com.hncboy.beehive.base.domain.query.PageQuery;
 import com.hncboy.beehive.base.enums.EnableDisableStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import jakarta.validation.constraints.Size;
 
 /**
  * @author hncboy

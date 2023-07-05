@@ -47,6 +47,8 @@
         <forest.version>1.5.31</forest.version>
         <lock4j-redisson.version>2.2.4</lock4j-redisson.version>
         <websocket.version>1.5.3</websocket.version>
+        <thumbnailator.version>0.4.20</thumbnailator.version>
+        <webp-imageio.version>0.1.6</webp-imageio.version>
     </properties>
 
     <dependencies>
@@ -177,16 +179,17 @@
             <artifactId>Java-WebSocket</artifactId>
             <version>${websocket.version}</version>
         </dependency>
-        <!-- Okhttp3 -->
+        <!-- 图片处理 -->
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.10.0</version>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>${thumbnailator.version}</version>
         </dependency>
+        <!-- webp 处理 -->
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp-sse</artifactId>
-            <version>4.10.0</version>
+            <groupId>org.sejda.imageio</groupId>
+            <artifactId>webp-imageio</artifactId>
+            <version>${webp-imageio.version}</version>
         </dependency>
     </dependencies>
 

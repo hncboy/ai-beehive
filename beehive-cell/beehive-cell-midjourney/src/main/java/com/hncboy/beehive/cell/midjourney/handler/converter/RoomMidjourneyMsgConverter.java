@@ -46,7 +46,8 @@ public interface RoomMidjourneyMsgConverter {
      */
     @AfterMapping
     default void afterEntityToVO(RoomMidjourneyMsgDO roomMidjourneyMsgDO, @MappingTarget RoomMidjourneyMsgVO roomMidjourneyMsgVO) {
-        roomMidjourneyMsgVO.setImageUrl(roomMidjourneyMsgDO.getImageName());
+        roomMidjourneyMsgVO.setCompressedImageUrl(roomMidjourneyMsgDO.getCompressedImageName());
+        roomMidjourneyMsgVO.setOriginalImageUrl(roomMidjourneyMsgDO.getOriginalImageName());
         // 如果是排队中状态，查询当前排队的长度
         if (roomMidjourneyMsgDO.getStatus() == MidjourneyMsgStatusEnum.SYS_QUEUING) {
             roomMidjourneyMsgVO.setWaitQueueLength(SpringUtil.getBean(MidjourneyTaskQueueHandler.class).getWaitQueueLength());

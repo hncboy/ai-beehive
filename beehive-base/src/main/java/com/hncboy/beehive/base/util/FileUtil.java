@@ -58,7 +58,7 @@ public class FileUtil {
      * @param multipartFile 文件
      * @param fileName      文件名
      */
-    public static void downloadFromMultipartFile(MultipartFile multipartFile, String fileName) {
+    public void downloadFromMultipartFile(MultipartFile multipartFile, String fileName) {
         // 构建完整路径
         String savePath = getFileSavePathPrefix().concat(fileName);
         File targetFile = new File(savePath);
@@ -80,7 +80,7 @@ public class FileUtil {
      * @param filename 文件名
      * @return 后缀名
      */
-    public static String getFileExtension(String filename) {
+    public String getFileExtension(String filename) {
         if (StrUtil.isEmpty(filename)) {
             return null;
         }

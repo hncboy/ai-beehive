@@ -65,8 +65,10 @@ public class ImagineDiscordMessageHandler extends AbstractDiscordMessageHandler 
         roomMidjourneyMsgDO.setDiscordMessageId(message.getId());
         roomMidjourneyMsgDO.setResponseContent(message.getContentRaw());
         roomMidjourneyMsgDO.setDiscordImageUrl(message.getAttachments().get(0).getUrl());
-        // 下载图片
-        roomMidjourneyMsgDO.setImageName(downloadImage(roomMidjourneyMsgDO.getDiscordImageUrl(), roomMidjourneyMsgDO.getId()));
+        // 下载原图
+        roomMidjourneyMsgDO.setOriginalImageName(downloadOriginalImage(roomMidjourneyMsgDO.getDiscordImageUrl(), roomMidjourneyMsgDO.getId()));
+        // 过程图片就不压缩了
+        roomMidjourneyMsgDO.setCompressedImageName(roomMidjourneyMsgDO.getOriginalImageName());
         roomMidjourneyMsgService.updateById(roomMidjourneyMsgDO);
     }
 
