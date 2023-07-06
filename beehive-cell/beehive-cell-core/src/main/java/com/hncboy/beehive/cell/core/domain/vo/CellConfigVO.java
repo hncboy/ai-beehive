@@ -42,9 +42,6 @@ public class CellConfigVO {
     @Schema(title = "介绍")
     private String introduce;
 
-    @Schema(title = "前端組件")
-    private String frontComponent;
-
     @Schema(title = "前端组件类型")
     private String frontComponentType;
 

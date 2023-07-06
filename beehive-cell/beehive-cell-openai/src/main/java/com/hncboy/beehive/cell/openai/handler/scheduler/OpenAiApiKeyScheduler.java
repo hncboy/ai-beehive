@@ -14,6 +14,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import retrofit2.HttpException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -84,10 +85,21 @@ public class OpenAiApiKeyScheduler {
                 openAiApiKeyDO.setErrorInfo(StrUtil.EMPTY);
                 openAiApiKeyService.updateById(openAiApiKeyDO);
             } catch (Exception e) {
-                log.warn("OpenAi ApiKey 刷新额度出现异常，ApiKey 信息：{}", ObjectMapperUtil.toJson(openAiApiKeyDO), e);
-                openAiApiKeyDO.setUpdateReason("刷新额度出现异常");
-                openAiApiKeyDO.setErrorInfo(ExceptionUtil.stacktraceToString(e));
                 openAiApiKeyDO.setRefreshBalanceTime(new Date());
+                openAiApiKeyDO.setErrorInfo(ExceptionUtil.stacktraceToString(e));
+
+                if (e instanceof HttpException && ((HttpException) e).code() == 401) {
+                    log.warn("OpenAi ApiKey 刷新额度出现 401，ApiKey 信息：{}", ObjectMapperUtil.toJson(openAiApiKeyDO), e);
+                    openAiApiKeyDO.setUpdateReason("刷新额度出现 401，疑似 ApkKey 被封禁，置为失效");
+                    openAiApiKeyDO.setIsRefreshBalance(false);
+                    openAiApiKeyDO.setStatus(OpenAiApiKeyStatusEnum.INVALID);
+                } else {
+                    // 一般是网络问题不更新状态，可能有网络波动不稳定
+                    log.warn("OpenAi ApiKey 刷新额度出现异常，ApiKey 信息：{}", ObjectMapperUtil.toJson(openAiApiKeyDO), e);
+                    openAiApiKeyDO.setUpdateReason("刷新额度出现异常");
+                    openAiApiKeyDO.setErrorInfo(ExceptionUtil.stacktraceToString(e));
+                }
+
                 openAiApiKeyService.updateById(openAiApiKeyDO);
             }
 

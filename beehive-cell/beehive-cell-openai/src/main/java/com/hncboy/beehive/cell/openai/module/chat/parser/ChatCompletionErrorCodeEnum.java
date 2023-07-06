@@ -80,7 +80,20 @@ public enum ChatCompletionErrorCodeEnum {
      *     }
      * }
      */
-    BILLING_NOT_ACTIVE("billing_not_active", "账单未激活");
+    BILLING_NOT_ACTIVE("billing_not_active", "账单未激活"),
+
+    /**
+     * 账号被封
+     * {
+     *     "error": {
+     *         "message": "This key is associated with a deactivated account. If you feel this is an error, contact us through our help center at help.openai.com.",
+     *         "type": "invalid_request_error",
+     *         "param": null,
+     *         "code": "account_deactivated"
+     *     }
+     * }
+     */
+    ACCOUNT_DEACTIVATED("account_deactivated", "账号被封");
 
     @Getter
     private final String code;
@@ -94,5 +107,4 @@ public enum ChatCompletionErrorCodeEnum {
     public static final Map<String, ChatCompletionErrorCodeEnum> CODE_MAP = Stream
             .of(ChatCompletionErrorCodeEnum.values())
             .collect(Collectors.toMap(ChatCompletionErrorCodeEnum::getCode, Function.identity()));
-
 }
