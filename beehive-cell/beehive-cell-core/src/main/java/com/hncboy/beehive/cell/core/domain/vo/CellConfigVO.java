@@ -30,9 +30,6 @@ public class CellConfigVO {
     @Schema(title = "是否有默认值，false 否 true 是")
     private Boolean isHaveDefaultValue;
 
-    @Schema(title = "用户是否可以使用默认值，false 否 true 是")
-    private Boolean isUserCanUseDefaultValue;
-
     @Schema(title = "用户是否可见默认值，false 否 true 是")
     private Boolean isUserValueVisible;
 
@@ -44,4 +41,13 @@ public class CellConfigVO {
 
     @Schema(title = "介绍")
     private String introduce;
+
+    @Schema(title = "前端組件")
+    private String frontComponent;
+
+    @Schema(title = "前端组件类型")
+    private String frontComponentType;
+
+    @Schema(title = "前端組件内容")
+    private String frontComponentContent;
 }

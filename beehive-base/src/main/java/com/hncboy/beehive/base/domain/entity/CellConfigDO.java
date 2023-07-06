@@ -108,6 +108,16 @@ public class CellConfigDO {
     private String remark;
 
     /**
+     * 前端组件类型
+     */
+    private String frontComponentType;
+
+    /**
+     * 前端組件内容
+     */
+    private String frontComponentContent;
+
+    /**
      * 是否删除 0 否 NULL 是
      */
     @TableLogic(value = "0", delval = "NULL")

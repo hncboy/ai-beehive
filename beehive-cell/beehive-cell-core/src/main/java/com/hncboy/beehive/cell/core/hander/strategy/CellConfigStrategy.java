@@ -44,6 +44,7 @@ public interface CellConfigStrategy {
 
     /**
      * 单个校验房间配置项参数
+     * TODO 是否需要采用规则引擎
      *
      * @param cellConfigCodeEnum 配置项 code 枚举
      * @param dataWrapper        房间配置项参数值

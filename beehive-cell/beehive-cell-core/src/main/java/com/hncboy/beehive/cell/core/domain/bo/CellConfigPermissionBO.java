@@ -69,4 +69,14 @@ public class CellConfigPermissionBO {
      * 介绍
      */
     private String introduce;
+
+    /**
+     * 前端组件类型
+     */
+    private String frontComponentType;
+
+    /**
+     * 前端組件内容
+     */
+    private String frontComponentContent;
 }
