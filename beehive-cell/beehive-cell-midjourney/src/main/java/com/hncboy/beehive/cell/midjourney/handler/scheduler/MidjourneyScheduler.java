@@ -62,7 +62,6 @@ public class MidjourneyScheduler {
      * 清理过期的任务
      * 场景 C：任务在数据中状态为排队但是在 Redis 队列中不存在，此时将任务标记为失败，不重新放入队列
      * 情况 1：Redis 队列中的数据被手动删除了，情况应该也少
-     * 情况 2：Redis 队列 key 过期，理论上不太可能。
      * 情况 3：拉取到队列的任务，正在发送请求，此时消息状态数据库没有更新，此时属于正常情况，可能会误判
      */
     private void clearHistoryTaskScene3() {

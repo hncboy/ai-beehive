@@ -44,9 +44,8 @@ public class MidjourneyTaskQueueHandler {
 
     /**
      * 执行任务 key 前綴
-     * TODO 如果一直没有回调就会过期，监听过期，用来减少 EXECUTE_TASK_COUNT_KEY
      */
-    private static final String PREFIX_EXECUTE_TASK_KEY = PREFIX + "execute:task:";
+    public static final String PREFIX_EXECUTE_TASK_KEY = PREFIX + "execute:task:";
 
     /**
      * 用于分布式锁的 key
@@ -99,19 +98,21 @@ public class MidjourneyTaskQueueHandler {
     public void finishExecuteTask(Long mjMsgId) {
         // 删除执行中的任务 key
         Boolean deleteResult = RedisUtil.delete(PREFIX_EXECUTE_TASK_KEY + mjMsgId);
-        // 获取执行任务数量
+
+        // 获取执行中的任务
         int executeTaskCount = getExecuteTaskCount();
+        // 删除成功的情况下
         if (deleteResult) {
             // 如果执行任务数量大于 0，就减 1
             if (executeTaskCount > 0) {
                 executeTaskCount--;
-                // 执行任务数量 - 1，30 分钟过期，保证所有任务正常执行完
-                RedisUtil.set(EXECUTE_TASK_COUNT_KEY, String.valueOf(executeTaskCount), 30, TimeUnit.MINUTES);
+                // 执行任务数量 - 1，永不过期
+                RedisUtil.set(EXECUTE_TASK_COUNT_KEY, String.valueOf(executeTaskCount));
             }
         }
 
-        // 拉取新任务
         MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
+        // 拉取新任务
         pullTaskFromWaitQueue(midjourneyProperties, executeTaskCount);
     }
 
@@ -219,10 +220,10 @@ public class MidjourneyTaskQueueHandler {
     private void setExecuteTask(int executeTaskCount, Long midjourneyMsgId) {
         log.info("Midjourney 设置执行中的任务：{}", midjourneyMsgId);
 
-        // 执行任务数量 + 1，过期时间 30 分钟，每次有新任务都会重置过期时间，保证 discord 响应失败时可以清除执行任务数量
-        RedisUtil.set(EXECUTE_TASK_COUNT_KEY, String.valueOf(executeTaskCount + 1), 30, TimeUnit.MINUTES);
-        // 插入执行中任务 key，过期时间 10 分钟，正常情况没问题
-        RedisUtil.set(PREFIX_EXECUTE_TASK_KEY + midjourneyMsgId, String.valueOf(midjourneyMsgId), 10, TimeUnit.MINUTES);
+        // 执行任务数量 + 1，永不过期，有问题自己处理
+        RedisUtil.set(EXECUTE_TASK_COUNT_KEY, String.valueOf(executeTaskCount + 1));
+        // 插入执行中任务 key，永不过期，有问题自己处理
+        RedisUtil.set(PREFIX_EXECUTE_TASK_KEY + midjourneyMsgId, String.valueOf(midjourneyMsgId));
     }
 
     /**
