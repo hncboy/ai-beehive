@@ -33,10 +33,10 @@
     <properties>
         <revision>2.0.0</revision>
         <java.version>17</java.version>
-        <mapstruct.version>1.5.3.Final</mapstruct.version>
-        <lombok.version>1.18.26</lombok.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok.version>1.18.28</lombok.version>
         <aspectj.version>1.9.19</aspectj.version>
-        <hutool-all.version>5.8.19</hutool-all.version>
+        <hutool-all.version>5.8.20</hutool-all.version>
         <maven.plugin.version>3.11.0</maven.plugin.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <springdoc.version>2.1.0</springdoc.version>
@@ -44,7 +44,7 @@
         <guava.version>31.1-jre</guava.version>
         <mysql.version>8.0.32</mysql.version>
         <chatgpt-sdk.version>1.0.14</chatgpt-sdk.version>
-        <forest.version>1.5.31</forest.version>
+        <forest.version>1.5.32</forest.version>
         <lock4j-redisson.version>2.2.4</lock4j-redisson.version>
         <websocket.version>1.5.3</websocket.version>
         <thumbnailator.version>0.4.20</thumbnailator.version>
