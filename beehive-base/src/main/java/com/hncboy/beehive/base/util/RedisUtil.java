@@ -112,6 +112,18 @@ public class RedisUtil {
     /** ------------------------ List 相关操作---------------------------- */
 
     /**
+     * 获取列表指定范围内的元素
+     *
+     * @param key   key
+     * @param start 开始位置, 0 是开始位置
+     * @param end   结束位置, -1 返回所有
+     * @return 列表
+     */
+    public static List<String> lRange(String key, long start, long end) {
+        return STRING_REDIS_TEMPLATE.opsForList().range(key, start, end);
+    }
+
+    /**
      * 存储在 list 尾部
      *
      * @param key   key

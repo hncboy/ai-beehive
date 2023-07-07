@@ -1,5 +1,6 @@
 package com.hncboy.beehive.cell.midjourney.handler.scheduler;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -34,11 +35,10 @@ public class MidjourneyScheduler {
     @Resource
     private RoomMidjourneyMsgService roomMidjourneyMsgService;
 
-    @Scheduled(cron = "0 0/3 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void handlerTask() {
         log.info("Midjourney 定时任务开始");
 
-        // // TODO 清理 Redis 队列中不存在但是数据库处于排队中
         // 首先清理过期的任务，可以腾出任务
         clearHistoryTask();
 
@@ -55,6 +55,42 @@ public class MidjourneyScheduler {
     private void clearHistoryTask() {
         clearHistoryTaskScene1();
         clearHistoryTaskScene2();
+        clearHistoryTaskScene3();
+    }
+
+    /**
+     * 清理过期的任务
+     * 场景 C：任务在数据中状态为排队但是在 Redis 队列中不存在，此时将任务标记为失败，不重新放入队列
+     * 情况 1：Redis 队列中的数据被手动删除了，情况应该也少
+     * 情况 2：Redis 队列 key 过期，理论上不太可能。
+     * 情况 3：拉取到队列的任务，正在发送请求，此时消息状态数据库没有更新，此时属于正常情况，可能会误判
+     */
+    private void clearHistoryTaskScene3() {
+        // 查询排队中的任务
+        List<RoomMidjourneyMsgDO> roomMessages = roomMidjourneyMsgService.list(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
+                .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.SYS_QUEUING)
+                // 24 小时前的消息，24 小时还在排队的任务，出错的可能性大
+                .lt(RoomMidjourneyMsgDO::getDiscordStartTime, LocalDateTime.now().minusHours(24)));
+        if (CollectionUtil.isEmpty(roomMessages)) {
+            return;
+        }
+
+        List<Long> waitQueueElement = midjourneyTaskQueueHandler.getWaitQueueElement();
+        for (RoomMidjourneyMsgDO roomMessage : roomMessages) {
+            if (waitQueueElement.contains(roomMessage.getId())) {
+                continue;
+            }
+
+            boolean update = roomMidjourneyMsgService.update(new RoomMidjourneyMsgDO(), new LambdaUpdateWrapper<RoomMidjourneyMsgDO>()
+                    .set(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.SYS_FAILURE)
+                    .set(RoomMidjourneyMsgDO::getResponseContent, "系统异常，排队数据丢失")
+                    .set(RoomMidjourneyMsgDO::getFailureReason, StrUtil.format("系统异常，Redis 队列中不存在排队数据，由 {} 定时任务处理", DateUtil.now()))
+                    .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.SYS_QUEUING)
+                    // 防止已经被更新过
+                    .eq(RoomMidjourneyMsgDO::getUpdateTime, roomMessage.getUpdateTime())
+                    .eq(RoomMidjourneyMsgDO::getId, roomMessage.getId()));
+            log.info("Midjourney 定时任务，清理过期的任务，更新状态为 SYS_FAILURE，消息 id：{}，更新结果：{}", roomMessage.getId(), update);
+        }
     }
 
     /**

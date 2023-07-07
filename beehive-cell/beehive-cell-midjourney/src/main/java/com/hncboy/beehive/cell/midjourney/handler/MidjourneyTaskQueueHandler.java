@@ -1,5 +1,6 @@
 package com.hncboy.beehive.cell.midjourney.handler;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Pair;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.annotation.Lock4j;
@@ -14,8 +15,11 @@ import com.hncboy.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author hncboy
@@ -40,7 +44,7 @@ public class MidjourneyTaskQueueHandler {
 
     /**
      * 执行任务 key 前綴
-     * TODO 监听过期，用来减少 EXECUTE_TASK_COUNT_KEY
+     * TODO 如果一直没有回调就会过期，监听过期，用来减少 EXECUTE_TASK_COUNT_KEY
      */
     private static final String PREFIX_EXECUTE_TASK_KEY = PREFIX + "execute:task:";
 
@@ -76,8 +80,8 @@ public class MidjourneyTaskQueueHandler {
 
             // 插入队列尾部
             RedisUtil.lRightPush(WAIT_QUEUE_KEY, String.valueOf(midjourneyMsgId));
-            // 队列过期时间重置为 1 小时
-            RedisUtil.expire(WAIT_QUEUE_KEY, 1, TimeUnit.HOURS);
+            // 队列过期时间重置为 6 小时
+            RedisUtil.expire(WAIT_QUEUE_KEY, 6, TimeUnit.HOURS);
             return MidjourneyMsgStatusEnum.SYS_QUEUING;
         }
 
@@ -156,14 +160,18 @@ public class MidjourneyTaskQueueHandler {
                 return;
             }
 
+            // 此时 Redis 队列中无数据，但是消息状态是排队中，下面报错会导致队列状态一直处于排队中
+
             log.info("Midjourney 从队列中拉取到新任务：{}", newAnswerMessage.getId());
 
             Pair<Boolean, String> resultPair = new Pair<>(false, "初始化");
 
             DiscordService discordService = SpringUtil.getBean(DiscordService.class);
             switch (newAnswerMessage.getAction()) {
-                case IMAGINE -> resultPair = discordService.imagine(newAnswerMessage.getFinalPrompt(), midjourneyProperties);
-                case DESCRIBE -> resultPair = discordService.describe(newAnswerMessage.getDiscordImageUrl(), midjourneyProperties);
+                case IMAGINE ->
+                        resultPair = discordService.imagine(newAnswerMessage.getFinalPrompt(), midjourneyProperties);
+                case DESCRIBE ->
+                        resultPair = discordService.describe(newAnswerMessage.getDiscordImageUrl(), midjourneyProperties);
                 case VARIATION -> {
                     // 不考虑频道切换
                     RoomMidjourneyMsgDO parentRoomMidjourneyMsgDO = roomMidjourneyMsgService.getById(newAnswerMessage.getUvParentId());
@@ -235,5 +243,18 @@ public class MidjourneyTaskQueueHandler {
     public int getWaitQueueLength() {
         Long currentWaitQueueLength = RedisUtil.lLen(WAIT_QUEUE_KEY);
         return Math.toIntExact(currentWaitQueueLength == null ? 0 : currentWaitQueueLength);
+    }
+
+    /**
+     * 获取等待队列元素
+     *
+     * @return 队列列表
+     */
+    public List<Long> getWaitQueueElement() {
+        List<String> elements = RedisUtil.lRange(WAIT_QUEUE_KEY, 0, -1);
+        if (CollectionUtil.isEmpty(elements)) {
+            return Collections.emptyList();
+        }
+        return elements.stream().map(Long::valueOf).collect(Collectors.toList());
     }
 }
