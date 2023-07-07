@@ -54,7 +54,7 @@ public enum ChatCompletionErrorCodeEnum {
      *     }
      * }
      */
-    INSUFFICIENT_QUOTA("insufficient_quota", "余额不足"),
+    INSUFFICIENT_QUOTA("insufficient_quota", "账号余额不足"),
 
     /**
      * 模型负载过高
@@ -93,7 +93,22 @@ public enum ChatCompletionErrorCodeEnum {
      *     }
      * }
      */
-    ACCOUNT_DEACTIVATED("account_deactivated", "账号被封");
+    ACCOUNT_DEACTIVATED("account_deactivated", "账号被封"),
+
+    /**
+     * Tokens 达到频率限制
+     * {
+     *     "error": {
+     *         "message": "Rate limit reached for 10KTPM-200RPM in organization xxxxxx on tokens per min. Limit: 10000 / min. Please try again in 6ms. Contact us through our help center at help.openai.com if you continue to have issues.",
+     *         "type": "tokens",
+     *         "param": null,
+     *         "code": null
+     *     }
+     * }
+     */
+    RATE_LIMIT_TOKENS("tokens", "tokens 达到频率限制");
+
+     // TODO 目前没有请求次数速率限制异常，有遇到再补充
 
     @Getter
     private final String code;

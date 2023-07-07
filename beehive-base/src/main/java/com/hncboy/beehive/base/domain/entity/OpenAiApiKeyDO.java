@@ -64,9 +64,27 @@ public class OpenAiApiKeyDO {
     private BigDecimal balanceWaterLine;
 
     /**
+     * 刷新状态时间
+     * 刷新余额伴随着刷新状态
+     */
+    private Date refreshStatusTime;
+
+    /**
      * 刷新余额时间
      */
     private Date refreshBalanceTime;
+
+    /**
+     * 是否刷新余额
+     * 余额刷新不一定准确，所以某些 apiKey 可以不刷新
+     */
+    private Boolean isRefreshBalance;
+
+    /**
+     * 是否刷新状态
+     * 用于检测账号是否封禁
+     */
+    private Boolean isRefreshStatus;
 
     /**
      * 权重，权重高的优先执行
@@ -77,11 +95,6 @@ public class OpenAiApiKeyDO {
      * 状态
      */
     private OpenAiApiKeyStatusEnum status;
-
-    /**
-     * 是否刷新余额
-     */
-    private Boolean isRefreshBalance;
 
     /**
      * 备注
