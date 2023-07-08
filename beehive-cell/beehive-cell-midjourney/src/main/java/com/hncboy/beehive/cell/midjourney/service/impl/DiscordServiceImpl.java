@@ -166,7 +166,7 @@ public class DiscordServiceImpl implements DiscordService {
         ForestResponse<?> forestResponse = executeRequestAsResponse(midjourneyProperties, midjourneyProperties.getDiscordApiUrl(), requestBodyStr);
         if (forestResponse.isError()) {
             log.error("Midjourney 调用 Discord 接口失败，请求参数：{}，响应消息： {}", requestBodyStr, forestResponse.getContent(), forestResponse.getException());
-            return new Pair<>(false, "上传图片失败，请稍后重试");
+            return new Pair<>(false, "调用接口发起请求失败，请稍后重试");
         }
 
         return new Pair<>(true, null);

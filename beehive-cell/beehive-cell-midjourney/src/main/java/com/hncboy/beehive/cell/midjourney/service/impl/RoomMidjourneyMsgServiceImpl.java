@@ -35,6 +35,7 @@ import com.hncboy.beehive.cell.midjourney.handler.converter.RoomMidjourneyMsgCon
 import com.hncboy.beehive.cell.midjourney.service.DiscordSendService;
 import com.hncboy.beehive.cell.midjourney.service.DiscordService;
 import com.hncboy.beehive.cell.midjourney.service.RoomMidjourneyMsgService;
+import com.hncboy.beehive.cell.midjourney.util.MjRoomMessageUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -246,10 +247,10 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         long answerMessageId = IdWorker.getId();
 
         MultipartFile multipartFile = describeRequest.getFile();
-        // 新文件名：前缀 + 消息 id + 后缀
-        String newFileName = MidjourneyConstant.DESCRIBE_FILE_PREFIX + answerMessageId + StrPool.DOT + FileUtil.getFileExtension(multipartFile.getOriginalFilename());
+        // 新原始文件名：前缀 + 消息 id + 后缀
+        String newOriginalFileName = MidjourneyConstant.DESCRIBE_ORIGINAL_FILE_PREFIX + answerMessageId + StrPool.DOT + FileUtil.getFileExtension(multipartFile.getOriginalFilename());
         // 保存文件
-        FileUtil.downloadFromMultipartFile(multipartFile, newFileName);
+        FileUtil.downloadFromMultipartFile(multipartFile, newOriginalFileName);
 
         MidjourneyProperties midjourneyProperties = MidjourneyProperties.init();
 
@@ -269,7 +270,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         // TODO 图片审核
 
         // 上传图片
-        Pair<Boolean, String> uploadResponsePair = discordService.uploadImage(newFileName, multipartFile, midjourneyProperties);
+        Pair<Boolean, String> uploadResponsePair = discordService.uploadImage(newOriginalFileName, multipartFile, midjourneyProperties);
         if (!uploadResponsePair.getKey()) {
             throw new ServiceException(uploadResponsePair.getValue());
         }
@@ -280,13 +281,17 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         // 检查是否有正在处理的任务
         MidjourneyRoomMsgHandler.checkExistProcessingTask();
 
+        // 下载压缩图片
+        String compressedImageFileName = MjRoomMessageUtil.downloadCompressedImage(newOriginalFileName, answerMessageId);
+
         // 问题消息创建插入
         RoomMidjourneyMsgDO questionMessage = new RoomMidjourneyMsgDO();
         questionMessage.setId(questionMessageId);
         questionMessage.setRoomId(describeRequest.getRoomId());
         questionMessage.setUserId(FrontUserUtil.getUserId());
         questionMessage.setType(MessageTypeEnum.QUESTION);
-        questionMessage.setCompressedImageName(newFileName);
+        questionMessage.setOriginalImageName(newOriginalFileName);
+        questionMessage.setCompressedImageName(compressedImageFileName);
         questionMessage.setDiscordImageUrl(discordUploadFileName);
         questionMessage.setAction(MjMsgActionEnum.DESCRIBE);
         questionMessage.setStatus(MidjourneyMsgStatusEnum.SYS_SUCCESS);
@@ -298,7 +303,8 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         RoomMidjourneyMsgDO answerMessage = new RoomMidjourneyMsgDO();
         answerMessage.setId(answerMessageId);
         answerMessage.setRoomId(questionMessage.getRoomId());
-        answerMessage.setCompressedImageName(newFileName);
+        answerMessage.setOriginalImageName(newOriginalFileName);
+        answerMessage.setCompressedImageName(compressedImageFileName);
         answerMessage.setDiscordImageUrl(discordUploadFileName);
         answerMessage.setAction(MjMsgActionEnum.DESCRIBE);
         answerMessage.setDiscordStartTime(new Date());

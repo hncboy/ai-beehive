@@ -16,7 +16,17 @@ public class MidjourneyConstant {
     public static final String IMAGE_PNG = "image/png";
 
     /**
-     * describe 上传文件前缀
+     * 压缩图文件前缀
      */
-    public static final String DESCRIBE_FILE_PREFIX = "mj_describe_";
+    public static final String COMPRESSED_FILE_PREFIX = "mj-compressed-";
+
+    /**
+     * 原图文件前缀
+     */
+    public static final String ORIGINAL_FILE_PREFIX = "mj-original-";
+
+    /**
+     * describe 原图文件前缀
+     */
+    public static final String DESCRIBE_ORIGINAL_FILE_PREFIX = "mj-original-describe-";
 }

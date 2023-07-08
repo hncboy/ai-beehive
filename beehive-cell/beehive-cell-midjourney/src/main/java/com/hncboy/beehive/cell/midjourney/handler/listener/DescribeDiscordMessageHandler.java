@@ -50,12 +50,12 @@ public class DescribeDiscordMessageHandler extends AbstractDiscordMessageHandler
         int hashStartIndex = discordImageUrl.lastIndexOf("/");
         // 截取文件名，文件名就是房间消息 id
         String mjMsgId = CharSequenceUtil.subBefore(discordImageUrl.substring(hashStartIndex + 1), ".", true);
-        if (StrUtil.isBlank(mjMsgId) || !StrUtil.startWith(mjMsgId, MidjourneyConstant.DESCRIBE_FILE_PREFIX)) {
+        if (StrUtil.isBlank(mjMsgId) || !StrUtil.startWith(mjMsgId, MidjourneyConstant.DESCRIBE_ORIGINAL_FILE_PREFIX)) {
             return;
         }
 
         // 找对应的房间消息记录
-        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(mjMsgId.replace(MidjourneyConstant.DESCRIBE_FILE_PREFIX, ""));
+        RoomMidjourneyMsgDO roomMidjourneyMsgDO = roomMidjourneyMsgService.getById(mjMsgId.replace(MidjourneyConstant.DESCRIBE_ORIGINAL_FILE_PREFIX, ""));
         if (Objects.isNull(roomMidjourneyMsgDO)) {
             return;
         }
