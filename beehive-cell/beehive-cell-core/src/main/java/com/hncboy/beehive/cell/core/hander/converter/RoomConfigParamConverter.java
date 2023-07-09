@@ -1,5 +1,6 @@
 package com.hncboy.beehive.cell.core.hander.converter;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.hncboy.beehive.base.domain.entity.RoomConfigParamDO;
 import com.hncboy.beehive.base.util.FrontUserUtil;
 import com.hncboy.beehive.cell.core.domain.bo.CellConfigPermissionBO;
@@ -44,6 +45,7 @@ public interface RoomConfigParamConverter {
      */
     default RoomConfigParamDO boToEntity(RoomConfigParamBO roomConfigParamBO, Long roomId) {
         RoomConfigParamDO roomConfigParamDO = new RoomConfigParamDO();
+        roomConfigParamDO.setId(IdWorker.getId());
         roomConfigParamDO.setUserId(FrontUserUtil.getUserId());
         roomConfigParamDO.setRoomId(roomId);
         roomConfigParamDO.setCellConfigCode(roomConfigParamBO.getCellConfigCode());

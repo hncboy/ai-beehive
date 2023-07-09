@@ -23,7 +23,7 @@ public class RoomConfigParamDO {
      * 主键
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 用户 ID

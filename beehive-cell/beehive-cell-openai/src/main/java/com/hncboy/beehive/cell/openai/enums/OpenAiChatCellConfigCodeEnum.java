@@ -1,5 +1,6 @@
 package com.hncboy.beehive.cell.openai.enums;
 
+import cn.hutool.core.util.NumberUtil;
 import com.hncboy.beehive.base.enums.CellCodeEnum;
 import com.hncboy.beehive.base.exception.ServiceException;
 import com.hncboy.beehive.base.util.ThrowExceptionUtil;
@@ -49,7 +50,9 @@ public enum OpenAiChatCellConfigCodeEnum implements ICellConfigCodeEnum {
             if (dataWrapper.isNull()) {
                 return;
             }
-
+            if (!NumberUtil.isInteger(dataWrapper.asString())) {
+                throw new ServiceException("maxTokens 限制范围是 [100, 10000]");
+            }
             int maxTokens = dataWrapper.asInt();
             if (maxTokens < 100 || maxTokens > 10000) {
                 throw new ServiceException("maxTokens 限制范围是 [100, 10000]");

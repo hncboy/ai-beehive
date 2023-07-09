@@ -26,14 +26,7 @@ public enum OpenAiChatWebModeEnum {
      * 目前限制 3 小时 25 条消息，超过限制报什么错还没测试
      * ChatGPT Plus
      */
-    GPT_4("gpt-4"),
-
-    /**
-     * 对应官网 GPT-4 Browsing with bing
-     * 有什么限制还不知道
-     * ChatGPT Plus
-     */
-    GPT_4_BROWSING("gpt-4-browsing");
+    GPT_4("gpt-4");
 
     @Getter
     private final String name;

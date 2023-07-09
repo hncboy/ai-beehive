@@ -114,6 +114,9 @@ public abstract class AbstractCellConfigStrategy implements CellConfigStrategy {
             RoomConfigParamBO roomConfigParamBO = entry.getValue();
             ICellConfigCodeEnum cellConfigCodeEnum = entry.getKey();
 
+            // 单个校验参数
+            singleValidate(cellConfigCodeEnum, new DataWrapper(roomConfigParamBO.getValue()));
+
             // 复合校验所有的参数
             cellConfigCodeEnum.compositeValidate(roomConfigParamBoMap, getCellCode());
 

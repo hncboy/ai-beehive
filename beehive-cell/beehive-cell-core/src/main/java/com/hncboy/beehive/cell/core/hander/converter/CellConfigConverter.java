@@ -64,7 +64,7 @@ public interface CellConfigConverter {
         }
 
         // 默认值不可见
-        if (cellConfigPermissionBO.getIsUserValueVisible()) {
+        if (!cellConfigPermissionBO.getIsUserValueVisible()) {
             // 默认值值置为空
             cellConfigVO.setDefaultValue(null);
         }
