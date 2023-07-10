@@ -189,6 +189,10 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
             // 记录登录失败日志
             loginLogService.loginFailed(FrontUserRegisterTypeEnum.EMAIL, emailDO.getId(), userInfoVO.getBaseUserId(), "用户被禁止登录");
             throw new ServiceException("您已经被禁止登录，有问题请联系管理员");
+        } else if (userInfoVO.getStatus() == FrontUserStatusEnum.WAIT_CHECK) {
+            // 记录登录失败日志
+            loginLogService.loginFailed(FrontUserRegisterTypeEnum.EMAIL, emailDO.getId(), userInfoVO.getBaseUserId(), "用户等待审核");
+            throw new ServiceException("您的账号等待管理员审核");
         }
 
         // 执行登录

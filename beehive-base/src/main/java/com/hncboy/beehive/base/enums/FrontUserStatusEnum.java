@@ -25,7 +25,7 @@ public enum FrontUserStatusEnum {
 
     /**
      * 待审核
-     * 目前没用，有需要可以加注册审核机制
+     * 可以配置注册时是否需要审核
      */
     WAIT_CHECK("wait_check");
 

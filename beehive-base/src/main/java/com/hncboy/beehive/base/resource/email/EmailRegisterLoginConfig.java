@@ -51,6 +51,11 @@ public class EmailRegisterLoginConfig {
     private String loginAllowSuffix;
 
     /**
+     * 注册审核是否开启
+     */
+    private Boolean registerCheckEnabled;
+
+    /**
      * 校验邮箱注册权限
      *
      * @param registerEmail 注册的邮箱
