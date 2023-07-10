@@ -1,24 +1,28 @@
 package com.hncboy.beehive.cell.openai.module.chat.parser;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.hncboy.beehive.base.domain.entity.RoomOpenAiChatWebMsgDO;
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import com.hncboy.beehive.base.util.ObjectMapperUtil;
 import com.hncboy.beehive.cell.openai.domain.vo.RoomOpenAiChatMsgVO;
 import com.hncboy.beehive.cell.openai.module.chat.accesstoken.ChatWebConversationResponse;
 import com.hncboy.beehive.cell.openai.module.chat.storage.RoomOpenAiChatMessageStorage;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.json.JSONUtil;
 import com.unfbx.chatgpt.entity.chat.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author hncboy
  * @date 2023-3-24
  * AccessToken 的聊天对话解析器
  */
+@Slf4j
 @Component
 public class AccessTokenChatResponseParser implements ResponseParser<ChatWebConversationResponse> {
 
@@ -56,7 +60,37 @@ public class AccessTokenChatResponseParser implements ResponseParser<ChatWebConv
 
     @Override
     public String parseErrorMessage(String originalResponseErrorMsg) {
-        return originalResponseErrorMsg;
+        try {
+            // 首先得满足 json 格式，有些情况比如网页直接 502 非接口返回的就是 html，也有可能是网络故障
+            if (!JSONUtil.isTypeJSON(originalResponseErrorMsg)) {
+                return "网络故障，请稍后再试";
+            }
+
+            // 提取 code
+            JsonNode detailJsonNode = ObjectMapperUtil.readTree(originalResponseErrorMsg).get("detail");
+            JsonNode codeJsonNode = detailJsonNode.get("code");
+            // 如果没有 code 节点，则直接取 detail 的文字
+            if (Objects.isNull(codeJsonNode)) {
+                return AccessTokenChatErrorCodeEnum.DETAIL_MAP.get(detailJsonNode.asText()).getMessage();
+            }
+            String code = codeJsonNode.asText();
+            String type = detailJsonNode.get("type").asText();
+
+            // 先通过 code，再通过 type
+            AccessTokenChatErrorCodeEnum errorCodeEnum = Optional.ofNullable(code)
+                    .map(AccessTokenChatErrorCodeEnum.CODE_MAP::get)
+                    .orElseGet(() -> Optional.ofNullable(type)
+                            .map(AccessTokenChatErrorCodeEnum.CODE_MAP::get)
+                            .orElse(null));
+
+            if (Objects.isNull(errorCodeEnum)) {
+                return "未知编码错误，请稍后再试";
+            }
+            return errorCodeEnum.getMessage();
+        } catch (Exception e) {
+            log.error("AccessToken 解析错误信息失败，错误信息：{}", originalResponseErrorMsg, e);
+            return "未知解析错误，请稍后再试";
+        }
     }
 
     @Override

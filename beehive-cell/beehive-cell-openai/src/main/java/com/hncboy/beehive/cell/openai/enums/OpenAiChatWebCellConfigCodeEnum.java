@@ -46,7 +46,7 @@ public enum OpenAiChatWebCellConfigCodeEnum implements ICellConfigCodeEnum {
 
             // GPT 4 图纸无法使用 GPT 3.5 模型
             if (cellCode == CellCodeEnum.OPENAI_CHAT_WEB_4) {
-                if (ObjectUtil.equals(OpenAiChatWebModeEnum.GPT_4.getName(), defaultValue)) {
+                if (ObjectUtil.notEqual(OpenAiChatWebModeEnum.GPT_4.getName(), defaultValue)) {
                     throw new ServiceException("模型参数错误，该图纸必须使用 GPT-4");
                 }
             }

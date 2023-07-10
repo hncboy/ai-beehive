@@ -69,7 +69,7 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
         // 填充问题消息记录
         RoomOpenAiChatMsgDO questionMessage = (RoomOpenAiChatMsgDO) chatMessageStorage.getQuestionMessageDO();
         questionMessage.setStatus(roomOpenAiChatMsgStatusEnum);
-        // 错误响应数据
+        // 填充问题错误响应数据
         questionMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
 
         // 填充使用 token
@@ -92,7 +92,9 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
             RoomOpenAiChatMsgDO answerMessage = new RoomOpenAiChatMsgDO();
             answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.ERROR);
             answerMessage.setOriginalData(chatMessageStorage.getOriginalResponseData());
+            // 错误响应数据
             answerMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
+            // 解析内容填充
             answerMessage.setContent(chatMessageStorage.getParser().parseErrorMessage(answerMessage.getResponseErrorData()));
 
             // 返回给前端的错误信息从这里取

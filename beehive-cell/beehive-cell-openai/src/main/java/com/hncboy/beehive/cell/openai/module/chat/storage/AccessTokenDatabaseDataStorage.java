@@ -75,7 +75,7 @@ public class AccessTokenDatabaseDataStorage extends AbstractDatabaseDataStorage 
         // 填充问题消息记录
         RoomOpenAiChatWebMsgDO questionMessage = (RoomOpenAiChatWebMsgDO) chatMessageStorage.getQuestionMessageDO();
         questionMessage.setStatus(roomOpenAiChatMsgStatusEnum);
-        // 错误响应数据
+        // 填充问题错误响应数据
         questionMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
 
         // 还没收到回复就断了，跳过回答消息记录更新
@@ -95,7 +95,13 @@ public class AccessTokenDatabaseDataStorage extends AbstractDatabaseDataStorage 
             RoomOpenAiChatWebMsgDO answerMessage = new RoomOpenAiChatWebMsgDO();
             answerMessage.setStatus(RoomOpenAiChatMsgStatusEnum.ERROR);
             answerMessage.setRequestMessageId("error");
-            answerMessage.setContent("系统异常，请稍后再试");
+            answerMessage.setResponseErrorData(chatMessageStorage.getErrorResponseData());
+            answerMessage.setContent(chatMessageStorage.getParser().parseErrorMessage(answerMessage.getResponseErrorData()));
+
+            // 返回给前端的错误信息从这里取
+            chatMessageStorage.setAnswerMessageDO(answerMessage);
+            chatMessageStorage.setReceivedMessage(answerMessage.getContent());
+
             saveAnswerMessage(answerMessage, questionMessage, chatMessageStorage);
         }
 

@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 /**
  * @author hncboy
  * @date 2023/6/15
- * 对话错误码枚举
+ * API 对话错误码枚举
  * @see <a href="https://platform.openai.com/docs/guides/error-codes/api-errors"/>API 错误</a>
  */
 @AllArgsConstructor
