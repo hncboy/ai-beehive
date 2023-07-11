@@ -38,6 +38,8 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/user/get_pic_code")
                 // 放行用户端邮箱登录
                 .excludePathPatterns("/user/login/email")
+                // 放行资源文件
+                .excludePathPatterns("/resources/**")
                 // swagger 放行
                 .excludePathPatterns("/swagger-ui/**")
                 .excludePathPatterns("/v3/api-docs/**");

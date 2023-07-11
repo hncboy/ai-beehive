@@ -96,6 +96,19 @@ public enum ChatCompletionErrorCodeEnum {
     ACCOUNT_DEACTIVATED("account_deactivated", "账号被封"),
 
     /**
+     * 该 ApiKey 由于违反政策，访问被终止
+     * {
+     *     "error": {
+     *         "message": "Your access was terminated due to violation of our policies, please check your email for more information. If you believe this is in error and would like to appeal, please contact us through our help center at help.openai.com.",
+     *         "type": "access_terminated",
+     *         "param": null,
+     *         "code": "access_terminated"
+     *     }
+     * }
+     */
+    ACCESS_TERMINATED("access_terminated", "该 ApiKey 由于违反政策，访问被终止"),
+
+    /**
      * Tokens 达到频率限制
      * {
      *     "error": {

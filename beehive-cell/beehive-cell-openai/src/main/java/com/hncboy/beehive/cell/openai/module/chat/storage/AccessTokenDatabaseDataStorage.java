@@ -117,7 +117,7 @@ public class AccessTokenDatabaseDataStorage extends AbstractDatabaseDataStorage 
      * @param chatMessageStorage 消息存储
      */
     private void saveAnswerMessage(RoomOpenAiChatWebMsgDO answerMessage, RoomOpenAiChatWebMsgDO questionMessage, RoomOpenAiChatMessageStorage chatMessageStorage) {
-        answerMessage.setUserId(FrontUserUtil.getUserId());
+        answerMessage.setUserId(questionMessage.getUserId());
         answerMessage.setRequestConversationId(questionMessage.getRequestConversationId());
         // 请求 parentMessageId 为空的话随机生成一个
         answerMessage.setRequestParentMessageId(questionMessage.getRequestMessageId());
