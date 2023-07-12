@@ -58,7 +58,22 @@ public enum CellCodeEnum {
     /**
      * Midjourney
      */
-    MIDJOURNEY("Midjourney");
+    MIDJOURNEY("Midjourney"),
+
+    /**
+     * ChatGLM
+     */
+    CHAT_GLM("ChatGLM"),
+
+    /**
+     * 文心一言
+     */
+    BAIDU_WXYY("baidu_wxyy"),
+
+    /**
+     * 通义千问
+     */
+    ALI_TYQW("ali_tyqw");
 
     @Getter
     @JsonValue

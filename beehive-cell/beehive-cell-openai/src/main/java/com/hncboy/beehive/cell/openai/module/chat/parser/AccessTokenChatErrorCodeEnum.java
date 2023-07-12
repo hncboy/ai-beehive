@@ -46,7 +46,7 @@ public enum AccessTokenChatErrorCodeEnum {
      *   }
      * }
      */
-    INVALID_JWT("invalid_jwt", "无效的 JWT", null),
+    INVALID_JWT("invalid_jwt", "无效的 JWT，请勿多次尝试", null),
 
     /**
      * AccessToken 过期
@@ -59,7 +59,20 @@ public enum AccessTokenChatErrorCodeEnum {
      *   }
      * }
      */
-    TOKEN_EXPIRED("token_expired", "AccessToken 过期", null);
+    TOKEN_EXPIRED("token_expired", "AccessToken 过期，请勿多次尝试", null),
+
+    /**
+     * 对话不存在或被删除
+     * {
+     * 	"detail": {
+     * 		"message": "Conversation not found",
+     * 		"code": "conversation_not_found"
+     *   }
+     * }
+     */
+    CONVERSATION_NOT_FOUND("conversation_not_found", "该对话不存在或已删除，请新建房间，请勿多次尝试", null);
+
+    // TODO GPT4 次数达到上限
 
     @Getter
     private final String code;

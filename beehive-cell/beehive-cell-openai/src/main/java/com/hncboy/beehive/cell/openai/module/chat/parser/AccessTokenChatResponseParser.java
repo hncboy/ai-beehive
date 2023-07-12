@@ -74,14 +74,9 @@ public class AccessTokenChatResponseParser implements ResponseParser<ChatWebConv
                 return AccessTokenChatErrorCodeEnum.DETAIL_MAP.get(detailJsonNode.asText()).getMessage();
             }
             String code = codeJsonNode.asText();
-            String type = detailJsonNode.get("type").asText();
 
-            // 先通过 code，再通过 type
-            AccessTokenChatErrorCodeEnum errorCodeEnum = Optional.ofNullable(code)
-                    .map(AccessTokenChatErrorCodeEnum.CODE_MAP::get)
-                    .orElseGet(() -> Optional.ofNullable(type)
-                            .map(AccessTokenChatErrorCodeEnum.CODE_MAP::get)
-                            .orElse(null));
+            // 通过 code 获取
+            AccessTokenChatErrorCodeEnum errorCodeEnum = Optional.ofNullable(code).map(AccessTokenChatErrorCodeEnum.CODE_MAP::get).orElse(null);
 
             if (Objects.isNull(errorCodeEnum)) {
                 return "未知编码错误，请稍后再试";
