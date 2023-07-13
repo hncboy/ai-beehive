@@ -66,6 +66,16 @@ public enum CellCodeEnum {
     CHAT_GLM("ChatGLM"),
 
     /**
+     * POE
+     */
+    POE("poe"),
+
+    /**
+     * Azure
+     */
+    AZURE("Azure"),
+
+    /**
      * 文心一言
      */
     BAIDU_WXYY("baidu_wxyy"),

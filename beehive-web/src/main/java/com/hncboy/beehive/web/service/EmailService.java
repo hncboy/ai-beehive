@@ -1,5 +1,7 @@
 package com.hncboy.beehive.web.service;
 
+import cn.hutool.core.lang.Pair;
+
 /**
  * 邮箱服务
  *
@@ -14,5 +16,5 @@ public interface EmailService {
      * @param verifyCode  验证码
      * @return 是否发送成功
      */
-    Boolean sendForVerifyCode(String targetEmail, String verifyCode);
+    Pair<Boolean, String> sendForVerifyCode(String targetEmail, String verifyCode);
 }

@@ -1,5 +1,6 @@
 package com.hncboy.beehive.web.service.strategy.user;
 
+import cn.hutool.core.lang.Pair;
 import com.hncboy.beehive.base.constant.ApplicationConstant;
 import com.hncboy.beehive.base.domain.entity.EmailVerifyCodeDO;
 import com.hncboy.beehive.base.domain.entity.FrontUserBaseDO;
@@ -90,7 +91,7 @@ public class EmailAbstractRegisterStrategy extends AbstractRegisterTypeStrategy 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Boolean register(RegisterFrontUserForEmailRequest request) {
+    public Pair<Boolean, String> register(RegisterFrontUserForEmailRequest request) {
         // 校验邮箱注册权限
         EmailRegisterLoginConfig emailRegisterAccountConfig = EmailUtil.getRegisterAccountConfig();
         emailRegisterAccountConfig.checkRegisterPermission(request.getIdentity());

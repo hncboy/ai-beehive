@@ -1,5 +1,6 @@
 package com.hncboy.beehive.web.service;
 
+import cn.hutool.core.lang.Pair;
 import com.hncboy.beehive.base.enums.FrontUserRegisterTypeEnum;
 import com.hncboy.beehive.web.domain.request.RegisterFrontUserForEmailRequest;
 import com.hncboy.beehive.web.domain.vo.LoginInfoVO;
@@ -19,7 +20,7 @@ public interface FrontUserService {
      * @param request 注册请求
      * @return 是否成功
      */
-    Boolean register(RegisterFrontUserForEmailRequest request);
+    Pair<Boolean, String> register(RegisterFrontUserForEmailRequest request);
 
     /**
      * 验证码验证

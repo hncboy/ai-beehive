@@ -1,5 +1,6 @@
 package com.hncboy.beehive.web.service.impl;
 
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.IdUtil;
 import com.hncboy.beehive.base.enums.FrontUserRegisterTypeEnum;
 import com.hncboy.beehive.base.util.SimpleCaptchaUtil;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class FrontUserServiceImpl implements FrontUserService {
 
     @Override
-    public Boolean register(RegisterFrontUserForEmailRequest request) {
+    public Pair<Boolean, String> register(RegisterFrontUserForEmailRequest request) {
         AbstractRegisterTypeStrategy registerStrategy = AbstractRegisterTypeStrategy.findStrategyByRegisterType(request.getRegisterType());
         return registerStrategy.register(request);
     }

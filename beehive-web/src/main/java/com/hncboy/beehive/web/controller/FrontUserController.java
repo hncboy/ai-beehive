@@ -1,5 +1,6 @@
 package com.hncboy.beehive.web.controller;
 
+import cn.hutool.core.lang.Pair;
 import com.hncboy.beehive.base.enums.FrontUserRegisterTypeEnum;
 import com.hncboy.beehive.base.exception.ServiceException;
 import com.hncboy.beehive.base.handler.response.R;
@@ -44,11 +45,12 @@ public class FrontUserController {
     @Operation(summary = "邮箱注册")
     @PostMapping("/register/email")
     public R<Boolean> registerFrontUser(@Validated @RequestBody RegisterFrontUserForEmailRequest request) {
-        if (frontUserService.register(request)) {
+        Pair<Boolean, String> registerResult = frontUserService.register(request);
+        if (registerResult.getKey()) {
             return R.data(true);
         }
         // 这里抛出异常防止 service 抛出回滚
-        throw new ServiceException("注册失败");
+        throw new ServiceException(registerResult.getValue());
     }
 
     @Operation(summary = "用户信息")

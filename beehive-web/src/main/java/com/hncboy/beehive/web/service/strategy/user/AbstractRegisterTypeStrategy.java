@@ -1,5 +1,6 @@
 package com.hncboy.beehive.web.service.strategy.user;
 
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.extra.spring.SpringUtil;
@@ -60,7 +61,7 @@ public abstract class AbstractRegisterTypeStrategy {
      * @param request 注册请求
      * @return 是否成功
      */
-    public abstract Boolean register(RegisterFrontUserForEmailRequest request);
+    public abstract Pair<Boolean, String> register(RegisterFrontUserForEmailRequest request);
 
     /**
      * 校验验证码是否通过

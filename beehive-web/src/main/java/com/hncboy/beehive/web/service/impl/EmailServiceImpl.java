@@ -1,13 +1,14 @@
 package com.hncboy.beehive.web.service.impl;
 
+import cn.hutool.core.lang.Pair;
+import cn.hutool.extra.mail.MailAccount;
+import cn.hutool.extra.mail.MailUtil;
 import com.hncboy.beehive.base.cache.SysParamCache;
 import com.hncboy.beehive.base.enums.EmailBizTypeEnum;
 import com.hncboy.beehive.base.resource.email.EmailRegisterLoginConfig;
 import com.hncboy.beehive.base.resource.email.EmailUtil;
 import com.hncboy.beehive.web.service.EmailService;
 import com.hncboy.beehive.web.service.SysEmailSendLogService;
-import cn.hutool.extra.mail.MailAccount;
-import cn.hutool.extra.mail.MailUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
     private SysEmailSendLogService emailLogService;
 
     @Override
-    public Boolean sendForVerifyCode(String targetEmail, String verifyCode) {
+    public Pair<Boolean, String> sendForVerifyCode(String targetEmail, String verifyCode) {
         // 记录日志
         EmailRegisterLoginConfig emailRegisterLoginConfig = EmailUtil.getRegisterAccountConfig();
         String sendContent = getSendContent(emailRegisterLoginConfig, verifyCode);
@@ -43,11 +44,11 @@ public class EmailServiceImpl implements EmailService {
         try {
             String sendMsgId = sendMessage(emailRegisterLoginConfig, mailAccount, targetEmail, sendContent);
             emailLogService.createSuccessLogBySysLog(sendMsgId, mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, sendContent);
-            return true;
+            return new Pair<>(true, null);
         } catch (Exception e) {
             // 邮件发送失败
             emailLogService.createFailedLogBySysLog("", mailAccount.getFrom(), targetEmail, EmailBizTypeEnum.REGISTER_VERIFY, sendContent, e.getMessage());
-            return false;
+            return new Pair<>(false, "邮件发送失败，请确认邮箱是否正确，如果正确但是还是无法发送邮件，请联系管理员");
         }
     }
 

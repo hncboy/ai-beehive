@@ -45,12 +45,12 @@ public class FrontUserRegisterAvailableValidator implements ConstraintValidator<
             return false;
         }
         isValid = SimpleCaptchaUtil.verifyCaptcha(registerRequest.getPicCodeSessionId(), registerRequest.getPicVerificationCode());
-        if (!isValid) {
+       /* if (!isValid) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("图形验证码输入错误").addConstraintViolation();
             log.info("注册 {} 注册账号：{} 验证码错误，校验不通过", registerType.getDesc(), registerRequest.getIdentity());
             return false;
-        }
+        }*/
         return true;
     }
 
