@@ -34,7 +34,7 @@ services:
       - CHAT_OPENAI_ACCESS_TOKEN=
       - CHAT_OPENAI_API_BASE_URL=https://api.openai.com/
       - CHAT_HTTP_PROXY_HOST:127.0.0.1
-      - EMAIL_HOST=smpt.qq.com
+      - EMAIL_HOST=smtp.qq.com
       - EMAIL_PORT=465
       - EMAIL_FROM=pigtalk@foxmail.com
       - EMAIL_USER=pigtalk@foxmail.com
