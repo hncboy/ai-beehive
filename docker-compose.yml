@@ -1,15 +1,15 @@
 version: '3'
 services:
   # MySQL 服务
-  mysql_gpt:
-    image: hncboy/chatgpt-web-java-mysql:latest
-    container_name: mysql_gpt
-#    ports:
-#      - 3309:3306
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - 3306:3306
     volumes:
-      - ~/mydata/mysql/data:/var/lib/mysql #数据文件挂载
-      - ~/mydata/mysql/conf:/etc/mysql/conf.d #配置文件挂载
-      - ~/mydata/mysql/log:/var/log/mysql #日志文件挂载
+      - ~/home/data/mysql/data:/var/lib/mysql #数据文件挂载
+      - ~/home/data/mysql/conf/my.cnf:/etc/mysql/conf.d #配置文件挂载
+      - ~/home/data/mysql/log:/var/log/mysql #日志文件挂载
     networks:
       gpt_network:
     healthcheck:
@@ -17,28 +17,32 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
-  # Java 服务
-  java_gpt:
-    image: hncboy/chatgpt-web-java:latest
-    container_name: java_gpt
+    privileged: true
     environment:
-      # 这里要用 mysql_gpt 的 3306 端口
-      - JDBC_URL=jdbc:mysql://mysql_gpt:3306/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: "123123"
+
+  # Java 服务
+  java:
+    image: lizhiheng1995/pigtalk:latest
+    container_name: java
+    environment:
+      # 这里要用 mysql 的 3306 端口
+      - JDBC_URL=jdbc:mysql://mysql:3306/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
       - MYSQL_USER_NAME=root
-      - MYSQL_PASSWORD=123456
-      - CHAT_OPENAI_API_KEY=xxx
+      - MYSQL_PASSWORD=123123
+      - CHAT_OPENAI_API_KEY=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
       - CHAT_OPENAI_ACCESS_TOKEN=
       - CHAT_OPENAI_API_BASE_URL=https://api.openai.com/
       - CHAT_HTTP_PROXY_HOST:127.0.0.1
       - EMAIL_HOST=smpt.qq.com
       - EMAIL_PORT=465
-      - EMAIL_FROM=xxx@qq.com
-      - EMAIL_USER=xxx@qq.com
-      - EMAIL_PASS=xxx
+      - EMAIL_FROM=pigtalk@foxmail.com
+      - EMAIL_USER=pigtalk@foxmail.com
+      - EMAIL_PASS=wlzjxoevpmjjbbea
     ports:
       - 3002:3002
     depends_on:
-      - mysql_gpt
+      - mysql
     restart: on-failure
     networks:
       gpt_network:

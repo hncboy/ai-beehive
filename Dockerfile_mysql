@@ -17,7 +17,7 @@ VOLUME /etc/mysql/conf.d
 EXPOSE 3306
 
 # 设置MySQL root的密码
-ENV MYSQL_ROOT_PASSWORD=123456
+ENV MYSQL_ROOT_PASSWORD=123123
 
 # 健康检查
 HEALTHCHECK --interval=5s --timeout=3s \
