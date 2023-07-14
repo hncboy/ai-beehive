@@ -76,6 +76,11 @@ public enum CellCodeEnum {
     AZURE("Azure"),
 
     /**
+     * Bard
+     */
+    Bard("Bard"),
+
+    /**
      * 文心一言
      */
     BAIDU_WXYY("baidu_wxyy"),
