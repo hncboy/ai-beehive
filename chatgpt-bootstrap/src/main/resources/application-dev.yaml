@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USER_NAME:root}
-    password: ${MYSQL_PASSWORD:123456}
-    url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
+    password: ${MYSQL_PASSWORD:123123}
+    url: ${JDBC_URL:jdbc:mysql://localhost:3306/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
 
 #mybatis-plus:
 #  configuration:
@@ -12,7 +12,7 @@ spring:
 
 chat:
   # OpenAI API Key - https://platform.openai.com/account/api-keys
-  openai_api_key: ${CHAT_OPENAI_API_KEY:}
+  openai_api_key: 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
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
   openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN:}
   # OpenAI API Base URL - https://api.openai.com/，要加/后缀
@@ -45,15 +45,16 @@ chat:
 # 邮箱验证相关
 email:
   # SMTP 服务器地址
-  host: ${EMAIL_HOST:xxxxxx}
+  host: ${EMAIL_HOST:smtp.qq.com}
   # 端口
   port: ${EMAIL_PORT:465}
   # 发件人前缀
-  from: ${EMAIL_FROM:xxxxxx}
+  from: ${EMAIL_FROM:pigtalk@foxmail.com}
   # 用户名
-  user: ${EMAIL_USER:xxxxxx}
+  user: ${EMAIL_USER:pigtalk@foxmail.com}
+#  user: ${EMAIL_USER:846484280@qq.com}
   # 如果要授权码，这里就是传授权码
-  pass: ${EMAIL_PASS:}
+  pass: ${EMAIL_PASS:wlzjxoevpmjjbbea}
   # 是否需要授权，决定是否要设置授权码
   auth: ${EMAIL_AUTH:true}
   # 邮箱验证码有效期（单位，分钟）
@@ -66,3 +67,8 @@ sa-token:
   # JWT 有效期
   timeout: ${LOGIN_TIMEOUT_SECONDS:86400}
   token-name: satoken
+
+#日志
+logging:
+  file:
+    name: log/logfile.log
