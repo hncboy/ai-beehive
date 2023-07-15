@@ -29,6 +29,8 @@ public class SaTokenConfig implements WebMvcConfigurer {
                     SaRouter.notMatch("/admin/**").check(r -> StpUtil.checkLogin());
                 }))
                 // 放行管理端登录接口
+                .excludePathPatterns("/sys_user/login")
+                // 放行管理端登录接口
                 .excludePathPatterns("/admin/sys_user/login")
                 // 放行用户端校验邮箱验证码
                 .excludePathPatterns("/user/verify_email_code")
