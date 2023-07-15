@@ -3,11 +3,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USER_NAME:root}
     password: ${MYSQL_PASSWORD:123456}
-    url: ${JDBC_URL:jdbc:mysql://localhost:3309/chat?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
+    url: ${JDBC_URL:jdbc:mysql://localhost:3306/ai_beehive?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true}
   data:
     redis:
       host: ${REDIS_HOST:localhost}
       password: ${REDIS_PASSWORD:password}
+      port: ${REDIS_PORT:6379}
       connect-timeout: 1000
   servlet:
     multipart:
@@ -24,9 +25,9 @@ spring:
       static-locations: file:${file-path-save-prefix}
 
 mybatis-plus:
-  configuration:
+  #configuration:
     # 控制台打印 SQL
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     # 关闭 banner
     banner: false
@@ -56,6 +57,7 @@ forest:
 logging:
   level:
     root: ${LOGGING_LEVEL_ROOT:info}
+    #com.hncboy: debug
 
 # 代理配置，一般 IDEA 运行使用
 proxy:
@@ -68,4 +70,4 @@ file-path:
   # 保存前缀
   save-prefix: ${FILE_PATH_SAVE_PREFIX:E:\\ChatGPT\\hello\\}
   # 访问前缀
-  visit-prefix: ${FILE_PATH_VISIT_PREFIX:resources}
+  visit-prefix: resources
