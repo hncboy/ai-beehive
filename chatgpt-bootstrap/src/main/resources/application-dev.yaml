@@ -12,7 +12,7 @@ spring:
 
 chat:
   # OpenAI API Key - https://platform.openai.com/account/api-keys
-  openai_api_key: ${CHAT_OPENAI_KEY:}
+  openai_api_key: ${CHAT_OPENAI_KEY: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}
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
   openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN:}
   # OpenAI API Base URL - https://api.openai.com/，要加/后缀
@@ -36,11 +36,11 @@ chat:
   # 全局最大请求时间间隔（秒）
   maxRequestSecond: ${CHAT_MAX_REQUEST_SECOND:}
   # ip 时间内最大请求次数
-  ipMaxRequest: ${CHAT_IP_MAX_REQUEST:}
+  ipMaxRequest: ${CHAT_IP_MAX_REQUEST:1}
   # ip 最大请求时间间隔（秒）
-  ipMaxRequestSecond: ${CHAT_IP_MAX_REQUEST_SECOND:}
+  ipMaxRequestSecond: ${CHAT_IP_MAX_REQUEST_SECOND:1}
   # 限制上下文对话的数量
-  limitQuestionContextCount: ${CHAT_LIMIT_QUESTION_CONTEXT_COUNT:}
+  limitQuestionContextCount: ${CHAT_LIMIT_QUESTION_CONTEXT_COUNT:5}
 
 # 邮箱验证相关
 email:
