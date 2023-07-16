@@ -49,21 +49,19 @@ public class DiscordStarter implements InitializingBean {
         log.info("Midjourney 开始启动");
 
         // 判断是否需要代理，下面和代理相关
-        if (!proxyConfig.getEnabled()) {
-            return;
+        if (proxyConfig.getEnabled()) {
+            // 解决报错：java.net.SocketTimeoutException: Connect timed out
+            OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+            okhttpbuilder.proxy(proxyConfig.getProxy());
+            builder.setHttpClientBuilder(okhttpbuilder);
+
+            // 解决报错：com.neovisionaries.ws.client.WebSocketException: Failed to connect to 'gateway.discord.gg:443': Connect timed out
+            WebSocketFactory webSocketFactory = new WebSocketFactory();
+            ProxySettings proxySettings = webSocketFactory.getProxySettings();
+            proxySettings.setHost(proxyConfig.getHttpHost());
+            proxySettings.setPort(proxyConfig.getHttpPort());
+            builder.setWebsocketFactory(webSocketFactory);
         }
-
-        // 解决报错：java.net.SocketTimeoutException: Connect timed out
-        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        okhttpbuilder.proxy(proxyConfig.getProxy());
-        builder.setHttpClientBuilder(okhttpbuilder);
-
-        // 解决报错：com.neovisionaries.ws.client.WebSocketException: Failed to connect to 'gateway.discord.gg:443': Connect timed out
-        WebSocketFactory webSocketFactory = new WebSocketFactory();
-        ProxySettings proxySettings = webSocketFactory.getProxySettings();
-        proxySettings.setHost(proxyConfig.getHttpHost());
-        proxySettings.setPort(proxyConfig.getHttpPort());
-        builder.setWebsocketFactory(webSocketFactory);
 
         builder.build();
     }

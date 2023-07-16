@@ -1,8 +1,8 @@
 -- 创建 database
-CREATE DATABASE IF NOT EXISTS ai_beehive2 DEFAULT CHARACTER SET utf8mb4;
+CREATE DATABASE IF NOT EXISTS ai_beehive DEFAULT CHARACTER SET utf8mb4;
 
 -- 进入 chat 库
-USE ai_beehive2;
+USE ai_beehive;
 
 CREATE TABLE IF NOT EXISTS `bh_cell`  (
     `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -86,7 +86,7 @@ INSERT INTO `bh_cell_config` VALUES (11, 'openai_chat_web_3_5', 'model', 'model'
 INSERT INTO `bh_cell_config` VALUES (12, 'openai_chat_web_3_5', 'access_token', 'access_token', 'Bearer xxxxx', 'Bearer xxxxx', 1, 1, 0, 1, 0, 1, 1, 'AccessToken', 'https://chat.openai.com/api/auth/session', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (13, 'openai_chat_web_3_5', 'proxy_url', 'proxy_url', 'https://ai.fakeopen.com/api/conversation', '代理地址', 1, 1, 0, 0, 1, 1, 1, '代理地址', '代理地址', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (14, 'openai_chat_web_4', 'model', 'model', 'gpt-4', 'gpt-4', 1, 1, 0, 0, 1, 1, 1, 'gpt-4', 'gpt-4', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
-INSERT INTO `bh_cell_config` VALUES (15, 'openai_chat_web_4', 'access_token', 'access_token', 'xxxxxxxxxxxx', 'Bearer xxxxx', 1, 1, 0, 1, 0, 1, 1, 'AccessToken', 'https://chat.openai.com/api/auth/session', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (15, 'openai_chat_web_4', 'access_token', 'access_token', 'Bearer xxxxxxxxxxxx', 'Bearer xxxxx', 1, 1, 0, 1, 0, 1, 1, 'AccessToken', 'https://chat.openai.com/api/auth/session', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (16, 'openai_chat_web_4', 'proxy_url', 'proxy_url', 'https://ai.fakeopen.com/api/conversation', '代理地址', 1, 1, 0, 0, 1, 1, 1, '代理地址', '代理地址', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (17, 'openai_image', 'api_key', 'api_key', '', 'sk-xxxx', 1, 1, 0, 0, 1, 1, 1, 'apiKey', 'apiKey，不填走 key 池', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (18, 'openai_image', 'openai_base_url', 'openai_base_url', 'https://api.openai.com/', 'https://api.openai.com/', 1, 1, 0, 0, 1, 1, 1, '代理地址', '代理地址', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');

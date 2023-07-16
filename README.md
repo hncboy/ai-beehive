@@ -3,7 +3,7 @@
 # 介绍
 
 - chatgpt-web-java 2.0 版本，AI 蜂巢
-- 网站：https://front.aibeehive.icu（）
+- 网站：https://front.aibeehive.icu
 
 # 框架
 
@@ -24,5 +24,12 @@
 - [Grt1228 ChatGPT java sdk](https://github.com/Grt1228/chatgpt-java)
 - ......
 
-## 待更新
+# 部署
+
+- 数据库在 beehive-bootstrap/src/main/resources/db/schema-mysql.sql
+- 数据库中存在默认的账号密码是 hellobee@aibeehive.icu——123456
+
+# 功能
+
+- 待更新
 
