@@ -23,6 +23,11 @@ import java.util.Objects;
 public class ChatConfig implements InitializingBean {
 
     /**
+     * 默认使用key的方式
+     * @see ApiTypeEnum
+     */
+    private String apiType;
+    /**
      * OpenAI API Key
      *
      * @link <a href="https://beta.openai.com/docs/api-reference/authentication"/>
@@ -121,7 +126,7 @@ public class ChatConfig implements InitializingBean {
      */
     public ApiTypeEnum getApiTypeEnum() {
         // 优先 API KEY
-        if (StrUtil.isNotBlank(openaiApiKey)) {
+        if (Objects.equals(openaiApiKey, ApiTypeEnum.API_KEY.getName())) {
             return ApiTypeEnum.API_KEY;
         }
         return ApiTypeEnum.ACCESS_TOKEN;

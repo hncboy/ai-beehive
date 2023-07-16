@@ -11,8 +11,10 @@ spring:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 chat:
+  # 决定会话使用key还是token,默认使用key
+  api_type: ${CHAT_API_TYPE:ApiKey}
   # OpenAI API Key - https://platform.openai.com/account/api-keys
-  openai_api_key: ${CHAT_OPENAI_KEY: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}
+  openai_api_key: ${CHAT_OPENAI_KEY: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}
   # change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
   openai_access_token: ${CHAT_OPENAI_ACCESS_TOKEN:}
   # OpenAI API Base URL - https://api.openai.com/，要加/后缀

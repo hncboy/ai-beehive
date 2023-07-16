@@ -56,7 +56,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         // 所有消息
         LinkedList<Message> messages = new LinkedList<>();
         // 添加用户上下文消息
-        addContextChatMessage(chatMessageDO, messages);
+        this.addContextChatMessage(chatMessageDO, messages);
 
         // 系统角色消息
         if (StrUtil.isNotBlank(chatProcessRequest.getSystemMessage())) {
