@@ -18,11 +18,11 @@ spring:
       max-request-size: ${SERVLET_MULTIPART_MAX_REQUEST_SIZE:15MB}
   mvc:
     # 响应路径，nginx 可以配该路径
-    static-path-pattern: /${file-path-visit-prefix}/**
+    static-path-pattern: /${file-path.visit-prefix}/**
   web:
     resources:
       # 资源文件存储路径
-      static-locations: file:${file-path-save-prefix}
+      static-locations: file:${file-path.save-prefix}
 
 mybatis-plus:
   #configuration:
@@ -61,7 +61,7 @@ logging:
 
 # 代理配置，一般 IDEA 运行使用
 proxy:
-  enabled: false
+  enabled: true
   http-host: 127.0.0.1
   http-port: 6666
 
