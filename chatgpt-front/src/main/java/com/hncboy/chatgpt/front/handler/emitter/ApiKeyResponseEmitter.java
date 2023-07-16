@@ -186,7 +186,8 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
             }
             ChatMessageDO parentMessage = chatMessageService.getOne(new LambdaQueryWrapper<ChatMessageDO>()
                     .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentAnswerMessageId()));
-            addContextChatMessage(parentMessage, messages);
+            // 这里一直在递归找父消息
+            this.addContextChatMessage(parentMessage, messages);
             return;
         }
 
