@@ -79,6 +79,27 @@ public class EmailServiceImpl implements EmailService {
      * @return 响应
      */
     protected String sendMessage(String targetEmail, String content) {
-        return MailUtil.send(mailAccount, targetEmail, "【StarGPT】账号注册", content, true);
+        return MailUtil.send(mailAccount, targetEmail, "【chatGPT】账号注册", content, true);
+    }
+
+    public static void main(String[] args) {
+//              - EMAIL_HOST=smtp.qq.com
+//      - EMAIL_PORT=465
+//      - EMAIL_FROM=pigtalk@foxmail.com
+//      - EMAIL_USER=pigtalk@foxmail.com
+//      - EMAIL_PASS=wlzjxoevpmjjbbea
+//      - EMAIL_VERIFY_REDIRECT_URL=https://pig3.pigchat.top/#/emailValidation?type=email&verifyCode=
+        MailAccount
+                mailAccount = new MailAccount();
+        mailAccount.setHost("smtp.qq.com");
+        mailAccount.setPort(465);
+        mailAccount.setFrom("pigtalk@foxmail.com");
+        mailAccount.setUser("pigtalk@foxmail.com");
+        mailAccount.setAuth(true);
+        mailAccount.setDebug(false);
+        mailAccount.setSslEnable(true);
+        mailAccount.setPass("wlzjxoevpmjjbbea");
+        String asd = MailUtil.send(mailAccount, "lizhiheng@lensung.com", "【pig chat】账号注册", "李志恒测试", true);
+        System.out.println(asd);
     }
 }
