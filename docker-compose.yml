@@ -30,9 +30,10 @@ services:
       - JDBC_URL=jdbc:mysql://mysql:3306/chat?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
       - MYSQL_USER_NAME=root
       - MYSQL_PASSWORD=123123
-      - CHAT_OPENAI_API_KEY=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
+      - CHAT_API_TYPE=ApiKey
+      - CHAT_OPENAI_API_KEY=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
       - CHAT_OPENAI_ACCESS_TOKEN=
-      - CHAT_LIMIT_QUESTION_CONTEXT_COUNT=5
+      - CHAT_LIMIT_QUESTION_CONTEXT_COUNT=
       - CHAT_IP_MAX_REQUEST_SECOND=1
       - CHAT_OPENAI_API_BASE_URL=https://api.openai.com/
       - CHAT_HTTP_PROXY_HOST:127.0.0.1

@@ -126,7 +126,7 @@ public class ChatConfig implements InitializingBean {
      */
     public ApiTypeEnum getApiTypeEnum() {
         // 优先 API KEY
-        if (Objects.equals(openaiApiKey, ApiTypeEnum.API_KEY.getName())) {
+        if (Objects.equals(apiType, ApiTypeEnum.API_KEY.getName())) {
             return ApiTypeEnum.API_KEY;
         }
         return ApiTypeEnum.ACCESS_TOKEN;
