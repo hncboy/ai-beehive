@@ -42,7 +42,7 @@ chat:
   # ip 最大请求时间间隔（秒）
   ipMaxRequestSecond: ${CHAT_IP_MAX_REQUEST_SECOND:1}
   # 限制上下文对话的数量
-  limitQuestionContextCount: ${CHAT_LIMIT_QUESTION_CONTEXT_COUNT:5}
+  limitQuestionContextCount: ${CHAT_LIMIT_QUESTION_CONTEXT_COUNT:}
 
 # 邮箱验证相关
 email:
