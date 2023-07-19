@@ -186,11 +186,7 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
             }
             ChatMessageDO parentMessage = chatMessageService.getOne(new LambdaQueryWrapper<ChatMessageDO>()
                                                                             .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentAnswerMessageId()));
-            // 这里一直在递归找父消息,如果当前消息加上父级消息，token超了，那么就不添加
-            Integer totalTokens = Objects.isNull(parentMessage.getTotalTokens()) ? 0 : parentMessage.getTotalTokens();
-            if (chatMessageDO.getTotalTokens() + totalTokens > ApiKeyModelEnum.NAME_MAP.get(chatMessageDO.getModelName()).getMaxTokens()) {
-                return;
-            }
+            if (this.outOfModelSize(chatMessageDO, parentMessage)) return;
             this.addContextChatMessage(parentMessage, messages);
             return;
         }
@@ -202,10 +198,13 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         ChatMessageDO parentMessage = chatMessageService.getOne(new LambdaQueryWrapper<ChatMessageDO>()
                                                                         .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentMessageId()));
         // 这里一直在递归找父消息,如果当前消息加上父级消息，token超了，那么就不添加
-        Integer totalTokens = Objects.isNull(parentMessage.getTotalTokens()) ? 0 : parentMessage.getTotalTokens();
-        if (chatMessageDO.getTotalTokens() + totalTokens > ApiKeyModelEnum.NAME_MAP.get(chatMessageDO.getModelName()).getMaxTokens()) {
-            return;
-        }
+        if (this.outOfModelSize(chatMessageDO, parentMessage)) return;
         addContextChatMessage(parentMessage, messages);
+    }
+
+    private boolean outOfModelSize(ChatMessageDO chatMessageDO, ChatMessageDO parentMessage) {
+        Integer parentTotalTokens = Objects.isNull(parentMessage.getTotalTokens()) ? 0 : parentMessage.getTotalTokens();
+        Integer messageTotalTokens = Objects.isNull(chatMessageDO.getTotalTokens()) ? 0 : chatMessageDO.getTotalTokens();
+        return messageTotalTokens + parentTotalTokens > ApiKeyModelEnum.NAME_MAP.get(chatMessageDO.getModelName()).getMaxTokens();
     }
 }
