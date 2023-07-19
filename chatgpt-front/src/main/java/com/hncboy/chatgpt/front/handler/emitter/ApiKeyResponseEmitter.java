@@ -167,8 +167,8 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
         // 父级消息id为空，表示是第一条消息，直接添加到message里
         if (Objects.isNull(chatMessageDO.getParentMessageId())) {
             messages.addFirst(Message.builder().role(Message.Role.USER)
-                    .content(chatMessageDO.getContent())
-                    .build());
+                                      .content(chatMessageDO.getContent())
+                                      .build());
             return;
         }
 
@@ -185,18 +185,27 @@ public class ApiKeyResponseEmitter implements ResponseEmitter {
                 return;
             }
             ChatMessageDO parentMessage = chatMessageService.getOne(new LambdaQueryWrapper<ChatMessageDO>()
-                    .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentAnswerMessageId()));
-            // 这里一直在递归找父消息
+                                                                            .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentAnswerMessageId()));
+            // 这里一直在递归找父消息,如果当前消息加上父级消息，token超了，那么就不添加
+            Integer totalTokens = Objects.isNull(parentMessage.getTotalTokens()) ? 0 : parentMessage.getTotalTokens();
+            if (chatMessageDO.getTotalTokens() + totalTokens > ApiKeyModelEnum.NAME_MAP.get(chatMessageDO.getModelName()).getMaxTokens()) {
+                return;
+            }
             this.addContextChatMessage(parentMessage, messages);
             return;
         }
 
         // 从下往上找并添加，越上面的数据放越前面
         messages.addFirst(Message.builder().role(role)
-                .content(chatMessageDO.getContent())
-                .build());
+                                  .content(chatMessageDO.getContent())
+                                  .build());
         ChatMessageDO parentMessage = chatMessageService.getOne(new LambdaQueryWrapper<ChatMessageDO>()
-                .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentMessageId()));
+                                                                        .eq(ChatMessageDO::getMessageId, chatMessageDO.getParentMessageId()));
+        // 这里一直在递归找父消息,如果当前消息加上父级消息，token超了，那么就不添加
+        Integer totalTokens = Objects.isNull(parentMessage.getTotalTokens()) ? 0 : parentMessage.getTotalTokens();
+        if (chatMessageDO.getTotalTokens() + totalTokens > ApiKeyModelEnum.NAME_MAP.get(chatMessageDO.getModelName()).getMaxTokens()) {
+            return;
+        }
         addContextChatMessage(parentMessage, messages);
     }
 }
