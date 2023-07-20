@@ -8,6 +8,7 @@ import com.unfbx.chatgpt.entity.chat.Message;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author hncboy
@@ -34,6 +35,9 @@ public class AccessTokenChatResponseParser implements ResponseParser<Conversatio
             return null;
         }
         ConversationResponse.Message message = parseSuccess(originalData).getMessage();
+        if (Objects.isNull(message)) {
+            return null;
+        }
         ConversationResponse.Author author = message.getAuthor();
         if (!author.getRole().equals(Message.Role.ASSISTANT.getName())) {
             return null;
