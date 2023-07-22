@@ -5,6 +5,7 @@
 - chatgpt-web-java 2.0 版本，更名为 ai-beehive（爱蜂巢、AI 蜂巢），体验站：https://front.aibeehive.icu
 - chatgpt-web-java 1.0 [最终版分支地址](https://github.com/hncboy/chatgpt-web-java/tree/v1.1.0)，体验地址：https://front3.stargpt.top/#/
 - 前端开发：https://github.com/mjjh1717
+- 前端项目地址：https://github.com/mjjh1717/chatgpt-shuowen
 - 描述：ai-beehive 项目的名字取自蜂巢，这源于我们构建房间的方式，即通过图纸塑造出独特的模块化房间，每个房间都是一个具有个性的聊天室，类似于蜂巢中的单独蜂窝。六边形的蜂窝设计启示我们，系统具有无限的扩展能力。在我们的 ai-beehive项目中，我们提供了一种方式，即通过添加新的图纸来扩展和丰富房间类型.
 
 # 框架
