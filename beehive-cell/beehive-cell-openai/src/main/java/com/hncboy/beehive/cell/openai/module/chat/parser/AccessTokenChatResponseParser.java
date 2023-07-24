@@ -43,6 +43,9 @@ public class AccessTokenChatResponseParser implements ResponseParser<ChatWebConv
             return null;
         }
         ChatWebConversationResponse.Message message = parseSuccess(originalData).getMessage();
+        if (Objects.isNull(message)) {
+            return null;
+        }
         ChatWebConversationResponse.Author author = message.getAuthor();
         if (!author.getRole().equals(Message.Role.ASSISTANT.getName())) {
             return null;
