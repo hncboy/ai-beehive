@@ -50,5 +50,5 @@ public class RoomOpenAiChatMessageStorage {
     /**
      * 当前消息流条数
      */
-    private int currentStreamMessageCount;
+    private Integer currentStreamMessageCount;
 }

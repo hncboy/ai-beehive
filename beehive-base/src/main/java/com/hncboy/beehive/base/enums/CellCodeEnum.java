@@ -61,6 +61,21 @@ public enum CellCodeEnum {
     MIDJOURNEY("Midjourney"),
 
     /**
+     * 文心千帆 ERNIE-Bot
+     */
+    WXQF_ERNIE_BOT("wxqf_ernie_bot"),
+
+    /**
+     * 文心千帆 ERNIE-Bot-turbo
+     */
+    WXQF_ERNIE_BOT_TURBO("wxqf_ernie_bot_turbo"),
+
+    /**
+     * 文心千帆 BLOOMZ-7B
+     */
+    WXQF_BLOOMZ_7B("wxqf_bloomz_7b"),
+
+    /**
      * ChatGLM
      */
     CHAT_GLM("ChatGLM"),
@@ -78,12 +93,12 @@ public enum CellCodeEnum {
     /**
      * Bard
      */
-    Bard("Bard"),
+    BARD("Bard"),
 
     /**
-     * 文心一言
+     * Claude
      */
-    BAIDU_WXYY("baidu_wxyy"),
+    CLAUDE("Claude"),
 
     /**
      * 通义千问

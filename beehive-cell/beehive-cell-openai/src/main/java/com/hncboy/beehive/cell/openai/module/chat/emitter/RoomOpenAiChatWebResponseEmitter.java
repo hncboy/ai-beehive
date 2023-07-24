@@ -75,7 +75,6 @@ public class RoomOpenAiChatWebResponseEmitter implements RoomOpenAiChatResponseE
         streamChatCompletions(conversationRequest, roomConfigParamAsMap, parsedEventSourceListener);
     }
 
-
     /**
      * 问答接口 stream 形式
      *
