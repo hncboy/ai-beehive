@@ -1,7 +1,7 @@
 package com.hncboy.beehive.cell.midjourney.util;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.hncboy.beehive.base.enums.MjMsgActionEnum;
+import com.hncboy.beehive.base.enums.MidjourneyMsgActionEnum;
 import com.hncboy.beehive.base.util.FileUtil;
 import com.hncboy.beehive.base.util.PictureUtil;
 import com.hncboy.beehive.cell.midjourney.constant.MidjourneyConstant;
@@ -28,8 +28,8 @@ public class MjRoomMessageUtil {
      * @param action 动作
      * @return 是否使用
      */
-    public boolean isUpscaleUse(int uUseBit, int index, MjMsgActionEnum action) {
-        if (action == MjMsgActionEnum.UPSCALE) {
+    public boolean isUpscaleUse(int uUseBit, int index, MidjourneyMsgActionEnum action) {
+        if (action == MidjourneyMsgActionEnum.UPSCALE) {
             return isBitSet(uUseBit, 4 - index);
         }
         throw new IllegalArgumentException("Mj 判断的 action 不合法");
@@ -42,8 +42,8 @@ public class MjRoomMessageUtil {
      * @param action 动作
      * @return 设置后的 uv 使用
      */
-    public int setUpscaleUse(int uvUseBit, int index, MjMsgActionEnum action) {
-        if (action == MjMsgActionEnum.UPSCALE) {
+    public int setUpscaleUse(int uvUseBit, int index, MidjourneyMsgActionEnum action) {
+        if (action == MidjourneyMsgActionEnum.UPSCALE) {
             return setBit(uvUseBit, 4 - index);
         }
         throw new IllegalArgumentException("Mj 设置的 action 不合法");

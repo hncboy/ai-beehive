@@ -27,7 +27,9 @@ import java.util.List;
  * @author hncboy
  * @date 2023/7/1
  * OpenAi ApiKey 定时任务
+ * 该任务目前废弃，因为该接口已经失效
  */
+@Deprecated
 @Slf4j
 @Component
 public class OpenAiApiKeyScheduler {
@@ -35,7 +37,7 @@ public class OpenAiApiKeyScheduler {
     @Resource
     private OpenAiApiKeyService openAiApiKeyService;
 
-    @Scheduled(cron = "0 0/30 * * * ?")
+//    @Scheduled(cron = "0 0/30 * * * ?")
     public void handler() {
         log.info("OpenAi ApiKey 检测定时任务开始");
 

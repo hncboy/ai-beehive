@@ -1,7 +1,7 @@
 package com.hncboy.beehive.cell.midjourney.util;
 
-import com.hncboy.beehive.base.enums.MjMsgActionEnum;
-import com.hncboy.beehive.cell.midjourney.domain.bo.MjDiscordMessageBO;
+import com.hncboy.beehive.base.enums.MidjourneyMsgActionEnum;
+import com.hncboy.beehive.cell.midjourney.domain.bo.MidjourneyDiscordMessageBO;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
 import net.dv8tion.jda.api.entities.Message;
@@ -57,13 +57,13 @@ public class MjDiscordMessageUtil {
      * @param message 原始消息
      * @return imagine 消息
      */
-    public static MjDiscordMessageBO matchImagineMessage(Message message) {
+    public static MidjourneyDiscordMessageBO matchImagineMessage(Message message) {
         Matcher matcher = IMAGINE_CONTENT_REGEX_PATTERN.matcher(message.getContentRaw());
         if (!matcher.find()) {
             return null;
         }
-        MjDiscordMessageBO messageBO = new MjDiscordMessageBO();
-        messageBO.setAction(MjMsgActionEnum.IMAGINE);
+        MidjourneyDiscordMessageBO messageBO = new MidjourneyDiscordMessageBO();
+        messageBO.setAction(MidjourneyMsgActionEnum.IMAGINE);
         messageBO.setPrompt(matcher.group(1));
         messageBO.setStatus(matcher.group(3));
         return messageBO;
@@ -75,16 +75,16 @@ public class MjDiscordMessageUtil {
      * @param message 原始消息
      * @return uv 消息
      */
-    public static MjDiscordMessageBO matchUpscaleAndVariationMessage(Message message) {
+    public static MidjourneyDiscordMessageBO matchUpscaleAndVariationMessage(Message message) {
         Matcher matcher = MJ_UV_CONTENT_REGEX_PATTERN.matcher(message.getContentRaw());
         if (!matcher.find()) {
             return matchUpscaleContent(message);
         }
-        MjDiscordMessageBO messageBO = new MjDiscordMessageBO();
+        MidjourneyDiscordMessageBO messageBO = new MidjourneyDiscordMessageBO();
         messageBO.setPrompt(matcher.group(1));
         String matchAction = matcher.group(2);
         // 判断是不是 Variation
-        messageBO.setAction(matchAction.startsWith("Variation") ? MjMsgActionEnum.VARIATION : MjMsgActionEnum.UPSCALE);
+        messageBO.setAction(matchAction.startsWith("Variation") ? MidjourneyMsgActionEnum.VARIATION : MidjourneyMsgActionEnum.UPSCALE);
         messageBO.setStatus(matcher.group(4));
         return messageBO;
     }
@@ -95,13 +95,13 @@ public class MjDiscordMessageUtil {
      * @param message 原始消息
      * @return upscale 消息
      */
-    private static MjDiscordMessageBO matchUpscaleContent(Message message) {
+    private static MidjourneyDiscordMessageBO matchUpscaleContent(Message message) {
         Matcher matcher = MJ_U_CONTENT_REGEX_PATTERN.matcher(message.getContentRaw());
         if (!matcher.find()) {
             return null;
         }
-        MjDiscordMessageBO messageBO = new MjDiscordMessageBO();
-        messageBO.setAction(MjMsgActionEnum.UPSCALE);
+        MidjourneyDiscordMessageBO messageBO = new MidjourneyDiscordMessageBO();
+        messageBO.setAction(MidjourneyMsgActionEnum.UPSCALE);
         messageBO.setPrompt(matcher.group(1));
         messageBO.setStatus("complete");
         messageBO.setIndex(Integer.parseInt(matcher.group(2)));

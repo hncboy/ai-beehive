@@ -4,7 +4,7 @@ import com.hncboy.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import com.hncboy.beehive.base.enums.CellCodeEnum;
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
-import com.hncboy.beehive.base.enums.MjMsgActionEnum;
+import com.hncboy.beehive.base.enums.MidjourneyMsgActionEnum;
 import com.hncboy.beehive.base.exception.ServiceException;
 import com.hncboy.beehive.base.util.FrontUserUtil;
 import com.hncboy.beehive.cell.core.hander.RoomHandler;
@@ -65,7 +65,7 @@ public class MidjourneyRoomMsgHandler {
         // 检查是否可以进行 upscale
         checkCanUpscaleAndVariation(parentRoomMidjourneyMsgDO, midjourneyProperties);
         // 判断是否已经 u 转换过
-        boolean isUse = MjRoomMessageUtil.isUpscaleUse(parentRoomMidjourneyMsgDO.getUUseBit(), index, MjMsgActionEnum.UPSCALE);
+        boolean isUse = MjRoomMessageUtil.isUpscaleUse(parentRoomMidjourneyMsgDO.getUUseBit(), index, MidjourneyMsgActionEnum.UPSCALE);
         if (isUse) {
             throw new ServiceException("该消息已经进行过 U" + index);
         }
@@ -83,7 +83,7 @@ public class MidjourneyRoomMsgHandler {
                 // 回答
                 .eq(RoomMidjourneyMsgDO::getType, MessageTypeEnum.ANSWER)
                 // u 转换
-                .eq(RoomMidjourneyMsgDO::getAction, MjMsgActionEnum.UPSCALE));
+                .eq(RoomMidjourneyMsgDO::getAction, MidjourneyMsgActionEnum.UPSCALE));
         if (Objects.isNull(convertRoomMidjourneyMsgDO)) {
             return;
         }
@@ -129,7 +129,7 @@ public class MidjourneyRoomMsgHandler {
         }
         // 只有答案消息 且 状态为成功的消息 且 动作为 imagine 的消息才能进行 u 转换
         if (parentRoomMidjourneyMsgDO.getType() != MessageTypeEnum.ANSWER
-                || parentRoomMidjourneyMsgDO.getAction() != MjMsgActionEnum.IMAGINE
+                || parentRoomMidjourneyMsgDO.getAction() != MidjourneyMsgActionEnum.IMAGINE
                 || parentRoomMidjourneyMsgDO.getStatus() != MidjourneyMsgStatusEnum.MJ_SUCCESS) {
             throw new ServiceException("该图片无法进行操作，原图未创建成功");
         }

@@ -11,7 +11,7 @@ import com.hncboy.beehive.base.domain.query.RoomMsgCursorQuery;
 import com.hncboy.beehive.base.enums.CellCodeEnum;
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
-import com.hncboy.beehive.base.enums.MjMsgActionEnum;
+import com.hncboy.beehive.base.enums.MidjourneyMsgActionEnum;
 import com.hncboy.beehive.base.exception.ServiceException;
 import com.hncboy.beehive.base.handler.SensitiveWordHandler;
 import com.hncboy.beehive.base.handler.mp.BeehiveServiceImpl;
@@ -101,7 +101,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         questionMessage.setPrompt(imagineRequest.getPrompt());
         // 组装最终的 prompt
         questionMessage.setFinalPrompt("[".concat(String.valueOf(answerMessageId)).concat("] ").concat(questionMessage.getPrompt()));
-        questionMessage.setAction(MjMsgActionEnum.IMAGINE);
+        questionMessage.setAction(MidjourneyMsgActionEnum.IMAGINE);
         questionMessage.setStatus(MidjourneyMsgStatusEnum.SYS_SUCCESS);
         questionMessage.setDiscordChannelId(midjourneyProperties.getChannelId());
         questionMessage.setIsDeleted(false);
@@ -113,7 +113,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setRoomId(questionMessage.getRoomId());
         answerMessage.setPrompt(questionMessage.getPrompt());
         answerMessage.setFinalPrompt(questionMessage.getFinalPrompt());
-        answerMessage.setAction(MjMsgActionEnum.IMAGINE);
+        answerMessage.setAction(MidjourneyMsgActionEnum.IMAGINE);
         answerMessage.setUUseBit(0);
 
         // 校验敏感词
@@ -156,7 +156,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         questionMessage.setUvParentId(parentRoomMidjourneyMsgDO.getId());
         questionMessage.setUvIndex(convertRequest.getIndex());
         questionMessage.setDiscordMessageId(parentRoomMidjourneyMsgDO.getDiscordMessageId());
-        questionMessage.setAction(MjMsgActionEnum.UPSCALE);
+        questionMessage.setAction(MidjourneyMsgActionEnum.UPSCALE);
         questionMessage.setStatus(MidjourneyMsgStatusEnum.SYS_SUCCESS);
         questionMessage.setIsDeleted(false);
         save(questionMessage);
@@ -167,7 +167,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setRoomId(questionMessage.getRoomId());
         answerMessage.setPrompt(questionMessage.getPrompt());
         answerMessage.setFinalPrompt(questionMessage.getFinalPrompt());
-        answerMessage.setAction(MjMsgActionEnum.UPSCALE);
+        answerMessage.setAction(MidjourneyMsgActionEnum.UPSCALE);
         answerMessage.setUvParentId(parentRoomMidjourneyMsgDO.getId());
         answerMessage.setUvIndex(convertRequest.getIndex());
         // 这里先赋值，因为回调监听没有可以赋值的地方
@@ -211,7 +211,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         questionMessage.setUvParentId(parentRoomMidjourneyMsgDO.getId());
         questionMessage.setUvIndex(convertRequest.getIndex());
         questionMessage.setDiscordMessageId(parentRoomMidjourneyMsgDO.getDiscordMessageId());
-        questionMessage.setAction(MjMsgActionEnum.VARIATION);
+        questionMessage.setAction(MidjourneyMsgActionEnum.VARIATION);
         questionMessage.setStatus(MidjourneyMsgStatusEnum.SYS_SUCCESS);
         questionMessage.setIsDeleted(false);
         save(questionMessage);
@@ -222,7 +222,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setRoomId(questionMessage.getRoomId());
         answerMessage.setPrompt(questionMessage.getPrompt());
         answerMessage.setFinalPrompt(questionMessage.getFinalPrompt());
-        answerMessage.setAction(MjMsgActionEnum.VARIATION);
+        answerMessage.setAction(MidjourneyMsgActionEnum.VARIATION);
         answerMessage.setUvParentId(parentRoomMidjourneyMsgDO.getId());
         answerMessage.setUvIndex(convertRequest.getIndex());
         answerMessage.setDiscordStartTime(new Date());
@@ -293,7 +293,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         questionMessage.setOriginalImageName(newOriginalFileName);
         questionMessage.setCompressedImageName(compressedImageFileName);
         questionMessage.setDiscordImageUrl(discordUploadFileName);
-        questionMessage.setAction(MjMsgActionEnum.DESCRIBE);
+        questionMessage.setAction(MidjourneyMsgActionEnum.DESCRIBE);
         questionMessage.setStatus(MidjourneyMsgStatusEnum.SYS_SUCCESS);
         questionMessage.setDiscordChannelId(midjourneyProperties.getChannelId());
         questionMessage.setIsDeleted(false);
@@ -306,7 +306,7 @@ public class RoomMidjourneyMsgServiceImpl extends BeehiveServiceImpl<RoomMidjour
         answerMessage.setOriginalImageName(newOriginalFileName);
         answerMessage.setCompressedImageName(compressedImageFileName);
         answerMessage.setDiscordImageUrl(discordUploadFileName);
-        answerMessage.setAction(MjMsgActionEnum.DESCRIBE);
+        answerMessage.setAction(MidjourneyMsgActionEnum.DESCRIBE);
         answerMessage.setDiscordStartTime(new Date());
         answerMessage.setUUseBit(0);
 

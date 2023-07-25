@@ -1,6 +1,6 @@
 package com.hncboy.beehive.cell.midjourney.domain.bo;
 
-import com.hncboy.beehive.base.enums.MjMsgActionEnum;
+import com.hncboy.beehive.base.enums.MidjourneyMsgActionEnum;
 import lombok.Data;
 
 /**
@@ -9,12 +9,12 @@ import lombok.Data;
  * Midjourney Discord 消息业务对象
  */
 @Data
-public class MjDiscordMessageBO {
+public class MidjourneyDiscordMessageBO {
 
     /**
      * 消息指令动作
      */
-    private MjMsgActionEnum action;
+    private MidjourneyMsgActionEnum action;
 
     /**
      * 消息内容

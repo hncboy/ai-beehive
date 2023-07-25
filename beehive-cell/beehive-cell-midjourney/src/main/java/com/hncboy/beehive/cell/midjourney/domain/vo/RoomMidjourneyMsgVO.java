@@ -2,7 +2,7 @@ package com.hncboy.beehive.cell.midjourney.domain.vo;
 
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
-import com.hncboy.beehive.base.enums.MjMsgActionEnum;
+import com.hncboy.beehive.base.enums.MidjourneyMsgActionEnum;
 import com.hncboy.beehive.base.handler.serializer.FilePathPrefixSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,7 +38,7 @@ public class RoomMidjourneyMsgVO {
     private String responseContent;
 
     @Schema(title = "指令动作枚举")
-    private MjMsgActionEnum action;
+    private MidjourneyMsgActionEnum action;
 
     @Schema(title = "u 指令使用比特位，末尾 4 位 0000，分别表示 U1 U2 U3 U4")
     private Integer uUseBit;

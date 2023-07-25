@@ -3,7 +3,7 @@ package com.hncboy.beehive.cell.midjourney.handler.listener;
 import com.hncboy.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
 import com.hncboy.beehive.cell.midjourney.constant.MidjourneyConstant;
-import com.hncboy.beehive.cell.midjourney.domain.bo.MjDiscordMessageBO;
+import com.hncboy.beehive.cell.midjourney.domain.bo.MidjourneyDiscordMessageBO;
 import com.hncboy.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import net.dv8tion.jda.api.entities.Message;
 import org.springframework.stereotype.Component;
@@ -30,7 +30,7 @@ public class ImagineDiscordMessageHandler extends AbstractDiscordMessageHandler 
 
     @Override
     public void onMessageReceived(Message message) {
-        MjDiscordMessageBO messageBO = MjDiscordMessageUtil.matchImagineMessage(message);
+        MidjourneyDiscordMessageBO messageBO = MjDiscordMessageUtil.matchImagineMessage(message);
         if (Objects.isNull(messageBO)) {
             return;
         }
@@ -73,7 +73,7 @@ public class ImagineDiscordMessageHandler extends AbstractDiscordMessageHandler 
     }
 
     private RoomMidjourneyMsgDO extractRoomMidjourneyMsgDO(Message message) {
-        MjDiscordMessageBO messageBO = MjDiscordMessageUtil.matchImagineMessage(message);
+        MidjourneyDiscordMessageBO messageBO = MjDiscordMessageUtil.matchImagineMessage(message);
         if (Objects.isNull(messageBO)) {
             return null;
         }

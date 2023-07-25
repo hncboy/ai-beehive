@@ -10,7 +10,7 @@ import lombok.Getter;
  * Midjourney 动作枚举
  */
 @AllArgsConstructor
-public enum MjMsgActionEnum {
+public enum MidjourneyMsgActionEnum {
 
     /**
      * 生成图片

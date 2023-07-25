@@ -2,9 +2,9 @@ package com.hncboy.beehive.cell.midjourney.handler.listener;
 
 import com.hncboy.beehive.base.domain.entity.RoomMidjourneyMsgDO;
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
-import com.hncboy.beehive.base.enums.MjMsgActionEnum;
+import com.hncboy.beehive.base.enums.MidjourneyMsgActionEnum;
 import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
-import com.hncboy.beehive.cell.midjourney.domain.bo.MjDiscordMessageBO;
+import com.hncboy.beehive.cell.midjourney.domain.bo.MidjourneyDiscordMessageBO;
 import com.hncboy.beehive.cell.midjourney.util.MjDiscordMessageUtil;
 import com.hncboy.beehive.cell.midjourney.util.MjRoomMessageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -31,7 +31,7 @@ public class UpscaleAndVariationDiscordMessageHandler extends AbstractDiscordMes
 
     @Override
     public void onMessageReceived(Message message) {
-        MjDiscordMessageBO messageBO = MjDiscordMessageUtil.matchUpscaleAndVariationMessage(message);
+        MidjourneyDiscordMessageBO messageBO = MjDiscordMessageUtil.matchUpscaleAndVariationMessage(message);
         if (Objects.isNull(messageBO)) {
             return;
         }
@@ -47,12 +47,12 @@ public class UpscaleAndVariationDiscordMessageHandler extends AbstractDiscordMes
         }
 
         // 如果是 upscale 消息
-        if (messageBO.getAction() == MjMsgActionEnum.UPSCALE) {
+        if (messageBO.getAction() == MidjourneyMsgActionEnum.UPSCALE) {
             // 找对应的 upscale 消息
             RoomMidjourneyMsgDO upscaleRoomMidjourneyMsgDO = roomMidjourneyMsgService.getOne(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
                     // 只会有等待接收状态，在 onMessageUpdate 因为区分不出是 u 几，所以不做处理
                     .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_WAIT_RECEIVED)
-                    .eq(RoomMidjourneyMsgDO::getAction, MjMsgActionEnum.UPSCALE)
+                    .eq(RoomMidjourneyMsgDO::getAction, MidjourneyMsgActionEnum.UPSCALE)
                     .eq(RoomMidjourneyMsgDO::getType, MessageTypeEnum.ANSWER)
                     .eq(RoomMidjourneyMsgDO::getUvIndex, messageBO.getIndex())
                     // 找子消息
@@ -66,17 +66,17 @@ public class UpscaleAndVariationDiscordMessageHandler extends AbstractDiscordMes
             roomMidjourneyMsgService.updateById(upscaleRoomMidjourneyMsgDO);
 
             // 更新父消息
-            parentRoomMidjourneyMsgDO.setUUseBit(MjRoomMessageUtil.setUpscaleUse(parentRoomMidjourneyMsgDO.getUUseBit(), upscaleRoomMidjourneyMsgDO.getUvIndex(), MjMsgActionEnum.UPSCALE));
+            parentRoomMidjourneyMsgDO.setUUseBit(MjRoomMessageUtil.setUpscaleUse(parentRoomMidjourneyMsgDO.getUUseBit(), upscaleRoomMidjourneyMsgDO.getUvIndex(), MidjourneyMsgActionEnum.UPSCALE));
             roomMidjourneyMsgService.updateById(parentRoomMidjourneyMsgDO);
         }
 
         // 如果是 variation 消息
-        if (messageBO.getAction() == MjMsgActionEnum.VARIATION) {
+        if (messageBO.getAction() == MidjourneyMsgActionEnum.VARIATION) {
             // 找对应的 variation 消息，这里不知道 v 几，理论上只会有一条
             RoomMidjourneyMsgDO variationRoomMidjourneyMsgDO = roomMidjourneyMsgService.getOne(new LambdaQueryWrapper<RoomMidjourneyMsgDO>()
                     // 只会有等待接收状态
                     .eq(RoomMidjourneyMsgDO::getStatus, MidjourneyMsgStatusEnum.MJ_WAIT_RECEIVED)
-                    .eq(RoomMidjourneyMsgDO::getAction, MjMsgActionEnum.VARIATION)
+                    .eq(RoomMidjourneyMsgDO::getAction, MidjourneyMsgActionEnum.VARIATION)
                     .eq(RoomMidjourneyMsgDO::getType, MessageTypeEnum.ANSWER)
                     // 找子消息
                     .eq(RoomMidjourneyMsgDO::getUvParentId, parentRoomMjMsgId));

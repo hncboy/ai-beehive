@@ -2,7 +2,7 @@ package com.hncboy.beehive.base.domain.entity;
 
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import com.hncboy.beehive.base.enums.MidjourneyMsgStatusEnum;
-import com.hncboy.beehive.base.enums.MjMsgActionEnum;
+import com.hncboy.beehive.base.enums.MidjourneyMsgActionEnum;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -60,7 +60,7 @@ public class RoomMidjourneyMsgDO {
     /**
      * 指令动作
      */
-    private MjMsgActionEnum action;
+    private MidjourneyMsgActionEnum action;
 
     /**
      * 压缩图名称
