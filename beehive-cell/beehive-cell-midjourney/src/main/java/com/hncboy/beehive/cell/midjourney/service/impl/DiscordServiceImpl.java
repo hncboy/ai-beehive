@@ -9,6 +9,7 @@ import com.dtflys.forest.http.ForestRequest;
 import com.dtflys.forest.http.ForestResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hncboy.beehive.base.util.ForestRequestUtil;
 import com.hncboy.beehive.base.util.ObjectMapperUtil;
 import com.hncboy.beehive.cell.midjourney.handler.cell.MidjourneyProperties;
@@ -46,9 +47,12 @@ public class DiscordServiceImpl implements DiscordService {
     public Pair<Boolean, String> imagine(String prompt, MidjourneyProperties midjourneyProperties) {
         String requestBodyStr = imagineParamsJson
                 .replace("$guild_id", midjourneyProperties.getGuildId())
-                .replace("$channel_id", midjourneyProperties.getChannelId())
-                .replace("$prompt", prompt);
-        return executeRequest(midjourneyProperties, requestBodyStr);
+                .replace("$channel_id", midjourneyProperties.getChannelId());
+
+        JsonNode requestBodyNode = ObjectMapperUtil.readTree(requestBodyStr);
+        // 转为 JsonNode 再修改防止 JSON 转义报错
+        ((ObjectNode) requestBodyNode.get("data").get("options").get(0)).put("value", prompt);
+        return executeRequest(midjourneyProperties, requestBodyNode.toString());
     }
 
     @Override
