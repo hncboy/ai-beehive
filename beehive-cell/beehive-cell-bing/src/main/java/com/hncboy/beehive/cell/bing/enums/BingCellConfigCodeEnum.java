@@ -29,7 +29,38 @@ public enum BingCellConfigCodeEnum implements ICellConfigCodeEnum {
             }
             throw new ServiceException(StrUtil.format("NewBing 模式 {} 参数错误", mode));
         }
-    }
+    },
 
-    // TODO 看下有无 cookie 有什么区别，如果需要的话，可以加个 cookie 配置项
+    /**
+     * WebSocket 连接地址
+     */
+    WSS_URL {
+
+        @Override
+        public String getCode() {
+            return "wss_url";
+        }
+    },
+
+    /**
+     * 创建对话地址
+     */
+    CREATE_CONVERSATION_URL {
+
+        @Override
+        public String getCode() {
+            return "create_conversation_url";
+        }
+    },
+
+    /**
+     * Cookie
+     */
+    COOKIE {
+
+        @Override
+        public String getCode() {
+            return "cookie";
+        }
+    }
 }

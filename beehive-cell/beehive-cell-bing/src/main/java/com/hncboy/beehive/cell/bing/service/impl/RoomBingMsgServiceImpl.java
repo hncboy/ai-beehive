@@ -1,6 +1,7 @@
 package com.hncboy.beehive.cell.bing.service.impl;
 
 import cn.hutool.core.text.StrPool;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -17,13 +18,17 @@ import com.hncboy.beehive.base.util.WebUtil;
 import com.hncboy.beehive.cell.bing.domain.bo.BingRoomBO;
 import com.hncboy.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
 import com.hncboy.beehive.cell.bing.domain.vo.RoomBingMsgVO;
+import com.hncboy.beehive.cell.bing.enums.BingCellConfigCodeEnum;
 import com.hncboy.beehive.cell.bing.handler.BingApiResponseTypeMessageHandler;
+import com.hncboy.beehive.cell.bing.handler.BingCellConfigStrategy;
 import com.hncboy.beehive.cell.bing.handler.BingRoomHandler;
 import com.hncboy.beehive.cell.bing.handler.converter.RoomBingMsgConverter;
 import com.hncboy.beehive.cell.bing.service.RoomBingMsgService;
 import com.hncboy.beehive.cell.bing.service.RoomBingService;
+import com.hncboy.beehive.cell.core.hander.strategy.DataWrapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Headers;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.springframework.stereotype.Service;
@@ -34,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author hncboy
@@ -59,6 +65,9 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
 
     @Resource
     private RoomBingService roomBingService;
+
+    @Resource
+    private BingCellConfigStrategy bingCellConfigStrategy;
 
     @Override
     public List<RoomBingMsgVO> list(RoomMsgCursorQuery cursorQuery) {
@@ -107,11 +116,15 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
      */
     private void buildWebSocketAndSendMessage(RoomBingMsgDO questionMessage, BingRoomBO bingRoomBO, RoomBingMsgSendRequest roomBingMsgSendRequest,
                                               ResponseBodyEmitter responseBodyEmitter, int retries) throws Exception {
+        Map<BingCellConfigCodeEnum, DataWrapper> roomConfigParamMap = bingCellConfigStrategy.getRoomConfigParamAsMap(questionMessage.getRoomId());
+
         // 连接地址
-        URI uri = new URI("wss://sydney.bing.com/sydney/ChatHub");
+        URI uri = new URI(roomConfigParamMap.get(BingCellConfigCodeEnum.WSS_URL).asString());
 
         // 请求头
         Map<String, String> httpHeaders = new HashMap<>(4);
+        httpHeaders.put("x-forwarded-for", BingRoomHandler.generateRandomIp());
+        httpHeaders.put("Cookie", roomConfigParamMap.get(BingCellConfigCodeEnum.COOKIE).asString());
 
         // 建立 WebSocket 连接，发送一句后就 close
         WebSocketClient webSocketClient = new WebSocketClient(uri, httpHeaders) {

@@ -2,6 +2,8 @@ package com.hncboy.beehive.cell.bing.handler;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.dtflys.forest.Forest;
 import com.dtflys.forest.http.ForestRequest;
 import com.dtflys.forest.http.ForestResponse;
@@ -15,7 +17,9 @@ import com.hncboy.beehive.base.util.ObjectMapperUtil;
 import com.hncboy.beehive.cell.bing.constant.NewBingConstant;
 import com.hncboy.beehive.cell.bing.domain.bo.BingApiCreateConversationResultBO;
 import com.hncboy.beehive.cell.bing.domain.request.RoomBingMsgSendRequest;
+import com.hncboy.beehive.cell.bing.enums.BingCellConfigCodeEnum;
 import com.hncboy.beehive.cell.bing.enums.BingModeEnum;
+import com.hncboy.beehive.cell.core.hander.strategy.DataWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -43,8 +47,12 @@ public class BingRoomHandler {
      * @return 创建结果
      */
     public static BingApiCreateConversationResultBO createConversation(Long roomId) {
-        ForestRequest<?> forestRequest = Forest.get("https://www.bing.com/turing/conversation/create");
+        BingCellConfigStrategy  bingCellConfigStrategy = SpringUtil.getBean(BingCellConfigStrategy.class);
+        Map<BingCellConfigCodeEnum, DataWrapper> roomConfigParamMap = bingCellConfigStrategy.getRoomConfigParamAsMap(roomId);
+
+        ForestRequest<?> forestRequest = Forest.get(roomConfigParamMap.get(BingCellConfigCodeEnum.CREATE_CONVERSATION_URL).asString());
         ForestRequestUtil.buildProxy(forestRequest);
+        forestRequest.addHeader("Cookie", roomConfigParamMap.get(BingCellConfigCodeEnum.CREATE_CONVERSATION_URL).asString());
         ForestResponse<?> forestResponse = forestRequest.execute(ForestResponse.class);
         if (forestResponse.isError()) {
             // 国内访问会 403
@@ -87,5 +95,17 @@ public class BingRoomHandler {
         // 替换 isStartOfSession，第一条消息为 true，其他为 false；如果第一条消息为 false 会报错，如果其他为 true，则会一直重复第一条的回答
         objectNode.put("isStartOfSession", roomBingDO.getNumUserMessagesInConversation() == 0);
         return ObjectMapperUtil.toJson(jsonNode);
+    }
+
+    /**
+     * 生成随机 IP
+     *
+     * @return IP
+     */
+    public static String generateRandomIp() {
+        int a = RandomUtil.randomInt(104, 108);
+        int b = RandomUtil.randomInt(256);
+        int c = RandomUtil.randomInt(256);
+        return "13." + a + "." + b + "." + c;
     }
 }
