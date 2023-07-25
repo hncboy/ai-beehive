@@ -1,7 +1,6 @@
 package com.hncboy.beehive.cell.bing.service.impl;
 
 import cn.hutool.core.text.StrPool;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -10,6 +9,7 @@ import com.hncboy.beehive.base.domain.entity.RoomBingMsgDO;
 import com.hncboy.beehive.base.domain.query.RoomMsgCursorQuery;
 import com.hncboy.beehive.base.enums.MessageTypeEnum;
 import com.hncboy.beehive.base.handler.mp.BeehiveServiceImpl;
+import com.hncboy.beehive.base.handler.response.R;
 import com.hncboy.beehive.base.mapper.RoomBingMsgMapper;
 import com.hncboy.beehive.base.util.FrontUserUtil;
 import com.hncboy.beehive.base.util.ObjectMapperUtil;
@@ -28,7 +28,6 @@ import com.hncboy.beehive.cell.bing.service.RoomBingService;
 import com.hncboy.beehive.cell.core.hander.strategy.DataWrapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.Headers;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * @author hncboy
@@ -183,7 +181,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
                             }
                         } else {
                             log.warn("NewBing 房间：{}，尝试重新建立话题失败，重试次数已用完", bingRoomBO.getRoomBingDO().getRoomId());
-                            ResponseBodyEmitterUtil.send(emitter, "发送对话失败，请稍后重试。");
+                            ResponseBodyEmitterUtil.send(emitter, R.fail("发送对话失败，请稍后重试。"));
                             emitter.complete();
                         }
                     }
@@ -197,7 +195,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
                 // 没有开启连接的情况，网络问题出连接不了
                 if (Objects.isNull(emitter)) {
                     emitter = responseBodyEmitter;
-                    ResponseBodyEmitterUtil.send(emitter, "发送对话出现问题，请检查网络");
+                    ResponseBodyEmitterUtil.send(emitter, R.fail("发送对话出现问题，请检查网络"));
                     emitter.complete();
                 }
             }
@@ -205,7 +203,7 @@ public class RoomBingMsgServiceImpl extends BeehiveServiceImpl<RoomBingMsgMapper
             @Override
             public void onError(Exception e) {
                 log.error("NewBing 房间：{}，WebSocket 连接发生错误", bingRoomBO.getRoomBingDO().getRoomId(), e);
-                ResponseBodyEmitterUtil.send(emitter, "发送对话异常，请稍后重试。");
+                ResponseBodyEmitterUtil.send(emitter, R.fail("发送对话异常，请稍后重试。"));
                 emitter.complete();
             }
         };
