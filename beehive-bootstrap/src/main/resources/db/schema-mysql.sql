@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS `bh_cell`  (
 -- ----------------------------
 -- Records of bh_cell
 -- ----------------------------
-INSERT INTO `bh_cell` VALUES (1, 'NewBing', 'https://img1.imgtp.com/2023/07/04/WJrNzlO5.png', 'new_bing', 88, 'published', '新必应', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell` VALUES (1, 'NewBing', 'https://img1.imgtp.com/2023/07/25/uFQSFjPu.ico', 'new_bing', 88, 'closed', '新必应', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (2, 'Midjourney', 'https://img1.imgtp.com/2023/07/04/PWdsPUAw.jpg', 'Midjourney', 87, 'closed', 'Midjourney', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
-INSERT INTO `bh_cell` VALUES (3, 'OpenAi Chat GPT3.5', 'https://img1.imgtp.com/2023/07/04/5Obs2pOC.png', 'openai_chat_api_3_5', 99, 'closed', 'OpenAi Chat GPT 3.5', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell` VALUES (3, 'OpenAi Chat GPT3.5', 'https://img1.imgtp.com/2023/07/25/lNqXPOvs.ico', 'openai_chat_api_3_5', 99, 'closed', 'OpenAi Chat GPT 3.5', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (4, 'Azure', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Azure', 0, 'wait_coding', '微软 Azure', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (5, 'Claude', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Claude', 0, 'wait_coding', 'Claude', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (6, 'Bard', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Bard', 0, 'wait_coding', '谷歌 Bard', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
@@ -31,15 +31,17 @@ INSERT INTO `bh_cell` VALUES (7, 'Alpaca', 'https://img1.imgtp.com/2023/07/12/1o
 INSERT INTO `bh_cell` VALUES (8, 'Vicuna', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Vicuna', 0, 'wait_coding', 'Vicuna', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (9, 'ChatGLM', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'ChatGLM', 0, 'wait_coding', 'ChatGLM', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (10, 'Gradio', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Gradio', 0, 'wait_coding', 'Gradio', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
-INSERT INTO `bh_cell` VALUES (11, '文心一言', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'baidu_wxyy', 0, 'wait_coding', '百度 文心一言', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (12, 'stable_diffusion', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'stable_diffusion', 0, 'wait_coding', 'stablediffusion', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (15, 'OpenAi Embeddings', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'openai_embeddings', 0, 'wait_coding', 'OpenAi Embeddings', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (16, '官网 ChatGPT 3.5', 'https://img1.imgtp.com/2023/07/04/MtZUWCwk.png', 'openai_chat_web_3_5', 89, 'closed', '官网 ChatGPT 3.5', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (17, '官网 ChatGPT 4', 'https://img1.imgtp.com/2023/07/04/MtZUWCwk.png', 'openai_chat_web_4', 90, 'closed', '官网 ChatGPT 4', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
-INSERT INTO `bh_cell` VALUES (18, 'OpenAi Image', 'https://img1.imgtp.com/2023/07/04/5Obs2pOC.png', 'openai_image', 97, 'closed', 'OpenAi Image', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
-INSERT INTO `bh_cell` VALUES (19, 'OpenAi Chat GPT4', 'https://img1.imgtp.com/2023/07/04/5Obs2pOC.png', 'openai_chat_api_4', 98, 'closed', 'OpenAi Chat GPT 4', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell` VALUES (18, 'OpenAi Image', 'https://img1.imgtp.com/2023/07/25/lNqXPOvs.ico', 'openai_image', 97, 'closed', 'OpenAi Image', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell` VALUES (19, 'OpenAi Chat GPT4', 'https://img1.imgtp.com/2023/07/25/lNqXPOvs.ico', 'openai_chat_api_4', 98, 'closed', 'OpenAi Chat GPT 4', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (20, '通义千问', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'ali_tyqw', 0, 'wait_coding', '阿里 通义千问', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (21, 'POE', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'poe', 0, 'wait_coding', 'POE', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell` VALUES (22, '文心千帆 ERNIE-Bot', 'https://img1.imgtp.com/2023/05/20/xuxNAI2w.ico', 'wxqf_ernie_bot', 80, 'published', 'ERNIE-Bot 是百度自行研发的大语言模型，覆盖海量中文数据，具有更强的对话问答、内容创作生成等能力', '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell` VALUES (23, '文心千帆 ERNIE-Bot-turbo', 'https://img1.imgtp.com/2023/05/20/xuxNAI2w.ico', 'wxqf_ernie_bot_turbo', 80, 'published', 'ERNIE-Bot-turbo 是百度自行研发的大语言模型，覆盖海量中文数据，具有更强的对话问答、内容创作生成等能力，响应速度更快', '2023-07-28 01:00:00', '2023-07-28 01:00:00   ');
+INSERT INTO `bh_cell` VALUES (24, '文心千帆 BLOOMZ-7B', 'https://img1.imgtp.com/2023/05/20/xuxNAI2w.ico', 'wxqf_bloomz_7b', 80, 'published', 'BLOOMZ-7B 是业内知名的大语言模型，由 Hugging Face 研发并开源，能够以 46 种语言和 13 种编程语言输出文本', '2023-07-28 01:00:00', '2023-07-28 01:00:00');
 
 -- ----------------------------
 -- Table structure for bh_cell_config
@@ -118,6 +120,28 @@ INSERT INTO `bh_cell_config` VALUES (44, 'openai_chat_api_4', '话题新鲜度 p
 INSERT INTO `bh_cell_config` VALUES (45, 'openai_chat_api_4', 'api_key', 'api_key', '', 'sk-xxx', 1, 1, 0, 0, 0, 1, 1, 'apiKey', 'apiKey，不填走 key 池', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (46, 'openai_chat_api_4', '代理地址', 'openai_base_url', 'https://api.openai.com/', 'https://api.openai.com/', 1, 1, 0, 0, 0, 1, 1, '代理地址，可以用自己搭建的', '代理地址，可以用自己搭建的', NULL, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (47, 'openai_chat_api_4', '附带历史消息数', 'context_count', '8', '32', 1, 1, 0, 1, 1, 1, 1, '单位小时，0 表示附带所有的消息', '单位小时，0 表示附带所有的消息', '{\"min\":1,\"max\":10,\"step\":1}', 'slider', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (48, 'wxqf_ernie_bot', '温度', 'temperature', '0.95', '0.95', 1, 1, 0, 1, 1, 1, 1, '温度说明：\r\n（1）较高的数值会使输出更加随机，而较低的数值会使其更加集中和确定\r\n（2）默认 0.95，范围 (0, 1.0]，不能为 0\r\n（3）建议该参数和 top_p 只设置1个\r\n（4）建议 top_p 和 temperature 不要同时更改', '温度说明：\r\n（1）较高的数值会使输出更加随机，而较低的数值会使其更加集中和确定\r\n（2）默认 0.95，范围 (0, 1.0]，不能为 0\r\n（3）建议该参数和 top_p 只设置1个\r\n（4）建议 top_p 和 temperature 不要同时更改', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (49, 'wxqf_ernie_bot', 'TOP_P', 'top_p', '0.95', '0.95', 1, 1, 0, 1, 1, 1, 1, '说明：\r\n（1）较高的数值会使输出更加随机，而较低的数值会使其更加集中和确定\r\n（2）默认 0.95，范围 (0, 1.0]，不能为 0\r\n（3）建议该参数和 top_p 只设置1个\r\n（4）建议 top_p 和 temperature 不要同时更改', '说明：\r\n（1）较高的数值会使输出更加随机，而较低的数值会使其更加集中和确定\r\n（2）默认 0.95，范围 (0, 1.0]，不能为 0\r\n（3）建议该参数和 top_p 只设置1个\r\n（4）建议 top_p 和 temperature 不要同时更改', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (50, 'wxqf_ernie_bot', '话题新鲜度 presence_penalty', 'penalty_score', '1.0', '1.0', 1, 1, 0, 1, 1, 1, 1, '通过对已生成的 token 增加惩罚，减少重复生成的现象。说明：\r\n（1）值越大表示惩罚越大 \r\n（2）默认1.0，取值范围：[1.0, 2.0]', '通过对已生成的 token 增加惩罚，减少重复生成的现象。说明：\r\n（1）值越大表示惩罚越大 \r\n（2）默认1.0，取值范围：[1.0, 2.0]', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (51, 'wxqf_ernie_bot', 'user_id', 'user_id', 'aibeehive', 'aibeehive', 1, 1, 0, 0, 0, 0, 0, '表示最终用户的唯一标识符，可以监视和检测滥用行为，防止接口恶意调用', '表示最终用户的唯一标识符，可以监视和检测滥用行为，防止接口恶意调用', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (52, 'wxqf_ernie_bot', '附带历史消息条数', 'context_count', '8', '8', 1, 1, 0, 1, 1, 1, 0, '上下文条数', '上下文条数', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (53, 'wxqf_ernie_bot', '附带多久的历史消息', 'context_related_time_hour', '8', '8', 1, 1, 0, 1, 1, 1, 0, '单位小时，0 表示附带所有的消息', '单位小时，0 表示附带所有的消息', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (54, 'wxqf_ernie_bot', 'access_token', 'access_token', 'xxxxxxxxx', '8', 1, 1, 0, 0, 0, 0, 0, 'access_token', '通过 key 和 secret 生成', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (55, 'wxqf_ernie_bot', '请求地址', 'request_url', 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions', '8', 1, 1, 0, 0, 0, 0, 0, '请求地址', '请求地址', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (56, 'wxqf_ernie_bot_turbo', 'user_id', 'user_id', 'aibeehive', 'aibeehive', 1, 1, 0, 0, 0, 0, 0, '上下文条数', '上下文条数', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (57, 'wxqf_ernie_bot_turbo', '附带历史消息条数', 'context_count', '8', '8', 1, 1, 0, 1, 1, 1, 0, '单位小时，0 表示附带所有的消息', '单位小时，0 表示附带所有的消息', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (58, 'wxqf_ernie_bot_turbo', '附带多久的历史消息', 'context_related_time_hour', '8', '8', 1, 1, 0, 1, 1, 1, 0, '单位小时，0 表示附带所有的消息', '单位小时，0 表示附带所有的消息', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (59, 'wxqf_ernie_bot_turbo', 'access_token', 'access_token', 'xxxxxxxxx', '8', 1, 1, 0, 0, 0, 0, 0, 'access_token', '通过 key 和 secret 生成', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (60, 'wxqf_ernie_bot_turbo', '请求地址', 'request_url', 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant', '8', 1, 1, 0, 0, 0, 0, 0, '请求地址', '请求地址', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (61, 'wxqf_bloomz_7b', 'user_id', 'user_id', 'aibeehive', 'aibeehive', 1, 1, 0, 0, 0, 0, 0, '表示最终用户的唯一标识符，可以监视和检测滥用行为，防止接口恶意调用', '表示最终用户的唯一标识符，可以监视和检测滥用行为，防止接口恶意调用', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (62, 'wxqf_bloomz_7b', '附带历史消息条数', 'context_count', '8', '8', 1, 1, 0, 1, 1, 1, 0, '上下文条数', '上下文条数', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (63, 'wxqf_bloomz_7b', '附带多久的历史消息', 'context_related_time_hour', '8', '8', 1, 1, 0, 1, 1, 1, 0, '单位小时，0 表示附带所有的消息', '单位小时，0 表示附带所有的消息', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (64, 'wxqf_bloomz_7b', 'access_token', 'access_token', 'xxxxxxxxx', '8', 1, 1, 0, 0, 0, 0, 0, 'access_token', '通过 key 和 secret 生成', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (65, 'wxqf_bloomz_7b', '请求地址', 'request_url', 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/bloomz_7b1', '8', 1, 1, 0, 0, 0, 0, 0, '请求地址', '请求地址', '', 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (66, 'new_bing', 'WebSocket 连接地址', 'wss_url', 'wss://sydney.bing.com/sydney/ChatHub', 'wss://sydney.bing.com/sydney/ChatHub', 1, 1, 0, 0, 0, 0, 0, 'WebSocket 连接地址', 'WebSocket 连接地址', NULL, 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (67, 'new_bing', '创建对话地址', 'create_conversation_url', 'https://www.bing.com/turing/conversation/create', 'https://www.bing.com/turing/conversation/create', 1, 1, 0, 0, 0, 0, 0, '创建对话地址', '创建对话地址', NULL, 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (68, 'new_bing', 'Cookie', 'cookie', 'xxxxxxxxx', 'cookie', 1, 1, 0, 0, 0, 0, 0, 'Cookie', 'Cookie', NULL, 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+
 
 -- ----------------------------
 -- Table structure for bh_cell_config_permission
@@ -144,6 +168,10 @@ INSERT INTO `bh_cell_config_permission` VALUES (4, 0, 'Midjourney', '0', 1, '202
 INSERT INTO `bh_cell_config_permission` VALUES (5, 0, 'openai_image', '0', 1, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config_permission` VALUES (6, 0, 'openai_chat_api_4', '0', 1, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_config_permission` VALUES (7, 0, 'openai_chat_web_4', '0', 1, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell_config_permission` VALUES (8, 0, 'wxqf_ernie_bot', '0', 1, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config_permission` VALUES (9, 0, 'wxqf_ernie_bot_turbo', '0', 1, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config_permission` VALUES (10, 0, 'wxqf_bloomz_7b', '0', 1, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+
 
 -- ----------------------------
 -- Table structure for bh_cell_permission
@@ -169,11 +197,14 @@ INSERT INTO `bh_cell_permission` VALUES (4, 0, 'openai_chat_web_3_5', 2, '2023-0
 INSERT INTO `bh_cell_permission` VALUES (5, 0, 'openai_chat_web_4', 2, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_permission` VALUES (6, 0, 'openai_image', 2, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_permission` VALUES (7, 0, 'openai_chat_api_4', 2, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
-INSERT INTO `bh_cell_permission` VALUES (8, 0, 'baidu_wxyy', 2, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell_permission` VALUES (8, 0, 'wxqf_ernie_bot', 2, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
 INSERT INTO `bh_cell_permission` VALUES (9, 0, 'ali_tyqw', 2, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_permission` VALUES (10, 0, 'ChatGLM', 2, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_permission` VALUES (11, 0, 'poe', 2, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell_permission` VALUES (12, 0, 'Bard', 2, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell_permission` VALUES (14, 0, 'wxqf_bloomz_7b', 2, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_permission` VALUES (15, 0, 'wxqf_ernie_bot_turbo', 2, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+
 
 -- ----------------------------
 -- Table structure for bh_email_verify_code
@@ -580,9 +611,36 @@ CREATE TABLE IF NOT EXISTS `bh_sys_param`  (
 -- ----------------------------
 -- Records of bh_sys_param
 -- ----------------------------
-INSERT INTO `bh_sys_param` VALUES (1, '百度 AI 配置', 'baidu-aip', '{\"enabled\":false,\"appId\":\"xxxxxx\",\"appKey\":\"xxxxxx\",\"secretKey\":\"xxxxxx\"}', '百度 AI 配置', 0, '2023-07-15 23:47:02', '2023-07-15 23:47:05');
-INSERT INTO `bh_sys_param` VALUES (2, '邮箱注册登录配置', 'email-registerLoginConfig', '{\"registerVerificationRedirectUrl\":\"http://localhost:3200/emailValidation?type=email&verifyCode=\",\"registerVerifyCodeExpireMinutes\":15,\"registerTemplateSubject\":\"【AI 蜂巢】账号注册\",\"registerAllowSuffix\":\"*\",\"registerEnabled\":true,\"loginAllowSuffix\":\"*\",\"registerCheckEnabled\":false}', '{\r\n	\"registerVerificationRedirectUrl\": \"http://localhost:1002/#/emailValidation?type=email&verifyCode=\",\r\n	\"registerVerifyCodeExpireMinutes\": \"验证码过期时间（分钟）\",\r\n	\"registerTemplateSubject\": \"邮件标题\",\r\n	\"registerAllowSuffix\": \"@qq.com,*\",\r\n	\"registerEnabled\": true,\r\n	\"loginAllowSuffix\": \"@qq.com,*\",\r\n	\"registerCheckEnabled\": true\r\n}', 0, '2023-07-15 23:47:02', '2023-07-15 23:47:05');
-INSERT INTO `bh_sys_param` VALUES (3, '邮箱配置', 'email-config', '{\"host\":\"smtp.qq.com\",\"port\":465,\"from\":\"xxxxxx@qq.com\",\"user\":\"xxxxxx@qq.com\",\"pass\":\"xxxxxx\",\"auth\":true,\"sslEnable\":true,\"startttlsEnable\":false}', '{\r\n	\"host\": \"smtp.qq.com\",\r\n	\"port\": 465,\r\n	\"from\": \"xxx@qq.com\",\r\n	\"user\": \"xxx@qq.com\",\r\n	\"pass\": \"xxx\",\r\n	\"auth\": true, \r\n	\"sslEnable\": true,\r\n	\"startttlsEnable\": false\r\n}', 0, '2023-07-15 23:47:02', '2023-07-15 23:47:05');
-INSERT INTO `bh_sys_param` VALUES (4, '邮箱-邮箱注册模板内容', 'email-registerTemplateContent', '<!DOCTYPE html>\r\n<html xmlns:th=\"http://www.thymeleaf.org\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Email Verification</title>\r\n    <style>\r\n        body {\r\n            font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n            font-size: 14px;\r\n            line-height: 1.42857143;\r\n            color: #333;\r\n            background-color: #F3F3F3;\r\n            text-align: center;\r\n        }\r\n\r\n        .container {\r\n            background-color: #FFFFFF;\r\n            border-radius: 4px;\r\n            padding: 30px;\r\n            width: 600px;\r\n            margin: auto;\r\n        }\r\n\r\n        .btn {\r\n            display: inline-block;\r\n            padding: 6px 12px;\r\n            margin-bottom: 0;\r\n            font-size: 14px;\r\n            font-weight: 400;\r\n            line-height: 1.42857143;\r\n            text-align: center;\r\n            white-space: nowrap;\r\n            vertical-align: middle;\r\n            cursor: pointer;\r\n            -webkit-user-select: none;\r\n            -moz-user-select: none;\r\n            -ms-user-select: none;\r\n            user-select: none;\r\n            background-image: none;\r\n            border-radius: 4px;\r\n            color: #fff;\r\n            background-color: #4f99d9;\r\n            border-color: #418fd3;\r\n            text-decoration: none;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h2>请验证您的邮箱地址</h2>\r\n        <p>感谢您注册我们的网站，请点击以下链接验证您的邮箱地址</p>\r\n        <p><a th:href=\"@{|${verificationUrl}|}\" class=\"btn\">点击验证邮箱地址</a></p>\r\n        <p>如果您没有注册我们的网站，请忽略此邮件。</p>\r\n        <p>有问题可以回复此邮件</p>\r\n    </div>\r\n</body>\r\n</html>', '内容太多单独放一个', 0, '2023-07-15 23:47:02', '2023-07-15 23:47:05');
-INSERT INTO `bh_sys_param` VALUES (5, '管理端账号', 'admin-account', 'beehive', '管理端登录时的账号', 0, '2023-07-15 23:47:02', '2023-07-15 23:47:05');
-INSERT INTO `bh_sys_param` VALUES (6, '管理端密码', 'admin-password', 'beehive', '管理端登录时的密码', 0, '2023-07-15 23:47:02', '2023-07-15 23:47:05');
+INSERT INTO `bh_sys_param` VALUES (1, '百度 AI 配置', 'baidu-aip', '{\"enabled\":false,\"appId\":\"xxxxxx\",\"appKey\":\"xxxxxx\",\"secretKey\":\"xxxxxx\"}', '百度 AI 配置', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_sys_param` VALUES (2, '邮箱注册登录配置', 'email-registerLoginConfig', '{\"registerVerificationRedirectUrl\":\"http://localhost:3200/emailValidation?type=email&verifyCode=\",\"registerVerifyCodeExpireMinutes\":15,\"registerTemplateSubject\":\"【AI 蜂巢】账号注册\",\"registerAllowSuffix\":\"*\",\"registerEnabled\":true,\"loginAllowSuffix\":\"*\",\"registerCheckEnabled\":false}', '{\r\n	\"registerVerificationRedirectUrl\": \"http://localhost:1002/#/emailValidation?type=email&verifyCode=\",\r\n	\"registerVerifyCodeExpireMinutes\": \"验证码过期时间（分钟）\",\r\n	\"registerTemplateSubject\": \"邮件标题\",\r\n	\"registerAllowSuffix\": \"@qq.com,*\",\r\n	\"registerEnabled\": true,\r\n	\"loginAllowSuffix\": \"@qq.com,*\",\r\n	\"registerCheckEnabled\": true\r\n}', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_sys_param` VALUES (3, '邮箱配置', 'email-config', '{\"host\":\"smtp.qq.com\",\"port\":465,\"from\":\"xxxxxx@qq.com\",\"user\":\"xxxxxx@qq.com\",\"pass\":\"xxxxxx\",\"auth\":true,\"sslEnable\":true,\"startttlsEnable\":false}', '{\r\n	\"host\": \"smtp.qq.com\",\r\n	\"port\": 465,\r\n	\"from\": \"xxx@qq.com\",\r\n	\"user\": \"xxx@qq.com\",\r\n	\"pass\": \"xxx\",\r\n	\"auth\": true, \r\n	\"sslEnable\": true,\r\n	\"startttlsEnable\": false\r\n}', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_sys_param` VALUES (4, '邮箱-邮箱注册模板内容', 'email-registerTemplateContent', '<!DOCTYPE html>\r\n<html xmlns:th=\"http://www.thymeleaf.org\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Email Verification</title>\r\n    <style>\r\n        body {\r\n            font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n            font-size: 14px;\r\n            line-height: 1.42857143;\r\n            color: #333;\r\n            background-color: #F3F3F3;\r\n            text-align: center;\r\n        }\r\n\r\n        .container {\r\n            background-color: #FFFFFF;\r\n            border-radius: 4px;\r\n            padding: 30px;\r\n            width: 600px;\r\n            margin: auto;\r\n        }\r\n\r\n        .btn {\r\n            display: inline-block;\r\n            padding: 6px 12px;\r\n            margin-bottom: 0;\r\n            font-size: 14px;\r\n            font-weight: 400;\r\n            line-height: 1.42857143;\r\n            text-align: center;\r\n            white-space: nowrap;\r\n            vertical-align: middle;\r\n            cursor: pointer;\r\n            -webkit-user-select: none;\r\n            -moz-user-select: none;\r\n            -ms-user-select: none;\r\n            user-select: none;\r\n            background-image: none;\r\n            border-radius: 4px;\r\n            color: #fff;\r\n            background-color: #4f99d9;\r\n            border-color: #418fd3;\r\n            text-decoration: none;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h2>请验证您的邮箱地址</h2>\r\n        <p>感谢您注册我们的网站，请点击以下链接验证您的邮箱地址</p>\r\n        <p><a th:href=\"@{|${verificationUrl}|}\" class=\"btn\">点击验证邮箱地址</a></p>\r\n        <p>如果您没有注册我们的网站，请忽略此邮件。</p>\r\n        <p>有问题可以回复此邮件</p>\r\n    </div>\r\n</body>\r\n</html>', '内容太多单独放一个', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_sys_param` VALUES (5, '管理端账号', 'admin-account', 'beehive', '管理端登录时的账号', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_sys_param` VALUES (6, '管理端密码', 'admin-password', 'beehive', '管理端登录时的密码', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+
+
+-- ----------------------------
+-- Table structure for bh_room_wxqf_chat_msg
+-- ----------------------------
+CREATE TABLE `bh_room_wxqf_chat_msg`  (
+    `id` bigint NOT NULL COMMENT '主键',
+    `user_id` int NOT NULL COMMENT '用户 id',
+    `room_id` bigint NOT NULL COMMENT '房间 id',
+    `parent_question_message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父级问题消息 id',
+    `message_type` int NOT NULL COMMENT '消息类型枚举',
+    `model_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模型名称',
+    `api_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ApiKey',
+    `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '消息内容',
+    `original_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息的原始请求或响应数据',
+    `response_error_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '错误的响应数据',
+    `prompt_tokens` bigint NULL DEFAULT NULL COMMENT '输入消息的 tokens',
+    `completion_tokens` bigint NULL DEFAULT NULL COMMENT '输出消息的 tokens',
+    `total_tokens` bigint NULL DEFAULT NULL COMMENT '累计 Tokens',
+    `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip',
+    `status` int NOT NULL COMMENT '消息状态',
+    `room_config_param_json` json NULL COMMENT '房间配置项参数 json',
+    `create_time` timestamp NOT NULL COMMENT '创建时间',
+    `update_time` timestamp NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uq_parent_question_message_id`(`parent_question_message_id` ASC) USING BTREE COMMENT '父消息只能有一个子消息'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'OpenAi 对话房间消息表' ROW_FORMAT = Dynamic;
