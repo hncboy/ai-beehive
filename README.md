@@ -184,3 +184,9 @@
 - 增加了 OpenAi ApiKey 轮询
 - 待更新......,
 
+# 联系方式
+
+加群添加微信备注 Github
+
+![](docs/pics/wechat.png)
+
