@@ -24,7 +24,6 @@ public class RoomConfigParamCache {
     public static List<RoomConfigParamDO> getRoomConfigParam(Long roomId) {
         RoomConfigParamService roomConfigParamService = SpringUtil.getBean(RoomConfigParamService.class);
         return roomConfigParamService.list(new LambdaQueryWrapper<RoomConfigParamDO>()
-                .select(RoomConfigParamDO::getCellConfigCode, RoomConfigParamDO::getValue)
                 .eq(RoomConfigParamDO::getRoomId, roomId));
     }
 }
