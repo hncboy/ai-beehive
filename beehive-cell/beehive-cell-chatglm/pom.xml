@@ -3,26 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.hncboy</groupId>
-        <artifactId>ai-beehive</artifactId>
+        <artifactId>beehive-cell</artifactId>
         <version>${revision}</version>
     </parent>
-    <packaging>pom</packaging>
-    <artifactId>beehive-cell</artifactId>
-
-    <modules>
-        <module>beehive-cell-core</module>
-        <module>beehive-cell-midjourney</module>
-        <module>beehive-cell-openai</module>
-        <module>beehive-cell-bing</module>
-        <module>beehive-cell-starter</module>
-        <module>beehive-cell-wxqf</module>
-        <module>beehive-cell-chatglm</module>
-    </modules>
+    <artifactId>beehive-cell-chatglm</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.hncboy</groupId>
-            <artifactId>beehive-base</artifactId>
+            <artifactId>beehive-cell-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

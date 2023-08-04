@@ -29,7 +29,7 @@ INSERT INTO `bh_cell` VALUES (5, 'Claude', 'https://img1.imgtp.com/2023/07/12/1o
 INSERT INTO `bh_cell` VALUES (6, 'Bard', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Bard', 0, 'wait_coding', '谷歌 Bard', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (7, 'Alpaca', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Alpaca', 0, 'wait_coding', 'Alpaca', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (8, 'Vicuna', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Vicuna', 0, 'wait_coding', 'Vicuna', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
-INSERT INTO `bh_cell` VALUES (9, 'ChatGLM', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'ChatGLM', 0, 'wait_coding', 'ChatGLM', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell` VALUES (9, 'ChatGLM', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'ChatGLM', 0, 'published', 'ChatGLM', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (10, 'Gradio', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'Gradio', 0, 'wait_coding', 'Gradio', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (12, 'stable_diffusion', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'stable_diffusion', 0, 'wait_coding', 'stablediffusion', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
 INSERT INTO `bh_cell` VALUES (15, 'OpenAi Embeddings', 'https://img1.imgtp.com/2023/07/12/1oLT69QU.png', 'openai_embeddings', 0, 'wait_coding', 'OpenAi Embeddings', '2023-06-16 01:00:00', '2023-06-16 01:00:00');
@@ -141,6 +141,13 @@ INSERT INTO `bh_cell_config` VALUES (65, 'wxqf_bloomz_7b', '请求地址', 'requ
 INSERT INTO `bh_cell_config` VALUES (66, 'new_bing', 'WebSocket 连接地址', 'wss_url', 'wss://sydney.bing.com/sydney/ChatHub', 'wss://sydney.bing.com/sydney/ChatHub', 1, 1, 0, 0, 0, 0, 0, 'WebSocket 连接地址', 'WebSocket 连接地址', NULL, 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (67, 'new_bing', '创建对话地址', 'create_conversation_url', 'https://www.bing.com/turing/conversation/create', 'https://www.bing.com/turing/conversation/create', 1, 1, 0, 0, 0, 0, 0, '创建对话地址', '创建对话地址', NULL, 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
 INSERT INTO `bh_cell_config` VALUES (68, 'new_bing', 'Cookie', 'cookie', 'xxxxxxxxx', 'cookie', 1, 1, 0, 0, 0, 0, 0, 'Cookie', 'Cookie', NULL, 'input', 0, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (69, 'ChatGLM', '代理地址', 'chatglm_base_url', 'http://xxxx:8000/', 'http://xxxx:8000/', 1, 1, 0, 0, 0, 1, 1, '代理地址，可以用自己搭建的', '代理地址，可以用自己搭建的', null, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (70, 'ChatGLM', '附带历史消息条数', 'context_count', '8', '32', 0, 1, 0, 1, 1, 1, 1, '上下文条数', '上下文条数', '{"min":1,"max":10,"step":1}', 'slider', 0, '2023-06-16 01:00:00', '2023-08-03 09:49:32');
+INSERT INTO `bh_cell_config` VALUES (71, 'ChatGLM', '附带多久的历史消息', 'context_related_time_hour', '24', '0', 0, 1, 0, 1, 1, 1, 1, '单位小时，0 表示附带所有的消息', '单位小时，0 表示附带所有的消息', null, 'input', 0, '2023-06-16 01:00:00', '2023-08-03 09:49:32');
+INSERT INTO `bh_cell_config` VALUES (72, 'ChatGLM', '是否启用本地敏感词库', 'enabled_local_sensitive_word', 'false', 'false', 1, 1, 1, 0, 0, 0, 0, '是否启用本地敏感词库', '是否启用本地敏感词库', null, 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (73, 'ChatGLM', '单次回复限制 max_tokens', 'max_tokens', '1000', '1000', 0, 1, 0, 1, 1, 1, 1, '每次限制的回复长度', '每次限制的回复长度', null, 'input', 0, '2023-06-16 01:00:00', '2023-08-03 09:52:16');
+INSERT INTO `bh_cell_config` VALUES (74, 'ChatGLM', '模型', 'model', 'chatglm2-6b', 'chatglm2-6b', 1, 1, 0, 0, 1, 1, 1, '模型', '模型', '', 'input', 0, '2023-06-16 01:00:00', '2023-06-16 01:00:00');
+INSERT INTO `bh_cell_config` VALUES (75, 'ChatGLM', '随机性 temperature', 'temperature', '0.2', '0.2', 0, 1, 0, 1, 1, 1, 1, '值越大，回复越随机', '值越大，回复越随机', null, 'input', 0, '2023-06-16 01:00:00', '2023-08-03 09:51:47');
 
 
 -- ----------------------------
@@ -171,6 +178,7 @@ INSERT INTO `bh_cell_config_permission` VALUES (7, 0, 'openai_chat_web_4', '0', 
 INSERT INTO `bh_cell_config_permission` VALUES (8, 0, 'wxqf_ernie_bot', '0', 1, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
 INSERT INTO `bh_cell_config_permission` VALUES (9, 0, 'wxqf_ernie_bot_turbo', '0', 1, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
 INSERT INTO `bh_cell_config_permission` VALUES (10, 0, 'wxqf_bloomz_7b', '0', 1, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
+INSERT INTO `bh_cell_config_permission` VALUES (11, 0, 'ChatGLM', '0', 1, '2023-07-28 01:00:00', '2023-07-28 01:00:00');
 
 
 -- ----------------------------
@@ -473,6 +481,32 @@ CREATE TABLE IF NOT EXISTS `bh_room_openai_chat_msg`  (
     UNIQUE INDEX `uq_parent_question_message_id`(`parent_question_message_id` ASC) USING BTREE COMMENT '父消息只能有一个子消息'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'OpenAi 对话房间消息表' ROW_FORMAT = DYNAMIC;
 
+-- ----------------------------
+-- Table structure for bh_room_chat_glm_msg
+-- ----------------------------
+DROP TABLE IF EXISTS `bh_room_chat_glm_msg`;
+CREATE TABLE IF NOT EXISTS `bh_room_chat_glm_msg`  (
+     `id` bigint NOT NULL COMMENT '主键',
+     `user_id` int NOT NULL COMMENT '用户 id',
+     `room_id` bigint NOT NULL COMMENT '房间 id',
+     `parent_question_message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父级问题消息 id',
+    `message_type` int NOT NULL COMMENT '消息类型枚举',
+    `model_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模型名称',
+    `api_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ApiKey',
+    `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '消息内容',
+    `original_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息的原始请求或响应数据',
+    `response_error_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '错误的响应数据',
+    `prompt_tokens` bigint NULL DEFAULT NULL COMMENT '输入消息的 tokens',
+    `completion_tokens` bigint NULL DEFAULT NULL COMMENT '输出消息的 tokens',
+    `total_tokens` bigint NULL DEFAULT NULL COMMENT '累计 Tokens',
+    `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip',
+    `status` int NOT NULL COMMENT '消息状态',
+    `room_config_param_json` json NULL COMMENT '房间配置项参数 json',
+    `create_time` timestamp NOT NULL COMMENT '创建时间',
+    `update_time` timestamp NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uq_parent_question_message_id`(`parent_question_message_id` ASC) USING BTREE COMMENT '父消息只能有一个子消息'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'ChatGLM 对话房间消息表' ROW_FORMAT = DYNAMIC;
 -- ----------------------------
 -- Records of bh_room_openai_chat_msg
 -- ----------------------------

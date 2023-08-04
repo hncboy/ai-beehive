@@ -34,5 +34,10 @@
             <artifactId>beehive-cell-wxqf</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hncboy</groupId>
+            <artifactId>beehive-cell-chatglm</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
