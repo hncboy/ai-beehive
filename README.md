@@ -1,5 +1,7 @@
 # ai-beehive
 
+### 服务器购买：[亚洲云](https://www.asiayun.com/aff/PJKGJTCD) 7.8 折优惠码：aibeehive
+
 # 介绍
 
 - chatgpt-web-java 2.0 版本，更名为 ai-beehive（爱蜂巢、AI 蜂巢），体验站：https://front.aibeehive.icu
